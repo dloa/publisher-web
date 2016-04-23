@@ -36,14 +36,20 @@ function registerNewPublisher(){
       address: newPublisherFlorincoinAddress
     },
     function(response) {
+      // response is the data we get back from the php file
       var data = JSON.parse(response);
       console.log(data);
-      newPublisherSignResponse = data.response[0];
+
+      // Add a log.
       document.getElementById('newPublisherLoadingWell').innerHTML += "Recieved sign request back. (" + newPublisherSignResponse + ")</br>";
 
       // If successful then register it.
       if (data['status'] === 'success'){
+        // Add a log before moving on, if unsuccessful then it will log differently.
         document.getElementById('newPublisherLoadingWell').innerHTML += "Registering publisher address...</br>";
+        // Save the signature.
+        newPublisherSignResponse = data.response[0];
+
         $.post('../php/registerPublisher.php',{
           name: newPublisherName,
           email: newPublisherEmail,
@@ -54,12 +60,27 @@ function registerNewPublisher(){
           console.log(responsetwo);
           var registerResponse = JSON.parse(responsetwo);
           console.log(registerResponse);
-          newPublisherRegisterResponse = registerResponse.response[0];
-          document.getElementById('newPublisherLoadingWell').innerHTML += "Recieved register request back. (" + newPublisherRegisterResponse + ")</br>";
+
+          // Check if the attempt was successful
+          if (registerResponse['status'] === 'success'){
+            // Save the response.
+            newPublisherRegisterResponse = registerResponse.response[0];
+            // Add log
+            document.getElementById('newPublisherLoadingWell').innerHTML += "Recieved register request back. (" + newPublisherRegisterResponse + ")</br>";
+            // Create aleart that it was successful
+            swal("Success!", "Your new publisher address has been successfully registered!", "success");
+            // Hide the modal
+            $('#newPublisherModal').modal('hide');
+          } else {
+            swal("Error!", "Error registering, please refresh and try again!", "error");
+            $('#newPublisherModal').modal('hide');
+          }
         });
       } else {
-        document.getElementById('newPublisherLoadingWell').innerHTML += "Error signing request, please refresh the page and try again.</br>";
+        swal("Error!", "Error signing request, please refresh and try again!", "error");
+        $('#newPublisherModal').modal('hide');
       }
     }
   );
+  
 }
