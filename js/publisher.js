@@ -74,7 +74,7 @@ function registerNewPublisher(){
             // Add the publisher as an option then select it.
             var x = document.getElementById("publisherSelect");
             var option = document.createElement("option");
-            option.text = newPublisherName + '(' + newPublisherFlorincoinAddress + ')';
+            option.text = newPublisherName + ' (' + newPublisherFlorincoinAddress + ')';
             x.add(option);
             x.value = option.text;
           } else {
@@ -88,5 +88,9 @@ function registerNewPublisher(){
       }
     }
   );
+
+  // Reset if they want to register another.
+  show(document.getElementById('newPublisherFormDiv'));
+  hide(document.getElementById('newPublisherLoadingDiv'));
   
 }

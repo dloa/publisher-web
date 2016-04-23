@@ -76,7 +76,7 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-6 form-inline">
                                     <button type="button" data-toggle="modal" data-target="#newPublisherModal" class="btn btn-default">Register New</button>
-                                    <button type="button"  class="btn btn-success pull-right">Continue</button>
+                                    <button type="button" onclick="continueToArtifact();" class="btn btn-success pull-right">Continue</button>
                                 </div>
                             </div>
                         </form>
@@ -193,6 +193,16 @@
     }
     function prevTab(elem) {
         $(elem).prev().find('a[data-toggle="tab"]').click();
+    }
+
+    function continueToArtifact(elem) {
+        if (document.getElementById("publisherSelect").value != 'None Registered...'){
+            var $active = $('.wizard .nav-tabs li.active');
+            $active.next().removeClass('disabled');
+            nextTab($active);
+        } else {
+            swal("Error!", "You must select a publisher address to continue!", "error");
+        }
     }
 	</script>
 
