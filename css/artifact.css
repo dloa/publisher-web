@@ -536,8 +536,8 @@ td.unpin {
   min-height: 75px; }
 
 .publish .cover-art {
-  width: 200px;
-  height: 275px;
+  width: 180px;
+  height: 250px;
   display: table;
   border: 1px dashed rgba(0,0,0, .1);
   border-radius: 6px;
@@ -545,15 +545,8 @@ td.unpin {
   cursor: pointer;
   padding: 5px;
   transition: all 0.1s;
-}
-.publish .cover-art:hover {
-  padding: 10px;
-  margin: -5px;
-  margin-bottom: 5px;
-  margin-right: 5px;
-  border: 1px dashed rgba(0,0,0, .1);
-  background-color: rgba(0,0,0, .025);
-  transition: all 0.1s;
+  background-size: 180px 250px;
+  background-repeat: no-repeat;
 }
 
 .publish .cover-art p {
