@@ -146,6 +146,95 @@ span.round-tab:hover {
     pointer-events: all;
 }
 
+.loading-spinner {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  bottom: 0;
+  left: 50%;
+  margin: -15px 0 -15px;
+  margin-top: -75px;
+}
+
+@-webkit-keyframes rotate-forever {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes rotate-forever {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotate-forever {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.loading-spinner {
+  -webkit-animation-duration: 0.75s;
+  -moz-animation-duration: 0.75s;
+  animation-duration: 0.75s;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -webkit-animation-name: rotate-forever;
+  -moz-animation-name: rotate-forever;
+  animation-name: rotate-forever;
+  -webkit-animation-timing-function: linear;
+  -moz-animation-timing-function: linear;
+  animation-timing-function: linear;
+  height: 30px;
+  width: 30px;
+  border: 8px solid #ADD8E6;
+  border-right-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.loadingLineHeight {
+    line-height: 371px;
+    height: 371px;
+}
+
+.well {
+    background-color: #000000;
+    color: #fff;
+}
+
 @media( max-width : 585px ) {
 
     .wizard {
@@ -288,24 +377,34 @@ span.round-tab:hover {
                     <h4 class="modal-title" id="newPublisherLabel">Register a new Publisher</h4>
                 </div>
                 <div class="modal-body">
-                <form>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Publisher Name</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Publisher Name">
-                    <p class="help-block">This is your display name for your publisher, i.e. Imogen Heap</p>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Email (optional)</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
-                    <p class="help-block">An MD5 hash will be generated from your email address, which will be published publicly. This is used for Gravatar’s dynamic Avatar lookup service, but your email address itself will not be published in plaintext.</p>
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputPassword1">Florincoin Address</label>
-                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="FKJ87H7uHyt876y68ASa876">
-                    <p class="help-block">This is your Florincoin address that you will use to publish items.</p>
-                  </div>
-                  <button type="submit" class="btn btn-default">Register Publisher</button>
-                </form>
+                <div id="newPublisherLoadingDiv" style="display:block;">
+                    <div class="loading-spinner"></div>
+                    <div class="well well-sm" style="margin-top: 271px; height: 100px; font-family:monospace; font-size: 12px;">
+                        Signing publisher announcement message.................<br>
+                        Publisher announce successful.<br>
+                        Registering publisher.............<br>
+                    </div>
+                </div>
+                <div id="newPublisherFormDiv" style="display:none">
+                    <form>
+                      <div class="form-group">
+                        <label for="newPublisherName">Publisher Name</label>
+                        <input type="email" class="form-control" id="newPublisherName" placeholder="Publisher Name">
+                        <p class="help-block">This is your display name for your publisher, i.e. Imogen Heap</p>
+                      </div>
+                      <div class="form-group">
+                        <label for="newPublisherEmail">Email (optional)</label>
+                        <input type="email" class="form-control" id="newPublisherEmail" placeholder="Email">
+                        <p class="help-block">An MD5 hash will be generated from your email address, which will be published publicly. This is used for Gravatar’s dynamic Avatar lookup service, but your email address itself will not be published in plaintext.</p>
+                      </div>
+                      <div class="form-group">
+                        <label for="newPublisherFlorincoinAddress">Florincoin Address</label>
+                        <input type="text" class="form-control" id="newPublisherFlorincoinAddress" placeholder="FKfguRay1RMskNP2esNDr8AawBZHF1eb56">
+                        <p class="help-block">This is your Florincoin address that you will use to publish items.</p>
+                      </div>
+                    </form>
+                    <button class="btn btn-default" onclick="registerNewPublisher();">Register Publisher</button>
+                </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
@@ -330,6 +429,25 @@ span.round-tab:hover {
             }
         });
 
+        function registerNewPublisher(elem){
+        hide(document.getElementById('newPublisherFormDiv'));
+        show(document.getElementById('newPublisherLoadingDiv'));
+    }
+
+    function hide (elements) {
+      elements = elements.length ? elements : [elements];
+      for (var index = 0; index < elements.length; index++) {
+        elements[index].style.display = 'none';
+      }
+    }
+
+    function show (elements, specifiedDisplay) {
+      elements = elements.length ? elements : [elements];
+      for (var index = 0; index < elements.length; index++) {
+        elements[index].style.display = specifiedDisplay || 'block';
+      }
+    }
+
         $(".next-step").click(function (e) {
 
             var $active = $('.wizard .nav-tabs li.active');
@@ -344,9 +462,6 @@ span.round-tab:hover {
 
         });
     });
-
-    function showNewPublisherModal(elem){
-    }
 
     function nextTab(elem) {
         $(elem).next().find('a[data-toggle="tab"]').click();
