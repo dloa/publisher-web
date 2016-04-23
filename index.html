@@ -84,28 +84,27 @@
                         </div>
                     </div>
                     <div class="tab-pane" role="tabpanel" id="step2">
-                        <div class="section publish">
+                        <div class="section publish col-lg-12">
                             <div class="publish-section information">
+                            <form>
                                 <div class="row">
                                     <div class="col-sm-8">
                                        <h5>Video Information</h5>
-                                        <form>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="" placeholder="Video Title">
+                                                <input type="text" class="form-control" id="videoTitle" placeholder="Video Title">
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="" placeholder="Director Name">
+                                                <input type="text" class="form-control" id="directorName" placeholder="Director Name">
                                             </div>
                                             <div class="form-group">
-                                                <input type="text" class="form-control" id="" placeholder="Distributor">
+                                                <input type="text" class="form-control" id="distributor" placeholder="Distributor">
                                             </div>
                                             <div class="form-group">
-                                                <input type="date" class="form-control" id="" placeholder="Release Year">
+                                                <input type="date" class="form-control" id="releaseYear" placeholder="Release Year">
                                             </div>
                                             <div class="form-group">
-                                                <textarea row="3" class="form-control" id="" placeholder="Video Description"></textarea>
+                                                <textarea row="3" class="form-control" id="description" placeholder="Video Description"></textarea>
                                             </div>
-                                        </form>
                                     </div>
                                     <div class="col-sm-4">
                                         <h5>Poster Image</h5>
@@ -119,19 +118,19 @@
                            <div class="publish-section publish-pricing">
                                 <div class="row">
                                     <div class="col-sm-10">
-                                        <p class="small">Pick the price for your track and album, lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit distinctio doloribus maiores ducimus.</p>
+                                        <p class="small">Pick the price for your video. You are allowed to enter up to one tenth of a cent.</p>
                                     </div>
                                 </div>
                                 <div class="row">
                                    <div class="col col-sm-6">
                                         <h5>Price to Play</h5>
                                         <form class="form-horizontal">
-                                            <div class="form-group">
+                                            <div class="form-group" style="margin-bottom: 65px">
                                                 <label for="" class="col-sm-5 control-label">Suggested:</label>
                                                 <div class="col-sm-7">
                                                     <div class="input-group">
                                                         <div class="input-group-addon">$</div>
-                                                        <input type="text" class="form-control" id="" placeholder="0.00">
+                                                        <input type="text" class="form-control" id="suggestedPlay" placeholder="0.000">
                                                     </div>
                                                 </div>
                                             </div>
@@ -140,7 +139,7 @@
                                                 <div class="col-sm-7">
                                                     <div class="input-group">
                                                         <div class="input-group-addon">$</div>
-                                                        <input type="text" class="form-control" id="" placeholder="0.00">
+                                                        <input type="text" class="form-control" id="minPlay" placeholder="0.000">
                                                     </div>
                                                 </div>
                                             </div>
@@ -154,7 +153,7 @@
                                                 <div class="col-sm-7">
                                                     <div class="input-group">
                                                         <div class="input-group-addon">$</div>
-                                                        <input type="text" class="form-control" id="" placeholder="0.00">
+                                                        <input type="text" class="form-control" id="suggestedBuy" placeholder="0.000">
                                                     </div>
                                                 </div>
                                             </div>
@@ -163,7 +162,7 @@
                                                 <div class="col-sm-7">
                                                     <div class="input-group">
                                                         <div class="input-group-addon">$</div>
-                                                        <input type="text" class="form-control" id="" placeholder="0.00">
+                                                        <input type="text" class="form-control" id="minBuy" placeholder="0.000">
                                                     </div>
                                                 </div>
                                             </div>
@@ -263,13 +262,14 @@
                                     <input type='file' id="extraFiles" name="extraFiles" multiple />
                                 </div>
                             </div>
+                            </form>
                            <div class="publish-section publish-submit">
                                 <div class="row">
                                     <div class="col-sm-9">
-                                        <p class="small">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam recusandae quae minima accusantium, tempora, sunt quia.</p>
+                                        <p class="small">You will be able to submit your video after you preview it. Be sure it looks exactly like what you desire as you will be unable to change this later.</p>
                                     </div>
                                     <div class="col-sm-3 text-right">
-                                        <button onclick="submit()" class="btn btn-primary">Publish</button>
+                                        <button type="button" id="previewButton" class="btn btn-primary">Preview</button>
                                     </div>
                                 </div>
                             </div>
@@ -277,13 +277,13 @@
                         </div>
                     </div>
                     <div class="tab-pane" role="tabpanel" id="step3">
-                        <h3>Step 3</h3>
-                        <p>This is step 3</p>
-                        <ul class="list-inline pull-right">
-                            <li><button type="button" class="btn btn-default prev-step">Previous</button></li>
-                            <li><button type="button" class="btn btn-default next-step">Skip</button></li>
-                            <li><button type="button" class="btn btn-primary btn-info-full next-step pull-left">Save and continue</button></li>
-                        </ul>
+                        <h3>Publishing...</h3>
+                        <div>
+                            <div class="loading-spinner" style="margin-top: -200px"></div>
+                            <div class="well well-sm" id="publishWell" style="margin-top: 0px; height: 500px; font-family:monospace; font-size: 12px;">
+                                Adding files to IPFS...
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane" role="tabpanel" id="complete">
                         <h3>Complete</h3>
@@ -331,7 +331,50 @@
                 </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="return false;">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewLabel">
+    <div class="">
+        <div class="modal-dialog" role="document" style='width:95%'>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="previewLabel">Preview Artifact</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                    <div class="row">
+                    <div class="col-md-12">
+                        <div class="row media-embed">
+                        <center>
+                            <video id='previewVideo' controls="controls" src="http://ipfs.alexandria.media/ipfs/QmNrcxXH9PgHzEaFTQQNQRYNvUbLZXnyKueaVUV3C94fDN/alexandria_v051alpha_demo.m4v" style="width: 80%">
+                            </video>
+                            </center>
+                        </div>
+                        <div class="row entity-meta-header">
+                        <br>
+                            <h2 id='previewTitle'>Alexandria v0.5.1 alpha demo</h2>
+                            <h3 id="previewArtist">Alexandria Council of Librarians</h3>
+                            <div class="entity-meta-content">
+                                <div id='previewTime' class="entity-pub-time">Posted <span>Tue Dec 08 2015 09:36:34 GMT-0700 (MST)</span></div>
+                                <div id='previewRuntime' class="entity-runtime">Runtime: <span id="entity-runtime">00:12:48</span></div>
+                            </div>
+                        </div>
+                        <div class="row media-desc">
+                            <p id='previewDescription'>Alexandria's founder, Devon Read, demos a variety of features and explains a bit more about how the Decentralized Library of Alexandria works... ProTip - One way that you can directly support Alexandria is by installing Librarian and pointing your web browser at this URL: http://localhost:8079/api/ipfs/pin/add/QmNrcxXH9PgHzEaFTQQNQRYNvUbLZXnyKueaVUV3C94fDN to pin this video locally to help decentralize it storage and distribution further.</p>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
+
+                    <button type="button" class="btn btn-success pull-right" data-dismiss="modal" onclick="submitArtifact()">Submit</button>
                 </div>
             </div>
         </div>
@@ -386,9 +429,51 @@
             var $active = $('.wizard .nav-tabs li.active');
             $active.next().removeClass('disabled');
             nextTab($active);
+
+            var $active = $('.wizard .nav-tabs li.active');
+            $active.next().removeClass('disabled');
+            nextTab($active);
         } else {
             swal("Error!", "You must select a publisher address to continue!", "error");
         }
+    }
+
+    $('#previewButton').click(function(e){
+        // Set all of the items in the preview.
+        // Set title.
+        $('#previewTitle').text($('#videoTitle').val());
+        // Set Publisher
+        $('#previewArtist').text($('#directorName').val());
+        // Set Description
+        $('#previewDescription').text($('#description').val());
+        // Set Video
+        try {
+            var newURL = URL.createObjectURL($('#mediaFiles').prop('files')[0]);
+            console.log(newURL);
+            $('#previewVideo').attr('src', newURL);
+        } catch(e) {
+            swal('Error', 'You must select a video file.', 'error');
+            return;
+        }
+
+        $('#previewModal').modal('show');
+    })
+
+    function submitArtifact(){
+        swal({
+          title: "Are you sure?",
+          text: "You will not be able to change this later without deleting it completely!",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonClass: "btn-success",
+          confirmButtonText: "Yes, publish it!",
+          closeOnConfirm: true
+        },
+        function(){
+            var $active = $('.wizard .nav-tabs li.active');
+            $active.next().removeClass('disabled');
+            nextTab($active);
+        });
     }
 
     continueToArtifact();
