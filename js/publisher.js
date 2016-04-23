@@ -76,6 +76,7 @@ function registerNewPublisher(){
             var option = document.createElement("option");
             option.text = newPublisherName + ' (' + newPublisherFlorincoinAddress + ')';
             x.add(option);
+            // Set the just added option to be active.
             x.value = option.text;
           } else {
             swal("Error!", "Error registering, please refresh and try again!", "error");
