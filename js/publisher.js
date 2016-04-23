@@ -31,7 +31,7 @@ function registerNewPublisher(){
   var newPublisherRegisterResponse = '';
 
   // Sign the publisher annoucement message.
-  $.post("../php/signPublisher.php",{
+  $.post("./php/signPublisher.php",{
       name: newPublisherName,
       address: newPublisherFlorincoinAddress
     },
@@ -50,7 +50,7 @@ function registerNewPublisher(){
         // Save the signature.
         newPublisherSignResponse = data.response[0];
 
-        $.post('../php/registerPublisher.php',{
+        $.post('./php/registerPublisher.php',{
           name: newPublisherName,
           email: newPublisherEmail,
           address: newPublisherFlorincoinAddress,
@@ -71,6 +71,12 @@ function registerNewPublisher(){
             swal("Success!", "Your new publisher address has been successfully registered!", "success");
             // Hide the modal
             $('#newPublisherModal').modal('hide');
+            // Add the publisher as an option then select it.
+            var x = document.getElementById("publisherSelect");
+            var option = document.createElement("option");
+            option.text = newPublisherName + '(' + newPublisherFlorincoinAddress + ')';
+            x.add(option);
+            x.value = option.text;
           } else {
             swal("Error!", "Error registering, please refresh and try again!", "error");
             $('#newPublisherModal').modal('hide');
