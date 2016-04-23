@@ -176,7 +176,7 @@
                                     <h5>
                                         <object type="image/svg+xml" data="assets/svg/media-16px-2_note-03.svg"></object>
                                         Video Files</h5>
-                                    <table class="table">
+                                    <!--<table class="table" id='mediaTable'>
                                         <colgroup>
                                             <col class="">
                                             <col class="">
@@ -205,11 +205,9 @@
                                                 <td><input type="text" class="form-control" value="DJ Day"></td>
                                             </tr>
                                         </tbody>
-                                    </table>
+                                    </table>-->
                                     <!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
-                                    <div class="upload-area">
-                                        <object data="assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml"></object>
-                                    </div>
+                                    <input type="file" name="mediaFiles" id="mediaFiles" multiple></input>
                                 </div>
                             </div>
                            <div class="publish-section">
@@ -218,7 +216,7 @@
                                         <object type="image/svg+xml" data="assets/svg/files-16px_single-folded-content.svg"></object>
                                         Extra Files
                                     </h5>
-                                    <table class="table">
+                                    <!--<table class="table" id="extraTable">
                                         <colgroup>
                                             <col class="">
                                             <col class="">
@@ -261,10 +259,8 @@
                                                 <td><input type="text" class="form-control" value="I Digress"></td>
                                             </tr>
                                         </tbody>
-                                    </table>
-                                    <div class="upload-area">
-                                        <object data="assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml"></object>
-                                    </div>
+                                    </table>-->
+                                    <input type='file' id="extraFiles" name="extraFiles" multiple />
                                 </div>
                             </div>
                            <div class="publish-section publish-submit">
@@ -277,6 +273,7 @@
                                     </div>
                                 </div>
                             </div>
+                            <div style='height:30px'></div>
                         </div>
                     </div>
                     <div class="tab-pane" role="tabpanel" id="step3">
