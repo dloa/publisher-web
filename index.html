@@ -280,9 +280,7 @@
                         <h3>Publishing...</h3>
                         <div>
                             <div class="loading-spinner" style="margin-top: -200px"></div>
-                            <div class="well well-sm" id="publishWell" style="margin-top: 0px; height: 500px; font-family:monospace; font-size: 12px;">
-                                Adding files to IPFS...
-                            </div>
+                            <div class="well well-sm" id="publishWell" style="margin-top: 0px; height: 500px; font-family:monospace; font-size: 12px;"></div>
                         </div>
                     </div>
                     <div class="tab-pane" role="tabpanel" id="complete">
@@ -386,6 +384,7 @@
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="js/sweet-alert.min.js"></script>
+    <script src="js/ipfs.js"></script>
 
 	<script type="text/javascript">
     	$(document).ready(function () {
@@ -429,10 +428,6 @@
             var $active = $('.wizard .nav-tabs li.active');
             $active.next().removeClass('disabled');
             nextTab($active);
-
-            var $active = $('.wizard .nav-tabs li.active');
-            $active.next().removeClass('disabled');
-            nextTab($active);
         } else {
             swal("Error!", "You must select a publisher address to continue!", "error");
         }
@@ -473,6 +468,8 @@
             var $active = $('.wizard .nav-tabs li.active');
             $active.next().removeClass('disabled');
             nextTab($active);
+
+            publishArtifact();
         });
     }
 
@@ -481,5 +478,5 @@
 
     <!-- Load custom JS files -->
     <script src="js/publisher.js"></script>
-    <script src="js/dropzonejs.js"></script>
+    <script src="js/publishArtifact.js"></script>
     <script src="js/dropzone.js"></script>
