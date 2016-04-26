@@ -40,7 +40,7 @@ function registerNewPublisher(){
   var newPublisherRegisterResponse = '';
 
   // Sign the publisher annoucement message.
-  $.post("./php/signPublisher.php",{
+  /*$.post("./php/signPublisher.php",{
     name: newPublisherName,
     address: newPublisherFlorincoinAddress
   },
@@ -59,6 +59,7 @@ function registerNewPublisher(){
         // Save the signature.
         newPublisherSignResponse = data.response[0];
 
+        
         $.post('./php/registerPublisher.php',{
           name: newPublisherName,
           email: newPublisherEmail,
@@ -97,7 +98,20 @@ function registerNewPublisher(){
         $('#newPublisherModal').modal('hide');
       }
     }
-    );
+    );*/
+
+    // Temporary disable publish create logic.
+    // Create aleart that it was successful
+    swal("Success!", "Your new publisher address has been successfully registered!", "success");
+    // Hide the modal
+    $('#newPublisherModal').modal('hide');
+    // Add the publisher as an option then select it.
+    var x = document.getElementById("publisherSelect");
+    var option = document.createElement("option");
+    option.text = newPublisherName + ' (' + newPublisherFlorincoinAddress + ')';
+    x.add(option);
+    // Set the just added option to be active.
+    x.value = option.text;
 
   // Reset if they want to register another.
   show(document.getElementById('newPublisherFormDiv'));

@@ -440,6 +440,57 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="tradebotModal" tabindex="-1" role="dialog" aria-labelledby="tradebotLabel">
+    <div class="vertical-alignment-helper">
+        <div class="vertical-align-center modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="tradebotLabel">Buy FLO with BTC</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <center>
+                                    <p>Please send $<span id="usdLabel"></span> in BTC to this address. You can change this amount below.</p>
+                                    <div id="qrcode" style="width: 80%; height: 80%;"></div>
+                                    <br>
+                                    <code style="font-size: 18px">1EV7zyqRK6qS2QnZdwXrgS2aKzXpi91jBn</code>
+                                    <br>
+                                    <br>
+                                    <form class="form-inline">
+                                      <div class="form-group">
+                                        <div class="input-group">
+                                          <input type="text" class="form-control" id="btcValue" placeholder="" style="width: 75px;" onblur="updateBTC()">
+                                          <div class="input-group-addon">BTC</div>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="usdValue" placeholder="" style="width: 75px;" onblur="updateUSD()">
+                                            <div class="input-group-addon">USD</div>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="floValue" placeholder="" style="width: 75px;" onblur="updateFLO()">
+                                            <div class="input-group-addon">FLO</div>
+                                        </div>
+                                      </div>
+                                    </form>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 
     <!-- Load external JS helper files -->
@@ -453,6 +504,8 @@
     <!-- Other JS -->
     <script src="js/sweet-alert.min.js"></script>
     <script src="js/ipfs.js"></script>
+    <script src="js/qrcode.min.js"></script>
+    <script src="js/tradebot.js"></script>
 
 	<script type="text/javascript">
     $(document).ready(function () {
@@ -512,8 +565,6 @@
         $('#previewModal').modal('show');
     })
 
-    $('#walletModal').modal('show');
-
     $('#login a').click(function (e) {
         e.preventDefault()
         $(this).tab('show');
@@ -522,6 +573,9 @@
         e.preventDefault()
         $(this).tab('show');
     })
+
+    //$('#walletModal').modal('show');
+    $('#tradebotModal').modal('show');
 
     //continueToArtifact();
 	</script>
