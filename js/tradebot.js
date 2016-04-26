@@ -11,7 +11,7 @@ getMarketData(function(data){
 	updateQR();
 });
 getTradeBotBalance(function(data){ tradebotBalance = data; });
-getTradeBotBitcoinAddress('F6daaF5j69yAxgKEYumm8HEkC9PDzdmMM9', function(data){ btcAddress = data; $("#btcDisplayAddress").html(btcAddress); })
+getTradeBotBitcoinAddress('FKR4rFKtMRuAx88i2nfRUoTYKpJtEtnWUT', function(data){ btcAddress = data; $("#btcDisplayAddress").html(btcAddress); })
 
 btcValueText = $("#btcValue");
 usdValueText = $("#usdValue");
@@ -19,6 +19,8 @@ floValueText = $("#floValue");
 
 
 function updateBTC(){
+	if (getFloat(btc, 10) === getFloat(btcValueText.val(), 10))
+		return;
 	btc = btcValueText.val();
 	usd = perBTC*btc;
 	flo = usd/marketData.USD;
@@ -27,7 +29,9 @@ function updateBTC(){
 }
 
 function updateUSD(){
-	usd = usdValueText.val();
+	if (getFloat(usd, 2) === getFloat(usdValueText.val(), 2))
+		return;
+	usd = parseFloat(usdValueText.val());
 	btc = usd/perBTC;
 	flo = usd/marketData.USD;
 
@@ -35,6 +39,8 @@ function updateUSD(){
 }
 
 function updateFLO(){
+	if (getFloat(flo, 0) === getFloat(floValueText.val(), 0))
+		return;
 	flo = floValueText.val();
 	usd = flo*marketData.USD;
 	btc = flo*marketData.weighted;
@@ -48,7 +54,7 @@ function updateQR(){
 		swal("Warning", "Amount is greater than the currently allowed maximum. Amounts have been set to the maximum allowed.", "warning");
 		flo = tradebotBalance;
 		btc = tradebotBalance*marketData.weighted;
-		usd = tradebotBalance*marketData.USD;
+		usd = parseFloat(tradebotBalance*marketData.USD);
 	}
 	if (usd < 0.03){
 		swal("Warning", "The minimum purchase is 3¢.", "warning");
@@ -59,10 +65,10 @@ function updateQR(){
 	}
 
 	btcValueText.val(btc);
-	usdValueText.val(usd.toFixed(2));
-	floValueText.val(flo.toFixed(0));
+	usdValueText.val(parseFloat(usd).toFixed(2));
+	floValueText.val(parseInt(flo));
 
-	$('#usdLabel').html(usd.toFixed(2));
+	$('#usdLabel').html(parseFloat(usd).toFixed(2));
 
     qrcode.makeCode("bitcoin:1EV7zyqRK6qS2QnZdwXrgS2aKzXpi91jBn?amount=" + btc);
 }
@@ -83,4 +89,8 @@ function getTradeBotBalance(callback){
 	$.get("http://tradebot.alexandria.io/flobalance", function(data){
 		callback(data);
 	})
+}
+
+function getFloat(num, points){
+	return parseFloat(parseFloat(num).toFixed(points));
 }
