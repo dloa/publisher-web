@@ -19,6 +19,38 @@ function loginToWallet() {
     });
 }
 
+function registerWallet() {
+	var data = {};
+	if ($("#createWalletEmail").val().length > 3)
+	    data = {email: emailInput.val()};
+	$.post("http://flovault.alexandria.io/wallet/create", data, function (response) {
+	    console.log("Create Response");
+	    console.log(response);
+	    if (response.error) {
+	        swal("Error", "Registration failed, please try again!", "error");
+	        return;
+	    }
+	    //identifierInput.val(response.identifier);
+	    wallet = new Wallet(response.identifier, $("#createWalletPassword").val());
+	    wallet.setSharedKey(response.shared_key);
+	    wallet.store();
+
+	    wallet.generateAddress();
+
+	    console.log(wallet);
+
+	    // Dismiss modal then open success.
+        $('#walletModal').modal('hide');
+	    swal({
+	    	title: "Success!", 
+	    	text: "text",
+	    	type: "success"
+	    });
+	    $(".sweet-alert .showSweetAlert").prop('tabindex', 0);
+	    $(".sweet-alert .lead").html("Register was successful, here is your identifier, please keep this safe or you may lose access to your coins and Publisher ID: <br><code>" + response.identifier + "</code>");
+	});
+}
+
 function loadAddresses(){
 	// First load addresses into new publisher modal
 
