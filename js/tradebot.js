@@ -2,14 +2,16 @@ var qrcode = new QRCode("qrcode");
 
 var marketData, tradebotBalance, btcAddress, btc, usd, flo, perBTC;
 getMarketData(function(data){ 
+	console.log(data)
 	marketData = data; 
 	perBTC = marketData.USD/marketData.weighted;
 	usd = 0.10;
 	btc = usd/perBTC;
-	flo = btc*marketData.weighted;
+	flo = usd/marketData.USD;
 	updateQR();
 });
 getTradeBotBalance(function(data){ tradebotBalance = data; });
+getTradeBotBitcoinAddress('F6daaF5j69yAxgKEYumm8HEkC9PDzdmMM9', function(data){ btcAddress = data; $("#btcDisplayAddress").html(btcAddress); })
 
 btcValueText = $("#btcValue");
 usdValueText = $("#usdValue");
@@ -19,7 +21,7 @@ floValueText = $("#floValue");
 function updateBTC(){
 	btc = btcValueText.val();
 	usd = perBTC*btc;
-	flo = (perBTC*btc)/marketData.USD;
+	flo = usd/marketData.USD;
 
 	updateQR();
 }
@@ -27,7 +29,7 @@ function updateBTC(){
 function updateUSD(){
 	usd = usdValueText.val();
 	btc = usd/perBTC;
-	flo = btc*marketData.weighted;
+	flo = usd/marketData.USD;
 
 	updateQR();
 }
@@ -53,12 +55,12 @@ function updateQR(){
 
 		usd = 0.03;
 		btc = usd/perBTC;
-		flo = btc*marketData.weighted;
+		flo = usd/marketData.USD;
 	}
 
 	btcValueText.val(btc);
 	usdValueText.val(usd.toFixed(2));
-	floValueText.val(flo);
+	floValueText.val(flo.toFixed(0));
 
 	$('#usdLabel').html(usd.toFixed(2));
 

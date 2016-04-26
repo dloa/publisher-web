@@ -456,22 +456,24 @@
                                     <p>Please send $<span id="usdLabel"></span> in BTC to this address. You can change this amount below.</p>
                                     <div id="qrcode" style="width: 80%; height: 80%;"></div>
                                     <br>
-                                    <code style="font-size: 18px">1EV7zyqRK6qS2QnZdwXrgS2aKzXpi91jBn</code>
+                                    <code style="font-size: 18px" id="btcDisplayAddress">1EV7zyqRK6qS2QnZdwXrgS2aKzXpi91jBn</code>
                                     <br>
                                     <br>
                                     <form class="form-inline">
+                                      <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">$</div>
+                                            <input type="text" class="form-control" id="usdValue" placeholder="" style="width: 75px;" onblur="updateUSD()">
+                                            <div class="input-group-addon">USD</div>
+                                        </div>
+                                      </div>
                                       <div class="form-group">
                                         <div class="input-group">
                                           <input type="text" class="form-control" id="btcValue" placeholder="" style="width: 75px;" onblur="updateBTC()">
                                           <div class="input-group-addon">BTC</div>
                                         </div>
                                       </div>
-                                      <div class="form-group">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="usdValue" placeholder="" style="width: 75px;" onblur="updateUSD()">
-                                            <div class="input-group-addon">USD</div>
-                                        </div>
-                                      </div>
+                                      
                                       <div class="form-group">
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="floValue" placeholder="" style="width: 75px;" onblur="updateFLO()">
