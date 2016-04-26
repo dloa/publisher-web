@@ -321,8 +321,10 @@
                       </div>
                       <div class="form-group">
                         <label for="newPublisherFlorincoinAddress">Florincoin Address</label>
-                        <input type="text" class="form-control" id="newPublisherFlorincoinAddress" placeholder="FKfguRay1RMskNP2esNDr8AawBZHF1eb56">
-                        <p class="help-block">This is your Florincoin address that you will use to publish items.</p>
+                        <select id="newPublisherFlorincoinAddress" class="form-control">
+                            <option>Create new address...</option>
+                        </select>
+                        <p class="help-block">This is your Florincoin address that you will use to publish items. Please note that you will need at least 1 FLO on this wallet. If you select a wallet with 0 FLO you will be promted to buy some using Bitcoin.</p>
                       </div>
                     </form>
                     <button class="btn btn-default" onclick="registerNewPublisher();">Register Publisher</button>
@@ -355,15 +357,15 @@
                         </div>
                         <div class="row entity-meta-header">
                         <br>
-                            <h2 id='previewTitle'>Alexandria v0.5.1 alpha demo</h2>
-                            <h3 id="previewArtist">Alexandria Council of Librarians</h3>
+                            <h2 id='previewTitle'>Title</h2>
+                            <h3 id="previewArtist">Artist</h3>
                             <div class="entity-meta-content">
                                 <div id='previewTime' class="entity-pub-time">Posted <span>Tue Dec 08 2015 09:36:34 GMT-0700 (MST)</span></div>
                                 <div id='previewRuntime' class="entity-runtime">Runtime: <span id="entity-runtime">00:12:48</span></div>
                             </div>
                         </div>
                         <div class="row media-desc">
-                            <p id='previewDescription'>Alexandria's founder, Devon Read, demos a variety of features and explains a bit more about how the Decentralized Library of Alexandria works... ProTip - One way that you can directly support Alexandria is by installing Librarian and pointing your web browser at this URL: http://localhost:8079/api/ipfs/pin/add/QmNrcxXH9PgHzEaFTQQNQRYNvUbLZXnyKueaVUV3C94fDN to pin this video locally to help decentralize it storage and distribution further.</p>
+                            <p id='previewDescription'>Description</p>
                         </div>
                     </div>
                     </div>

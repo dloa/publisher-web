@@ -35,9 +35,12 @@ function registerWallet() {
 	    wallet.setSharedKey(response.shared_key);
 	    wallet.store();
 
+	    // Create one address by default.
 	    wallet.generateAddress();
 
 	    console.log(wallet);
+
+	    loadAddresses();
 
 	    // Dismiss modal then open success.
         $('#walletModal').modal('hide');
@@ -53,6 +56,32 @@ function registerWallet() {
 
 function loadAddresses(){
 	// First load addresses into new publisher modal
+	for (var addr in wallet.addresses) {
+		var address = wallet.addresses[addr].addr;
+		// Add the florincoin addresses to the option list.
+        var x = document.getElementById("newPublisherFlorincoinAddress");
+        var option = document.createElement("option");
+        option.text = address;
+        x.add(option);
+	}
 
 	// Next check alexandria for all publishers and see if any wallets match. If they do, add them to the option list.
+	$.getJSON( "http://libraryd.alexandria.io/alexandria/v1/publisher/get/all", function( data ) {
+		for (var i = 0; i < data.length; i++) {
+			//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
+			for (var addr in wallet.addresses) {
+				var address = wallet.addresses[addr].addr;
+				if (data[i]["publisher-data"]["alexandria-publisher"].address == address){
+				//if (true){
+					// Add the publisher as an option then select it.
+		            var x = document.getElementById("publisherSelect");
+		            var option = document.createElement("option");
+		            option.text = data[i]["publisher-data"]["alexandria-publisher"].name + ' (' + data[i]["publisher-data"]["alexandria-publisher"].address + ')';
+		            x.add(option);
+		            // Set the just added option to be active.
+		            x.value = option.text;
+				}
+			}
+		}
+	});
 }
