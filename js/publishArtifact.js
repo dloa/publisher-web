@@ -1,5 +1,23 @@
 ipfs.setProvider({host: 'localhost', port: '5001', protocol: 'http'});
 
+function submitArtifact(){
+    swal({
+        title: "Are you sure?",
+        text: "You will not be able to change this later without deleting it completely!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonClass: "btn-success",
+        confirmButtonText: "Yes, publish it!",
+        closeOnConfirm: true
+    },
+    function(){
+        var $active = $('.wizard .nav-tabs li.active');
+        $active.next().removeClass('disabled');
+        nextTab($active);
+        publishArtifact();
+    });
+}
+
 function addFileToIPFS(file, count, callback){
 	// Check if file is null.
 	if (!file)

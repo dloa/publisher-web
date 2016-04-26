@@ -378,16 +378,69 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="walletModal" tabindex="-1" role="dialog" aria-labelledby="walletLabel">
+    <div class="vertical-alignment-helper">
+        <div class="vertical-align-center modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="walletLabel">Login to Wallet</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
+                                    <li role="presentation"><a href="#register" aria-controls="register" role="tab" data-toggle="tab">Register</a></li>
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="login">
+                                        <form>
+                                            <div class="form-group">
+                                                <label for="loginWalletIdentifier">Wallet Identifier</label>
+                                                <input type="text" class="form-control" id="loginWalletIdentifier" placeholder="xxxx-xxxx-xxx-xxx">
+                                                <p class="help-block">This is your wallet identifier that you recieved after creating a wallet with Flovault.</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="loginWalletPassword">Password</label>
+                                                <input type="password" class="form-control" id="loginWalletPassword" placeholder="">
+                                                <p class="help-block">This is your Florincoin address that you will use to publish items.</p>
+                                            </div>
+                                        </form>
+                                        <button class="btn btn-success" onclick="loginToWallet();">Login</button>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="register">register</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 
     <!-- Load external JS helper files -->
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <!-- Wallet JS -->
+    <script src="js/SimpleDeps.js"></script>
+    <script src="js/SimpleWallet.js"></script>
+    <script src="js/libraryd-js.js"></script>
+    <script src="js/wallet.js"></script>
+    <!-- Other JS -->
     <script src="js/sweet-alert.min.js"></script>
     <script src="js/ipfs.js"></script>
 
 	<script type="text/javascript">
-    	$(document).ready(function () {
+    $(document).ready(function () {
         //Initialize tooltips
         $('.nav-tabs > li a[title]').tooltip();
         
@@ -423,16 +476,6 @@
         $(elem).prev().find('a[data-toggle="tab"]').click();
     }
 
-    function continueToArtifact() {
-        if (document.getElementById("publisherSelect").value != 'None Registered...a'){
-            var $active = $('.wizard .nav-tabs li.active');
-            $active.next().removeClass('disabled');
-            nextTab($active);
-        } else {
-            swal("Error!", "You must select a publisher address to continue!", "error");
-        }
-    }
-
     $('#previewButton').click(function(e){
         // Set all of the items in the preview.
         // Set title.
@@ -454,29 +497,21 @@
         $('#previewModal').modal('show');
     })
 
-    function submitArtifact(){
-        swal({
-          title: "Are you sure?",
-          text: "You will not be able to change this later without deleting it completely!",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonClass: "btn-success",
-          confirmButtonText: "Yes, publish it!",
-          closeOnConfirm: true
-        },
-        function(){
-            var $active = $('.wizard .nav-tabs li.active');
-            $active.next().removeClass('disabled');
-            nextTab($active);
+    $('#walletModal').modal('show');
 
-            publishArtifact();
-        });
-    }
+    $('#login a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show');
+    })
+    $('#register a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show');
+    })
 
-    continueToArtifact();
+    //continueToArtifact();
 	</script>
 
     <!-- Load custom JS files -->
-    <script src="js/publisher.js"></script>
+    <script src="js/createPublisher.js"></script>
     <script src="js/publishArtifact.js"></script>
     <script src="js/dropzone.js"></script>

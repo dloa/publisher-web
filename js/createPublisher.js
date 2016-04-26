@@ -6,12 +6,21 @@ function hide (elements) {
 }
 
 function show (elements, specifiedDisplay) {
-   elements = elements.length ? elements : [elements];
-  for (var index = 0; index < elements.length; index++) {
-    elements[index].style.display = specifiedDisplay || 'block';
-  }
+ elements = elements.length ? elements : [elements];
+ for (var index = 0; index < elements.length; index++) {
+  elements[index].style.display = specifiedDisplay || 'block';
+}
 }
 
+function continueToArtifact() {
+  if (document.getElementById("publisherSelect").value != 'None Registered...'){
+    var $active = $('.wizard .nav-tabs li.active');
+    $active.next().removeClass('disabled');
+    nextTab($active);
+  } else {
+    swal("Error!", "You must select a publisher address to continue!", "error");
+  }
+}
 
 function registerNewPublisher(){
   // Hide the form and show the loading window.
@@ -32,10 +41,10 @@ function registerNewPublisher(){
 
   // Sign the publisher annoucement message.
   $.post("./php/signPublisher.php",{
-      name: newPublisherName,
-      address: newPublisherFlorincoinAddress
-    },
-    function(response) {
+    name: newPublisherName,
+    address: newPublisherFlorincoinAddress
+  },
+  function(response) {
       // response is the data we get back from the php file
       var data = JSON.parse(response);
       console.log(data);
@@ -88,7 +97,7 @@ function registerNewPublisher(){
         $('#newPublisherModal').modal('hide');
       }
     }
-  );
+    );
 
   // Reset if they want to register another.
   show(document.getElementById('newPublisherFormDiv'));
