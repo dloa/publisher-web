@@ -58,7 +58,7 @@ ipfs.add = function(input, callback) {
   request({
     callback: callback,
     method:"POST",
-    uri:"/add",
+    uri:"/add?arg=w",
     payload:form,
     accept: "application/json",
     transform: function(response) { return response ? JSON.parse(response)["Hash"] : null}});
