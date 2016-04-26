@@ -1,4 +1,4 @@
-ipfs.setProvider({host: 'localhost', port: '5001', protocol: 'http'});
+ipfs.setProvider({host: '46.101.230.105', port: '5001', protocol: 'http'});
 
 function submitArtifact(){
     swal({
