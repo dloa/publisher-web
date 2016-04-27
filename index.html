@@ -309,17 +309,17 @@
                 </div>
                 <div id="newPublisherFormDiv" style="display:block">
                     <form>
-                      <div class="form-group">
+                      <div class="form-group" id="pubNameFormGroup">
                         <label for="newPublisherName">Publisher Name</label>
                         <input type="email" class="form-control" id="newPublisherName" placeholder="Publisher Name">
                         <p class="help-block">This is your display name for your publisher, i.e. Imogen Heap</p>
                       </div>
-                      <div class="form-group">
+                      <div class="form-group" id="pubEmailFormGroup">
                         <label for="newPublisherEmail">Email (optional)</label>
                         <input type="email" class="form-control" id="newPublisherEmail" placeholder="Email">
                         <p class="help-block">An MD5 hash will be generated from your email address, which will be published publicly. This is used for Gravatar’s dynamic Avatar lookup service, but your email address itself will not be published in plaintext.</p>
                       </div>
-                      <div class="form-group">
+                      <div class="form-group" id="pubFloAddressFormGroup">
                         <label for="newPublisherFlorincoinAddress">Florincoin Address</label>
                         <select id="newPublisherFlorincoinAddress" class="form-control">
                             <!--<option>Create new address...</option> // Disabled until Tradebot works.-->

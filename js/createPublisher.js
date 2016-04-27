@@ -23,17 +23,29 @@ function continueToArtifact() {
 }
 
 function registerNewPublisher(){
+    // Variables from form
+    var newPublisherName = document.getElementById('newPublisherName').value;
+    var newPublisherEmail = document.getElementById('newPublisherEmail').value;
+    var newPublisherFlorincoinAddress = document.getElementById('newPublisherFlorincoinAddress').value;
+
+    // Validate inputs and throw errors.
+    if (isBlank(newPublisherName)){
+        swal("Error!", "You must provide a publisher name.", "error");
+        $("#pubNameFormGroup").addClass('has-error');
+        return;
+    }
+    if (isEmail(newPublisherEmail)){
+        swal("Error!", "You must provide a valid email.", "error");
+        $("#pubEmailFormGroup").addClass('has-error');
+        return;
+    }
+
     // Hide the form and show the loading window.
     hide(document.getElementById('newPublisherFormDiv'));
     show(document.getElementById('newPublisherLoadingDiv'));
 
     // Log to the well that we are signing the announcement message
     document.getElementById('newPublisherLoadingWell').innerHTML += "Signing publisher announcement message...</br>";
-
-    // Variables from form
-    var newPublisherName = document.getElementById('newPublisherName').value;
-    var newPublisherEmail = document.getElementById('newPublisherEmail').value;
-    var newPublisherFlorincoinAddress = document.getElementById('newPublisherFlorincoinAddress').value;
 
     // variable to hold the sign response
     var newPublisherSignResponse = '';
@@ -63,5 +75,12 @@ function registerNewPublisher(){
     // Reset if they want to register another.
     show(document.getElementById('newPublisherFormDiv'));
     hide(document.getElementById('newPublisherLoadingDiv'));
-  
+}
+
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
+}
+
+function isEmail(str){
+    return (!/^\s*$/.test(str) || /\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z/.test(str));
 }
