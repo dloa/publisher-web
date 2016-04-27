@@ -48,7 +48,7 @@ var Wallet = (function () {
     };
     Wallet.prototype.addAddress = function (address, data) {
         if (address in this.addresses) {
-            alert("Warning: address " + address + " already exists, skipping.");
+            swal("Warning", "Warning: address " + address + " already exists, skipping.", "warning");
         }
         else {
             this.addresses[address] = data;
@@ -63,7 +63,7 @@ var Wallet = (function () {
         var _this = this;
         $.get(baseURL + '/wallet/load/' + this.identifier, function (data) {
             if (data.error !== false) {
-                alert(data.error.message);
+                swal("Error!", data.error.message, "error");
             }
             else {
                 var decWallet, decWalletString, decWalletJSON;
@@ -84,7 +84,7 @@ var Wallet = (function () {
                         _success();
                     }
                     catch (ex) {
-                        alert("There was an error rendering this page. Please contact an administrator.");
+                        swal("Error", "There was an error rendering this page. Please contact an administrator.", "error");
                         console.log(ex);
                     }
                 }
@@ -109,17 +109,17 @@ var Wallet = (function () {
             wallet_data: encWalletDataCipher
         }, function (data) {
             if (data.error !== false) {
-                alert(data.error.message);
-                alert('WARNING: There was an error saving your wallet. ' +
+                swal("Error", data.error.message, "error");
+                swal("Error", 'WARNING: There was an error saving your wallet. ' +
                     'If you have created new addresses in the past few minutes, ' +
                     'please save their private keys ASAP, as your encrypted wallet' +
-                    ' may not have been updated properly on our servers.');
+                    ' may not have been updated properly on our servers.', "error");
             }
         }, "json").fail(function () {
-            alert('WARNING: There was an error saving your wallet. ' +
+            swal("Error", 'WARNING: There was an error saving your wallet. ' +
                 'If you have created new addresses in the past few minutes, ' +
                 'please save their private keys ASAP, as your encrypted wallet' +
-                ' may not have been updated properly on our servers.');
+                ' may not have been updated properly on our servers.', error);
         });
     };
 
@@ -247,7 +247,7 @@ var Wallet = (function () {
             if (fromAddress in this.addresses && this.validateKey(this.addresses[fromAddress].priv, true)) {
                 this.refreshBalances();
                 if (this.balances[fromAddress] < amount) {
-                    alert("You don't have enough coins to do that");
+                    swal("Error!", "You don't have enough coins to do that", "error");
                     return;
                 }
                 this.getUnspent(fromAddress, function (data) {
@@ -260,7 +260,7 @@ var Wallet = (function () {
                     var totalUnspent = parseInt((data.total * Math.pow(10, 8)).toString());
                     amount = parseInt((amount * Math.pow(10, 8)).toString());
                     if (amount < minFeePerKb) {
-                        alert("You must send at least 0.001 FLO (otherwise your transaction may get rejected)");
+                        swal("Warning", "You must send at least 0.001 FLO (otherwise your transaction may get rejected)", "warning");
                         return;
                     }
                     console.log('Sending ' + amount + ' satoshis from ' + fromAddress + ' to ' + toAddress + ' unspent amt: ' + totalUnspent);
@@ -278,7 +278,7 @@ var Wallet = (function () {
                        // estimatedFee = estimatedFee * 3;
                     }
                     if ((amount + estimatedFee) > totalUnspent) {
-                        alert("Can't fit fee of " + estimatedFee / Math.pow(10, 8) + " - lower your sending amount");
+                        swal("Error", "Can't fit fee of " + estimatedFee / Math.pow(10, 8) + " - lower your sending amount", "error");
                         console.log('WARNING: Total is greater than total unspent: %s - Actual Fee: %s', totalUnspent, estimatedFee);
                         return;
                     }
@@ -325,11 +325,11 @@ var Wallet = (function () {
                 this.refreshBalances();
             }
             else {
-                alert("Error: You don't own that address!");
+                swal("Error", "You don't own that address!", "error");
             }
         }
         else {
-            alert('Error: Your sending or recipient address is invalid. Please check for any typos');
+            swal("Error", 'Your sending or recipient address is invalid. Please check for any typos', "error");
         }
     };
     Wallet.prototype.pushTX = function (tx, callback) {
@@ -340,14 +340,14 @@ var Wallet = (function () {
         var _this = this;
         $.post(baseURL + '/wallet/pushtx', {hex: tx}, function (data) {
             if (!data.txid) {
-                alert('There was an error pushing your transaction. May be a temporary problem, please try again later.');
+                swal("Error", 'There was an error pushing your transaction. May be a temporary problem, please try again later.', "error");
             }
             else {
                 callback(data);
             }
             _this.refreshBalances();
         }, "json").fail(function () {
-            alert('There was an error pushing your transaction. May be a temporary problem, please try again later.');
+            swal("Error", 'There was an error pushing your transaction. May be a temporary problem, please try again later.', "error");
         });
     };
     Wallet.prototype.setBalance = function (address, balance) {
@@ -412,7 +412,7 @@ $('#login-btn').click(function () {
     wallet = new Wallet(identifier, password);
     $.get('/wallet/checkload/' + identifier, function (data) {
         if (data.error) {
-            alert('error loading wallet: ' + data.error.message);
+            swal("Error", 'Error loading wallet: ' + data.error.message, "error");
         }
         else {
             console.log(data);
@@ -423,7 +423,7 @@ $('#login-btn').click(function () {
             }
         }
     }, "json").fail(function () {
-        alert('error loading wallet');
+        swal("Error", 'Could not load wallet', "error");
     });
 });
 
