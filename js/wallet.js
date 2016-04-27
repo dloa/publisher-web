@@ -12,6 +12,8 @@ function loginToWallet() {
         wallet.load(function () {
             console.log("Wallet Post-Load");
             console.log(wallet);
+            // Load wallet into page
+            loadAddresses();
             // Dismiss modal then open success.
             $('#walletModal').modal('hide');
             swal("Success!", "Successfully logged into wallet!", "success");
@@ -58,6 +60,7 @@ function loadAddresses(){
 	// First load addresses into new publisher modal
 	for (var addr in wallet.addresses) {
 		var address = wallet.addresses[addr].addr;
+		console.log(address);
 		// Add the florincoin addresses to the option list.
         var x = document.getElementById("newPublisherFlorincoinAddress");
         var option = document.createElement("option");
