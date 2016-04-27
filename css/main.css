@@ -258,3 +258,13 @@ span.round-tab:hover {
         line-height: 50px;
     }
 }
+
+.has-warning .form-control {
+    border-color: #DAD226;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 3px 3px rgba(0,0,0,.075);
+}
+
+.publish .publish-pricing .has-warning .form-control{
+    background-color: rgb(244, 249, 176);
+}

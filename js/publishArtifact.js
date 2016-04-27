@@ -1,5 +1,88 @@
 ipfs.setProvider({host: '46.101.230.105', port: '5001', protocol: 'http'});
 
+$('#previewButton').click(function(e){
+	// Validate form.
+	// Required: Video Title
+	if (isBlank($('#videoTitle').val())){
+		swal("Error!", "You must provide a title", "error");
+        $("#artifactTitleGroup").addClass('has-error');
+        return;
+	} else {
+		$("#artifactTitleGroup").removeClass('has-error');
+	}
+	// Optional: Director Name
+	if (isBlank($('#directorName').val())){
+        $("#artifactDirectorGroup").addClass('has-warning');
+	} else {
+		$("#artifactDirectorGroup").removeClass('has-warning');
+	}
+	// Optional: Distributor
+	if (isBlank($('#distributor').val())){
+        $("#artifactDistributorGroup").addClass('has-warning');
+	} else {
+		$("#artifactDistributorGroup").removeClass('has-warning');
+	}
+	// Required: Date
+	if (isBlank($('#releaseDate').val())){
+		swal("Error!", "You must provide a release year", "error");
+        $("#artifactDateGroup").addClass('has-error');
+        return;
+	} else {
+		$("#artifactDateGroup").removeClass('has-error');
+	}
+	// Required: Description
+	if (isBlank($('#description').val())){
+		swal("Error!", "You must provide a description", "error");
+        $("#artifactDescriptionGroup").addClass('has-error');
+        return;
+	} else {
+		$("#artifactDescriptionGroup").removeClass('has-error');
+	}
+	// Optional: Suggested Price to Play
+	if (isBlank($('#suggestedPlay').val())){
+        $("#suggestedPricePer").addClass('has-warning');
+	} else {
+		$("#suggestedPricePer").removeClass('has-warning');
+	}
+	// Optional: Minimum Price to Play
+	if (isBlank($('#minPlay').val())){
+        $("#minimumPricePer").addClass('has-warning');
+	} else {
+		$("#minimumPricePer").removeClass('has-warning');
+	}
+	// Optional: Suggested Price to Purchase
+	if (isBlank($('#suggestedBuy').val())){
+        $("#suggestedPriceBuy").addClass('has-warning');
+	} else {
+		$("#suggestedPriceBuy").removeClass('has-warning');
+	}
+	// Optional: Minimum Price to Purchase
+	if (isBlank($('#minBuy').val())){
+        $("#minimumPriceBuy").addClass('has-warning');
+	} else {
+		$("#minimumPriceBuy").removeClass('has-warning');
+	}
+
+    // Set all of the items in the preview.
+    // Set title.
+    $('#previewTitle').text($('#videoTitle').val());
+    // Set Publisher
+    $('#previewArtist').text($('#directorName').val());
+    // Set Description
+    $('#previewDescription').text($('#description').val());
+    // Set Video
+    try {
+        var newURL = URL.createObjectURL($('#mediaFiles').prop('files')[0]);
+        console.log(newURL);
+        $('#previewVideo').attr('src', newURL);
+    } catch(e) {
+        swal('Error', 'You must select a video file.', 'error');
+        return;
+    }
+
+    $('#previewModal').modal('show');
+})
+
 function submitArtifact(){
     swal({
         title: "Are you sure?",
@@ -106,4 +189,8 @@ function publishArtifact(){
 
 		// TODO: Publish using libraryd-js
 	}
+}
+
+function isBlank(str) {
+    return (!str || /^\s*$/.test(str));
 }

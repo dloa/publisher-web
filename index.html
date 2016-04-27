@@ -90,19 +90,19 @@
                                 <div class="row">
                                     <div class="col-sm-8">
                                        <h5>Video Information</h5>
-                                            <div class="form-group">
+                                            <div class="form-group" id="artifactTitleGroup">
                                                 <input type="text" class="form-control" id="videoTitle" placeholder="Video Title">
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" id="artifactDirectorGroup">
                                                 <input type="text" class="form-control" id="directorName" placeholder="Director Name">
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" id="artifactDistributorGroup">
                                                 <input type="text" class="form-control" id="distributor" placeholder="Distributor">
                                             </div>
-                                            <div class="form-group">
-                                                <input type="date" class="form-control" id="releaseYear" placeholder="Release Year">
+                                            <div class="form-group" id="artifactDateGroup">
+                                                <input type="date" class="form-control" id="releaseDate" placeholder="Release Date">
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" id="artifactDescriptionGroup">
                                                 <textarea row="3" class="form-control" id="description" placeholder="Video Description"></textarea>
                                             </div>
                                     </div>
@@ -125,7 +125,7 @@
                                    <div class="col col-sm-6">
                                         <h5>Price to Play</h5>
                                         <form class="form-horizontal">
-                                            <div class="form-group" style="margin-bottom: 65px">
+                                            <div class="form-group" style="margin-bottom: 65px" id="suggestedPricePer">
                                                 <label for="" class="col-sm-5 control-label">Suggested:</label>
                                                 <div class="col-sm-7">
                                                     <div class="input-group">
@@ -134,7 +134,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" id="minimumPricePer">
                                                 <label for="" class="col-sm-5 control-label">Minimum:</label>
                                                 <div class="col-sm-7">
                                                     <div class="input-group">
@@ -148,7 +148,7 @@
                                    <div class="col col-sm-6">
                                         <h5>Price to Purchase</h5>
                                         <form class="form-horizontal">
-                                            <div class="form-group">
+                                            <div class="form-group" id="suggestedPriceBuy">
                                                 <label for="" class="col-sm-5 control-label">Suggested:</label>
                                                 <div class="col-sm-7">
                                                     <div class="input-group">
@@ -157,7 +157,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" id="minimumPriceBuy">
                                                 <label for="" class="col-sm-5 control-label">Minimum:</label>
                                                 <div class="col-sm-7">
                                                     <div class="input-group">
@@ -174,38 +174,8 @@
                                 <div class="publish-files audio-tracks">
                                     <h5>
                                         <object type="image/svg+xml" data="assets/svg/media-16px-2_note-03.svg"></object>
-                                        Video Files</h5>
-                                    <!--<table class="table" id='mediaTable'>
-                                        <colgroup>
-                                            <col class="">
-                                            <col class="">
-                                            <col style="width: 75px;">
-                                            <col style="width: 75px;">
-                                            <col style="width: 75px;">
-                                            <col class="">
-                                        </colgroup>
-                                        <thead>
-                                            <tr>
-                                                <th>File</th>
-                                                <th>File Name</th>
-                                                <th>File Size</th>
-                                                <th>Duration</th>
-                                                <th>Track</th>
-                                                <th>Display name</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>dj_day.flac</td>
-                                                <td>3.5 MB</td>
-                                                <td>3:27 min</td>
-                                                <td><input type="text" class="form-control" value="1"></td>
-                                                <td><input type="text" class="form-control" value="DJ Day"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>-->
-                                    <!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
+                                        Video Files
+                                    </h5>
                                     <input type="file" name="mediaFiles" id="mediaFiles" multiple></input>
                                 </div>
                             </div>
@@ -215,50 +185,6 @@
                                         <object type="image/svg+xml" data="assets/svg/files-16px_single-folded-content.svg"></object>
                                         Extra Files
                                     </h5>
-                                    <!--<table class="table" id="extraTable">
-                                        <colgroup>
-                                            <col class="">
-                                            <col class="">
-                                            <col style="width: 125px;">
-                                            <col class="">
-                                        </colgroup>
-                                        <thead>
-                                            <tr>
-                                                <th>File</th>
-                                                <th>File Name</th>
-                                                <th>File Type</th>
-                                                <th>Display name</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>dj_day.flac</td>
-                                                <td>
-                                                    <select class="form-control" id="sel1">
-                                                        <option>Artwork</option>
-                                                        <option>Zip File</option>
-                                                        <option>Thingy</option>
-                                                        <option>Luigi was not here</option>
-                                                    </select>
-                                                </td>
-                                                <td><input type="text" class="form-control" value="DJ Day"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>i_digress.flac</td>
-                                                <td>
-                                                    <select class="form-control" id="sel1">
-                                                        <option>Artwork</option>
-                                                        <option>Zip File</option>
-                                                        <option>Thingy</option>
-                                                        <option>Luigi was not here</option>
-                                                    </select>
-                                                </td>
-                                                <td><input type="text" class="form-control" value="I Digress"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>-->
                                     <input type='file' id="extraFiles" name="extraFiles" multiple />
                                 </div>
                             </div>
@@ -508,6 +434,9 @@
     <script src="js/ipfs.js"></script>
     <script src="js/qrcode.min.js"></script>
     <script src="js/tradebot.js"></script>
+    <script src="js/createPublisher.js"></script>
+    <script src="js/publishArtifact.js"></script>
+    <script src="js/dropzone.js"></script>
 
 	<script type="text/javascript">
     $(document).ready(function () {
@@ -546,27 +475,6 @@
         $(elem).prev().find('a[data-toggle="tab"]').click();
     }
 
-    $('#previewButton').click(function(e){
-        // Set all of the items in the preview.
-        // Set title.
-        $('#previewTitle').text($('#videoTitle').val());
-        // Set Publisher
-        $('#previewArtist').text($('#directorName').val());
-        // Set Description
-        $('#previewDescription').text($('#description').val());
-        // Set Video
-        try {
-            var newURL = URL.createObjectURL($('#mediaFiles').prop('files')[0]);
-            console.log(newURL);
-            $('#previewVideo').attr('src', newURL);
-        } catch(e) {
-            swal('Error', 'You must select a video file.', 'error');
-            return;
-        }
-
-        $('#previewModal').modal('show');
-    })
-
     $('#login a').click(function (e) {
         e.preventDefault()
         $(this).tab('show');
@@ -582,13 +490,8 @@
         }
     });
 
-    $('#walletModal').modal('show');
+    //$('#walletModal').modal('show');
     //$('#tradebotModal').modal('show');
 
-    //continueToArtifact();
+    continueToArtifact();
 	</script>
-
-    <!-- Load custom JS files -->
-    <script src="js/createPublisher.js"></script>
-    <script src="js/publishArtifact.js"></script>
-    <script src="js/dropzone.js"></script>
