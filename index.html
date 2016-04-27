@@ -412,7 +412,7 @@
                                                 <p class="help-block">This is your Florincoin address that you will use to publish items.</p>
                                             </div>
                                         </form>
-                                        <button class="btn btn-success" onclick="loginToWallet();">Login</button>
+                                        <button class="btn btn-success" id="walletLoginButton" onclick="loginToWallet();">Login</button>
                                     </div>
                                     <div role="tabpanel" class="tab-pane" id="register">
                                         <form>
@@ -575,6 +575,12 @@
         e.preventDefault()
         $(this).tab('show');
     })
+
+    $("#loginWalletPassword").keyup(function(event){
+        if(event.keyCode == 13){
+            $("#walletLoginButton").click();
+        }
+    });
 
     $('#walletModal').modal('show');
     //$('#tradebotModal').modal('show');
