@@ -194,3 +194,18 @@ function publishArtifact(){
 function isBlank(str) {
     return (!str || /^\s*$/.test(str));
 }
+
+function validatePricing(){
+	$('#suggestedPlay').val(parseFloat($('#suggestedPlay').val()).toFixed(3));
+	if($('#suggestedPlay').val() == "NaN")
+		$('#suggestedPlay').val("");
+	$('#minPlay').val(parseFloat($('#minPlay').val()).toFixed(3));
+	if($('#minPlay').val() == "NaN")
+		$('#minPlay').val("");
+	$('#suggestedBuy').val(parseFloat($('#suggestedBuy').val()).toFixed(3));
+	if($('#suggestedBuy').val() == "NaN")
+		$('#suggestedBuy').val("");
+	$('#minBuy').val(parseFloat($('#minBuy').val()).toFixed(3));
+	if($('#minBuy').val() == "NaN")
+		$('#minBuy').val("");
+}
