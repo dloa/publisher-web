@@ -2,34 +2,89 @@
 
 var LibraryDJS = LibraryDJS || {};
 
-function signPublisher(wallet, name, address) {
+// returns signature directly
+LibraryDJS.signPublisher = function (wallet, name, address, time) {
     // http://api.alexandria.io/#sign-publisher-announcement-message
-    var toSign = name + "-" + address + "-" + unixTime();
+    var toSign = name + "-" + address + "-" + time;
 
-    var signed = wallet.signMessage(address, toSign);
+    return wallet.signMessage(address, toSign);
+};
 
-    return {
-        status: "success",
-        response: [
-            signed
-        ]
-    }
-}
+// returns signature directly
+LibraryDJS.signArtifact = function (wallet, ipfs, address, time) {
+    // http://api.alexandria.io/#sign-publisher-announcement-message
+    var toSign = ipfs + "-" + address + "-" + time;
+
+    return wallet.signMessage(address, toSign);
+};
+// callback is (errorString, response) response=http://api.alexandria.io/#publish-new-artifact
+LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, callback) {
+    var time = unixTime();
+
+    var signature = LibraryDJS.signArtifact(wallet, ipfs, address, time);
+
+    var data = {
+        "media-data": {
+            "alexandria-media": alexandriaMedia,
+            "signature": signature
+        }
+    };
+
+    data["media-data"]["alexandria-media"].timestamp = parseInt(time);
+
+    LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.001, function (err, txIDs) {
+        if (err != null)
+            callback(err,
+                JSON.stringify({
+                    status: "failure",
+                    response: err
+                }));
+        else
+            callback(null,
+                JSON.stringify({
+                    status: "success",
+                    response: txIDs
+                }));
+    });
+};
 
 
-LibraryDJS.announcePublisher = function (wallet, name, address, bitMessage, email, signature) {
+// callback is (errorString, response) response=http://api.alexandria.io/#announce-new-publisher
+LibraryDJS.registerPublisher = function (wallet, name, address, bitMessage, email, signature, callback) {
+    LibraryDJS.announcePublisher(wallet, name, address, bitMessage, email, signature, callback);
+};
+
+// callback is (errorString, response) response=http://api.alexandria.io/#announce-new-publisher
+LibraryDJS.announcePublisher = function (wallet, name, address, bitMessage, email, callback) {
+    var time = unixTime();
+
+    var signature = LibraryDJS.signPublisher(wallet, name, address, time);
+
     var data = {
         "alexandria-publisher": {
             "name": name,
             "address": address,
-            "timestamp": unixTime(),
+            "timestamp": parseInt(time),
             "bitmessage": bitMessage,
             "email": CryptoJS.MD5(email).toString()
         },
         "signature": signature
     };
 
-    return LibraryDJS.Send(JSON.stringify(data));
+    LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.002, function (err, txIDs) {
+        if (err != null)
+            callback(err,
+                JSON.stringify({
+                    status: "failure",
+                    response: err
+                }));
+        else
+            callback(null,
+                JSON.stringify({
+                    status: "success",
+                    response: txIDs
+                }));
+    });
 };
 
 function unixTime() {
@@ -37,12 +92,15 @@ function unixTime() {
     return Date.now().toString().slice(0, -3);
 }
 
-LibraryDJS.Send = function (jsonData) {
-    LibraryDJS.sendToBlockChain(jsonData);
+// callback is (errorString, txIDs Array)
+LibraryDJS.Send = function (wallet, jsonData, address, amount, callback) {
+    LibraryDJS.sendToBlockChain(wallet, jsonData, address, amount, function (err, txIDs) {
+        callback(err, txIDs);
+    });
 };
 
-
-LibraryDJS.sendToBlockChain = function (txComment, address, amount) {
+// callback is (errorString, txIDs Array)
+LibraryDJS.sendToBlockChain = function (wallet, txComment, address, amount, callback) {
 
     // set tx fee
     // feature non existent in js currently
@@ -52,23 +110,21 @@ LibraryDJS.sendToBlockChain = function (txComment, address, amount) {
 
     // over sized?
     if (txComment.length > (CHOP_MAX_LEN * 10))
-        return JSON.stringify({
-            "success": false,
-            "Response": "txComment is too large to fit within 10 multipart transactions. try making it smaller!"
-        });
+        callback("txComment is too large to fit within 10 multipart transactions. try making it smaller!");
 
 
-    var txIDs = [];
     if (txComment.length > TXCOMMENT_MAX_LEN) {
-        txIDs = LibraryDJS.multiPart(txComment, address, amount);
+        LibraryDJS.multiPart(wallet, txComment, address, amount, callback);
     }
-    else{
-        txIDs[0] = wallet.sendCoins(address, address, amount, txComment);
+    else {
+        wallet.sendCoins(address, address, amount, txComment, function (err, data) {
+            callback(null, [data.txid]);
+        });
     }
-    return txIDs;
 };
 
-LibraryDJS.multiPart = function (txComment, address, amount) {
+// callback is (errorString, txIDs Array)
+LibraryDJS.multiPart = function (wallet, txComment, address, amount, callback) {
     var txIDs = [];
 
     var multiPartPrefix = "alexandria-media-multipart(";
@@ -89,26 +145,30 @@ LibraryDJS.multiPart = function (txComment, address, amount) {
     var multiPart = multiPartPrefix + part.toString() + "," + max.toString() +
         "," + address + "," + reference + "," + signature + "," + "):" + data;
 
-    var txID = wallet.sendCoins(address, address, amount, multiPart);
+    wallet.sendCoins(address, address, amount, multiPart, function (err, data) {
+        txIDs[txIDs.length] = data.txid;
+        reference = data.txid;
 
-    // ToDo: get txID
-    txIDs[txIDs.length] = txID;
-    reference = txID;
+        var count = 1;
+        for (var i = 1; i <= max; ++i) {
+            part = i;
+            data = chop[part];
+            preImage = part.toString() + "-" + max.toString() + "-" + address + "-" + reference + "-" + data;
+            signature = wallet.signMessage(address, preImage);
 
-    for (var i = 1; i <= max; ++i) {
-        part = i;
-        data = chop[part];
-        preImage = part.toString() + "-" + max.toString() + "-" + address + "-" + reference + "-" + data;
-        signature = wallet.signMessage(address, preImage);
+            multiPart = multiPartPrefix + part.toString() + "," + max.toString() +
+                "," + address + "," + reference + "," + signature + "," + "):" + data;
 
-        multiPart = multiPartPrefix + part.toString() + "," + max.toString() +
-            "," + address + "," + reference + "," + signature + "," + "):" + data;
+            wallet.sendCoins(address, address, amount, multiPart, function (err, data) {
+                txIDs[txIDs.length] = data.txid;
+                ++count;
+                if (count == max) {
+                    callback(null, txIDs);
+                }
+            });
 
-        txID = wallet.sendCoins(address, address, amount, multiPart);
-        txIDs[txIDs.length] = txID;
-    }
-
-    return txIDs;
+        }
+    });
 };
 
 LibraryDJS.chopString = function (input) {
@@ -124,5 +184,5 @@ LibraryDJS.chopString = function (input) {
     return chunks;
 };
 
-const CHOP_MAX_LEN = 3;
+const CHOP_MAX_LEN = 270;
 const TXCOMMENT_MAX_LEN = 528;

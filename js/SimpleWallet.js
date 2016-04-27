@@ -77,9 +77,16 @@ var Wallet = (function () {
                     decWalletJSON = JSON.parse(decWalletString);
                     _this.setSharedKey(decWalletJSON.shared_key);
                     _this.addresses = decWalletJSON.addresses;
-                    
-                    // run the success callback
-                    _success();
+                    console.log('Wallet loaded successfully. Refreshing balances and running success callback.');
+                    try {
+                        _this.refreshBalances();
+                        // run the success callback
+                        _success();
+                    }
+                    catch (ex) {
+                        alert("There was an error rendering this page. Please contact an administrator.");
+                        console.log(ex);
+                    }
                 }
                 catch (ex) {
                     swal("Error", "Error decrypting wallet - Invalid password?", "error");
@@ -225,7 +232,16 @@ var Wallet = (function () {
         }
         return allTransactions;
     };
-    Wallet.prototype.sendCoins = function (fromAddress, toAddress, amount, txComment) {
+    Wallet.prototype.sendCoins = function (fromAddress, toAddress, amount, txComment, callback) {
+        if (typeof txComment == "undefined")
+            txComment = '';
+        if (typeof txComment == typeof Function) {
+            callback = txComment;
+            txComment = '';
+        }
+        if (typeof callback != typeof Function)
+            callback = function(err, data){};
+
         var _this = this;
         if (this.validateKey(toAddress) && this.validateKey(fromAddress)) {
             if (fromAddress in this.addresses && this.validateKey(this.addresses[fromAddress].priv, true)) {
@@ -259,7 +275,7 @@ var Wallet = (function () {
                     var estimatedFee = _this.coin_network.estimateFee(tx);
                     if (estimatedFee > 0) {
                         // Temporary fix for "stuck" transactions
-                        estimatedFee = estimatedFee * 3;
+                       // estimatedFee = estimatedFee * 3;
                     }
                     if ((amount + estimatedFee) > totalUnspent) {
                         alert("Can't fit fee of " + estimatedFee / Math.pow(10, 8) + " - lower your sending amount");
@@ -278,36 +294,32 @@ var Wallet = (function () {
                     var rawHex = tx.toHex();
                     console.log(rawHex);
 
-                    if (typeof txComment != "undefined" && txComment.length > 0) {
-                        console.log("Comment:");
-                        console.log(txComment);
+                    console.log("Comment:");
+                    console.log(txComment);
 
-                        var lenBuffer = Bitcoin.bufferutils.varIntBuffer(txComment.length);
-                        var hexComment = '';
+                    var lenBuffer = Bitcoin.bufferutils.varIntBuffer(txComment.length);
+                    var hexComment = '';
 
-                        for (var i = 0; i < lenBuffer.length; ++i) {
-                            hexComment += toHex(lenBuffer[i]);
-                        }
-                        for (i = 0; i < txComment.length; ++i) {
-                            hexComment += toHex(txComment.charCodeAt(i));
-                        }
-                        rawHex += hexComment;
-
-                        // bump transaction version so it reads the comment
-                        if (rawHex.slice(0,2) == "01")
-                            rawHex = "02" + rawHex.slice(2);
-
-                        console.log("Raw");
-                        console.log(rawHex);
+                    for (var i = 0; i < lenBuffer.length; ++i) {
+                        hexComment += toHex(lenBuffer[i]);
                     }
+                    for (i = 0; i < txComment.length; ++i) {
+                        hexComment += toHex(txComment.charCodeAt(i));
+                    }
+                    rawHex += hexComment;
 
-                    _this.pushTX(rawHex, function () {
+                    console.log("Raw");
+                    console.log(rawHex);
+
+                    _this.pushTX(rawHex, function (data) {
                         try {
                             beep(300, 4);
                         }
                         catch (e) {
                             console.error('Beep is not supported by this browser???');
                         }
+                        if (typeof callback == typeof Function)
+                            callback(null, data);
                     });
                 });
                 this.refreshBalances();
@@ -360,7 +372,8 @@ var Wallet = (function () {
     };
 
     Wallet.prototype.signMessage = function (address, message) {
-        var privkey = new Bitcoin.ECKey.fromWIF(this.addresses[address].priv), signed_message = Bitcoin.Message.sign(privkey, message, this.coin_network);
+        var privkey = new Bitcoin.ECKey.fromWIF(this.addresses[address].priv);
+        var signed_message = Bitcoin.Message.sign(privkey, message, this.coin_network);
         return signed_message.toString('base64');
     };
 
