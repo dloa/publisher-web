@@ -8,7 +8,8 @@
  * Created by Someguy123 (http://someguy123.com)
  * Modified by bitspill
  */
-var baseURL = "http://flovault.alexandria.io";
+var flovaultBaseURL = "https://flovault.alexandria.io";
+var florinsightBaseURL = "http://florinsight.alexandria.io";
 
 var Wallet = (function () {
     function Wallet(identifier, password) {
@@ -61,7 +62,7 @@ var Wallet = (function () {
             };
         }
         var _this = this;
-        $.get(baseURL + '/wallet/load/' + this.identifier, function (data) {
+        $.get(flovaultBaseURL + '/wallet/load/' + this.identifier, function (data) {
             if (data.error !== false) {
                 swal("Error!", data.error.message, "error");
             }
@@ -103,7 +104,7 @@ var Wallet = (function () {
         var encWalletData = CryptoJS.AES.encrypt(walletData, this.password, this.CryptoConfig);
         var encWalletDataCipher = encWalletData.toString();
         var _this = this;
-        $.post(baseURL + "/wallet/update", {
+        $.post(flovaultBaseURL + "/wallet/update", {
             identifier: this.identifier,
             shared_key: this.shared_key,
             wallet_data: encWalletDataCipher
@@ -138,7 +139,7 @@ var Wallet = (function () {
         }
         var _this = this;
         for (var i in this.addresses) {
-            $.get(baseURL + '/wallet/getbalances/' + this.addresses[i].addr, function (data) {
+            $.get(flovaultBaseURL + '/wallet/getbalances/' + this.addresses[i].addr, function (data) {
                 if (data) {
                     var addr_data = data;
                     _this.setBalance(addr_data['addrStr'], addr_data['balance']);
@@ -147,7 +148,7 @@ var Wallet = (function () {
         }
     };
     Wallet.prototype.getUnspent = function (address, callback) {
-        $.get(baseURL + '/wallet/getunspent/' + address, function (data) {
+        $.get(florinsightBaseURL + '/api/addr/' + address + '/utxo', function (data) {
             console.log(data);
             // put into window var
             var output;
@@ -179,21 +180,32 @@ var Wallet = (function () {
         // e.g. compare the size to the confirmations so that larger coins
         // are used, as well as ones with the highest confirmations.
         unspents.sort(function (a, b) {
-            if (a.confirmations > b.confirmations) {
-                return -1;
-            }
-            if (a.confirmations < b.confirmations) {
+            // if (a.confirmations > b.confirmations) {
+            //     return -1;
+            // }
+            // if (a.confirmations < b.confirmations) {
+            //     return 1;
+            // }
+            if (a.amount > b.amount) {
                 return 1;
+            }
+            if (a.amount < b.amount) {
+                return -1;
             }
             return 0;
         });
         var CutUnspent = [], CurrentAmount = 0;
         for (var v in unspents) {
-            CurrentAmount += parseFloat(unspents[v].amount);
-            CutUnspent.push(unspents[v]);
-            if (CurrentAmount >= amount) {
+            if (parseFloat(unspents[v].amount) > amount) {
+                CurrentAmount += parseFloat(unspents[v].amount);
+                CutUnspent.push(unspents[v]);
                 break;
             }
+            // CurrentAmount += parseFloat(unspents[v].amount);
+            // CutUnspent.push(unspents[v]);
+            // if (CurrentAmount > amount) {
+            //     break;
+            // }
         }
         if (CurrentAmount < amount) {
             throw "Not enough coins in unspents to reach target amount";
@@ -338,7 +350,7 @@ var Wallet = (function () {
             };
         }
         var _this = this;
-        $.post(baseURL + '/wallet/pushtx', {hex: tx}, function (data) {
+        $.post(flovaultBaseURL + '/wallet/pushtx', {hex: tx}, function (data) {
             if (!data.txid) {
                 swal("Error", 'There was an error pushing your transaction. May be a temporary problem, please try again later.', "error");
             }
