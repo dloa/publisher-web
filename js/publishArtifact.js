@@ -1,7 +1,8 @@
-ipfs.setProvider({host: '46.101.230.105', port: '5001', protocol: 'http'});
+ipfs.setProvider({host: 'localhost', port: '5001', protocol: 'http'}); //46.101.230.105
 
 $('#previewButton').click(function(e){
 	// Validate form.
+	/*
 	// Required: Video Title
 	if (isBlank($('#videoTitle').val())){
 		swal("Error!", "You must provide a title", "error");
@@ -62,6 +63,7 @@ $('#previewButton').click(function(e){
 	} else {
 		$("#minimumPriceBuy").removeClass('has-warning');
 	}
+	*/
 
     // Set all of the items in the preview.
     // Set title.
@@ -73,7 +75,6 @@ $('#previewButton').click(function(e){
     // Set Video
     try {
         var newURL = URL.createObjectURL($('#mediaFiles').prop('files')[0]);
-        console.log(newURL);
         $('#previewVideo').attr('src', newURL);
     } catch(e) {
         swal('Error', 'You must select a video file.', 'error');
@@ -101,13 +102,13 @@ function submitArtifact(){
     });
 }
 
-function addFileToIPFS(file, count, callback){
-	// Check if file is null.
-	if (!file)
+function addFilesToIPFS(files, count, callback){
+	// Check if files is null.
+	if (!files)
 		return;
 
-	// Since we are not null, add the file to IPFS
-	ipfs.add(file, function (err, hash) {
+	// Since we are not null, add the files to IPFS
+	ipfs.add(files, function (err, hash) {
         if (err || !hash){
         	callback("ERROR: " + err, count);
         	return;
@@ -124,10 +125,10 @@ function publishArtifact(){
 	var extraFiles = document.getElementById("extraFiles").files;
 
 	// count will store the current readable index, total the total amount of files.
-	var count = 1;
+	var count = 0;
 	var total = 0;
 
-	// This will hold all the hashes.
+	// Holds all of the files as you push them in.
 	var ipfsFiles = [];
 
 	if (poster.length > 0)
@@ -138,39 +139,24 @@ function publishArtifact(){
 		total += extraFiles.length;
 
 	function addFile(file, index){
-		document.getElementById('publishWell').innerHTML += "[IPFS] Adding file " + index + "/" + total + " to IPFS...</br>";
-  		addFileToIPFS(file, index, function(hash, callIndex){ 
-  			document.getElementById('publishWell').innerHTML += "[IPFS] Added file " + callIndex + " to IPFS: " + hash + "</br>";
+		document.getElementById('publishWell').innerHTML += "[IPFS] Adding " + (count+1) + " files to IPFS...</br>";
+  		addFilesToIPFS(file, index, function(hash, callIndex){ 
+  			document.getElementById('publishWell').innerHTML += "[IPFS] Files added to IPFS: " + hash + "</br>";
 
-  			// Save the hash to the array
-  			ipfsFiles[callIndex-1] = hash;
-
-  			// Check if all indexes are filled and call a method if it is.
-  			if (ipfsFiles.length == total){
-  				var allAdded = true;
-  				for (var i = 0; i < ipfsFiles.length; i++) {
-  					// If an index is not set then set it to false.
-  					if (!ipfsFiles[i])
-  						allAdded = false;
-  					// TODO: Check if there was an error.
-  				}
-  				// If no indexes were false then add all the files to IPFS.
-  				if (allAdded)
-  					allFilesAddedToIPFS();
-  			}
+  			allFilesAddedToIPFS(hash);
     	});
 	}
 
 	// Add the poster file. We are safe to assume 0 as there is only one index.
 	if (poster.length > 0){
-  		addFile(poster[0], count);
+  		ipfsFiles[count] = poster[0];
   		count++;
 	}
 
 	// Add all media files.
 	if (mediaFiles.length > 0){
 		for (var i = 0; i < mediaFiles.length; i++) {
-	  		addFile(mediaFiles[i], count);
+  			ipfsFiles[count] = mediaFiles[i];
 			count++;
 		}
 	}
@@ -178,10 +164,12 @@ function publishArtifact(){
 	// Add all extra files.
 	if (extraFiles.length > 0){
 		for (var i = 0; i < extraFiles.length; i++) {
-	  		addFile(extraFiles[i], count);
+	  		ipfsFiles[count] = extraFiles[i];
 			count++;
 		}
 	}
+
+	addFile(ipfsFiles, count);
 
 	// This function will be called once all files have been added
 	function allFilesAddedToIPFS(){
