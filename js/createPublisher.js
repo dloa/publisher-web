@@ -68,6 +68,8 @@ function registerNewPublisher(){
         swal("Success!", "Your new publisher address has been successfully registered!", "success");
         // Hide the modal
         $('#newPublisherModal').modal('hide');
+        // Remove the "None Registered..." text
+        $("#publisherSelect option[value='None Registered...']").remove();
         // Add the publisher as an option then select it.
         var x = document.getElementById("publisherSelect");
         var option = document.createElement("option");

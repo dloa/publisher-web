@@ -84,7 +84,8 @@ function loadAddresses(){
 			for (var addr in wallet.addresses) {
 				var address = wallet.addresses[addr].addr;
 				if (data[i]["publisher-data"]["alexandria-publisher"].address == address){
-				//if (true){
+			        // Remove the "None Registered..." text
+			        $("#publisherSelect option[value='None Registered...']").remove();
 					// Add the publisher as an option then select it.
 		            var x = document.getElementById("publisherSelect");
 		            var option = document.createElement("option");
