@@ -75,6 +75,7 @@
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-6 form-inline">
                                     <button type="button" data-toggle="modal" data-target="#newPublisherModal" class="btn btn-default">Register New</button>
+                                    <button type="button" data-toggle="modal" data-target="#walletInfoModal" class="btn btn-default" onclick="refreshWalletInfo();">Wallet Info</button>
                                     <button type="button" onclick="continueToArtifact();" class="btn btn-success pull-right">Continue</button>
                                 </div>
                             </div>
@@ -364,6 +365,53 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="walletInfoModal" tabindex="-1" role="dialog" aria-labelledby="walletInfoLabel">
+    <div class="vertical-alignment-helper">
+        <div class="vertical-align-center modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="walletInfoLabel">Wallet Info</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#main" aria-controls="main" role="tab" data-toggle="tab">Main</a></li>
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="main">
+                                        <h4>Identifier <code id="identifier">83b02d1-5ef7d4a9-12268be-bb9346f</code></h4>
+                                        <table class="table table-bordered" id="addressTable">
+                                            <thead>
+                                                <tr>
+                                                    <th>Address</th>
+                                                    <th style="width: 30%">Balance</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr></tr>
+                                            </tbody>
+                                        </table>
+                                        <button class="btn btn-default" onclick="newAddress();">New Address</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+                    <button class="btn btn-default pull-left" onclick="refreshWalletInfo();">Refresh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="tradebotModal" tabindex="-1" role="dialog" aria-labelledby="tradebotLabel">
     <div class="vertical-alignment-helper">
         <div class="vertical-align-center modal-dialog" role="document">
@@ -489,6 +537,7 @@
     });
 
     $('#walletModal').modal('show');
+    //$('#walletInfoModal').modal('show');
     //$('#tradebotModal').modal('show');
 
     //continueToArtifact();

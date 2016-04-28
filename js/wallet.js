@@ -14,6 +14,7 @@ function loginToWallet() {
             console.log(wallet);
             // Load wallet into page
             loadAddresses();
+	    	refreshWalletInfo();
             // Dismiss modal then open success.
             $('#walletModal').modal('hide');
             swal("Success!", "Successfully logged into wallet!", "success");
@@ -95,4 +96,24 @@ function loadAddresses(){
 			}
 		}
 	});
+}
+
+function refreshWalletInfo(){
+	wallet.refreshBalances(function(data){
+		$('#identifier').text(wallet.identifier);
+		$('#addressTable > tbody').html("");
+		for (var addr in wallet.addresses) {
+			var address = wallet.addresses[addr].addr;
+			var balance = wallet.balances[addr];
+
+			// Add the florincoin addresses and balance to the table.
+	        $('#addressTable > tbody:last-child').append('<tr><td><code>' + address + '</code></td><td><code>' + balance + '</code></td></tr>');
+		}
+	});
+}
+
+function newAddress(){
+	wallet.generateAddress();
+	wallet.store();
+	refreshWalletInfo();
 }
