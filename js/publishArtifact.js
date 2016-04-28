@@ -2,7 +2,6 @@ ipfs.setProvider({host: '46.101.230.105', port: '5001', protocol: 'http'});
 
 $('#previewButton').click(function(e){
 	// Validate form.
-	/*
 	// Required: Video Title
 	if (isBlank($('#videoTitle').val())){
 		swal("Error!", "You must provide a title", "error");
@@ -63,7 +62,6 @@ $('#previewButton').click(function(e){
 	} else {
 		$("#minimumPriceBuy").removeClass('has-warning');
 	}
-	*/
 
     // Set all of the items in the preview.
     // Set title.
