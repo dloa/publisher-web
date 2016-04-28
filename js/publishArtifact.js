@@ -214,7 +214,7 @@ function publishArtifact(){
                 	"Bitcoin Address": "", // None currently provided.
                 	"DHT Hash": hashes[hashes.length-1].Hash,
                     "filename": hashes[videoHashIndex].Name,
-                    "runtime": duration
+                    "runtime": duration.toFixed(0)
                 }
             }
         };

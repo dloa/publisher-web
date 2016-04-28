@@ -40,6 +40,9 @@ function registerWallet() {
 	    // Create one address by default.
 	    wallet.generateAddress();
 
+	    // Store wallet.
+	    wallet.store();
+
 	    console.log(wallet);
 
 	    loadAddresses();

@@ -39,6 +39,11 @@ function registerNewPublisher(){
         $("#pubEmailFormGroup").addClass('has-error');
         return;
     }
+    if (isBlank(newPublisherFlorincoinAddress)){
+        swal("Error!", "You must sign into a wallet! Reload the page and try again.", "error");
+        $("#pubFloAddressFormGroup").addClass('has-error');
+        return;
+    }
 
     // Hide the form and show the loading window.
     hide(document.getElementById('newPublisherFormDiv'));
