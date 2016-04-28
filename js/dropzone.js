@@ -4,7 +4,6 @@ $("#posterFile").change(function(input){
         var reader = new FileReader();
 
         reader.onload = function (e) {
-            console.log(e.target.result);
             document.getElementById('poster').style.backgroundImage =  "url('" + e.target.result + "')";
             document.getElementById('posterText').innerHTML = '';
         }
