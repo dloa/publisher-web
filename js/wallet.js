@@ -55,7 +55,12 @@ function registerWallet() {
 	    	type: "success"
 	    });
 	    $(".sweet-alert .showSweetAlert").prop('tabindex', 0);
-	    $(".sweet-alert .lead").html("Register was successful, here is your identifier, please keep this safe or you may lose access to your coins and Publisher ID: <br><code>" + response.identifier + "</code>");
+	    var address = "";
+	    for (var addr in wallet.addresses) {
+			address = wallet.addresses[addr].addr;
+			console.log(address);
+		}
+	    $(".sweet-alert .lead").html("Register was successful, here is your identifier, please keep this safe or you may lose access to your coins and Publisher ID: <br><code>" + response.identifier + "</code><br>Your initial Florincoin address is: <br><code>" + address + "</code>");
 	});
 }
 
