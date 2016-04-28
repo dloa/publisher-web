@@ -248,20 +248,24 @@ function publishArtifact(){
 
         document.getElementById('publishWell').innerHTML += JSON.stringify(alexandriaMedia) + "<br>";
 
-		LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, function(){
-			document.getElementById('publishWell').innerHTML += "Successfully published artifact! <br>";
-			swal({
-			  title: "Success!",
-			  text: "Your artifact was published successfully! It may take up to an hour to show up on the Media Browser.",
-			  type: "success",
-			  showCancelButton: false,
-			  confirmButtonClass: "btn-success",
-			  confirmButtonText: "Ok",
-			  closeOnConfirm: true
-			},
-			function(){
-			  location.reload();
-			});
+		LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, function(err, data){
+			if (err != null){
+				swal("Error!", "There was an error publishing your artifact: " + err, "error");
+			} else {
+				document.getElementById('publishWell').innerHTML += "Successfully published artifact! <br>";
+				swal({
+				  title: "Success!",
+				  text: "Your artifact was published successfully! It may take up to an hour to show up on the Media Browser.",
+				  type: "success",
+				  showCancelButton: false,
+				  confirmButtonClass: "btn-success",
+				  confirmButtonText: "Ok",
+				  closeOnConfirm: true
+				},
+				function(){
+				  location.reload();
+				});
+			}
 		});
 	}
 }
