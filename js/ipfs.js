@@ -53,7 +53,6 @@ function request(opts) {
 
 ipfs.add = function(input, callback) {
   var form = new FormData();
-  console.log(input);
   // If there is just one file we will be able to do input.name
   if (input.name){
     var data = (isBuffer(input) ? input.toString('binary') : input);
@@ -72,10 +71,10 @@ ipfs.add = function(input, callback) {
     uri:"/add?w", // ?w = -w, --wrap-with-directory bool   - Wrap files with a directory object
     payload:form,
     accept: "application/json",
-    transform: function(response) { 
-     console.log(JSON.parse(response));
-     return response ? JSON.parse(response) : null
-    }});
+    transform: function(response) {
+     return response ? JSON.parse(formatResponse(response)) : null;
+    }
+  });
 };
 
 ipfs.catText = function(ipfsHash, callback) {
@@ -110,6 +109,18 @@ function isBuffer(obj) {
       typeof obj.constructor.isBuffer === 'function' &&
       obj.constructor.isBuffer(obj))
     ))
+}
+
+function formatResponse(response){
+  var split = response.split("}{");
+  var formatted = "[";
+  for (var i = 0; i < split.length; i++) {
+    if (i != split.length-1)
+      formatted += split[i] + "},{";
+    else
+      formatted += split[i] +="]";
+  }
+  return formatted;
 }
 
 if (window !== 'undefined') {

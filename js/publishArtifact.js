@@ -139,7 +139,11 @@ function publishArtifact(){
 	function addFile(file, index){
 		document.getElementById('publishWell').innerHTML += "[IPFS] Adding " + (count+1) + " files to IPFS...</br>";
   		addFilesToIPFS(file, index, function(hash, callIndex){ 
-  			document.getElementById('publishWell').innerHTML += "[IPFS] Files added to IPFS: " + hash + "</br>";
+  			var hashes = "";
+  			for (var i = 0; i < hash.length-1; i++) {
+  				hashes += "\"" + hash[i].Name + "\", ";
+  			}
+  			document.getElementById('publishWell').innerHTML += "[IPFS] Files added to IPFS: " + hashes + "</br>";
 
   			allFilesAddedToIPFS(hash);
     	});
