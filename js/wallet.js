@@ -1,7 +1,7 @@
 var wallet;
 
 function loginToWallet() {
-	$.get("http://flovault.alexandria.io/wallet/checkload/" + $("#loginWalletIdentifier").val(), function (response) {
+	$.get("https://flovault.alexandria.io/wallet/checkload/" + $("#loginWalletIdentifier").val(), function (response) {
         console.log("Check Load Response");
         console.log(response);
         if (response.gauth_enabled) {
@@ -25,7 +25,7 @@ function registerWallet() {
 	var data = {};
 	if ($("#createWalletEmail").val().length > 3)
 	    data = {email: emailInput.val()};
-	$.post("http://flovault.alexandria.io/wallet/create", data, function (response) {
+	$.post("https://flovault.alexandria.io/wallet/create", data, function (response) {
 	    console.log("Create Response");
 	    console.log(response);
 	    if (response.error) {
