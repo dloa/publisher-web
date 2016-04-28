@@ -54,14 +54,18 @@ function request(opts) {
 ipfs.add = function(input, callback) {
   var form = new FormData();
   var data = (isBuffer(input) ? input.toString('binary') : input);
-  form.append("file",new Blob([data],{}));
+  console.log(input);
+  form.append("file",new Blob([data],{}), input.name);
   request({
     callback: callback,
     method:"POST",
-    uri:"/add?arg=w",
+    uri:"/add?w", // ?w = -w, --wrap-with-directory bool   - Wrap files with a directory object
     payload:form,
     accept: "application/json",
-    transform: function(response) { return response ? JSON.parse(response)["Hash"] : null}});
+    transform: function(response) { 
+     // return response ? JSON.parse(response)["Hash"] : null
+     console.log(response);
+    }});
 };
 
 ipfs.catText = function(ipfsHash, callback) {
