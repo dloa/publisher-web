@@ -40,7 +40,7 @@ LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, c
                 }
             }
         };
-    ipfs = "Qmeke1CyonqgKErvGhE18WLBuhrLaScbpSAS6vGLuoSCXM";
+    //ipfs = "Qmeke1CyonqgKErvGhE18WLBuhrLaScbpSAS6vGLuoSCXM";
 
     var signature = LibraryDJS.signArtifact(wallet, ipfs, address, time);
 

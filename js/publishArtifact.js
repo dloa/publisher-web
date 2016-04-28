@@ -122,6 +122,19 @@ function publishArtifact(){
 	var mediaFiles = document.getElementById("mediaFiles").files;
 	var extraFiles = document.getElementById("extraFiles").files;
 
+	// Get Video Runtime
+	var duration = 0;
+	window.URL = window.URL || window.webkitURL;
+	var video = document.createElement('video');
+	  video.preload = 'metadata';
+	  video.onloadedmetadata = function() {
+	    window.URL.revokeObjectURL(this.src)
+	    duration = video.duration;
+	    mediaFiles[0].duration = duration;
+	    console.log(duration);
+	}
+	video.src = URL.createObjectURL(mediaFiles[0]);
+
 	// count will store the current readable index, total the total amount of files.
 	var count = 0;
 	var total = 0;
@@ -174,10 +187,82 @@ function publishArtifact(){
 	addFile(ipfsFiles, count);
 
 	// This function will be called once all files have been added
-	function allFilesAddedToIPFS(){
+	function allFilesAddedToIPFS(hashes){
 		document.getElementById('publishWell').innerHTML += "All files added to IPFS, publishing artifact...</br>";
 
-		// TODO: Publish using libraryd-js
+		// Load the selected and only keep the address that is inside the parens.
+		var walletAddress = $("#publisherSelect").val().replace(/[^()](?=([^()]*\([^()]*\))*[^()]*$)/g, '').replace('(', '').replace(')', '');
+		var title = $('#videoTitle').val();
+		var description = $('#description').val();
+		var year = parseInt($('#releaseDate').val());
+
+		var videoHashIndex = 0;
+		if (!isBlank($('#posterFile').val()))
+			videoHashIndex = 1;
+
+		var alexandriaMedia = {
+            "torrent": hashes[hashes.length-1].Hash,
+            "publisher": walletAddress,
+            "timestamp": Date.now(),
+            "type": "video",
+            "payment": {},
+            "info": {
+                "title": title,
+                "description": description,
+                "year": year,
+                "extra-info": {
+                	"Bitcoin Address": "", // None currently provided.
+                	"DHT Hash": hashes[hashes.length-1].Hash,
+                    "filename": hashes[videoHashIndex].Name,
+                    "runtime": duration
+                }
+            }
+        };
+
+        // Optional Fields
+        var director = $('#directorName').val();
+        var distributor = $('#distributor').val();
+        var poster = $('#posterFile').val();
+        var suggPricePer = $('#suggestedPlay').val();
+        var minPricePer = $('#minPlay').val();
+        var suggPriceBuy = $('#suggestedBuy').val();
+        var minPriceBuy = $('#minBuy').val();
+
+        // If item is not blank, then add it, otherwise just continue as these are all optional.
+        if (!isBlank(director))
+        	alexandriaMedia["info"]["extra-info"]["artist"] = director;
+
+        if (!isBlank(distributor))
+        	alexandriaMedia["info"]["extra-info"]["company"] = distributor;
+
+        if (!isBlank(poster))
+        	alexandriaMedia["info"]["extra-info"]["posterFrame"] = hashes[0].Name;
+
+        /*
+        if (!isBlank(suggPricePer))
+        	alexandriaMedia["payment"].artist = director;
+
+        if (!isBlank(minPricePer))
+        	alexandriaMedia["info"].artist = director;
+		*/
+
+        document.getElementById('publishWell').innerHTML += JSON.stringify(alexandriaMedia) + "<br>";
+
+		LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, function(){
+			document.getElementById('publishWell').innerHTML += "Successfully published artifact! <br>";
+			swal({
+			  title: "Success!",
+			  text: "Your artifact was published successfully! It may take up to an hour to show up on the Media Browser.",
+			  type: "success",
+			  showCancelButton: false,
+			  confirmButtonClass: "btn-success",
+			  confirmButtonText: "Ok",
+			  closeOnConfirm: true
+			},
+			function(){
+			  location.reload();
+			});
+		});
 	}
 }
 
