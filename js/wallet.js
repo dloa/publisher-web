@@ -99,9 +99,11 @@ function loadAddresses(){
 }
 
 function refreshWalletInfo(){
+	$('#refreshButton').text("Loading...");
 	wallet.refreshBalances(function(data){
 		$('#identifier').text(wallet.identifier);
 		$('#addressTable > tbody').html("");
+		$('#refreshButton').text("Refresh");
 		for (var addr in wallet.addresses) {
 			var address = wallet.addresses[addr].addr;
 			var balance = wallet.balances[addr];
