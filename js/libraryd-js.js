@@ -21,18 +21,38 @@ LibraryDJS.signArtifact = function (wallet, ipfs, address, time) {
 LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, callback) {
     var time = unixTime();
 
+    var test = {
+            "torrent": "Qmeke1CyonqgKErvGhE18WLBuhrLaScbpSAS6vGLuoSCXM",
+            "publisher": "F6yEsikfYQPRAEL8FfDzumLqPD9WDPmKtK",
+            "timestamp": 0,
+            "type": "music",
+            "payment": {},
+            "info": {
+                "title": "Lady J",
+                "description": "Lady J with a really long description so it goes into multiple parts and really tests stuff.",
+                "year": 2003,
+                "extra-info": {
+                    "filename": "320bit_mp3/10%20Lady%20J.mp3",
+                    "filetype": "album track",
+                    "displayname": "Lady J",
+                    "albumtrack": "10",
+                    "runtime": 241
+                }
+            }
+        };
+    ipfs = "Qmeke1CyonqgKErvGhE18WLBuhrLaScbpSAS6vGLuoSCXM";
+
     var signature = LibraryDJS.signArtifact(wallet, ipfs, address, time);
 
     var data = {
-        "media-data": {
-            "alexandria-media": alexandriaMedia,
-            "signature": signature
-        }
+            "alexandria-media": alexandriaMedia, //test,
+            signature: signature
     };
 
-    data["media-data"]["alexandria-media"].timestamp = parseInt(time);
+    data["alexandria-media"].timestamp = parseInt(time);
+    data["alexandria-media"].publisher = address;
 
-    LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.001, function (err, txIDs) {
+    LibraryDJS.Send(wallet, JSON.stringify(data), address, 1, function (err, txIDs) {
         if (err != null)
             callback(err,
                 JSON.stringify({
@@ -71,7 +91,7 @@ LibraryDJS.announcePublisher = function (wallet, name, address, bitMessage, emai
         "signature": signature
     };
 
-    LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.002, function (err, txIDs) {
+    LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.001, function (err, txIDs) {
         if (err != null)
             callback(err,
                 JSON.stringify({
@@ -159,7 +179,7 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, callback) {
             multiPart = multiPartPrefix + part.toString() + "," + max.toString() +
                 "," + address + "," + reference + "," + signature + "," + "):" + data;
 
-            wallet.sendCoins(address, address, amount, multiPart, function (err, data) {
+            wallet.sendCoins(address, address, amount+amount*i, multiPart, function (err, data) {
                 txIDs[txIDs.length] = data.txid;
                 ++count;
                 if (count == max) {
