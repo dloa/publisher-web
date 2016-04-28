@@ -53,9 +53,19 @@ function request(opts) {
 
 ipfs.add = function(input, callback) {
   var form = new FormData();
-  var data = (isBuffer(input) ? input.toString('binary') : input);
   console.log(input);
-  form.append("file",new Blob([data],{}), input.name);
+  // If there is just one file we will be able to do input.name
+  if (input.name){
+    var data = (isBuffer(input) ? input.toString('binary') : input);
+    form.append("file",new Blob([data],{}), input.name);
+  }
+  else { // Else assume multiple files.
+    for (var i = 0; i < input.length; i++) {
+      console.log(input[i].name);
+      var data = (isBuffer(input[i]) ? input.toString('binary') : input[i]);
+      form.append("file",new Blob([data],{}), input[i].name);
+    }
+  }
   request({
     callback: callback,
     method:"POST",
@@ -63,8 +73,8 @@ ipfs.add = function(input, callback) {
     payload:form,
     accept: "application/json",
     transform: function(response) { 
-     // return response ? JSON.parse(response)["Hash"] : null
-     console.log(response);
+     console.log(JSON.parse(response));
+     return response ? JSON.parse(response) : null
     }});
 };
 
