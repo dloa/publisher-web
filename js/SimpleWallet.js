@@ -23,6 +23,8 @@ var Wallet = (function () {
         };
         this.identifier = identifier;
         this.password = password;
+        this.known_spent = [];
+        this.known_unspent = [];
     }
 
     /**
@@ -162,6 +164,26 @@ var Wallet = (function () {
             }
         }, "json");
     };
+
+    /**
+     * Attempts to remove inputs that are known to be spent.
+     * This helps avoid problems when sending multiple transactions shortly
+     * after eachother.
+     */
+    Wallet.prototype.removeSpent = function (coins) {
+        console.log("removeSpent");
+        console.log(JSON.stringify(coins));
+        var clean_coins = coins;
+        for (var v in this.known_spent) {
+            for (var k in coins) {
+                if (JSON.stringify(coins[k]) == JSON.stringify(this.known_spent[v])) {
+                    delete clean_coins[k];
+                }
+            }
+        }
+        console.log(JSON.stringify(clean_coins));
+        return clean_coins;
+    };
     /**
      * calculateBestUnspent()
      *
@@ -175,6 +197,8 @@ var Wallet = (function () {
      * @returns {{unspent: Array<UnspentTX>, total: number}}
      */
     Wallet.prototype.calculateBestUnspent = function (amount, unspents) {
+        console.log("calcBestUnspent");
+        console.log(unspents);
         // note: unspents = [ {tx, amount, n, confirmations, script}, ... ]
         // TODO: implement a real algorithm to determine the best unspents
         // e.g. compare the size to the confirmations so that larger coins
@@ -196,16 +220,16 @@ var Wallet = (function () {
         });
         var CutUnspent = [], CurrentAmount = 0;
         for (var v in unspents) {
-            if (parseFloat(unspents[v].amount) > amount) {
-                CurrentAmount += parseFloat(unspents[v].amount);
-                CutUnspent.push(unspents[v]);
-                break;
-            }
-            // CurrentAmount += parseFloat(unspents[v].amount);
-            // CutUnspent.push(unspents[v]);
-            // if (CurrentAmount > amount) {
+            // if (parseFloat(unspents[v].amount) > amount) {
+            //     CurrentAmount += parseFloat(unspents[v].amount);
+            //     CutUnspent.push(unspents[v]);
             //     break;
             // }
+            CurrentAmount += parseFloat(unspents[v].amount);
+            CutUnspent.push(unspents[v]);
+            if (CurrentAmount > amount) {
+                break;
+            }
         }
         if (CurrentAmount < amount) {
             throw "Not enough coins in unspents to reach target amount";
@@ -263,7 +287,13 @@ var Wallet = (function () {
                     return;
                 }
                 this.getUnspent(fromAddress, function (data) {
-                    data = _this.calculateBestUnspent(amount, data);
+                    var combine = data;
+                    for (var i = 0; i < _this.known_unspent.length; ++i)
+                        if (_this.known_unspent[i].address == fromAddress)
+                            combine.push(_this.known_unspent[i]);
+
+                    var clean_unspent = _this.removeSpent(combine);
+                    data = _this.calculateBestUnspent(amount, clean_unspent);
                     console.log(data);
                     // temporary constant
                     var minFeePerKb = 100000;
@@ -280,6 +310,7 @@ var Wallet = (function () {
                     for (var v in unspents) {
                         if (unspents[v].confirmations) {
                             tx.addInput(unspents[v].txid, unspents[v].vout);
+                            _this.known_spent.push(unspents[v]);
                         }
                     }
                     tx.addOutput(toAddress, amount);
@@ -312,7 +343,7 @@ var Wallet = (function () {
                     var lenBuffer = Bitcoin.bufferutils.varIntBuffer(txComment.length);
                     var hexComment = '';
 
-                    for (var i = 0; i < lenBuffer.length; ++i) {
+                    for (i = 0; i < lenBuffer.length; ++i) {
                         hexComment += toHex(lenBuffer[i]);
                     }
                     for (i = 0; i < txComment.length; ++i) {
@@ -324,6 +355,14 @@ var Wallet = (function () {
                     console.log(rawHex);
 
                     _this.pushTX(rawHex, function (data) {
+                        if (changeValue >= minFeePerKb)
+                            _this.known_unspent.push({
+                                address: fromAddress,
+                                txid: data.txid,
+                                vout: 1,
+                                confirmations: -1,
+                                amount: changeValue / Math.pow(10, 8)
+                            });
                         try {
                             beep(300, 4);
                         }

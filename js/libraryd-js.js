@@ -52,7 +52,7 @@ LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, c
     data["alexandria-media"].timestamp = parseInt(time);
     data["alexandria-media"].publisher = address;
 
-    LibraryDJS.Send(wallet, JSON.stringify(data), address, 1, function (err, txIDs) {
+    LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.001, function (err, txIDs) {
         if (err != null)
             callback(err,
                 JSON.stringify({
@@ -169,7 +169,7 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, callback) {
         txIDs[txIDs.length] = data.txid;
         reference = data.txid;
 
-        var count = 1;
+        var count = 0;
         for (var i = 1; i <= max; ++i) {
             part = i;
             data = chop[part];
@@ -179,14 +179,17 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, callback) {
             multiPart = multiPartPrefix + part.toString() + "," + max.toString() +
                 "," + address + "," + reference + "," + signature + "," + "):" + data;
 
-            wallet.sendCoins(address, address, amount+amount*i, multiPart, function (err, data) {
-                txIDs[txIDs.length] = data.txid;
-                ++count;
-                if (count == max) {
-                    callback(null, txIDs);
-                }
-            });
-
+            (function (i, address, amount, multiPart) {
+                setTimeout(function () {
+                    wallet.sendCoins(address, address, amount, multiPart, function (err, data) {
+                        txIDs[txIDs.length] = data.txid;
+                        ++count;
+                        if (count == max) {
+                            callback(null, txIDs);
+                        }
+                    });
+                }, i * 1000);
+            })(i, address, amount, multiPart);
         }
     });
 };
