@@ -34,7 +34,7 @@ function registerNewPublisher(){
         $("#pubNameFormGroup").addClass('has-error');
         return;
     }
-    if (isEmail(newPublisherEmail)){
+    if (!isEmail(newPublisherEmail)){
         swal("Error!", "You must provide a valid email.", "error");
         $("#pubEmailFormGroup").addClass('has-error');
         return;

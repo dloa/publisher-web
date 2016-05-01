@@ -25,7 +25,7 @@ function loginToWallet() {
 function registerWallet() {
 	var data = {};
 	if ($("#createWalletEmail").val().length > 3)
-	    data = {email: emailInput.val()};
+	    data = {email: $("#createWalletEmail").val()};
 	$.post("https://flovault.alexandria.io/wallet/create", data, function (response) {
 	    console.log("Create Response");
 	    console.log(response);
