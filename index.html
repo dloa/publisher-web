@@ -425,7 +425,7 @@
                 <div class="modal-body">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-6" id="tradebotBuy">
                                 <center>
                                     <p>Please send $<span id="usdLabel"></span> in BTC to this address. You can change this amount below.</p>
                                     <div id="qrcode" style="width: 80%; height: 80%;"></div>
@@ -457,11 +457,26 @@
                                     </form>
                                 </center>
                             </div>
+                            <div class="col-md-6" id="tradebotPending" style="opacity: 0; display: none;">
+                                <center>
+                                    <p style="padding-top: 20px;">Bitcoin transaction recieved... waiting for Tradebot to send funds...</p>
+                                </center>
+                                <div id="loading">
+                                    <ul class="bokeh">
+                                        <li></li>
+                                        <li></li>
+                                        <li></li>
+                                    </ul>
+                                </div>
+                                <center>
+                                    <p style="padding-top: -50px;">This usually takes 5-10 minutes depending on Bitcoin block times and Tradebot response times.</p>
+                                </center>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal" onclick="cancelFloBuy()">Cancel</button>
                 </div>
             </div>
         </div>
@@ -538,9 +553,30 @@
         }
     });
 
-    function openTradebot(address){
-        $('#tradebotModal').modal('show');
-        tradebot(address);
+    function fade(element) {
+        var op = 1;  // initial opacity
+        var timer = setInterval(function () {
+            if (op <= 0.1){
+                clearInterval(timer);
+                element.style.display = 'none';
+            }
+            element.style.opacity = op;
+            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+            op -= op * 0.1;
+        }, 20);
+    }
+
+    function unfade(element) {
+        var op = 0.01;  // initial opacity
+        element.style.display = 'block';
+        var timer = setInterval(function () {
+            if (op >= 1){
+                clearInterval(timer);
+            }
+            element.style.opacity = op;
+            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+            op += op * 0.1;
+        }, 15);
     }
 
     $('#walletModal').modal('show');

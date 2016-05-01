@@ -1,6 +1,6 @@
 var qrcode = new QRCode("qrcode");
 
-var marketData, tradebotBalance, btcAddress, btc, usd, flo, perBTC;
+var marketData, tradebotBalance, btcAddress, btc, usd, flo, perBTC, bitcoinWebsocket, floAddress, startingBalance;
 
 btcValueText = $("#btcValue");
 usdValueText = $("#usdValue");
@@ -8,6 +8,12 @@ floValueText = $("#floValue");
 
 function tradebot(address){
 	console.log("Creating tradebot interface with address: " + address);
+
+	// Save the address and starting balance
+	floAddress = address;
+	startingBalance = wallet.balances[floAddress];
+	console.log("Starting wallet balance: " + startingBalance);
+
 	getMarketData(function(data){ 
 		console.log(data)
 		marketData = data; 
@@ -18,7 +24,51 @@ function tradebot(address){
 		updateQR();
 	});
 	getTradeBotBalance(function(data){ tradebotBalance = data; });
-	getTradeBotBitcoinAddress(address, function(data){ btcAddress = data; $("#btcDisplayAddress").html(btcAddress); })
+	getTradeBotBitcoinAddress(address, function(data){ btcAddress = data; $("#btcDisplayAddress").html(btcAddress); updateQR(); setupWebsocket(); })
+
+	$('#tradebotModal').modal('show');
+}
+
+function setupWebsocket(){
+	var restartWebSocket = true;
+
+	bitcoinWebsocket = new WebSocket("wss://ws.blockchain.info/inv");
+
+	bitcoinWebsocket.onopen = function(evt){
+		console.log('Websocket Opened...');
+		bitcoinWebsocket.send('{"op":"addr_sub", "addr":"' + btcAddress + '"}');
+	}
+
+	bitcoinWebsocket.onmessage = function(evt){
+		var received_msg = evt.data;
+		var message = JSON.parse(received_msg);
+		if (message.op == "utx"){
+			console.log(message);
+			console.log("Recieved transaction, hash: " + message.x.hash);
+			fade(document.getElementById("tradebotBuy"));
+			setTimeout(function(){ unfade(document.getElementById("tradebotPending")); }, 229);
+			var checkWalletInterval = setInterval(function(){
+				wallet.refreshBalances(function(data){
+					console.log("wallet balance: " + wallet.balances[floAddress])
+					if (wallet.balances[floAddress] > startingBalance){
+						console.log("Recieved transaction from FLO Bot");
+						clearInterval(checkWalletInterval);
+						refreshWalletInfo();
+						swal("Success!", "Your buy was successful, " + (wallet.balances[floAddress]-startingBalance).toFixed(2) + " FLO was deposited into your wallet.", "success");
+						$('#tradebotModal').modal('hide');
+					}
+				});
+			}, 6000);
+			restartWebSocket = false;
+			bitcoinWebsocket.close();
+		}
+	}
+
+	bitcoinWebsocket.onclose = function(evt){
+		console.log("Websocket Closed")
+		if (restartWebSocket)
+			setTimeout(function(){ setupWebsocket(); }, 200);
+	}
 }
 
 function updateBTC(){
@@ -73,7 +123,10 @@ function updateQR(){
 
 	$('#usdLabel').html(parseFloat(usd).toFixed(2));
 
-    qrcode.makeCode("bitcoin:1EV7zyqRK6qS2QnZdwXrgS2aKzXpi91jBn?amount=" + btc);
+	var qrstring = "bitcoin:" + btcAddress + "?amount=" + btc;
+	console.log(qrstring);
+
+    qrcode.makeCode(qrstring);
 }
 
 function getMarketData(callback){
@@ -96,4 +149,8 @@ function getTradeBotBalance(callback){
 
 function getFloat(num, points){
 	return parseFloat(parseFloat(num).toFixed(points));
+}
+
+function cancelFloBuy(){
+	bitcoinWebsocket.close();
 }

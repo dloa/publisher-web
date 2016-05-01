@@ -110,7 +110,7 @@ function refreshWalletInfo(){
 			var balance = wallet.balances[addr];
 
 			// Add the florincoin addresses and balance to the table.
-	        $('#addressTable > tbody:last-child').append('<tr><td><code>' + address + '</code></td><td><code>' + balance + '</code></td><td><button class="btn btn-success" onclick="openTradebot(\'' + address + '\')">Buy FLO</button></tr>');
+	        $('#addressTable > tbody:last-child').append('<tr><td><code>' + address + '</code></td><td><code>' + balance + '</code></td><td><button class="btn btn-success" onclick="tradebot(\'' + address + '\')">Buy FLO</button></tr>');
 		}
 	});
 }
