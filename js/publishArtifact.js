@@ -1,4 +1,4 @@
-ipfs.setProvider({host: '46.101.230.105', port: '5001', protocol: 'http'});
+ipfs.setProvider({host: '46.101.230.105', port: '5002', protocol: 'http'});
 
 $('#previewButton').click(function(e){
 	// Validate form.

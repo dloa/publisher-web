@@ -45,6 +45,7 @@ function request(opts) {
   }
   if (opts.payload) {
     req.enctype = "multipart/form-data";
+    console.log(opts);
     req.send(opts.payload);
   } else {
     req.send()
@@ -56,13 +57,14 @@ ipfs.add = function(input, callback) {
   // If there is just one file we will be able to do input.name
   if (input.name){
     var data = (isBuffer(input) ? input.toString('binary') : input);
-    form.append("file",new Blob([data],{}), input.name);
+    form.append("file", new Blob([data],{}), input.name, input.size);
   }
   else { // Else assume multiple files.
     for (var i = 0; i < input.length; i++) {
       console.log(input[i].name);
       var data = (isBuffer(input[i]) ? input.toString('binary') : input[i]);
-      form.append("file",new Blob([data],{}), input[i].name);
+      console.log(input);
+      form.append("file",new Blob([data],{}), input[i].name, input[i].size);
     }
   }
   request({
