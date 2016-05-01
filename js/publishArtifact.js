@@ -93,6 +93,15 @@ function submitArtifact(){
         closeOnConfirm: true
     },
     function(){
+    	var walletAddress = $("#publisherSelect").val().replace(/[^()](?=([^()]*\([^()]*\))*[^()]*$)/g, '').replace('(', '').replace(')', '');
+    	console.log(wallet.balances[walletAddress]);
+    	if (wallet.balances[walletAddress] < 1){
+    		tradebot(walletAddress);
+    		setTimeout(function(){
+    			swal("Error!", "You must have at least 1 FLO in your wallet to publish an artifact.", "error");
+    		}, 1000);
+        	return;
+    	}
         var $active = $('.wizard .nav-tabs li.active');
         $active.next().removeClass('disabled');
         nextTab($active);
