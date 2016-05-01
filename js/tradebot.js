@@ -1,6 +1,6 @@
 var qrcode = new QRCode("qrcode");
 
-var marketData, tradebotBalance, btcAddress, btc, usd, flo, perBTC, bitcoinWebsocket, floAddress, startingBalance;
+var marketData, tradebotBalance, btcAddress, btc, usd, flo, perBTC, bitcoinWebsocket, floAddress, startingBalance, restartWebSocket;
 
 btcValueText = $("#btcValue");
 usdValueText = $("#usdValue");
@@ -23,6 +23,9 @@ function tradebot(address){
 		flo = usd/marketData.USD;
 		updateQR();
 	});
+	
+	restartWebSocket = true;
+
 	getTradeBotBalance(function(data){ tradebotBalance = data; });
 	getTradeBotBitcoinAddress(address, function(data){ btcAddress = data; $("#btcDisplayAddress").html(btcAddress); updateQR(); setupWebsocket(); })
 
@@ -30,8 +33,6 @@ function tradebot(address){
 }
 
 function setupWebsocket(){
-	var restartWebSocket = true;
-
 	bitcoinWebsocket = new WebSocket("wss://ws.blockchain.info/inv");
 
 	bitcoinWebsocket.onopen = function(evt){
@@ -152,5 +153,6 @@ function getFloat(num, points){
 }
 
 function cancelFloBuy(){
+	restartWebSocket = false;
 	bitcoinWebsocket.close();
 }
