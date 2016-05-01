@@ -44,6 +44,11 @@ function registerNewPublisher(){
         $("#pubFloAddressFormGroup").addClass('has-error');
         return;
     }
+    if(wallet.balances[newPublisherFlorincoinAddress] < 1){
+        tradebot(newPublisherFlorincoinAddress);
+        swal("Error!", "You must have at least 1 FLO in your wallet to register a publisher.", "error");
+        return;
+    }
 
     // Hide the form and show the loading window.
     hide(document.getElementById('newPublisherFormDiv'));
