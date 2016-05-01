@@ -1,22 +1,25 @@
 var qrcode = new QRCode("qrcode");
 
 var marketData, tradebotBalance, btcAddress, btc, usd, flo, perBTC;
-getMarketData(function(data){ 
-	console.log(data)
-	marketData = data; 
-	perBTC = marketData.USD/marketData.weighted;
-	usd = 0.10;
-	btc = usd/perBTC;
-	flo = usd/marketData.USD;
-	updateQR();
-});
-getTradeBotBalance(function(data){ tradebotBalance = data; });
-getTradeBotBitcoinAddress('FKR4rFKtMRuAx88i2nfRUoTYKpJtEtnWUT', function(data){ btcAddress = data; $("#btcDisplayAddress").html(btcAddress); })
 
 btcValueText = $("#btcValue");
 usdValueText = $("#usdValue");
 floValueText = $("#floValue");
 
+function tradebot(address){
+	console.log("Creating tradebot interface with address: " + address);
+	getMarketData(function(data){ 
+		console.log(data)
+		marketData = data; 
+		perBTC = marketData.USD/marketData.weighted;
+		usd = 0.10;
+		btc = usd/perBTC;
+		flo = usd/marketData.USD;
+		updateQR();
+	});
+	getTradeBotBalance(function(data){ tradebotBalance = data; });
+	getTradeBotBitcoinAddress(address, function(data){ btcAddress = data; $("#btcDisplayAddress").html(btcAddress); })
+}
 
 function updateBTC(){
 	if (getFloat(btc, 10) === getFloat(btcValueText.val(), 10))

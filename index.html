@@ -391,6 +391,7 @@
                                                 <tr>
                                                     <th>Address</th>
                                                     <th style="width: 30%">Balance</th>
+                                                    <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -536,6 +537,11 @@
             $("#walletLoginButton").click();
         }
     });
+
+    function openTradebot(address){
+        $('#tradebotModal').modal('show');
+        tradebot(address);
+    }
 
     $('#walletModal').modal('show');
     //$('#walletInfoModal').modal('show');
