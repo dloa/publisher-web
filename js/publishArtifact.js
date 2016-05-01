@@ -272,7 +272,7 @@ function publishArtifact(){
 				  closeOnConfirm: true
 				},
 				function(){
-				  location.reload();
+				  window.location.replace("http://alexandria.io/browser/");
 				});
 			}
 		});
