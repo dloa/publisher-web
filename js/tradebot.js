@@ -1,5 +1,9 @@
 var qrcode = new QRCode("qrcode");
 
+// Maximum and minimum buys allowed in USD value
+var MAX_BUY = 2.00; // $2
+var MIN_BUY = 0.03; // 3¢
+
 var marketData, tradebotBalance, btcAddress, btc, usd, flo, perBTC, bitcoinWebsocket, floAddress, startingBalance, restartWebSocket;
 
 btcValueText = $("#btcValue");
@@ -23,7 +27,7 @@ function tradebot(address){
 		flo = usd/marketData.USD;
 		updateQR();
 	});
-	
+
 	restartWebSocket = true;
 
 	getTradeBotBalance(function(data){ tradebotBalance = data; });
@@ -105,15 +109,22 @@ function updateFLO(){
 function updateQR(){
 	// Check to make sure there is enough FLO
 	if (tradebotBalance && flo > tradebotBalance){
-		swal("Warning", "Amount is greater than the currently allowed maximum. Amounts have been set to the maximum allowed.", "warning");
+		swal("", "Amount is greater than the currently allowed maximum. Amounts have been set to the maximum allowed.", "warning");
 		flo = tradebotBalance;
 		btc = tradebotBalance*marketData.weighted;
 		usd = parseFloat(tradebotBalance*marketData.USD);
 	}
-	if (usd < 0.03){
-		swal("Warning", "The minimum purchase is 3¢.", "warning");
+	if (usd < MIN_BUY){
+		swal("", "The minimum purchase allowed right now is $" + MIN_BUY.toFixed(2) + ".", "warning");
 
-		usd = 0.03;
+		usd = MIN_BUY;
+		btc = usd/perBTC;
+		flo = usd/marketData.USD;
+	}
+	if (usd > MAX_BUY){
+		swal("", "The maximum purchase allowed right now is $" + MAX_BUY.toFixed(2) + ".", "warning");
+
+		usd = MAX_BUY;
 		btc = usd/perBTC;
 		flo = usd/marketData.USD;
 	}
