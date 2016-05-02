@@ -212,7 +212,7 @@ function publishArtifact(){
 		var title = $('#videoTitle').val();
 		var description = $('#description').val();
 		var year = parseInt($('#releaseDate').val());
-		var bitcoinAddress = parseInt($('#bitcoinAddress').val());
+		var bitcoinAddress = $('#bitcoinAddress').val();
 
 		var videoHashIndex = 0;
 		if (!isBlank($('#posterFile').val()))
@@ -224,9 +224,10 @@ function publishArtifact(){
             "timestamp": Date.now(),
             "type": "video",
             "payment": {
-            	"fiat": "USD", // Hardcode USD, unknown if is needed yet.
-                "paymentToken": "BTC", // Hardcode BTC, unknown if is needed yet
-                "paymentAddress": bitcoinAddress
+            	// Commented out because Libraryd hates me :c
+            	//"fiat": "USD", // Hardcode USD, unknown if is needed yet.
+                //"paymentToken": "BTC", // Hardcode BTC, unknown if is needed yet
+                //"paymentAddress": bitcoinAddress
             },
             "info": {
                 "title": title,
@@ -236,7 +237,13 @@ function publishArtifact(){
                 	"Bitcoin Address": bitcoinAddress,
                 	"DHT Hash": hashes[hashes.length-1].Hash,
                     "filename": hashes[videoHashIndex].Name,
-                    "runtime": duration.toFixed(0)
+                    "runtime": duration.toFixed(0),
+                    "files": [{
+		            	"dname": "", // Display Name
+		            	"fname": hashes[videoHashIndex].Name, // File Name
+		            	"runtime": duration.toFixed(0),
+		            	"type": "video"
+		            }]
                 }
             }
         };
@@ -257,15 +264,27 @@ function publishArtifact(){
         if (!isBlank(distributor))
         	alexandriaMedia["info"]["extra-info"]["company"] = distributor;
 
-        if (!isBlank(poster))
+        if (!isBlank(poster)){
         	alexandriaMedia["info"]["extra-info"]["posterFrame"] = hashes[0].Name;
-        /*
+        	alexandriaMedia["info"]["extra-info"]["files"].push({
+        		"dname": "",
+        		"fname": hashes[0].Name,
+        		"type": "preview"
+        	})
+        }
+        
         if (!isBlank(suggPricePer))
-        	alexandriaMedia["payment"]["suggPlayPrice"] = suggPricePer;
+        	alexandriaMedia["info"]["extra-info"]["files"][0]["sugPlay"] = suggPricePer; // Hardcode to first file for now as that is the main file.
 
         if (!isBlank(minPricePer))
-        	alexandriaMedia["info"].artist = director;
-        */
+        	alexandriaMedia["info"]["extra-info"]["files"][0]["minPlay"] = minPricePer;
+
+        if (!isBlank(suggPriceBuy))
+        	alexandriaMedia["info"]["extra-info"]["files"][0]["sugBuy"] = suggPriceBuy;
+
+        if (!isBlank(minPriceBuy))
+        	alexandriaMedia["info"]["extra-info"]["files"][0]["minBuy"] = minPriceBuy;
+
 
         document.getElementById('publishWell').innerHTML += JSON.stringify(alexandriaMedia) + "<br>";
 
