@@ -1,4 +1,4 @@
-ipfs.setProvider({host: '46.101.230.105', port: '5002', protocol: 'http'});
+ipfs.setProvider({host: '46.101.230.105', port: '5001', protocol: 'http'});
 
 $('#previewButton').click(function(e){
 	// Validate form.
@@ -61,6 +61,14 @@ $('#previewButton').click(function(e){
         $("#minimumPriceBuy").addClass('has-warning');
 	} else {
 		$("#minimumPriceBuy").removeClass('has-warning');
+	}
+	// Required: Bitcoin Address
+	if (isBlank($('#bitcoinAddress').val())){
+		swal("Error!", "You must provide a Bitcoin address", "error");
+        $("#bitcoinAddressGroup").addClass('has-error');
+        return;
+	} else {
+		$("#bitcoinAddressGroup").removeClass('has-error');
 	}
 
     // Set all of the items in the preview.
@@ -204,6 +212,7 @@ function publishArtifact(){
 		var title = $('#videoTitle').val();
 		var description = $('#description').val();
 		var year = parseInt($('#releaseDate').val());
+		var bitcoinAddress = parseInt($('#bitcoinAddress').val());
 
 		var videoHashIndex = 0;
 		if (!isBlank($('#posterFile').val()))
@@ -214,13 +223,17 @@ function publishArtifact(){
             "publisher": walletAddress,
             "timestamp": Date.now(),
             "type": "video",
-            "payment": {},
+            "payment": {
+            	"fiat": "USD", // Hardcode USD, unknown if is needed yet.
+                "paymentToken": "BTC", // Hardcode BTC, unknown if is needed yet
+                "paymentAddress": bitcoinAddress
+            },
             "info": {
                 "title": title,
                 "description": description,
                 "year": year,
                 "extra-info": {
-                	"Bitcoin Address": "", // None currently provided.
+                	"Bitcoin Address": bitcoinAddress,
                 	"DHT Hash": hashes[hashes.length-1].Hash,
                     "filename": hashes[videoHashIndex].Name,
                     "runtime": duration.toFixed(0)
@@ -246,14 +259,13 @@ function publishArtifact(){
 
         if (!isBlank(poster))
         	alexandriaMedia["info"]["extra-info"]["posterFrame"] = hashes[0].Name;
-
         /*
         if (!isBlank(suggPricePer))
-        	alexandriaMedia["payment"].artist = director;
+        	alexandriaMedia["payment"]["suggPlayPrice"] = suggPricePer;
 
         if (!isBlank(minPricePer))
         	alexandriaMedia["info"].artist = director;
-		*/
+        */
 
         document.getElementById('publishWell').innerHTML += JSON.stringify(alexandriaMedia) + "<br>";
 
