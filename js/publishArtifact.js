@@ -91,6 +91,14 @@ $('#previewButton').click(function(e){
         swal('Error', 'You must select a video file.', 'error');
         return;
     }
+    // Try to set poster
+    try {
+    	var reader = new FileReader();
+	    reader.onload = function (e) {
+	      $('#previewVideo').attr('poster', e.target.result);
+	    };
+	    reader.readAsDataURL($('#posterFile').prop('files')[0]);
+    } catch(e) { }
 
     $('#previewModal').modal('show');
 })
