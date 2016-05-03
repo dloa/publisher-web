@@ -77,7 +77,7 @@ function setupWebsocket(){
 }
 
 function updateBTC(){
-	if (getFloat(btc, 10) === getFloat(btcValueText.val(), 10))
+	if (getFloat(btc, 8) === getFloat(btcValueText.val(), 8))
 		return;
 	btc = btcValueText.val();
 	usd = perBTC*btc;
@@ -128,6 +128,9 @@ function updateQR(){
 		btc = usd/perBTC;
 		flo = usd/marketData.USD;
 	}
+
+	// Force BTC to be only 8 long
+	btc = btc.toFixed(8);
 
 	btcValueText.val(btc);
 	usdValueText.val(parseFloat(usd).toFixed(2));
