@@ -1,6 +1,7 @@
 ipfs.setProvider({host: '46.101.230.105', port: '5001', protocol: 'http'});
 
 $('#previewButton').click(function(e){
+	var hasPaymentInfo = false;
 	// Validate form.
 	// Required: Video Title
 	if (isBlank($('#videoTitle').val())){
@@ -43,27 +44,31 @@ $('#previewButton').click(function(e){
         $("#suggestedPricePer").addClass('has-warning');
 	} else {
 		$("#suggestedPricePer").removeClass('has-warning');
+		hasPaymentInfo = true;
 	}
 	// Optional: Minimum Price to Play
 	if (isBlank($('#minPlay').val())){
         $("#minimumPricePer").addClass('has-warning');
 	} else {
 		$("#minimumPricePer").removeClass('has-warning');
+		hasPaymentInfo = true;
 	}
 	// Optional: Suggested Price to Purchase
 	if (isBlank($('#suggestedBuy').val())){
         $("#suggestedPriceBuy").addClass('has-warning');
 	} else {
 		$("#suggestedPriceBuy").removeClass('has-warning');
+		hasPaymentInfo = true;
 	}
 	// Optional: Minimum Price to Purchase
 	if (isBlank($('#minBuy').val())){
         $("#minimumPriceBuy").addClass('has-warning');
 	} else {
 		$("#minimumPriceBuy").removeClass('has-warning');
+		hasPaymentInfo = true;
 	}
 	// Required: Bitcoin Address
-	if (isBlank($('#bitcoinAddress').val())){
+	if (hasPaymentInfo && isBlank($('#bitcoinAddress').val())){
 		swal("Error!", "You must provide a Bitcoin address", "error");
         $("#bitcoinAddressGroup").addClass('has-error');
         return;
@@ -234,7 +239,6 @@ function publishArtifact(){
                 "description": description,
                 "year": year,
                 "extra-info": {
-                	"Bitcoin Address": bitcoinAddress,
                 	"DHT Hash": hashes[hashes.length-1].Hash,
                     "filename": hashes[videoHashIndex].Name,
                     "runtime": duration.toFixed(0),
@@ -258,6 +262,9 @@ function publishArtifact(){
         var minPriceBuy = $('#minBuy').val();
 
         // If item is not blank, then add it, otherwise just continue as these are all optional.
+        if (!isBlank(bitcoinAddress))
+        	alexandriaMedia["info"]["extra-info"]["Bitcoin Address"] = bitcoinAddress;
+
         if (!isBlank(director))
         	alexandriaMedia["info"]["extra-info"]["artist"] = director;
 
