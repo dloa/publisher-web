@@ -1,5 +1,8 @@
 ipfs.setProvider({host: '46.101.230.105', port: '5001', protocol: 'http'});
 
+// Set up here so that it is accessable in other methods.
+var duration = 0;
+
 $('#previewButton').click(function(e){
 	var hasPaymentInfo = false;
 	// Validate form.
@@ -99,6 +102,21 @@ $('#previewButton').click(function(e){
 	    };
 	    reader.readAsDataURL($('#posterFile').prop('files')[0]);
     } catch(e) { }
+    // Get and set runtime
+    var mediaFiles = document.getElementById("mediaFiles").files;
+	window.URL = window.URL || window.webkitURL;
+	var video = document.createElement('video');
+	  video.preload = 'metadata';
+	  video.onloadedmetadata = function() {
+	    window.URL.revokeObjectURL(this.src)
+	    duration = video.duration;
+	    mediaFiles[0].duration = duration;
+	    $("#runtime").text(formatRuntime(duration.toFixed(0).toString()));
+	}
+	video.src = URL.createObjectURL(mediaFiles[0]);
+	// Set the publish time/date
+	var dateString = dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT Z");
+	$('#current-time').text(dateString);
 
     $('#previewModal').modal('show');
 })
@@ -151,19 +169,6 @@ function publishArtifact(){
 	var poster = document.getElementById("posterFile").files;
 	var mediaFiles = document.getElementById("mediaFiles").files;
 	var extraFiles = document.getElementById("extraFiles").files;
-
-	// Get Video Runtime
-	var duration = 0;
-	window.URL = window.URL || window.webkitURL;
-	var video = document.createElement('video');
-	  video.preload = 'metadata';
-	  video.onloadedmetadata = function() {
-	    window.URL.revokeObjectURL(this.src)
-	    duration = video.duration;
-	    mediaFiles[0].duration = duration;
-	    console.log(duration);
-	}
-	video.src = URL.createObjectURL(mediaFiles[0]);
 
 	// count will store the current readable index, total the total amount of files.
 	var count = 0;
@@ -310,7 +315,7 @@ function publishArtifact(){
 				document.getElementById('publishWell').innerHTML += "Successfully published artifact! <br>";
 				swal({
 				  title: "Success!",
-				  text: "Your artifact was published successfully! It may take up to an hour to show up on the Media Browser.",
+				  text: "Your artifact was published successfully! It should take around two minutes to show up on the Media Browser depending on Florincoin block times.",
 				  type: "success",
 				  showCancelButton: false,
 				  confirmButtonClass: "btn-success",
@@ -318,7 +323,8 @@ function publishArtifact(){
 				  closeOnConfirm: true
 				},
 				function(){
-				  window.location.replace("http://alexandria.io/browser/");
+					// Redirect to browser :)
+				  	window.location.replace("http://alexandria.io/browser/");
 				});
 			}
 		});
@@ -342,4 +348,18 @@ function validatePricing(){
 	$('#minBuy').val(parseFloat($('#minBuy').val()).toFixed(3));
 	if($('#minBuy').val() == "NaN")
 		$('#minBuy').val("");
+}
+
+function formatRuntime(runtimeInt) {
+    var sec_num = parseInt(runtimeInt, 10); // don't forget the second param
+    var hours   = Math.floor(sec_num / 3600);
+    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+    if (hours   < 10) {hours   = "0"+hours;}
+    if (minutes < 10) {minutes = "0"+minutes;}
+    if (seconds < 10) {seconds = "0"+seconds;}
+    var time    = hours+':'+minutes+':'+seconds;
+
+    return time;
 }
