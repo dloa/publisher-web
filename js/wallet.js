@@ -78,7 +78,7 @@ function loadAddresses(){
 	}
 
 	// Next check alexandria for all publishers and see if any wallets match. If they do, add them to the option list.
-	$.getJSON( "http://libraryd.alexandria.io/alexandria/v1/publisher/get/all", function( data ) {
+	$.getJSON( "https://libraryd.alexandria.io/alexandria/v1/publisher/get/all", function( data ) {
 		for (var i = 0; i < data.length; i++) {
 			//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
 			for (var addr in wallet.addresses) {
