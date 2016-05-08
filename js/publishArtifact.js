@@ -185,7 +185,7 @@ function publishArtifact(){
 		total += extraFiles.length;
 
 	function addFile(file, index){
-		document.getElementById('publishWell').innerHTML += "[IPFS] Adding " + (count+1) + " files to IPFS...</br>";
+		document.getElementById('publishWell').innerHTML += "[IPFS] Adding " + count + " files to IPFS...</br>";
   		addFilesToIPFS(file, index, function(hash, callIndex){ 
   			var hashes = "";
   			for (var i = 0; i < hash.length-1; i++) {
