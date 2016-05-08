@@ -114,6 +114,7 @@ function isBuffer(obj) {
 }
 
 function formatResponse(response){
+  response = response.replace(/(?:\r\n|\r|\n)/g, '');
   var split = response.split("}{");
   var formatted = "[";
   for (var i = 0; i < split.length; i++) {
