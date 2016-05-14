@@ -185,6 +185,30 @@ var Wallet = (function () {
         console.log(JSON.stringify(clean_coins));
         return clean_coins;
     };
+    Wallet.prototype.mergeUnspent = function (unspent, address) {
+        var merged = unspent;
+        console.log("!unspent!");
+        console.log(JSON.stringify(unspent, null, 2));
+
+        for (var i = 0; i < this.known_unspent.length; ++i)
+            if (this.known_unspent[i].address == address) {
+                var dupe = false;
+                for (var j = 0; j < unspent.length; ++j)
+                    if (this.known_unspent[i].txid == merged[j].txid &&
+                        this.known_unspent[i].vout == merged[j].vout) {
+                        dupe = true;
+                        break;
+                    }
+                if (!dupe)
+                    merged.push(this.known_unspent[i]);
+            }
+
+        console.log("!known_unspent!");
+        console.log(JSON.stringify(this.known_unspent, null, 2));
+        console.log("!merged!");
+        console.log(JSON.stringify(merged, null, 2));
+        return merged;
+    };
     /**
      * calculateBestUnspent()
      *
@@ -288,12 +312,8 @@ var Wallet = (function () {
                     return;
                 }
                 this.getUnspent(fromAddress, function (data) {
-                    var combine = data;
-                    for (var i = 0; i < _this.known_unspent.length; ++i)
-                        if (_this.known_unspent[i].address == fromAddress)
-                            combine.push(_this.known_unspent[i]);
-
-                    var clean_unspent = _this.removeSpent(combine);
+                    var merged = _this.mergeUnspent(data, fromAddress);
+                    var clean_unspent = _this.removeSpent(merged);
                     data = _this.calculateBestUnspent(amount, clean_unspent);
                     console.log(data);
                     // temporary constant
@@ -344,7 +364,7 @@ var Wallet = (function () {
                     var lenBuffer = Bitcoin.bufferutils.varIntBuffer(txComment.length);
                     var hexComment = '';
 
-                    for (i = 0; i < lenBuffer.length; ++i) {
+                    for (var i = 0; i < lenBuffer.length; ++i) {
                         hexComment += toHex(lenBuffer[i]);
                     }
                     for (i = 0; i < txComment.length; ++i) {
@@ -356,6 +376,17 @@ var Wallet = (function () {
                     console.log(rawHex);
 
                     _this.pushTX(rawHex, function (data) {
+                        // If I'm paying myself it's known_unspent
+                        if (toAddress == fromAddress) {
+                            _this.known_unspent.push({
+                                address: toAddress,
+                                txid: data.txid,
+                                vout: 0,
+                                confirmations: -1,
+                                amount: amount / Math.pow(10, 8)
+                            });
+                        }
+                        // Add the change as a known_unspent
                         if (changeValue >= minFeePerKb)
                             _this.known_unspent.push({
                                 address: fromAddress,
