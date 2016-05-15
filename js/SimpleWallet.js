@@ -395,12 +395,6 @@ var Wallet = (function () {
                                 confirmations: -1,
                                 amount: changeValue / Math.pow(10, 8)
                             });
-                        try {
-                            beep(300, 4);
-                        }
-                        catch (e) {
-                            console.error('Beep is not supported by this browser???');
-                        }
                         if (typeof callback == typeof Function)
                             callback(null, data);
                     });
