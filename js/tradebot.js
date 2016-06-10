@@ -145,7 +145,7 @@ function updateQR(){
 }
 
 function getMarketData(callback){
-	$.getJSON("https://libraryd.alexandria.io/flo-market-data/v1/getAll", function(data){
+	$.getJSON("https://api.alexandria.io/flo-market-data/v1/getAll", function(data){
 		callback(data);
 	})
 }
