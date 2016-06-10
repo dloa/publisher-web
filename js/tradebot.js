@@ -109,20 +109,20 @@ function updateFLO(){
 function updateQR(){
 	// Check to make sure there is enough FLO
 	if (tradebotBalance && flo > tradebotBalance){
-		swal("", "Amount is greater than the currently allowed maximum. Amounts have been set to the maximum allowed.", "warning");
+		swal("Warning", "Amount is greater than the currently allowed maximum. Amounts have been set to the maximum allowed.", "warning");
 		flo = tradebotBalance;
 		btc = tradebotBalance*marketData.weighted;
 		usd = parseFloat(tradebotBalance*marketData.USD);
 	}
 	if (usd < MIN_BUY){
-		swal("", "The minimum purchase allowed right now is $" + MIN_BUY.toFixed(2) + ".", "warning");
+		swal("Warning", "The minimum purchase allowed right now is $" + MIN_BUY.toFixed(2) + ".", "warning");
 
 		usd = MIN_BUY;
 		btc = usd/perBTC;
 		flo = usd/marketData.USD;
 	}
 	if (usd > MAX_BUY){
-		swal("", "The maximum purchase allowed right now is $" + MAX_BUY.toFixed(2) + ".", "warning");
+		swal("Warning", "The maximum purchase allowed right now is $" + MAX_BUY.toFixed(2) + ".", "warning");
 
 		usd = MAX_BUY;
 		btc = usd/perBTC;
