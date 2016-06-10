@@ -130,7 +130,7 @@ function updateQR(){
 	}
 
 	// Force BTC to be only 8 long
-	btc = btc.toFixed(8);
+	btc = parseFloat(btc).toFixed(8);
 
 	btcValueText.val(btc);
 	usdValueText.val(parseFloat(usd).toFixed(2));
