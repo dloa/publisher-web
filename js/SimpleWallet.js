@@ -25,8 +25,40 @@ var Wallet = (function () {
         this.password = password;
         this.known_spent = [];
         this.known_unspent = [];
-    }
 
+        if('spentdata' in localStorage) {
+            try {
+                var spdata = JSON.parse(localStorage.spentdata);
+                this.known_spent = spdata.spent;
+                this.known_unspent = spdata.unspent;
+            } catch(e) {
+                // local data is corrupt?
+                delete localStorage['spentdata'];
+            }
+        }
+    };
+
+    Wallet.prototype.putSpent = function (spent) {
+        this.known_spent.push(spent);
+        var unspent = this.known_unspent;
+        // clean out known unspent
+        for (var v in unspent) {
+            if (JSON.stringify(spent) == JSON.stringify(unspent[v])) {
+                delete this.known_unspent[k];
+            }
+        }
+        this.storeSpent();
+    };
+
+    Wallet.prototype.putUnspent = function (spent) {
+        this.known_unspent.push(spent);
+        this.storeSpent();
+    };
+
+    Wallet.prototype.storeSpent = function() {
+        var spdata = {spent: this.known_spent, unspent: this.known_unspent};
+        localStorage.spentdata = JSON.stringify(spdata);
+    }
     /**
      * setSharedKey()
      *
@@ -145,7 +177,6 @@ var Wallet = (function () {
                 if (data) {
                     var addr_data = data;
                     _this.setBalance(addr_data['addrStr'], addr_data['balance']);
-                    callback(data);
                 }
             }, "json");
         }
@@ -301,7 +332,8 @@ var Wallet = (function () {
             txComment = '';
         }
         if (typeof callback != typeof Function)
-            callback = function(err, data){};
+            callback = function (err, data) {
+            };
 
         var _this = this;
         if (this.validateKey(toAddress) && this.validateKey(fromAddress)) {
@@ -328,10 +360,11 @@ var Wallet = (function () {
                     }
                     console.log('Sending ' + amount + ' satoshis from ' + fromAddress + ' to ' + toAddress + ' unspent amt: ' + totalUnspent);
                     var unspents = data.unspent;
+                    _this.putSpent.bind(_this);
                     for (var v in unspents) {
                         if (unspents[v].confirmations) {
                             tx.addInput(unspents[v].txid, unspents[v].vout);
-                            _this.known_spent.push(unspents[v]);
+                            _this.putSpent(unspents[v]);
                         }
                     }
                     tx.addOutput(toAddress, amount);
@@ -376,9 +409,10 @@ var Wallet = (function () {
                     console.log(rawHex);
 
                     _this.pushTX(rawHex, function (data) {
+                        _this.putUnspent.bind(_this);
                         // If I'm paying myself it's known_unspent
                         if (toAddress == fromAddress) {
-                            _this.known_unspent.push({
+                            _this.putUnspent({
                                 address: toAddress,
                                 txid: data.txid,
                                 vout: 0,
@@ -388,7 +422,7 @@ var Wallet = (function () {
                         }
                         // Add the change as a known_unspent
                         if (changeValue >= minFeePerKb)
-                            _this.known_unspent.push({
+                            _this.putUnspent({
                                 address: fromAddress,
                                 txid: data.txid,
                                 vout: 1,
