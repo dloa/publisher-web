@@ -106,8 +106,8 @@ $('#previewButton').click(function(e){
     var mediaFiles = document.getElementById("mediaFiles").files;
 	window.URL = window.URL || window.webkitURL;
 	var video = document.createElement('video');
-	  video.preload = 'metadata';
-	  video.onloadedmetadata = function() {
+	video.preload = 'metadata';
+	video.onloadedmetadata = function() {
 	    window.URL.revokeObjectURL(this.src)
 	    duration = video.duration;
 	    mediaFiles[0].duration = duration;
