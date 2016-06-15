@@ -1,3 +1,6 @@
+var mediaFiles = [];
+var extraFiles = [];
+
 $("#posterFile").change(function(input){
     var files = input.files ? input.files : input.currentTarget.files;
     if (files) {
@@ -100,6 +103,9 @@ function ParseExtra(file) {
     $('#pricing').show();
     $('#extraTable').show();
 
+    // Add file to array
+    extraFiles.push(file);
+
     console.log(file);
     var tableLength = $('#extraTable tr').length-1;
 
@@ -113,7 +119,7 @@ function ParseExtra(file) {
                     '<option>Zip File</option>' +
                 '</select>' +
             '</td>' +
-            '<td><input type="text" class="form-control" value="' + file.name + '"></td>' +
+            '<td><input type="text" class="form-control" id="name" value="' + file.name + '"></td>' +
        '</tr>');
     AddPricingRow(file);
     
@@ -123,6 +129,9 @@ function ParseMedia(file) {
     // Show the two tables by default now that we have some media.
     $('#pricing').show();
     $('#mediaFilesTable').show();
+
+    // Add file to array
+    mediaFiles.push(file);
 
     console.log(file);
     var tableLength = $('#mediaFilesTable tr').length-1;
@@ -139,25 +148,25 @@ function ParseMedia(file) {
     }
     video.src = URL.createObjectURL(file);
     $('#mediaFilesTable tr:last').after(
-        '<tr id="' + file.name.split('.').join('') + '">' +
+        '<tr id="' + file.name.replace('.', '').replace(' ', '') + '">' +
             '<td>' + tableLength + '</td>' +
             '<td>' + file.name + '</td>' +
             '<td>' + humanFileSize(file.size, true) + '</td>' +
             '<td>...</td>' +
-            '<td><input type="text" class="form-control" value="' + file.name + '"></td>' +
-            '<td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(' + file.name.split('.').join('') + ')">x</button></td>' +
+            '<td><input type="text" class="form-control" id="name" value="' + file.name + '"></td>' +
+            '<td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(' + file.name.replace('.', '').replace(' ', '') + ')">x</button></td>' +
         '</tr>');
     AddPricingRow(file);
 }
 
 function AddPricingRow(file){
     $('#pricingTable tr:last').after(
-    '<tr id="' + file.name.split('.').join('') + 'price">' +
+    '<tr id="' + file.name.replace('.', '').replace(' ', '') + 'price">' +
         '<td style="width:20%">' + file.name + '</td>' +
         '<td>' +
             '<div class="input-group">' +
                 '<div class="input-group-addon">$</div>' +
-                '<input type="text" class="form-control" id="suggestedPlay" onblur="validatePricing()" placeholder="0.000">' +
+                '<input type="text" class="form-control" id="sugPlay" onblur="validatePricing()" placeholder="0.000">' +
             '</div>' +
         '</td>' +
         '<td>' +
@@ -169,7 +178,7 @@ function AddPricingRow(file){
         '<td>' +
             '<div class="input-group">' +
                 '<div class="input-group-addon">$</div>' +
-                '<input type="text" class="form-control" id="suggestedBuy" onblur="validatePricing()" placeholder="0.000">' +
+                '<input type="text" class="form-control" id="sugBuy" onblur="validatePricing()" placeholder="0.000">' +
             '</div>' +
         '</td>' +
         '<td>' +
@@ -178,7 +187,7 @@ function AddPricingRow(file){
                 '<input type="text" class="form-control" id="minBuy" onblur="validatePricing()" placeholder="0.000">' +
             '</div>' +
         '</td>' +
-        '<td style="width:15%"><input type="checkbox" name="vehicle" value="Bike"> Disallow Play<br><input type="checkbox" name="vehicle" value="Bike"> Disallow Buy</td>' +
+        '<td style="width:15%"><input type="checkbox" id="disPlay"> Disallow Play<br><input type="checkbox" id="disBuy"> Disallow Buy</td>' +
     '</tr>');
 }
 function humanFileSize(bytes, si) {

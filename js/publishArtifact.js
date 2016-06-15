@@ -88,7 +88,7 @@ $('#previewButton').click(function(e){
     $('#previewDescription').text($('#description').val());
     // Set Video
     try {
-        var newURL = URL.createObjectURL($('#mediaFiles').prop('files')[0]);
+        var newURL = URL.createObjectURL(mediaFiles[0]);
         $('#previewVideo').attr('src', newURL);
     } catch(e) {
         swal('Error', 'You must select a video file.', 'error');
@@ -103,7 +103,6 @@ $('#previewButton').click(function(e){
 	    reader.readAsDataURL($('#posterFile').prop('files')[0]);
     } catch(e) { }
     // Get and set runtime
-    var mediaFiles = document.getElementById("mediaFiles").files;
 	window.URL = window.URL || window.webkitURL;
 	var video = document.createElement('video');
 	video.preload = 'metadata';
@@ -167,8 +166,7 @@ function addFilesToIPFS(files, count, callback){
 
 function publishArtifact(){
 	var poster = document.getElementById("posterFile").files;
-	var mediaFiles = document.getElementById("mediaFiles").files;
-	var extraFiles = document.getElementById("extraFiles").files;
+	// mediaFiles and extraFiles are defined in dropzone.js
 
 	// count will store the current readable index, total the total amount of files.
 	var count = 0;
@@ -254,13 +252,8 @@ function publishArtifact(){
                 "extra-info": {
                 	"DHT Hash": hashes[hashes.length-1].Hash,
                     "filename": hashes[videoHashIndex].Name,
-                    "runtime": duration.toFixed(0),
-                    "files": [{
-		            	"dname": "", // Display Name
-		            	"fname": hashes[videoHashIndex].Name, // File Name
-		            	"runtime": duration.toFixed(0),
-		            	"type": "video"
-		            }]
+                    //"runtime": duration.toFixed(0),
+                    "files": []
                 }
             }
         };
@@ -284,6 +277,60 @@ function publishArtifact(){
         if (!isBlank(distributor))
         	alexandriaMedia["info"]["extra-info"]["company"] = distributor;
 
+        if (!isBlank(mediaFiles)){
+        	for (var i = 0; i < mediaFiles.length; i++) {
+        		// Get Display Name from Table
+        		var displayName = $('#' + mediaFiles[i].name.replace('.', '').replace(' ', '') + ' #name').val();
+        		// Get Type from Table
+        		var type = $('#' + mediaFiles[i].name.replace('.', '').replace(' ', '') + ' #type').val();
+        		// Get duration from table
+        		//var duration = duration.toFixed(0); // Need to un-hardcode this...
+        		// Get prices from table
+        		var priceSelector = '#' + mediaFiles[i].name.replace('.', '').replace(' ', '') + 'price';
+        		var minPlay = $(priceSelector + ' #minPlay').val();
+        		var sugPlay = $(priceSelector + ' #sugPlay').val();
+        		var minBuy = $(priceSelector + ' #minBuy').val();
+        		var sugBuy = $(priceSelector + ' #sugBuy').val();
+        		// Get checkboxes from pricing table
+        		var disallowPlay = $(priceSelector + ' #disPlay').is(':checked');
+        		var disallowBuy = $(priceSelector + ' #disBuy').is(':checked');
+
+        		var fileJSON = {
+	        		"dname": displayName,
+	        		"fname": mediaFiles[i].name,
+	        		//"duration": duration,
+	        		"type": 'video'
+	        	}
+
+	        	// Set all optional fields
+	        	if (!isBlank(minPlay)){
+	        		fileJSON['minPlay'] = minPlay;
+	        	}
+
+	        	if (!isBlank(sugPlay)){
+	        		fileJSON['sugPlay'] = sugPlay;
+	        	}
+
+	        	if (!isBlank(minBuy)){
+	        		fileJSON['minBuy'] = minBuy;
+	        	}
+
+	        	if (!isBlank(sugBuy)){
+	        		fileJSON['sugBuy'] = sugBuy;
+	        	}
+
+	        	if (disallowPlay){
+	        		fileJSON['disallowPlay'] = true;
+	        	}
+
+	        	if (disallowBuy){
+	        		fileJSON['disallowBuy'] = true;
+	        	}
+
+        		alexandriaMedia["info"]["extra-info"]["files"].push(fileJSON)
+        	}
+        }
+
         if (!isBlank(poster)){
         	alexandriaMedia["info"]["extra-info"]["posterFrame"] = hashes[0].Name;
         	alexandriaMedia["info"]["extra-info"]["files"].push({
@@ -292,18 +339,57 @@ function publishArtifact(){
         		"type": "preview"
         	})
         }
-        
-        if (!isBlank(suggPricePer))
-        	alexandriaMedia["info"]["extra-info"]["files"][0]["sugPlay"] = suggPricePer; // Hardcode to first file for now as that is the main file.
 
-        if (!isBlank(minPricePer))
-        	alexandriaMedia["info"]["extra-info"]["files"][0]["minPlay"] = minPricePer;
+        if (!isBlank(extraFiles)){
+        	for (var i = 0; i < extraFiles.length; i++) {
+        		// Get Display Name from Table
+        		var displayName = $('#' + extraFiles[i].name.replace('.', '').replace(' ', '') + ' #name').val();
+        		// Get Type from Table
+        		var type = $('#' + extraFiles[i].name.replace('.', '').replace(' ', '') + ' #type').val();
+        		// Get prices from table
+        		var priceSelector = '#' + extraFiles[i].name.replace('.', '').replace(' ', '') + 'price';
+        		var minPlay = $(priceSelector + ' #minPlay').val();
+        		var sugPlay = $(priceSelector + ' #sugPlay').val();
+        		var minBuy = $(priceSelector + ' #minBuy').val();
+        		var sugBuy = $(priceSelector + ' #sugBuy').val();
+        		// Get checkboxes from pricing table
+        		var disallowPlay = $(priceSelector + ' #disPlay').is(':checked');
+        		var disallowBuy = $(priceSelector + ' #disBuy').is(':checked');
 
-        if (!isBlank(suggPriceBuy))
-        	alexandriaMedia["info"]["extra-info"]["files"][0]["sugBuy"] = suggPriceBuy;
+        		var fileJSON = {
+	        		"dname": displayName,
+	        		"fname": extraFiles[i].name,
+	        		"type": type
+	        	}
 
-        if (!isBlank(minPriceBuy))
-        	alexandriaMedia["info"]["extra-info"]["files"][0]["minBuy"] = minPriceBuy;
+	        	// Set all optional fields
+	        	if (!isBlank(minPlay)){
+	        		fileJSON['minPlay'] = minPlay;
+	        	}
+
+	        	if (!isBlank(sugPlay)){
+	        		fileJSON['sugPlay'] = sugPlay;
+	        	}
+
+	        	if (!isBlank(minBuy)){
+	        		fileJSON['minBuy'] = minBuy;
+	        	}
+
+	        	if (!isBlank(sugBuy)){
+	        		fileJSON['sugBuy'] = sugBuy;
+	        	}
+
+	        	if (disallowPlay){
+	        		fileJSON['disallowPlay'] = true;
+	        	}
+
+	        	if (disallowBuy){
+	        		fileJSON['disallowBuy'] = true;
+	        	}
+
+        		alexandriaMedia["info"]["extra-info"]["files"].push(fileJSON)
+        	}
+        }
 
 
         document.getElementById('publishWell').innerHTML += JSON.stringify(alexandriaMedia) + "<br>";
