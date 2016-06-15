@@ -148,48 +148,50 @@ function ParseMedia(file) {
     }
     video.src = URL.createObjectURL(file);
     $('#mediaFilesTable tr:last').after(
-        '<tr id="' + file.name.replace('.', '').replace(' ', '') + '">' +
+        '<tr id="' + sanitizeID(file.name) + '">' +
             '<td>' + tableLength + '</td>' +
             '<td>' + file.name + '</td>' +
             '<td>' + humanFileSize(file.size, true) + '</td>' +
             '<td>...</td>' +
             '<td><input type="text" class="form-control" id="name" value="' + file.name + '"></td>' +
-            '<td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(' + file.name.replace('.', '').replace(' ', '') + ')">x</button></td>' +
+            '<td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(\'' + sanitizeID(file.name) + '\')">x</button></td>' +
         '</tr>');
     AddPricingRow(file);
 }
 
 function AddPricingRow(file){
     $('#pricingTable tr:last').after(
-    '<tr id="' + file.name.replace('.', '').replace(' ', '') + 'price">' +
+    '<tr id="' + sanitizeID(file.name) + 'price">' +
         '<td style="width:20%">' + file.name + '</td>' +
         '<td>' +
             '<div class="input-group">' +
                 '<div class="input-group-addon">$</div>' +
-                '<input type="text" class="form-control" id="sugPlay" onblur="validatePricing()" placeholder="0.000">' +
+                '<input type="text" class="form-control" id="sugPlay" onblur="validatePricing(\'' + sanitizeID(file.name) + '\')" placeholder="0.000">' +
             '</div>' +
         '</td>' +
         '<td>' +
             '<div class="input-group">' +
                 '<div class="input-group-addon">$</div>' +
-                '<input type="text" class="form-control" id="minPlay" onblur="validatePricing()" placeholder="0.000">' +
+                '<input type="text" class="form-control" id="minPlay" onblur="validatePricing(\'' + sanitizeID(file.name) + '\')" placeholder="0.000">' +
             '</div>' +
        '</td>' +
         '<td>' +
             '<div class="input-group">' +
                 '<div class="input-group-addon">$</div>' +
-                '<input type="text" class="form-control" id="sugBuy" onblur="validatePricing()" placeholder="0.000">' +
+                '<input type="text" class="form-control" id="sugBuy" onblur="validatePricing(\'' + sanitizeID(file.name) + '\')" placeholder="0.000">' +
             '</div>' +
         '</td>' +
         '<td>' +
             '<div class="input-group">' +
                 '<div class="input-group-addon">$</div>' +
-                '<input type="text" class="form-control" id="minBuy" onblur="validatePricing()" placeholder="0.000">' +
+                '<input type="text" class="form-control" id="minBuy" onblur="validatePricing(\'' + sanitizeID(file.name) + '\')" placeholder="0.000">' +
             '</div>' +
         '</td>' +
-        '<td style="width:15%"><input type="checkbox" id="disPlay"> Disallow Play<br><input type="checkbox" id="disBuy"> Disallow Buy</td>' +
+        '<td style="width:15%"><input type="checkbox" id="disPlay" onclick="checkboxToggle(\'' + sanitizeID(file.name) + '\')"> Disallow Play' +
+        '<br><input type="checkbox" id="disBuy" onclick="checkboxToggle(\'' + sanitizeID(file.name) + '\')"> Disallow Buy</td>' +
     '</tr>');
 }
+
 function humanFileSize(bytes, si) {
     var thresh = si ? 1000 : 1024;
     if(Math.abs(bytes) < thresh) {
@@ -205,6 +207,35 @@ function humanFileSize(bytes, si) {
     } while(Math.abs(bytes) >= thresh && u < units.length - 1);
     return bytes.toFixed(1)+' '+units[u];
 }
+
 function removeRow(name){
-    name.remove()
+    $('#' + name).remove()
+}
+
+function sanitizeID(name){
+    return name.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/\s]/gi, '');
+}
+
+function validatePricing(id){
+    console.log(id);
+    
+    $('#' + id + 'price #sugPlay').val(parseFloat($('#' + id + 'price #sugPlay').val()).toFixed(3));
+    if($('#' + id + 'price #sugPlay').val() == "NaN")
+        $('#' + id + 'price #sugPlay').val("");
+
+    $('#' + id + 'price #minPlay').val(parseFloat($('#' + id + 'price #minPlay').val()).toFixed(3));
+    if($('#' + id + 'price #minPlay').val() == "NaN")
+        $('#' + id + 'price #minPlay').val("");
+
+    $('#' + id + 'price #sugBuy').val(parseFloat($('#' + id + 'price #sugBuy').val()).toFixed(3));
+    if($('#' + id + 'price #sugBuy').val() == "NaN")
+        $('#' + id + 'price #sugBuy').val("");
+
+    $('#' + id + 'price #minBuy').val(parseFloat($('#' + id + 'price #minBuy').val()).toFixed(3));
+    if($('#' + id + 'price #minBuy').val() == "NaN")
+        $('#' + id + 'price #minBuy').val("");
+}
+
+function checkboxToggle(id){
+    console.log(id + 'price');
 }
