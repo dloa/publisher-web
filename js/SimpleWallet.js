@@ -8,8 +8,8 @@
  * Created by Someguy123 (http://someguy123.com)
  * Modified by bitspill
  */
-var flovaultBaseURL = "https://alexandria.io/flovault";
-var florinsightBaseURL = "https://alexandria.io/florinsight";
+var flovaultBaseURL = "https://flovault.alexandria.io/";
+var florinsightBaseURL = "https://florinsight.alexandria.io/";
 
 var Wallet = (function () {
     function Wallet(identifier, password) {
@@ -177,6 +177,7 @@ var Wallet = (function () {
                 if (data) {
                     var addr_data = data;
                     _this.setBalance(addr_data['addrStr'], addr_data['balance']);
+                    callback(data);
                 }
             }, "json");
         }
