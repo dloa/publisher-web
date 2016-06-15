@@ -9,7 +9,7 @@
  * Modified by bitspill
  */
 var flovaultBaseURL = "https://flovault.alexandria.io";
-var florinsightBaseURL = "http://florinsight.alexandria.io";
+var florinsightBaseURL = "https://florinsight.alexandria.io";
 
 var Wallet = (function () {
     function Wallet(identifier, password) {
