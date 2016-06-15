@@ -177,6 +177,7 @@ var Wallet = (function () {
                 if (data) {
                     var addr_data = data;
                     _this.setBalance(addr_data['addrStr'], addr_data['balance']);
+                    callback(data);
                 }
             }, "json");
         }
