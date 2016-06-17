@@ -44,7 +44,7 @@ var Wallet = (function () {
         // clean out known unspent
         for (var v in unspent) {
             if (JSON.stringify(spent) == JSON.stringify(unspent[v])) {
-                delete this.known_unspent[k];
+                delete this.known_unspent[v];
             }
         }
         this.storeSpent();

@@ -79,8 +79,12 @@ function FileSelectHandler(e) {
 
     // process all File objects
     for (var i = 0, f; f = files[i]; i++) {
-        if (e.srcElement.id == "mediaDrop" || e.srcElement.id == "mediaFiles")
-            ParseMedia(f);
+        if (e.srcElement.id == "mediaDrop" || e.srcElement.id == "mediaFiles"){
+            if (f.type.indexOf('video') > -1)
+                ParseMedia(f);
+            else
+                swal('Error', 'You can only select video files for the media browser', 'error');
+        }
         else
             ParseExtra(f);
     }
