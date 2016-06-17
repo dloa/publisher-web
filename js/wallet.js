@@ -73,6 +73,7 @@ function loadAddresses(){
 		// Add the florincoin addresses to the option list.
         var x = document.getElementById("newPublisherFlorincoinAddress");
         var option = document.createElement("option");
+        option.value = address;
         option.text = address;
         x.add(option);
 	}
@@ -93,6 +94,8 @@ function loadAddresses(){
 		            x.add(option);
 		            // Set the just added option to be active.
 		            x.value = option.text;
+		            // Remove the option from the register publisher page
+		            $('#newPublisherFlorincoinAddress option[value="' + address + '"]').remove()
 				}
 			}
 		}
