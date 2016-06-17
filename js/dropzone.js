@@ -120,6 +120,7 @@ function ParseExtra(file) {
                 '</select>' +
             '</td>' +
             '<td><input type="text" class="form-control" id="name" value="' + file.name + '"></td>' +
+            '<td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(\'' + sanitizeID(file.name) + '\')">x</button></td>' +
        '</tr>');
     AddPricingRow(file);
     
@@ -209,7 +210,27 @@ function humanFileSize(bytes, si) {
 }
 
 function removeRow(name){
-    $('#' + name).remove()
+    $('#' + name).remove();
+    $('#' + name + 'price').remove();
+
+    for (var i = 0; i < mediaFiles.length; i++) {
+        if (sanitizeID(mediaFiles[i].name) == name)
+            mediaFiles.splice(i, 1);
+    }
+
+    for (var i = 0; i < extraFiles.length; i++) {
+        if (sanitizeID(extraFiles[i].name) == name)
+            extraFiles.splice(i, 1);
+    }
+
+    if (mediaFiles.length == 0)
+        $('#mediaFilesTable').hide();
+
+    if (extraFiles.length == 0)
+        $('#extraTable').hide();
+
+    if (extraFiles.length == 0 && mediaFiles.length == 0)
+        $('#pricing').hide();
 }
 
 function sanitizeID(name){
