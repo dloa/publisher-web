@@ -187,8 +187,8 @@ function AddPricingRow(file){
                 '<input type="text" class="form-control" id="minBuy" onblur="validatePricing(\'' + sanitizeID(file.name) + '\')" placeholder="0.000">' +
             '</div>' +
         '</td>' +
-        '<td style="width:15%"><input type="checkbox" id="disPlay" onclick="checkboxToggle(\'' + sanitizeID(file.name) + '\')"> Disallow Play' +
-        '<br><input type="checkbox" id="disBuy" onclick="checkboxToggle(\'' + sanitizeID(file.name) + '\')"> Disallow Buy</td>' +
+        '<td style="width:15%"><input type="checkbox" id="disPlay" onclick="checkboxToggle(\'' + sanitizeID(file.name) + '\', \'play\')"> Disallow Play' +
+        '<br><input type="checkbox" id="disBuy" onclick="checkboxToggle(\'' + sanitizeID(file.name) + '\', \'buy\')"> Disallow Buy</td>' +
     '</tr>');
 }
 
@@ -217,25 +217,52 @@ function sanitizeID(name){
 }
 
 function validatePricing(id){
-    console.log(id);
-    
+    // Round to 3 digits
     $('#' + id + 'price #sugPlay').val(parseFloat($('#' + id + 'price #sugPlay').val()).toFixed(3));
-    if($('#' + id + 'price #sugPlay').val() == "NaN")
+    // If it was empty, just replace it to be empty again
+    if($('#' + id + 'price #sugPlay').val() == "NaN" || $('#' + id + 'price #sugPlay').val() == 0)
         $('#' + id + 'price #sugPlay').val("");
+    // If it was just filled, uncheck the checkbox
+    else
+        $('#' + id + 'price #disPlay').prop("checked", false);
 
     $('#' + id + 'price #minPlay').val(parseFloat($('#' + id + 'price #minPlay').val()).toFixed(3));
-    if($('#' + id + 'price #minPlay').val() == "NaN")
+    if($('#' + id + 'price #minPlay').val() == "NaN" || $('#' + id + 'price #minPlay').val() == 0)
         $('#' + id + 'price #minPlay').val("");
+    else
+        $('#' + id + 'price #disPlay').prop("checked", false);
 
     $('#' + id + 'price #sugBuy').val(parseFloat($('#' + id + 'price #sugBuy').val()).toFixed(3));
-    if($('#' + id + 'price #sugBuy').val() == "NaN")
+    if($('#' + id + 'price #sugBuy').val() == "NaN" || $('#' + id + 'price #sugBuy').val() == 0)
         $('#' + id + 'price #sugBuy').val("");
+    else
+        $('#' + id + 'price #disBuy').prop("checked", false);
 
     $('#' + id + 'price #minBuy').val(parseFloat($('#' + id + 'price #minBuy').val()).toFixed(3));
-    if($('#' + id + 'price #minBuy').val() == "NaN")
+    if($('#' + id + 'price #minBuy').val() == "NaN" || $('#' + id + 'price #minBuy').val() == 0)
         $('#' + id + 'price #minBuy').val("");
+    else
+        $('#' + id + 'price #disBuy').prop("checked", false);
 }
 
-function checkboxToggle(id){
-    console.log(id + 'price');
+function checkboxToggle(id, checkbox){
+    // Check if the play button was just toggled, if it was check to make sure that it was toggled on.
+    if (checkbox == 'play' && $('#' + id + 'price #disPlay').is(':checked')){
+        // Clear the play pricing, this shortens the publisher JSON
+        $('#' + id + 'price #sugPlay').val("");
+        $('#' + id + 'price #minPlay').val("");
+        // Uncheck the buy if it is checked, one of them must be unchecked
+        if ($('#' + id + 'price #disBuy').is(':checked'))
+            $('#' + id + 'price #disBuy').prop("checked", false);
+    }
+
+    // Check if the buy button was just toggled, check to make sure that it was toggled on.
+    if (checkbox == 'buy' && $('#' + id + 'price #disBuy').is(':checked')){
+        // Clear the play pricing, this shortens the publisher JSON
+        $('#' + id + 'price #sugBuy').val("");
+        $('#' + id + 'price #minBuy').val("");
+        // Uncheck the buy if it is checked, one of them must be unchecked
+        if ($('#' + id + 'price #disPlay').is(':checked'))
+            $('#' + id + 'price #disPlay').prop("checked", false);
+    }
 }
