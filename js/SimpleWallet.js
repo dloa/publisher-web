@@ -25,15 +25,15 @@ var Wallet = (function () {
         this.password = password;
         this.known_spent = [];
         this.known_unspent = [];
-
-        if('spentdata' in localStorage) {
+        var spentkey = 'spentdata-'+identifier;
+        if(spentkey in localStorage) {
             try {
-                var spdata = JSON.parse(localStorage.spentdata);
+                var spdata = JSON.parse(localStorage[spentkey]);
                 this.known_spent = spdata.spent;
                 this.known_unspent = spdata.unspent;
             } catch(e) {
                 // local data is corrupt?
-                delete localStorage['spentdata'];
+                delete localStorage[spentkey];
             }
         }
     };
