@@ -56,6 +56,10 @@ var Wallet = (function () {
     };
 
     Wallet.prototype.storeSpent = function() {
+        // first clean the arrays
+        this.known_spent = this.known_spent.filter(function(x) { return x !== null && x !== undefined });
+        this.known_unspent = this.known_unspent.filter(function(x) { return x !== null && x !== undefined });
+        // now actually store it
         var spdata = {spent: this.known_spent, unspent: this.known_unspent};
         localStorage.spentdata = JSON.stringify(spdata);
     }
@@ -224,7 +228,10 @@ var Wallet = (function () {
 
         for (var i = 0; i < this.known_unspent.length; ++i) {
             // note: we delete from known_unspent on spend, so we need to check if it's undefined
-            if (this.known_unspent[i] !== undefined && this.known_unspent[i].address == address) {
+            if (this.known_unspent[i]           !== undefined && 
+                this.known_spent[i]             !== null && 
+                this.known_unspent[i].address    == address) 
+            {
                 var dupe = false;
                 for (var j = 0; j < unspent.length; ++j)
                     if (this.known_unspent[i].txid == merged[j].txid &&
