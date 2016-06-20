@@ -27,7 +27,7 @@ $('#previewButton').click(function(e){
 		$("#artifactDistributorGroup").removeClass('has-warning');
 	}
 	// Required: Date
-	if (isBlank($('#releaseDate').val())){
+	if (isBlank($('#releaseDate').val()) || isNaN(parseInt($('#releaseDate').val())) || parseInt($('#releaseDate').val()) <= 0){
 		swal("Error!", "You must provide a release year", "error");
         $("#artifactDateGroup").addClass('has-error');
         return;
