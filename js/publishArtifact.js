@@ -121,6 +121,9 @@ $('#previewButton').click(function(e){
 })
 
 function submitArtifact(){
+	// Pause the preview video to stop it playing
+    $('#previewVideo').get(0).pause();
+
     swal({
         title: "Are you sure?",
         text: "You will not be able to change this later without deleting it completely!",
