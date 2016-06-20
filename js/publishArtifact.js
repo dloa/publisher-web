@@ -134,6 +134,9 @@ function submitArtifact(){
         closeOnConfirm: true
     },
     function(){
+    	window.onbeforeunload = function() {
+			return "You are currently publishing, are you sure you want to navigate away?";
+		}
     	var walletAddress = $("#publisherSelect").val().replace(/[^()](?=([^()]*\([^()]*\))*[^()]*$)/g, '').replace('(', '').replace(')', '');
     	console.log(wallet.balances[walletAddress]);
     	if (wallet.balances[walletAddress] < 1){
@@ -397,6 +400,9 @@ function publishArtifact(){
 				swal("Error!", "There was an error publishing your artifact: " + err, "error");
 			} else {
 				document.getElementById('publishWell').innerHTML += "Successfully published artifact! <br>";
+				window.onbeforeunload = function() {
+					return "You are currently publishing, are you sure you want to navigate away?";
+				}
 				swal({
 				  title: "Success!",
 				  text: "Your artifact was published successfully! It should take around two minutes to show up on the Media Browser depending on Florincoin block times.",
