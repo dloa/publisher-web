@@ -380,6 +380,7 @@ function publishArtifact(){
 
 			alexandriaMedia["info"]["extra-info"]["posterFrame"] = hashes[0].Name;
 			alexandriaMedia["info"]["extra-info"]["files"].push({
+				"dname": 'Cover Art',
 				"fname": hashes[0].Name,
 				"type": type
 			})
