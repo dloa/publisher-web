@@ -130,7 +130,8 @@ function ParseExtra(file) {
 			'<td>' + file.name + '</td>' +
 			'<td>' +
 				'<select class="form-control" id="type">' +
-					'<option>Artwork</option>' +
+                    '<option>Artwork</option>' +
+					'<option>Music Video</option>' +
 					'<option>Zip File</option>' +
 				'</select>' +
 			'</td>' +
