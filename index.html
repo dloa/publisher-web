@@ -4,7 +4,7 @@
 
     <title>DLOA - Publisher</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
     <!-- Load css files -->
     <link href="./css/main.css" rel="stylesheet">
@@ -84,33 +84,83 @@
                     </div>
                     <div class="tab-pane" role="tabpanel" id="step2">
                         <div class="section publish col-lg-12">
-                            <div class="publish-section information">
-                            <form>
-                                <div class="row">
-                                    <div class="col-sm-8">
-                                       <h5>Video Information</h5>
-                                            <div class="form-group" id="artifactTitleGroup">
-                                                <input type="text" class="form-control" id="videoTitle" placeholder="Video Title">
-                                            </div>
-                                            <div class="form-group" id="artifactDirectorGroup">
-                                                <input type="text" class="form-control" id="directorName" placeholder="Director Name">
-                                            </div>
-                                            <div class="form-group" id="artifactDistributorGroup">
-                                                <input type="text" class="form-control" id="distributor" placeholder="Distributor">
-                                            </div>
-                                            <div class="form-group" id="artifactDateGroup">
-                                                <input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
-                                            </div>
-                                            <div class="form-group" id="artifactDescriptionGroup">
-                                                <textarea row="3" class="form-control" id="description" placeholder="Video Description"></textarea>
-                                            </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <h5>Preview Image</h5>
-                                        <div id="poster" class="cover-art">
-                                            <p id="posterText">Preview Image</p>
+                            <div class="publish-section artifact-type">
+                                <h5>Select Artifact type</h5> 
+                                <ul class="nav nav-pills" role="tablist">
+                                    <li class="active"><a href="#music" data-toggle="tab">Music</a></li>
+                                    <li><a href="#video" data-toggle="tab">Video</a></li>
+                                </ul>
+                            </div>
+                            <div class="publish-section information tab-content" style="margin-top: -50px;">
+                                <div id='music' class="tab-pane fade in active">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <h5>Album Information</h5>
+                                            <form>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" id="" placeholder="Album Title">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" id="" placeholder="Artist Name">
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col col-sm-6">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control" id="" placeholder="Genre">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col col-sm-6">
+                                                        <div class="form-group">
+                                                            <input type="text" class="form-control" id="" placeholder="Release Year">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" id="" placeholder="Tags">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" id="" placeholder="Record Label">
+                                                </div>
+                                                <div class="form-group">
+                                                    <textarea row="3" class="form-control" id="" placeholder="Album Description"></textarea>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <input type="file" name="posterFile" id="posterFile" accept="image/*">
+                                        <div class="col-sm-4">
+                                            <h5>Cover Art</h5>
+                                            <div class="cover-art">
+                                                <p>Cover art</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id='video' class="tab-pane fade">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                           <h5>Video Information</h5>
+                                                <div class="form-group" id="artifactTitleGroup">
+                                                    <input type="text" class="form-control" id="videoTitle" placeholder="Video Title">
+                                                </div>
+                                                <div class="form-group" id="artifactDirectorGroup">
+                                                    <input type="text" class="form-control" id="directorName" placeholder="Director Name">
+                                                </div>
+                                                <div class="form-group" id="artifactDistributorGroup">
+                                                    <input type="text" class="form-control" id="distributor" placeholder="Distributor">
+                                                </div>
+                                                <div class="form-group" id="artifactDateGroup">
+                                                    <input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
+                                                </div>
+                                                <div class="form-group" id="artifactDescriptionGroup">
+                                                    <textarea row="3" class="form-control" id="description" placeholder="Video Description"></textarea>
+                                                </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <h5>Preview Image</h5>
+                                            <div id="poster" class="cover-art">
+                                                <p id="posterText">Preview Image</p>
+                                            </div>
+                                            <input type="file" name="posterFile" id="posterFile" accept="image/*">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -221,7 +271,6 @@
                                     <input type='file' id="extraFiles" name="extraFiles" multiple />
                                 </div>
                             </div>
-                            </form>
                            <div class="publish-section publish-submit">
                                 <div class="row">
                                     <div class="col-sm-9">

@@ -68,7 +68,7 @@ span.round-tab:hover {
     width: 25%;
 }
 
-.wizard li:after {
+.wizard-inner li:after {
     content: " ";
     position: absolute;
     left: 46%;
@@ -80,7 +80,7 @@ span.round-tab:hover {
     transition: 0.1s ease-in-out;
 }
 
-.wizard li.active:after {
+.wizard-inner li.active:after {
     content: " ";
     position: absolute;
     left: 46%;
