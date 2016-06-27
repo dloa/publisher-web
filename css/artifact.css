@@ -565,7 +565,7 @@ td.unpin {
   cursor: pointer;
   padding: 5px;
   transition: all 0.1s;
-  background-size: 250px 150px;
+  background-size: 250px 250px;
   background-repeat: no-repeat;
 }
 

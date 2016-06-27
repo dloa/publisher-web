@@ -1,19 +1,24 @@
 var mediaFiles = [];
 var extraFiles = [];
 
-$("#posterFile").change(function(input){
-	var files = input.files ? input.files : input.currentTarget.files;
-	if (files) {
-		var reader = new FileReader();
+$("#music #posterFile").change(function(input){ changePoster(input); });
+$("#video #posterFile").change(function(input){ changePoster(input); });
 
-		reader.onload = function (e) {
-			document.getElementById('poster').style.backgroundImage =  "url('" + e.target.result + "')";
-			document.getElementById('posterText').innerHTML = '';
-		}
+function changePoster(input){
+    var files = input.files ? input.files : input.currentTarget.files;
+    if (files) {
+        var reader = new FileReader();
 
-		reader.readAsDataURL(files[0]);
-	}
-})
+        var mediaType = $("#metainfo div.active").attr('id');
+
+        reader.onload = function (e) {
+            $('#' + mediaType + ' #poster').css("background-image", "url('" + e.target.result + "')");
+            $('#' + mediaType + ' #posterText').text(' ');
+        }
+
+        reader.readAsDataURL(files[0]);
+    }
+}
 
 // getElementById
 function $id(id) {
