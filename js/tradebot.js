@@ -141,7 +141,7 @@ function updateQR(){
 	var qrstring = "bitcoin:" + btcAddress + "?amount=" + btc;
 	console.log(qrstring);
 
-    qrcode.makeCode(qrstring);
+	qrcode.makeCode(qrstring);
 }
 
 function getMarketData(callback){

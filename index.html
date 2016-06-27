@@ -1,628 +1,691 @@
 <html lang="en"><head>
-    <meta charset="utf-8">
-    <meta name="robots" content="noindex">
+	<meta charset="utf-8">
+	<meta name="robots" content="noindex">
 
-    <title>DLOA - Publisher</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<title>DLOA - Publisher</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
-    <!-- Load css files -->
-    <link href="./css/main.css" rel="stylesheet">
-    <link href="./css/artifact.css" rel="stylesheet">
-    <link href="./css/sweet-alert.css" rel="stylesheet">
+	<!-- Load css files -->
+	<link href="./css/main.css" rel="stylesheet">
+	<link href="./css/artifact.css" rel="stylesheet">
+	<link href="./css/sweet-alert.css" rel="stylesheet">
 </head>
 <body>
 	<div class="container">
 	<div class="row">
 		<section>
-        <div style="margin-top:50px;">
-        </div>
-        <div class="wizard">
-            <div class="wizard-inner">
-                <div class="connecting-line"></div>
-                <ul class="nav nav-tabs" role="tablist">
+		<div style="margin-top:50px;">
+		</div>
+		<div class="wizard">
+			<div class="wizard-inner">
+				<div class="connecting-line"></div>
+				<ul class="nav nav-tabs" role="tablist">
 
-                    <li role="presentation" class="active">
-                        <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="" data-original-title="Publisher">
-                            <span class="round-tab">
-                                <i class="glyphicon glyphicon-user line-height-hack"></i>
-                            </span>
-                        </a>
-                    </li>
+					<li role="presentation" class="active">
+						<a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="" data-original-title="Publisher">
+							<span class="round-tab">
+								<i class="glyphicon glyphicon-user line-height-hack"></i>
+							</span>
+						</a>
+					</li>
 
-                    <li role="presentation" class="disabled">
-                        <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="" data-original-title="Artifact">
-                            <span class="round-tab">
-                                <i class="glyphicon glyphicon-film line-height-hack"></i>
-                            </span>
-                        </a>
-                    </li>
-                    <li role="presentation" class="disabled">
-                        <a href="#step3" data-toggle="tab" aria-controls="step3" role="tab" title="" data-original-title="Publish">
-                            <span class="round-tab">
-                                <i class="glyphicon glyphicon-refresh line-height-hack"></i>
-                            </span>
-                        </a>
-                    </li>
+					<li role="presentation" class="disabled">
+						<a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="" data-original-title="Artifact">
+							<span class="round-tab">
+								<i class="glyphicon glyphicon-film line-height-hack"></i>
+							</span>
+						</a>
+					</li>
+					<li role="presentation" class="disabled">
+						<a href="#step3" data-toggle="tab" aria-controls="step3" role="tab" title="" data-original-title="Publish">
+							<span class="round-tab">
+								<i class="glyphicon glyphicon-refresh line-height-hack"></i>
+							</span>
+						</a>
+					</li>
 
-                    <li role="presentation" class="disabled">
-                        <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="" data-original-title="Complete">
-                            <span class="round-tab">
-                                <i class="glyphicon glyphicon-ok line-height-hack"></i>
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+					<li role="presentation" class="disabled">
+						<a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="" data-original-title="Complete">
+							<span class="round-tab">
+								<i class="glyphicon glyphicon-ok line-height-hack"></i>
+							</span>
+						</a>
+					</li>
+				</ul>
+			</div>
 
-            <form role="form" lpformnum="1">
-                <div class="tab-content">
-                    <div class="tab-pane active" role="tabpanel" id="step1">
-                        <h3>Step 1</h3>
-                        <p>Select/Create your Publisher ID</p>
-                        <div class="col-lg-10 col-lg-offset-2">
-                        <form class="form-horizontal">
-                            <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-2 control-label">Select Publisher ID</label>
-                                <div class="col-sm-6">
-                                    <select id="publisherSelect" class="form-control">
-                                        <option value="None Registered...">None Registered...</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <br>
-                            <br>
-                            <div class="form-group">
-                                <div class="col-sm-offset-2 col-sm-6 form-inline">
-                                    <button type="button" data-toggle="modal" data-target="#newPublisherModal" class="btn btn-default">Register New</button>
-                                    <button type="button" data-toggle="modal" data-target="#walletInfoModal" class="btn btn-default" onclick="refreshWalletInfo();">Wallet Info</button>
-                                    <button type="button" onclick="continueToArtifact();" class="btn btn-success pull-right">Continue</button>
-                                </div>
-                            </div>
-                        </form>
-                        </div>
-                    </div>
-                    <div class="tab-pane" role="tabpanel" id="step2">
-                        <div class="section publish col-lg-12">
-                            <div class="publish-section information">
-                            <form>
-                                <div class="row">
-                                    <div class="col-sm-8">
-                                       <h5>Video Information</h5>
-                                            <div class="form-group" id="artifactTitleGroup">
-                                                <input type="text" class="form-control" id="videoTitle" placeholder="Video Title">
-                                            </div>
-                                            <div class="form-group" id="artifactDirectorGroup">
-                                                <input type="text" class="form-control" id="directorName" placeholder="Director Name">
-                                            </div>
-                                            <div class="form-group" id="artifactDistributorGroup">
-                                                <input type="text" class="form-control" id="distributor" placeholder="Distributor">
-                                            </div>
-                                            <div class="form-group" id="artifactDateGroup">
-                                                <input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
-                                            </div>
-                                            <div class="form-group" id="artifactDescriptionGroup">
-                                                <textarea row="3" class="form-control" id="description" placeholder="Video Description"></textarea>
-                                            </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <h5>Preview Image</h5>
-                                        <div id="poster" class="cover-art">
-                                            <p id="posterText">Preview Image</p>
-                                        </div>
-                                        <input type="file" name="posterFile" id="posterFile" accept="image/*">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" id='bitcoinAddressField'>
-                                <div class="col-sm-12">
-                                    <h3>Pricing/Payment Information</h3>
-                                    <div class="form-group" id="bitcoinAddressGroup">
-                                        <label for="bitcoinAddress">Bitcoin Address</label>
-                                        <input class="form-control" style="width: 30%" type="text" id="bitcoinAddress" placeholder="17aGuzA9p1ZmG49V9GmR6UgGzg1dQx9We9">
-                                        <p class="help-block">This is your Bitcoin address that you will use to receive payments for this artifact.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="publish-section publish-pricing" id='pricing'>
-                                <div class="row">
-                                    <div class="col-sm-10">
-                                        <p class="small">Pick the price for each file. You are allowed to enter up to one tenth of a cent.</p>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col col-lg-12">
-                                        <table class="table" id='pricingTable'>
-                                            <thead>
-                                                <tr>
-                                                    <th>File Name</th>
-                                                    <th>Suggested Play</th>
-                                                    <th>Minimum Play</th>
-                                                    <th>Suggested Buy</th>
-                                                    <th>Minimum Buy</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr></tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                           <div class="publish-section">
-                                <div class="publish-files audio-tracks">
-                                    <h5>
-                                        <object type="image/svg+xml" data="assets/svg/media-16px-2_note-03.svg"></object>
-                                        Video Files
-                                    </h5>
-                                    <table class="table" id='mediaFilesTable'>
-                                        <colgroup>
-                                            <col class="">
-                                            <col class="">
-                                            <col style="width: 75px;">
-                                            <col style="width: 75px;">
-                                            <col style="">
-                                            <col class="width: 75px;">
-                                        </colgroup>
-                                        <thead>
-                                            <tr>
-                                                <th>File</th>
-                                                <th>File Name</th>
-                                                <th>File Size</th>
-                                                <th>Duration</th>
-                                                <th>Display name</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="mediaTable">
-                                            <tr>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
-                                    <div class="upload-area" id="mediaDrop">
-                                        <object data="assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
-                                    </div>
-                                    <input type="file" name="mediaFiles" id="mediaFiles" multiple accept="video/*"></input>
-                                </div>
-                            </div>
-                           <div class="publish-section">
-                                <div class="publish-files extra-files">
-                                    <h5>
-                                        <object type="image/svg+xml" data="assets/svg/files-16px_single-folded-content.svg"></object>
-                                        Extra Files
-                                    </h5>
-                                    <table class="table" id='extraTable'>
-                                        <colgroup>
-                                            <col class="">
-                                            <col class="">
-                                            <col style="width: 125px;">
-                                            <col class="">
-                                            <col class="">
-                                        </colgroup>
-                                        <thead>
-                                            <tr>
-                                                <th>File</th>
-                                                <th>File Name</th>
-                                                <th>File Type</th>
-                                                <th>Display name</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr></tr>
-                                        </tbody>
-                                    </table>
-                                    <!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
-                                    <div class="upload-area" id="extraDrop">
-                                        <object data="assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
-                                    </div>
-                                    <input type='file' id="extraFiles" name="extraFiles" multiple />
-                                </div>
-                            </div>
-                            </form>
-                           <div class="publish-section publish-submit">
-                                <div class="row">
-                                    <div class="col-sm-9">
-                                        <p class="small">You will be able to submit your video after you preview it. Be sure it looks exactly like what you desire as you will be unable to change this later.</p>
-                                    </div>
-                                    <div class="col-sm-3 text-right">
-                                        <button type="button" id="previewButton" class="btn btn-primary">Preview</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style='height:30px'></div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" role="tabpanel" id="step3">
-                        <h3>Publishing...</h3>
-                        <div>
-                            <div class="loading-spinner" style="margin-top: -200px"></div>
-                            <div class="well well-sm" id="publishWell" style="margin-top: 0px; height: 500px; font-family:monospace; font-size: 12px;"></div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" role="tabpanel" id="complete">
-                        <h3>Complete</h3>
-                        <p>You have successfully completed all steps.</p>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            </form>
-        </div>
-    </section>
+			<form role="form" lpformnum="1">
+				<div class="tab-content">
+					<div class="tab-pane active" role="tabpanel" id="step1">
+						<h3>Step 1</h3>
+						<p>Select/Create your Publisher ID</p>
+						<div class="col-lg-10 col-lg-offset-2">
+						<form class="form-horizontal">
+							<div class="form-group">
+								<label for="inputEmail3" class="col-sm-2 control-label">Select Publisher ID</label>
+								<div class="col-sm-6">
+									<select id="publisherSelect" class="form-control">
+										<option value="None Registered...">None Registered...</option>
+									</select>
+								</div>
+							</div>
+							<br>
+							<br>
+							<div class="form-group">
+								<div class="col-sm-offset-2 col-sm-6 form-inline">
+									<button type="button" data-toggle="modal" data-target="#newPublisherModal" class="btn btn-default">Register New</button>
+									<button type="button" data-toggle="modal" data-target="#walletInfoModal" class="btn btn-default" onclick="refreshWalletInfo();">Wallet Info</button>
+									<button type="button" onclick="continueToArtifact();" class="btn btn-success pull-right">Continue</button>
+								</div>
+							</div>
+						</form>
+						</div>
+					</div>
+					<div class="tab-pane" role="tabpanel" id="step2">
+						<div class="section publish col-lg-12">
+							<div class="publish-section artifact-type">
+								<h5>Select Artifact type</h5> 
+								<ul class="nav nav-pills" role="tablist">
+									<li class="active" onclick="changeArtifactType('music')"><a href="#music" data-toggle="tab">Music</a></li>
+									<li onclick="changeArtifactType('video')"><a href="#video" data-toggle="tab">Video</a></li>
+								</ul>
+							</div>
+							<div class="publish-section information tab-content" id='metainfo' style="margin-top: -50px;">
+								<div id='music' class="tab-pane fade in active">
+									<div class="row">
+										<div class="col-sm-8">
+											<h5>Album Information</h5>
+											<form>
+												<div class="form-group" id="artifactTitleGroup">
+													<input type="text" class="form-control" id="title" placeholder="Album Title">
+												</div>
+												<div class="form-group" id="artifactArtistGroup">
+													<input type="text" class="form-control" id="artistName" placeholder="Artist Name">
+												</div>
+												<div class="row">
+													<div class="col col-sm-6">
+														<div class="form-group" id="artifactGenereGroup">
+															<input type="text" class="form-control" id="genere" placeholder="Genre">
+														</div>
+													</div>
+													<div class="col col-sm-6">
+														<div class="form-group" id="artifactDateGroup">
+															<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
+														</div>
+													</div>
+												</div>
+												<div class="form-group" id="artifactTagsGroup">
+													<input type="text" class="form-control" id="tags" placeholder="Tags">
+												</div>
+												<div class="form-group" id="artifactRecordLabelGroup">
+													<input type="text" class="form-control" id="recordLabel" placeholder="Record Label">
+												</div>
+												<div class="form-group" id="artifactDescriptionGroup">
+													<textarea row="3" class="form-control" id="description" placeholder="Album Description"></textarea>
+												</div>
+											</form>
+										</div>
+										<div class="col-sm-4">
+											<h5>Cover Art</h5>
+											<div class="cover-art-square" id='poster'>
+												<p id="posterText">Cover art</p>
+											</div>
+											<input type="file" name="posterFile" id="posterFile" accept="image/*">
+										</div>
+									</div>
+								</div>
+								<div id='video' class="tab-pane fade">
+									<div class="row">
+										<div class="col-sm-8">
+										   <h5>Video Information</h5>
+												<div class="form-group" id="artifactTitleGroup">
+													<input type="text" class="form-control" id="title" placeholder="Video Title">
+												</div>
+												<div class="form-group" id="artifactDirectorGroup">
+													<input type="text" class="form-control" id="directorName" placeholder="Director Name">
+												</div>
+												<div class="form-group" id="artifactDistributorGroup">
+													<input type="text" class="form-control" id="distributor" placeholder="Distributor">
+												</div>
+												<div class="form-group" id="artifactDateGroup">
+													<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
+												</div>
+												<div class="form-group" id="artifactDescriptionGroup">
+													<textarea row="3" class="form-control" id="description" placeholder="Video Description"></textarea>
+												</div>
+										</div>
+										<div class="col-sm-4">
+											<h5>Preview Image</h5>
+											<div id="poster" class="cover-art">
+												<p id="posterText">Preview Image</p>
+											</div>
+											<input type="file" name="posterFile" id="posterFile" accept="image/*">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row" id='bitcoinAddressField'>
+								<div class="col-sm-12">
+									<h3>Pricing/Payment Information</h3>
+									<div class="form-group" id="bitcoinAddressGroup">
+										<label for="bitcoinAddress">Bitcoin Address</label>
+										<input class="form-control" style="width: 30%" type="text" id="bitcoinAddress" placeholder="17aGuzA9p1ZmG49V9GmR6UgGzg1dQx9We9">
+										<p class="help-block">This is your Bitcoin address that you will use to receive payments for this artifact.</p>
+									</div>
+								</div>
+							</div>
+							<div class="publish-section publish-pricing" id='pricing'>
+								<div class="row">
+									<div class="col-sm-10">
+										<p class="small">Pick the price for each file. You are allowed to enter up to one tenth of a cent.</p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col col-lg-12">
+										<table class="table" id='pricingTable'>
+											<thead>
+												<tr>
+													<th>File Name</th>
+													<th>Suggested Play</th>
+													<th>Minimum Play</th>
+													<th>Suggested Buy</th>
+													<th>Minimum Buy</th>
+													<th></th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr></tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						   <div class="publish-section">
+								<div class="publish-files audio-tracks">
+									<h5>
+										<object type="image/svg+xml" data="assets/svg/media-16px-2_note-03.svg"></object>
+										Media Files
+									</h5>
+									<table class="table" id='mediaFilesTable'>
+										<colgroup>
+											<col class="">
+											<col class="">
+											<col style="width: 75px;">
+											<col style="width: 75px;">
+											<col style="">
+											<col class="width: 75px;">
+										</colgroup>
+										<thead>
+											<tr>
+												<th>File</th>
+												<th>File Name</th>
+												<th>File Size</th>
+												<th>Duration</th>
+												<th>Display name</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody id="mediaTable">
+											<tr>
+											</tr>
+										</tbody>
+									</table>
+									<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
+									<div class="upload-area" id="mediaDrop">
+										<object data="assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
+									</div>
+									<input type="file" name="mediaFiles" id="mediaFiles" multiple accept="audio/*"></input>
+								</div>
+							</div>
+						   <div class="publish-section">
+								<div class="publish-files extra-files">
+									<h5>
+										<object type="image/svg+xml" data="assets/svg/files-16px_single-folded-content.svg"></object>
+										Extra Files
+									</h5>
+									<table class="table" id='extraTable'>
+										<colgroup>
+											<col class="">
+											<col class="">
+											<col style="width: 125px;">
+											<col class="">
+											<col class="">
+										</colgroup>
+										<thead>
+											<tr>
+												<th>File</th>
+												<th>File Name</th>
+												<th>File Type</th>
+												<th>Display name</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr></tr>
+										</tbody>
+									</table>
+									<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
+									<div class="upload-area" id="extraDrop">
+										<object data="assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
+									</div>
+									<input type='file' id="extraFiles" name="extraFiles" multiple />
+								</div>
+							</div>
+						   <div class="publish-section publish-submit">
+								<div class="row">
+									<div class="col-sm-9">
+										<p class="small">You will be able to submit your artifact after you preview it. Be sure it looks exactly like what you desire as you will be unable to change this later.</p>
+									</div>
+									<div class="col-sm-3 text-right">
+										<button type="button" id="previewButton" class="btn btn-primary">Preview</button>
+									</div>
+								</div>
+							</div>
+							<div style='height:30px'></div>
+						</div>
+					</div>
+					<div class="tab-pane" role="tabpanel" id="step3">
+						<h3>Publishing...</h3>
+						<div>
+							<div class="loading-spinner" style="margin-top: -200px"></div>
+							<div class="well well-sm" id="publishWell" style="margin-top: 0px; height: 500px; font-family:monospace; font-size: 12px;"></div>
+						</div>
+					</div>
+					<div class="tab-pane" role="tabpanel" id="complete">
+						<h3>Complete</h3>
+						<p>You have successfully completed all steps.</p>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</form>
+		</div>
+	</section>
    </div>
 </div>
 <div class="modal fade" id="newPublisherModal" tabindex="-1" role="dialog" aria-labelledby="newPublisherLabel">
-    <div class="vertical-alignment-helper">
-        <div class="modal-dialog vertical-align-center" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="newPublisherLabel">Register a new Publisher</h4>
-                </div>
-                <div class="modal-body">
-                <div id="newPublisherLoadingDiv" style="display:none;">
-                    <div class="loading-spinner"></div>
-                    <div class="well well-sm" id="newPublisherLoadingWell" style="margin-top: 171px; height: 200px; font-family:monospace; font-size: 12px;"></div>
-                </div>
-                <div id="newPublisherFormDiv" style="display:block">
-                    <form>
-                      <div class="form-group" id="pubNameFormGroup">
-                        <label for="newPublisherName">Publisher Name</label>
-                        <input type="email" class="form-control" id="newPublisherName" placeholder="Publisher Name">
-                        <p class="help-block">This is your display name for your publisher, i.e. Imogen Heap</p>
-                      </div>
-                      <div class="form-group" id="pubEmailFormGroup">
-                        <label for="newPublisherEmail">Email (optional)</label>
-                        <input type="email" class="form-control" id="newPublisherEmail" placeholder="Email">
-                        <p class="help-block">An MD5 hash will be generated from your email address, which will be published publicly. This is used for Gravatar’s dynamic Avatar lookup service, but your email address itself will not be published in plaintext.</p>
-                      </div>
-                      <div class="form-group" id="pubFloAddressFormGroup">
-                        <label for="newPublisherFlorincoinAddress">Florincoin Address</label>
-                        <select id="newPublisherFlorincoinAddress" class="form-control">
-                            <!--<option>Create new address...</option> // Disabled until Tradebot works.-->
-                        </select>
-                        <p class="help-block">This is your Florincoin address that you will use to publish items. Please note that you will need at least 1 FLO on this wallet. If you select a wallet with 0 FLO you will be prompted to buy some using Bitcoin.</p>
-                      </div>
-                    </form>
-                    <button class="btn btn-default" onclick="registerNewPublisher();">Register Publisher</button>
-                </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="return false;">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="vertical-alignment-helper">
+		<div class="modal-dialog vertical-align-center" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="newPublisherLabel">Register a new Publisher</h4>
+				</div>
+				<div class="modal-body">
+				<div id="newPublisherLoadingDiv" style="display:none;">
+					<div class="loading-spinner"></div>
+					<div class="well well-sm" id="newPublisherLoadingWell" style="margin-top: 171px; height: 200px; font-family:monospace; font-size: 12px;"></div>
+				</div>
+				<div id="newPublisherFormDiv" style="display:block">
+					<form>
+					  <div class="form-group" id="pubNameFormGroup">
+						<label for="newPublisherName">Publisher Name</label>
+						<input type="email" class="form-control" id="newPublisherName" placeholder="Publisher Name">
+						<p class="help-block">This is your display name for your publisher, i.e. Imogen Heap</p>
+					  </div>
+					  <div class="form-group" id="pubEmailFormGroup">
+						<label for="newPublisherEmail">Email (optional)</label>
+						<input type="email" class="form-control" id="newPublisherEmail" placeholder="Email">
+						<p class="help-block">An MD5 hash will be generated from your email address, which will be published publicly. This is used for Gravatar’s dynamic Avatar lookup service, but your email address itself will not be published in plaintext.</p>
+					  </div>
+					  <div class="form-group" id="pubFloAddressFormGroup">
+						<label for="newPublisherFlorincoinAddress">Florincoin Address</label>
+						<select id="newPublisherFlorincoinAddress" class="form-control">
+							<!--<option>Create new address...</option> // Disabled until Tradebot works.-->
+						</select>
+						<p class="help-block">This is your Florincoin address that you will use to publish items. Please note that you will need at least 1 FLO on this wallet. If you select a wallet with 0 FLO you will be prompted to buy some using Bitcoin.</p>
+					  </div>
+					</form>
+					<button class="btn btn-default" onclick="registerNewPublisher();">Register Publisher</button>
+				</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal" onclick="return false;">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewLabel">
-    <div class="">
-        <div class="modal-dialog" role="document" style='width:95%'>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="previewLabel">Preview Artifact</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="container">
-                    <div class="row">
-                    <div class="col-md-12">
-                        <div class="row media-embed">
-                        <center>
-                            <video id='previewVideo' controls="controls" src="" style="width: 80%">
-                            </video>
-                            </center>
-                        </div>
-                        <div class="row entity-meta-header">
-                        <br>
-                            <h2 id='previewTitle'>Title</h2>
-                            <h3 id="previewArtist">Artist</h3>
-                            <div class="entity-meta-content">
-                                <div id='previewTime' class="entity-pub-time">Posted <span id="current-time">Tue Dec 08 2015 09:36:34 GMT-0700 (MST)</span></div>
-                                <div id='previewRuntime' class="entity-runtime">Runtime: <span id="runtime">00:12:48</span></div>
-                            </div>
-                        </div>
-                        <div class="row media-desc">
-                            <p id='previewDescription'>Description</p>
-                        </div>
-                    </div>
-                    </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal" onclick="$('#previewVideo').get(0).pause();">Cancel</button>
+	<div class="">
+		<div class="modal-dialog" role="document" style='width:95%'>
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="previewLabel">Preview Artifact</h4>
+				</div>
+				<div class="modal-body">
+					<div class="container">
+					<div class="row">
+					<div class="col-md-12">
+						<div class="row media-embed">
+						<center>
+							<video id='previewVideo' controls="controls" src="" style="width: 80%">
+							</video>
+							</center>
+						</div>
+						<div class="row entity-meta-header">
+						<br>
+							<h2 id='previewTitle'>Title</h2>
+							<h3 id="previewArtist">Artist</h3>
+							<div class="entity-meta-content">
+								<div id='previewTime' class="entity-pub-time">Posted <span id="current-time">Tue Dec 08 2015 09:36:34 GMT-0700 (MST)</span></div>
+								<div id='previewRuntime' class="entity-runtime">Runtime: <span id="runtime">00:12:48</span></div>
+							</div>
+						</div>
+						<div class="row media-desc">
+							<p id='previewDescription'>Description</p>
+						</div>
+					</div>
+					</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger pull-left" data-dismiss="modal" onclick="$('#previewVideo').get(0).pause();">Cancel</button>
 
-                    <button type="button" class="btn btn-success pull-right" data-dismiss="modal" onclick="submitArtifact()">Submit</button>
-                </div>
-            </div>
-        </div>
-    </div>
+					<button type="button" class="btn btn-success pull-right" data-dismiss="modal" onclick="submitArtifact()">Submit</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="modal fade" id="walletModal" tabindex="-1" role="dialog" aria-labelledby="walletLabel">
-    <div class="vertical-alignment-helper">
-        <div class="vertical-align-center modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="walletLabel">Login to Wallet</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <!-- Nav tabs -->
-                                <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
-                                    <li role="presentation"><a href="#register" aria-controls="register" role="tab" data-toggle="tab">Register</a></li>
-                                </ul>
+	<div class="vertical-alignment-helper">
+		<div class="vertical-align-center modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="walletLabel">Login to Wallet</h4>
+				</div>
+				<div class="modal-body">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-6">
+								<!-- Nav tabs -->
+								<ul class="nav nav-tabs" role="tablist">
+									<li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
+									<li role="presentation"><a href="#register" aria-controls="register" role="tab" data-toggle="tab">Register</a></li>
+								</ul>
 
-                                <!-- Tab panes -->
-                                <div class="tab-content">
-                                    <div role="tabpanel" class="tab-pane active" id="login">
-                                        <form>
-                                            <div class="form-group">
-                                                <label for="loginWalletIdentifier">Wallet Identifier</label>
-                                                <input type="text" class="form-control" id="loginWalletIdentifier" placeholder="xxxx-xxxx-xxx-xxx">
-                                                <p class="help-block">This is your wallet identifier that you recieved after creating a wallet with Flovault.</p>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="loginWalletPassword">Password</label>
-                                                <input type="password" class="form-control" id="loginWalletPassword" placeholder="">
-                                                <p class="help-block"></p>
-                                            </div>
-                                        </form>
-                                        <button class="btn btn-success" id="walletLoginButton" onclick="loginToWallet();">Login</button>
-                                    </div>
-                                    <div role="tabpanel" class="tab-pane" id="register">
-                                        <form>
-                                            <div class="form-group">
-                                                <label for="loginWalletIdentifier">Email Address</label>
-                                                <input type="email" class="form-control" id="createWalletEmail" placeholder="example@me.com">
-                                                <p class="help-block">Optional email, used for 2FA and if you forget your identifier.</p>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="loginWalletPassword">Password</label>
-                                                <input type="password" class="form-control" id="createWalletPassword" placeholder="">
-                                                <p class="help-block">You will use this password along with your generated identifier to login to your account.</p>
-                                            </div>
-                                        </form>
-                                        <button class="btn btn-success" onclick="registerWallet();">Register</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-        </div>
-    </div>
+								<!-- Tab panes -->
+								<div class="tab-content">
+									<div role="tabpanel" class="tab-pane active" id="login">
+										<form>
+											<div class="form-group">
+												<label for="loginWalletIdentifier">Wallet Identifier</label>
+												<input type="text" class="form-control" id="loginWalletIdentifier" placeholder="xxxx-xxxx-xxx-xxx">
+												<p class="help-block">This is your wallet identifier that you recieved after creating a wallet with Flovault.</p>
+											</div>
+											<div class="form-group">
+												<label for="loginWalletPassword">Password</label>
+												<input type="password" class="form-control" id="loginWalletPassword" placeholder="">
+												<p class="help-block"></p>
+											</div>
+										</form>
+										<button class="btn btn-success" id="walletLoginButton" onclick="loginToWallet();">Login</button>
+									</div>
+									<div role="tabpanel" class="tab-pane" id="register">
+										<form>
+											<div class="form-group">
+												<label for="loginWalletIdentifier">Email Address</label>
+												<input type="email" class="form-control" id="createWalletEmail" placeholder="example@me.com">
+												<p class="help-block">Optional email, used for 2FA and if you forget your identifier.</p>
+											</div>
+											<div class="form-group">
+												<label for="loginWalletPassword">Password</label>
+												<input type="password" class="form-control" id="createWalletPassword" placeholder="">
+												<p class="help-block">You will use this password along with your generated identifier to login to your account.</p>
+											</div>
+										</form>
+										<button class="btn btn-success" onclick="registerWallet();">Register</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="modal fade" id="walletInfoModal" tabindex="-1" role="dialog" aria-labelledby="walletInfoLabel">
-    <div class="vertical-alignment-helper">
-        <div class="vertical-align-center modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="walletInfoLabel">Wallet Info</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <!-- Nav tabs -->
-                                <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" class="active"><a href="#main" aria-controls="main" role="tab" data-toggle="tab">Main</a></li>
-                                </ul>
+	<div class="vertical-alignment-helper">
+		<div class="vertical-align-center modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="walletInfoLabel">Wallet Info</h4>
+				</div>
+				<div class="modal-body">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-6">
+								<!-- Nav tabs -->
+								<ul class="nav nav-tabs" role="tablist">
+									<li role="presentation" class="active"><a href="#main" aria-controls="main" role="tab" data-toggle="tab">Main</a></li>
+								</ul>
 
-                                <!-- Tab panes -->
-                                <div class="tab-content">
-                                    <div role="tabpanel" class="tab-pane active" id="main">
-                                        <h4>Identifier <code id="identifier"></code></h4>
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered table-condensed" id="addressTable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Address</th>
-                                                        <th style="width: 30%">Balance</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr></tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <button class="btn btn-default" onclick="newAddress();">New Address</button>
-                                        <button class="btn btn-danger" onclick="location.reload();">Log Out</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
-                    <button class="btn btn-default pull-left" onclick="refreshWalletInfo();" id="refreshButton">Refresh</button>
-                </div>
-            </div>
-        </div>
-    </div>
+								<!-- Tab panes -->
+								<div class="tab-content">
+									<div role="tabpanel" class="tab-pane active" id="main">
+										<h4>Identifier <code id="identifier"></code></h4>
+										<div class="table-responsive">
+											<table class="table table-bordered table-condensed" id="addressTable">
+												<thead>
+													<tr>
+														<th>Address</th>
+														<th style="width: 30%">Balance</th>
+														<th>Actions</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr></tr>
+												</tbody>
+											</table>
+										</div>
+										<button class="btn btn-default" onclick="newAddress();">New Address</button>
+										<button class="btn btn-danger" onclick="location.reload();">Log Out</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+					<button class="btn btn-default pull-left" onclick="refreshWalletInfo();" id="refreshButton">Refresh</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <div class="modal fade" id="tradebotModal" tabindex="-1" role="dialog" aria-labelledby="tradebotLabel">
-    <div class="vertical-alignment-helper">
-        <div class="vertical-align-center modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="tradebotLabel">Get FLO with TradeBot</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-6" id="tradebotBuy">
-                                <center>
-                                    <p>Please send $<span id="usdLabel"></span> in BTC to this address. You can change this amount below.</p>
-                                    <div id="qrcode" style="width: 80%; height: 80%;"></div>
-                                    <br>
-                                    <code style="font-size: 18px" id="btcDisplayAddress">1EV7zyqRK6qS2QnZdwXrgS2aKzXpi91jBn</code>
-                                    <br>
-                                    <br>
-                                    <form class="form-inline">
-                                      <div class="form-group">
-                                        <div class="input-group">
-                                            <div class="input-group-addon">$</div>
-                                            <input type="text" class="form-control" id="usdValue" placeholder="" style="width: 75px;" onblur="updateUSD()">
-                                            <div class="input-group-addon">USD</div>
-                                        </div>
-                                      </div>
-                                      <div class="form-group">
-                                        <div class="input-group">
-                                          <input type="text" class="form-control" id="btcValue" placeholder="" style="width: 75px;" onblur="updateBTC()">
-                                          <div class="input-group-addon">BTC</div>
-                                        </div>
-                                      </div>
-                                      
-                                      <div class="form-group">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="floValue" placeholder="" style="width: 75px;" onblur="updateFLO()">
-                                            <div class="input-group-addon">FLO</div>
-                                        </div>
-                                      </div>
-                                    </form>
-                                </center>
-                            </div>
-                            <div class="col-md-6" id="tradebotPending" style="opacity: 0; display: none;">
-                                <center>
-                                    <p style="padding-top: 20px;">Bitcoin transaction recieved... waiting for Tradebot to send funds...</p>
-                                </center>
-                                <div id="loading">
-                                    <ul class="bokeh">
-                                        <li></li>
-                                        <li></li>
-                                        <li></li>
-                                    </ul>
-                                </div>
-                                <center>
-                                    <p style="padding-top: -50px;">This usually takes 5-10 minutes depending on Bitcoin block times and Tradebot response times.</p>
-                                </center>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger pull-right" data-dismiss="modal" onclick="cancelFloBuy()">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <video src="" width="1" height="1" id="video_player"></video>
+	<div class="vertical-alignment-helper">
+		<div class="vertical-align-center modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="tradebotLabel">Get FLO with TradeBot</h4>
+				</div>
+				<div class="modal-body">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-6" id="tradebotBuy">
+								<center>
+									<p>Please send $<span id="usdLabel"></span> in BTC to this address. You can change this amount below.</p>
+									<div id="qrcode" style="width: 80%; height: 80%;"></div>
+									<br>
+									<code style="font-size: 18px" id="btcDisplayAddress">1EV7zyqRK6qS2QnZdwXrgS2aKzXpi91jBn</code>
+									<br>
+									<br>
+									<form class="form-inline">
+									  <div class="form-group">
+										<div class="input-group">
+											<div class="input-group-addon">$</div>
+											<input type="text" class="form-control" id="usdValue" placeholder="" style="width: 75px;" onblur="updateUSD()">
+											<div class="input-group-addon">USD</div>
+										</div>
+									  </div>
+									  <div class="form-group">
+										<div class="input-group">
+										  <input type="text" class="form-control" id="btcValue" placeholder="" style="width: 75px;" onblur="updateBTC()">
+										  <div class="input-group-addon">BTC</div>
+										</div>
+									  </div>
+									  
+									  <div class="form-group">
+										<div class="input-group">
+											<input type="text" class="form-control" id="floValue" placeholder="" style="width: 75px;" onblur="updateFLO()">
+											<div class="input-group-addon">FLO</div>
+										</div>
+									  </div>
+									</form>
+								</center>
+							</div>
+							<div class="col-md-6" id="tradebotPending" style="opacity: 0; display: none;">
+								<center>
+									<p style="padding-top: 20px;">Bitcoin transaction recieved... waiting for Tradebot to send funds...</p>
+								</center>
+								<div id="loading">
+									<ul class="bokeh">
+										<li></li>
+										<li></li>
+										<li></li>
+									</ul>
+								</div>
+								<center>
+									<p style="padding-top: -50px;">This usually takes 5-10 minutes depending on Bitcoin block times and Tradebot response times.</p>
+								</center>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger pull-right" data-dismiss="modal" onclick="cancelFloBuy()">Cancel</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<video src="" width="1" height="1" id="video_player"></video>
 </div>
 </body>
 
-    <!-- Load external JS helper files -->
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <!-- Wallet JS -->
-    <script src="js/SimpleDeps.js"></script>
-    <script src="js/SimpleWallet.js"></script>
-    <script src="js/libraryd-js.js"></script>
-    <script src="js/wallet.js"></script>
-    <!-- Other JS -->
-    <script src="js/dropzone.js"></script>
-    <script src="js/sweet-alert.min.js"></script>
-    <script src="js/date-format.js"></script>
-    <script src="js/ipfs.js"></script>
-    <script src="js/qrcode.min.js"></script>
-    <script src="js/tradebot.js"></script>
-    <script src="js/createPublisher.js"></script>
-    <script src="js/publishArtifact.js"></script>
+	<!-- Load external JS helper files -->
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+	<!-- Wallet JS -->
+	<script src="js/SimpleDeps.js"></script>
+	<script src="js/SimpleWallet.js"></script>
+	<script src="js/libraryd-js.js"></script>
+	<script src="js/wallet.js"></script>
+	<!-- Other JS -->
+	<script src="js/dropzone.js"></script>
+	<script src="js/sweet-alert.min.js"></script>
+	<script src="js/date-format.js"></script>
+	<script src="js/ipfs.js"></script>
+	<script src="js/qrcode.min.js"></script>
+	<script src="js/tradebot.js"></script>
+	<script src="js/createPublisher.js"></script>
+	<script src="js/publishArtifact.js"></script>
 
 	<script type="text/javascript">
-    $(document).ready(function () {
-        //Initialize
-        $('.nav-tabs > li a[title]').tooltip();
-        $('#pricing').hide();
-        $('#mediaFilesTable').hide();
-        $('#extraTable').hide();
-        
-        //Wizard
-        $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+	$(document).ready(function () {
+		//Initialize
+		$('.nav-tabs > li a[title]').tooltip();
+		$('#pricing').hide();
+		$('#mediaFilesTable').hide();
+		$('#extraTable').hide();
+		
+		//Wizard
+		$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
 
-            var $target = $(e.target);
-        
-            if ($target.parent().hasClass('disabled')) {
-                return false;
-            }
-        });
+			var $target = $(e.target);
+		
+			if ($target.parent().hasClass('disabled')) {
+				return false;
+			}
+		});
 
-        $(".next-step").click(function (e) {
+		$(".next-step").click(function (e) {
 
-            var $active = $('.wizard .nav-tabs li.active');
-            $active.next().removeClass('disabled');
-            nextTab($active);
+			var $active = $('.wizard .nav-tabs li.active');
+			$active.next().removeClass('disabled');
+			nextTab($active);
 
-        });
-        $(".prev-step").click(function (e) {
+		});
+		$(".prev-step").click(function (e) {
 
-            var $active = $('.wizard .nav-tabs li.active');
-            prevTab($active);
+			var $active = $('.wizard .nav-tabs li.active');
+			prevTab($active);
 
-        });
-    });
+		});
+	});
 
-    function nextTab(elem) {
-        $(elem).next().find('a[data-toggle="tab"]').click();
-    }
-    function prevTab(elem) {
-        $(elem).prev().find('a[data-toggle="tab"]').click();
-    }
+	function nextTab(elem) {
+		$(elem).next().find('a[data-toggle="tab"]').click();
+	}
+	function prevTab(elem) {
+		$(elem).prev().find('a[data-toggle="tab"]').click();
+	}
 
-    $('#login a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show');
-    })
-    $('#register a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show');
-    })
+	$('#login a').click(function (e) {
+		e.preventDefault()
+		$(this).tab('show');
+	})
+	$('#register a').click(function (e) {
+		e.preventDefault()
+		$(this).tab('show');
+	})
 
-    $("#loginWalletPassword").keyup(function(event){
-        if(event.keyCode == 13){
-            $("#walletLoginButton").click();
-        }
-    });
+	$("#loginWalletPassword").keyup(function(event){
+		if(event.keyCode == 13){
+			$("#walletLoginButton").click();
+		}
+	});
 
-    function fade(element) {
-        var op = 1;  // initial opacity
-        var timer = setInterval(function () {
-            if (op <= 0.1){
-                clearInterval(timer);
-                element.style.display = 'none';
-            }
-            element.style.opacity = op;
-            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-            op -= op * 0.1;
-        }, 20);
-    }
+	function fade(element) {
+		var op = 1;  // initial opacity
+		var timer = setInterval(function () {
+			if (op <= 0.1){
+				clearInterval(timer);
+				element.style.display = 'none';
+			}
+			element.style.opacity = op;
+			element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+			op -= op * 0.1;
+		}, 20);
+	}
 
-    function unfade(element) {
-        var op = 0.01;  // initial opacity
-        element.style.display = 'block';
-        var timer = setInterval(function () {
-            if (op >= 1){
-                clearInterval(timer);
-            }
-            element.style.opacity = op;
-            element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-            op += op * 0.1;
-        }, 15);
-    }
+	function unfade(element) {
+		var op = 0.01;  // initial opacity
+		element.style.display = 'block';
+		var timer = setInterval(function () {
+			if (op >= 1){
+				clearInterval(timer);
+			}
+			element.style.opacity = op;
+			element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+			op += op * 0.1;
+		}, 15);
+	}
 
-    $('#walletModal').modal('show');
-    //$('#walletInfoModal').modal('show');
-    //$('#tradebotModal').modal('show');
+	function changeArtifactType(mediaType){
+		// Remove all media files when artifact type is changed.
+		$('.mediaRow').each(function(){
+			$(this).find('.btn-danger').click();
+		});
+		// Change supported files to be uploaded
+		// Get type in order to validate files
+		if (mediaType == 'music')
+			mediaType = 'audio';
+
+		mediaType += '/*';
+
+		console.log(mediaType);
+
+		$('#mediaFiles').attr('accept', mediaType);
+	}
 
     //continueToArtifact();
 	</script>

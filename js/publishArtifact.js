@@ -5,152 +5,167 @@ var duration = 0;
 
 $('#previewButton').click(function(e){
 	var hasPaymentInfo = false;
+	var mediaType = "#" + $("#metainfo div.active").attr('id');
+	console.log(mediaType);
 	// Validate form.
 	// Required: Video Title
-	if (isBlank($('#videoTitle').val())){
+	if (isBlank($(mediaType + ' #title').val())){
 		swal("Error!", "You must provide a title", "error");
-        $("#artifactTitleGroup").addClass('has-error');
-        return;
+		$(mediaType + " #artifactTitleGroup").addClass('has-error');
+		return;
 	} else {
-		$("#artifactTitleGroup").removeClass('has-error');
-	}
-	// Optional: Director Name
-	if (isBlank($('#directorName').val())){
-        $("#artifactDirectorGroup").addClass('has-warning');
-	} else {
-		$("#artifactDirectorGroup").removeClass('has-warning');
-	}
-	// Optional: Distributor
-	if (isBlank($('#distributor').val())){
-        $("#artifactDistributorGroup").addClass('has-warning');
-	} else {
-		$("#artifactDistributorGroup").removeClass('has-warning');
+		$(mediaType + " #artifactTitleGroup").removeClass('has-error');
 	}
 	// Required: Date
-	if (isBlank($('#releaseDate').val()) || isNaN(parseInt($('#releaseDate').val())) || parseInt($('#releaseDate').val()) <= 0){
+	if (isBlank($(mediaType + ' #releaseDate').val()) || isNaN(parseInt($('#releaseDate').val())) || parseInt($('#releaseDate').val()) <= 0){
 		swal("Error!", "You must provide a release year", "error");
-        $("#artifactDateGroup").addClass('has-error');
-        return;
+		$(mediaType + " #artifactDateGroup").addClass('has-error');
+		return;
 	} else {
-		$("#artifactDateGroup").removeClass('has-error');
+		$(mediaType + " #artifactDateGroup").removeClass('has-error');
 	}
 	// Required: Description
-	if (isBlank($('#description').val())){
+	if (isBlank($(mediaType + ' #description').val())){
 		swal("Error!", "You must provide a description", "error");
-        $("#artifactDescriptionGroup").addClass('has-error');
-        return;
+		$(mediaType + " #artifactDescriptionGroup").addClass('has-error');
+		return;
 	} else {
-		$("#artifactDescriptionGroup").removeClass('has-error');
+		$(mediaType + " #artifactDescriptionGroup").removeClass('has-error');
 	}
-	// Optional: Suggested Price to Play
-	if (isBlank($('#suggestedPlay').val())){
-        $("#suggestedPricePer").addClass('has-warning');
-	} else {
-		$("#suggestedPricePer").removeClass('has-warning');
-		hasPaymentInfo = true;
+
+	// Validate optional items for music metadata
+	if (mediaType == '#music'){
+		// Optional: Artist Name
+		if (isBlank($(mediaType + ' #artistName').val())){
+			$(mediaType + " #artifactArtistGroup").addClass('has-warning');
+		} else {
+			$(mediaType + " #artifactArtistGroup").removeClass('has-warning');
+		}
+		// Optional: Genere
+		if (isBlank($(mediaType + ' #genere').val())){
+			$(mediaType + " #artifactGenereGroup").addClass('has-warning');
+		} else {
+			$(mediaType + " #artifactGenereGroup").removeClass('has-warning');
+		}
+		// Optional: Tags
+		if (isBlank($(mediaType + ' #tags').val())){
+			$(mediaType + " #artifactTagsGroup").addClass('has-warning');
+		} else {
+			$(mediaType + " #artifactTagsGroup").removeClass('has-warning');
+		}
+		// Optional: Record Label
+		if (isBlank($(mediaType + ' #recordLabel').val())){
+			$(mediaType + " #artifactRecordLabelGroup").addClass('has-warning');
+		} else {
+			$(mediaType + " #artifactRecordLabelGroup").removeClass('has-warning');
+		}
 	}
-	// Optional: Minimum Price to Play
-	if (isBlank($('#minPlay').val())){
-        $("#minimumPricePer").addClass('has-warning');
-	} else {
-		$("#minimumPricePer").removeClass('has-warning');
-		hasPaymentInfo = true;
+	// Validate optional items for video metadata
+	if (mediaType == '#video'){
+		// Optional: Director Name
+		if (isBlank($(mediaType + ' #directorName').val())){
+			$(mediaType + " #artifactDirectorGroup").addClass('has-warning');
+		} else {
+			$(mediaType + " #artifactDirectorGroup").removeClass('has-warning');
+		}
+		// Optional: Distributor
+		if (isBlank($(mediaType + ' #distributor').val())){
+			$(mediaType + " #artifactDistributorGroup").addClass('has-warning');
+		} else {
+			$(mediaType + " #artifactDistributorGroup").removeClass('has-warning');
+		}
 	}
-	// Optional: Suggested Price to Purchase
-	if (isBlank($('#suggestedBuy').val())){
-        $("#suggestedPriceBuy").addClass('has-warning');
-	} else {
-		$("#suggestedPriceBuy").removeClass('has-warning');
-		hasPaymentInfo = true;
-	}
-	// Optional: Minimum Price to Purchase
-	if (isBlank($('#minBuy').val())){
-        $("#minimumPriceBuy").addClass('has-warning');
-	} else {
-		$("#minimumPriceBuy").removeClass('has-warning');
-		hasPaymentInfo = true;
-	}
+
+	// Check if there is any pricing info entered at all
+	// Optional: Pricing
+	$('.price').each(function(){
+		if (!isBlank($(this).val()))
+			hasPaymentInfo = true;
+	});
 	// Required: Bitcoin Address
 	if (hasPaymentInfo && isBlank($('#bitcoinAddressGroup input').val())){
 		swal("Error!", "You must provide a Bitcoin address", "error");
-        $("#bitcoinAddressGroup").addClass('has-error');
-        return;
+		$("#bitcoinAddressGroup").addClass('has-error');
+		return;
 	} else {
 		$("#bitcoinAddressGroup").removeClass('has-error');
 	}
 
-    // Set all of the items in the preview.
-    // Set title.
-    $('#previewTitle').text($('#videoTitle').val());
-    // Set Publisher
-    $('#previewArtist').text($('#directorName').val());
-    // Set Description
-    $('#previewDescription').text($('#description').val());
-    // Set Video
-    try {
-        var newURL = URL.createObjectURL(mediaFiles[0]);
-        $('#previewVideo').attr('src', newURL);
-    } catch(e) {
-        swal('Error', 'You must select a video file.', 'error');
-        return;
-    }
-    // Try to set poster
-    try {
-    	var reader = new FileReader();
-	    reader.onload = function (e) {
-	      $('#previewVideo').attr('poster', e.target.result);
-	    };
-	    reader.readAsDataURL($('#posterFile').prop('files')[0]);
-    } catch(e) { }
-    // Get and set runtime
+	// Set all of the items in the preview.
+	// Set title.
+	$('#previewTitle').text($(mediaType + ' #title').val());
+	// Set Publisher
+	if (mediaType == 'music')
+		$('#previewArtist').text($(mediaType + ' #artist').val());
+	else if (mediaType == 'video')
+		$('#previewArtist').text($(mediaType + ' #directorName').val());
+	// Set Description
+	$('#previewDescription').text($(mediaType + ' #description').val());
+	// Set Media
+	try {
+		var newURL = URL.createObjectURL(mediaFiles[0]);
+		$('#previewVideo').attr('src', newURL);
+	} catch(e) {
+		swal('Error', 'You must select a video file.', 'error');
+		return;
+	}
+	// Try to set poster
+	try {
+		var reader = new FileReader();
+		reader.onload = function (e) {
+		  $('#previewVideo').attr('poster', e.target.result);
+		};
+		reader.readAsDataURL($(mediaType + ' #posterFile').prop('files')[0]);
+	} catch(e) { }
+	// Get and set runtime
 	window.URL = window.URL || window.webkitURL;
 	var video = document.createElement('video');
 	video.preload = 'metadata';
 	video.onloadedmetadata = function() {
-	    window.URL.revokeObjectURL(this.src)
-	    duration = video.duration;
-	    mediaFiles[0].duration = duration;
-	    $("#runtime").text(formatRuntime(duration.toFixed(0).toString()));
+		window.URL.revokeObjectURL(this.src)
+		duration = video.duration;
+		mediaFiles[0].duration = duration;
+		$("#runtime").text(formatRuntime(duration.toFixed(0).toString()));
 	}
 	video.src = URL.createObjectURL(mediaFiles[0]);
 	// Set the publish time/date
 	var dateString = dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT Z");
 	$('#current-time').text(dateString);
 
-    $('#previewModal').modal('show');
+	$('#previewModal').modal('show');
 })
 
 function submitArtifact(){
 	// Pause the preview video to stop it playing
-    $('#previewVideo').get(0).pause();
+	$('#previewVideo').get(0).pause();
 
-    swal({
-        title: "Are you sure?",
-        text: "You will not be able to change this later without deleting it completely!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonClass: "btn-success",
-        confirmButtonText: "Yes, publish it!",
-        closeOnConfirm: true
-    },
-    function(){
-    	window.onbeforeunload = function() {
+	swal({
+		title: "Are you sure?",
+		text: "You will not be able to change this later! Please make sure everything is correct!",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonClass: "btn-success",
+		confirmButtonText: "Yes, publish it!",
+		closeOnConfirm: true
+	},
+	function(){
+		window.onbeforeunload = function() {
 			return "You are currently publishing, are you sure you want to navigate away?";
 		}
-    	var walletAddress = $("#publisherSelect").val().replace(/[^()](?=([^()]*\([^()]*\))*[^()]*$)/g, '').replace('(', '').replace(')', '');
-    	console.log(wallet.balances[walletAddress]);
-    	if (wallet.balances[walletAddress] < 1){
-    		tradebot(walletAddress);
-    		setTimeout(function(){
-    			swal("Error!", "You must have at least 1 FLO in your wallet to publish an artifact.", "error");
-    		}, 1000);
-        	return;
-    	}
-        var $active = $('.wizard .nav-tabs li.active');
-        $active.next().removeClass('disabled');
-        nextTab($active);
-        publishArtifact();
-    });
+		var walletAddress = $("#publisherSelect").val().replace(/[^()](?=([^()]*\([^()]*\))*[^()]*$)/g, '').replace('(', '').replace(')', '');
+		console.log(wallet.balances[walletAddress]);
+		if (wallet.balances[walletAddress] < 1){
+			tradebot(walletAddress);
+			setTimeout(function(){
+				swal("Error!", "You must have at least 1 FLO in your wallet to publish an artifact.", "error");
+			}, 1000);
+			return;
+		}
+		var $active = $('.wizard .nav-tabs li.active');
+		$active.next().removeClass('disabled');
+		nextTab($active);
+		publishArtifact();
+	});
 }
 
 function addFilesToIPFS(files, count, callback){
@@ -160,14 +175,14 @@ function addFilesToIPFS(files, count, callback){
 
 	// Since we are not null, add the files to IPFS
 	ipfs.add(files, function (err, hash) {
-        if (err || !hash){
-        	callback("ERROR: " + err, count);
-        	return;
-        }
-        console.log(hash);
-        callback(hash, count);
-        return;
-    });
+		if (err || !hash){
+			callback("ERROR: " + err, count);
+			return;
+		}
+		console.log(hash);
+		callback(hash, count);
+		return;
+	});
 }
 
 function publishArtifact(){
@@ -198,7 +213,7 @@ function publishArtifact(){
   			document.getElementById('publishWell').innerHTML += "[IPFS] Files added to IPFS: " + hashes + "</br>";
 
   			allFilesAddedToIPFS(hash);
-    	});
+		});
 	}
 
 	// Add the poster file. We are safe to assume 0 as there is only one index.
@@ -229,11 +244,14 @@ function publishArtifact(){
 	function allFilesAddedToIPFS(hashes){
 		document.getElementById('publishWell').innerHTML += "All files added to IPFS, publishing artifact...</br>";
 
+		// Select media type based off of pill nav
+		var mediaType = "#" + $("#metainfo div.active").attr('id');
+
 		// Load the selected and only keep the address that is inside the parens.
 		var walletAddress = $("#publisherSelect").val().replace(/[^()](?=([^()]*\([^()]*\))*[^()]*$)/g, '').replace('(', '').replace(')', '');
-		var title = $('#videoTitle').val();
-		var description = $('#description').val();
-		var year = parseInt($('#releaseDate').val());
+		var title = $(mediaType + ' #title').val();
+		var description = $(mediaType + ' #description').val();
+		var year = parseInt($(mediaType + ' #releaseDate').val());
 		var bitcoinAddress = $('#bitcoinAddress').val();
 
 		var videoHashIndex = 0;
@@ -241,159 +259,184 @@ function publishArtifact(){
 			videoHashIndex = 1;
 
 		var alexandriaMedia = {
-            "torrent": hashes[hashes.length-1].Hash,
-            "publisher": walletAddress,
-            "timestamp": Date.now(),
-            "type": "video",
-            "payment": {
-            	// Commented out because Libraryd hates me :c
-            	//"fiat": "USD", // Hardcode USD, unknown if is needed yet.
-                //"paymentToken": "BTC", // Hardcode BTC, unknown if is needed yet
-                //"paymentAddress": bitcoinAddress
-            },
-            "info": {
-                "title": title,
-                "description": description,
-                "year": year,
-                "extra-info": {
-                	"DHT Hash": hashes[hashes.length-1].Hash,
-                    "filename": hashes[videoHashIndex].Name,
-                    //"runtime": duration.toFixed(0),
-                    "files": []
-                }
-            }
-        };
+			"torrent": hashes[hashes.length-1].Hash,
+			"publisher": walletAddress,
+			"timestamp": Date.now(),
+			"type": mediaType.replace('#',''),
+			"payment": {
+				// Commented out because Libraryd hates me :c
+				//"fiat": "USD", // Hardcode USD, unknown if is needed yet.
+				//"paymentToken": "BTC", // Hardcode BTC, unknown if is needed yet
+				//"paymentAddress": bitcoinAddress
+			},
+			"info": {
+				"title": title,
+				"description": description,
+				"year": year,
+				"extra-info": {
+					"DHT Hash": hashes[hashes.length-1].Hash,
+					"filename": hashes[videoHashIndex].Name,
+					//"runtime": duration.toFixed(0),
+					"files": []
+				}
+			}
+		};
 
-        // Optional Fields
-        var director = $('#directorName').val();
-        var distributor = $('#distributor').val();
-        var poster = $('#posterFile').val();
-        var suggPricePer = $('#suggestedPlay').val();
-        var minPricePer = $('#minPlay').val();
-        var suggPriceBuy = $('#suggestedBuy').val();
-        var minPriceBuy = $('#minBuy').val();
+		// If item is not blank, then add it, otherwise just continue as these are all optional.
+		if (!isBlank(bitcoinAddress))
+			alexandriaMedia["info"]["extra-info"]["Bitcoin Address"] = bitcoinAddress;
 
-        // If item is not blank, then add it, otherwise just continue as these are all optional.
-        if (!isBlank(bitcoinAddress))
-        	alexandriaMedia["info"]["extra-info"]["Bitcoin Address"] = bitcoinAddress;
+		// Optional Fields
+		var poster = $(mediaType + ' #posterFile').val();
 
-        if (!isBlank(director))
-        	alexandriaMedia["info"]["extra-info"]["artist"] = director;
+		// Metadata per artifact type
+		if (mediaType == '#music'){
+			var artistName = $(mediaType + ' #artistName').val();
+			var genere = $(mediaType + ' #genere').val();
+			var tags = $(mediaType + ' #tags').val();
+			var recordLabel = $(mediaType + ' #recordLabel').val();
 
-        if (!isBlank(distributor))
-        	alexandriaMedia["info"]["extra-info"]["company"] = distributor;
+			if (!isBlank(artistName))
+				alexandriaMedia["info"]["extra-info"]["artist"] = artistName;
 
-        if (!isBlank(mediaFiles)){
-        	for (var i = 0; i < mediaFiles.length; i++) {
-        		// Get Display Name from Table
-        		var displayName = $('#' + sanitizeID(mediaFiles[i].name) + ' #name').val();
-        		if (displayName == mediaFiles[i].name)
-        			displayName = "";
-        		// Get Type from Table
-        		var type = $('#' + sanitizeID(mediaFiles[i].name) + ' #type').val();
-        		// Get duration from table
-        		//var duration = duration.toFixed(0); // Need to un-hardcode this...
-        		// Get prices from table
-        		var priceSelector = '#' + sanitizeID(mediaFiles[i].name) + 'price';
-        		var minPlay = $(priceSelector + ' #minPlay').val();
-        		var sugPlay = $(priceSelector + ' #sugPlay').val();
-        		var minBuy = $(priceSelector + ' #minBuy').val();
-        		var sugBuy = $(priceSelector + ' #sugBuy').val();
-        		// Get checkboxes from pricing table
-        		var disallowPlay = $(priceSelector + ' #disPlay').is(':checked');
-        		var disallowBuy = $(priceSelector + ' #disBuy').is(':checked');
+			if (!isBlank(genere))
+				alexandriaMedia["info"]["extra-info"]["genere"] = genere;
 
-        		var fileJSON = {
-	        		"fname": mediaFiles[i].name,
-	        		//"duration": duration,
-	        		"type": 'video'
-	        	}
+			if (!isBlank(genere))
+				alexandriaMedia["info"]["extra-info"]["tags"] = tags;
 
-	        	// Set all optional fields
-	        	if (!isBlank(displayName))
-	        		fileJSON['dname'] = displayName
+			if (!isBlank(recordLabel))
+				alexandriaMedia["info"]["extra-info"]["company"] = recordLabel;
+		}
+		else if (mediaType == '#video'){
+			var director = $(mediaType + ' #directorName').val();
+			var distributor = $(mediaType + ' #distributor').val();	
 
-	        	if (!isBlank(minPlay))
-	        		fileJSON['minPlay'] = minPlay;
+			if (!isBlank(director))
+				alexandriaMedia["info"]["extra-info"]["artist"] = director;
 
-	        	if (!isBlank(sugPlay))
-	        		fileJSON['sugPlay'] = sugPlay;
+			if (!isBlank(distributor))
+				alexandriaMedia["info"]["extra-info"]["company"] = distributor;
+		}
 
-	        	if (!isBlank(minBuy))
-	        		fileJSON['minBuy'] = minBuy;
+		if (!isBlank(mediaFiles)){
+			for (var i = 0; i < mediaFiles.length; i++) {
+				// Get Display Name from Table
+				var displayName = $('#' + sanitizeID(mediaFiles[i].name) + ' #name').val();
+				if (displayName == mediaFiles[i].name)
+					displayName = "";
+				// Get Type from Table
+				var type = $('#' + sanitizeID(mediaFiles[i].name) + ' #type').val();
+				// Get duration from table
+				//var duration = duration.toFixed(0); // Need to un-hardcode this...
+				// Get prices from table
+				var priceSelector = '#' + sanitizeID(mediaFiles[i].name) + 'price';
+				var minPlay = $(priceSelector + ' #minPlay').val();
+				var sugPlay = $(priceSelector + ' #sugPlay').val();
+				var minBuy = $(priceSelector + ' #minBuy').val();
+				var sugBuy = $(priceSelector + ' #sugBuy').val();
+				// Get checkboxes from pricing table
+				var disallowPlay = $(priceSelector + ' #disPlay').is(':checked');
+				var disallowBuy = $(priceSelector + ' #disBuy').is(':checked');
 
-	        	if (!isBlank(sugBuy))
-	        		fileJSON['sugBuy'] = sugBuy;
+				var fileJSON = {
+					"fname": mediaFiles[i].name,
+					//"duration": duration,
+					"type": mediaType.replace('#','')
+				}
 
-	        	if (disallowPlay)
-	        		fileJSON['disallowPlay'] = true;
+				// Set all optional fields
+				if (!isBlank(displayName))
+					fileJSON['dname'] = displayName
 
-	        	if (disallowBuy)
-	        		fileJSON['disallowBuy'] = true;
+				if (!isBlank(minPlay))
+					fileJSON['minPlay'] = minPlay;
 
-        		alexandriaMedia["info"]["extra-info"]["files"].push(fileJSON)
-        	}
-        }
+				if (!isBlank(sugPlay))
+					fileJSON['sugPlay'] = sugPlay;
 
-        if (!isBlank(poster)){
-        	alexandriaMedia["info"]["extra-info"]["posterFrame"] = hashes[0].Name;
-        	alexandriaMedia["info"]["extra-info"]["files"].push({
-        		"fname": hashes[0].Name,
-        		"type": "preview"
-        	})
-        }
+				if (!isBlank(minBuy))
+					fileJSON['minBuy'] = minBuy;
 
-        if (!isBlank(extraFiles)){
-        	for (var i = 0; i < extraFiles.length; i++) {
-        		// Get Display Name from Table
-        		var displayName = $('#' + sanitizeID(extraFiles[i].name) + ' #name').val();
-        		if (displayName == extraFiles[i].name)
-        			displayName = "";
-        		// Get Type from Table
-        		var type = $('#' + sanitizeID(extraFiles[i].name) + ' #type').val();
-        		// Get prices from table
-        		var priceSelector = '#' + sanitizeID(extraFiles[i].name) + 'price';
-        		var minPlay = $(priceSelector + ' #minPlay').val();
-        		var sugPlay = $(priceSelector + ' #sugPlay').val();
-        		var minBuy = $(priceSelector + ' #minBuy').val();
-        		var sugBuy = $(priceSelector + ' #sugBuy').val();
-        		// Get checkboxes from pricing table
-        		var disallowPlay = $(priceSelector + ' #disPlay').is(':checked');
-        		var disallowBuy = $(priceSelector + ' #disBuy').is(':checked');
+				if (!isBlank(sugBuy))
+					fileJSON['sugBuy'] = sugBuy;
 
-        		var fileJSON = {
-	        		"fname": extraFiles[i].name,
-	        		"type": type
-	        	}
+				if (disallowPlay)
+					fileJSON['disallowPlay'] = true;
 
-	        	// Set all optional fields
-	        	if (!isBlank(displayName))
-	        		fileJSON['dname'] = displayName
+				if (disallowBuy)
+					fileJSON['disallowBuy'] = true;
 
-	        	if (!isBlank(minPlay))
-	        		fileJSON['minPlay'] = minPlay;
+				alexandriaMedia["info"]["extra-info"]["files"].push(fileJSON)
+			}
+		}
 
-	        	if (!isBlank(sugPlay))
-	        		fileJSON['sugPlay'] = sugPlay;
+		if (!isBlank(poster)){
+			var type = 'preview'
+			if (mediaType == '#music')
+				type = 'coverArt';
+			else if (mediaType == '#video')
+				type = 'preview'
 
-	        	if (!isBlank(minBuy))
-	        		fileJSON['minBuy'] = minBuy;
+			alexandriaMedia["info"]["extra-info"]["posterFrame"] = hashes[0].Name;
+			alexandriaMedia["info"]["extra-info"]["files"].push({
+				"dname": 'Cover Art',
+				"fname": hashes[0].Name,
+				"type": type
+			})
+		}
 
-	        	if (!isBlank(sugBuy))
-	        		fileJSON['sugBuy'] = sugBuy;
+		if (!isBlank(extraFiles)){
+			for (var i = 0; i < extraFiles.length; i++) {
+				// Get Display Name from Table
+				var displayName = $('#' + sanitizeID(extraFiles[i].name) + ' #name').val();
+				if (displayName == extraFiles[i].name)
+					displayName = "";
+				// Get Type from Table
+				var type = $('#' + sanitizeID(extraFiles[i].name) + ' #type').val();
+				// Get prices from table
+				var priceSelector = '#' + sanitizeID(extraFiles[i].name) + 'price';
+				var minPlay = $(priceSelector + ' #minPlay').val();
+				var sugPlay = $(priceSelector + ' #sugPlay').val();
+				var minBuy = $(priceSelector + ' #minBuy').val();
+				var sugBuy = $(priceSelector + ' #sugBuy').val();
+				// Get checkboxes from pricing table
+				var disallowPlay = $(priceSelector + ' #disPlay').is(':checked');
+				var disallowBuy = $(priceSelector + ' #disBuy').is(':checked');
 
-	        	if (disallowPlay)
-	        		fileJSON['disallowPlay'] = true;
+				var fileJSON = {
+					"fname": extraFiles[i].name,
+					"type": type
+				}
 
-	        	if (disallowBuy)
-	        		fileJSON['disallowBuy'] = true;
+				// Set all optional fields
+				if (!isBlank(displayName))
+					fileJSON['dname'] = displayName
 
-        		alexandriaMedia["info"]["extra-info"]["files"].push(fileJSON)
-        	}
-        }
+				if (!isBlank(minPlay))
+					fileJSON['minPlay'] = minPlay;
+
+				if (!isBlank(sugPlay))
+					fileJSON['sugPlay'] = sugPlay;
+
+				if (!isBlank(minBuy))
+					fileJSON['minBuy'] = minBuy;
+
+				if (!isBlank(sugBuy))
+					fileJSON['sugBuy'] = sugBuy;
+
+				if (disallowPlay)
+					fileJSON['disallowPlay'] = true;
+
+				if (disallowBuy)
+					fileJSON['disallowBuy'] = true;
+
+				alexandriaMedia["info"]["extra-info"]["files"].push(fileJSON)
+			}
+		}
 
 
-        document.getElementById('publishWell').innerHTML += '<pre>' + JSON.stringify(alexandriaMedia, null, 4) + "</pre><br>";
+		document.getElementById('publishWell').innerHTML += '<pre>' + JSON.stringify(alexandriaMedia, null, 4) + "</pre><br>";
 
 		LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, function(err, data){
 			if (err != null){
@@ -420,19 +463,19 @@ function publishArtifact(){
 }
 
 function isBlank(str) {
-    return (!str || /^\s*$/.test(str));
+	return (!str || /^\s*$/.test(str));
 }
 
 function formatRuntime(runtimeInt) {
-    var sec_num = parseInt(runtimeInt, 10); // don't forget the second param
-    var hours   = Math.floor(sec_num / 3600);
-    var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-    var seconds = sec_num - (hours * 3600) - (minutes * 60);
+	var sec_num = parseInt(runtimeInt, 10); // don't forget the second param
+	var hours   = Math.floor(sec_num / 3600);
+	var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+	var seconds = sec_num - (hours * 3600) - (minutes * 60);
 
-    if (hours   < 10) {hours   = "0"+hours;}
-    if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    var time    = hours+':'+minutes+':'+seconds;
+	if (hours   < 10) {hours   = "0"+hours;}
+	if (minutes < 10) {minutes = "0"+minutes;}
+	if (seconds < 10) {seconds = "0"+seconds;}
+	var time	= hours+':'+minutes+':'+seconds;
 
-    return time;
+	return time;
 }
