@@ -13,12 +13,12 @@ body {
 
 @media screen and (max-width: 1200px) {
   #content {
-    max-width: 650px; } }
+	max-width: 650px; } }
 
 @media screen and (min-width: 1200px) {
   #content {
-    max-width: 80%;
-    margin: auto; } }
+	max-width: 80%;
+	margin: auto; } }
 
 .section {
   margin: -45px 0; }
@@ -225,7 +225,7 @@ label {
 
 @media screen and (min-width: 900px) {
   .form-inline .form-control.ipfs {
-    min-width: 350px; } }
+	min-width: 350px; } }
 
 input.rating {
   max-width: 65px; }
@@ -403,16 +403,16 @@ a.svg:after {
 
 @keyframes pulseBg {
   0% {
-    background: #eaeaea; }
+	background: #eaeaea; }
   50% {
-    background: #f4f4f4; }
+	background: #f4f4f4; }
   100% {
-    background: #eaeaea; } }
+	background: #eaeaea; } }
 
 /* Pinned files */
 @media screen and (min-width: 920px) {
   .form-pin-file {
-    float: right; } }
+	float: right; } }
 
 .btn-pin-file {
   margin-left: 10px; }
