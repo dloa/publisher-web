@@ -77,13 +77,19 @@ function FileSelectHandler(e) {
     // fetch FileList object
     var files = e.target.files || e.dataTransfer.files;
 
+    // Get type in order to validate files
+    var mediaType = $("#metainfo div.active").attr('id');
+
+    if (mediaType == 'music')
+        mediaType = 'audio';
+
     // process all File objects
     for (var i = 0, f; f = files[i]; i++) {
         if (e.srcElement.id == "mediaDrop" || e.srcElement.id == "mediaFiles"){
-            if (f.type.indexOf('video') > -1)
+            if (f.type.indexOf(mediaType) > -1)
                 ParseMedia(f);
             else
-                swal('Error', 'You can only select video files for the media browser', 'error');
+                swal('Error', 'You can only select ' + mediaType + ' files.', 'error');
         }
         else
             ParseExtra(f);
