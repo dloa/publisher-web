@@ -91,46 +91,47 @@
                                     <li><a href="#video" data-toggle="tab">Video</a></li>
                                 </ul>
                             </div>
-                            <div class="publish-section information tab-content" style="margin-top: -50px;">
+                            <div class="publish-section information tab-content" id='metainfo' style="margin-top: -50px;">
                                 <div id='music' class="tab-pane fade in active">
                                     <div class="row">
                                         <div class="col-sm-8">
                                             <h5>Album Information</h5>
                                             <form>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" id="" placeholder="Album Title">
+                                                <div class="form-group" id="artifactTitleGroup">
+                                                    <input type="text" class="form-control" id="title" placeholder="Album Title">
                                                 </div>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" id="" placeholder="Artist Name">
+                                                <div class="form-group" id="artifactArtistNameGroup">
+                                                    <input type="text" class="form-control" id="artistName" placeholder="Artist Name">
                                                 </div>
                                                 <div class="row">
                                                     <div class="col col-sm-6">
-                                                        <div class="form-group">
-                                                            <input type="text" class="form-control" id="" placeholder="Genre">
+                                                        <div class="form-group" id="artifactGenereGroup">
+                                                            <input type="text" class="form-control" id="genere" placeholder="Genre">
                                                         </div>
                                                     </div>
                                                     <div class="col col-sm-6">
-                                                        <div class="form-group">
-                                                            <input type="text" class="form-control" id="" placeholder="Release Year">
+                                                        <div class="form-group" id="artifactDateGroup">
+                                                            <input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" id="" placeholder="Tags">
+                                                <div class="form-group" id="artifactTagsGroup">
+                                                    <input type="text" class="form-control" id="tags" placeholder="Tags">
                                                 </div>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" id="" placeholder="Record Label">
+                                                <div class="form-group" id="artifactRecordLabelGroup">
+                                                    <input type="text" class="form-control" id="recordLabel" placeholder="Record Label">
                                                 </div>
-                                                <div class="form-group">
-                                                    <textarea row="3" class="form-control" id="" placeholder="Album Description"></textarea>
+                                                <div class="form-group" id="artifactDescriptionGroup">
+                                                    <textarea row="3" class="form-control" id="description" placeholder="Album Description"></textarea>
                                                 </div>
                                             </form>
                                         </div>
                                         <div class="col-sm-4">
                                             <h5>Cover Art</h5>
-                                            <div class="cover-art">
+                                            <div class="cover-art-square">
                                                 <p>Cover art</p>
                                             </div>
+                                            <input type="file" name="posterFile" id="posterFile" accept="image/*">
                                         </div>
                                     </div>
                                 </div>
@@ -139,7 +140,7 @@
                                         <div class="col-sm-8">
                                            <h5>Video Information</h5>
                                                 <div class="form-group" id="artifactTitleGroup">
-                                                    <input type="text" class="form-control" id="videoTitle" placeholder="Video Title">
+                                                    <input type="text" class="form-control" id="title" placeholder="Video Title">
                                                 </div>
                                                 <div class="form-group" id="artifactDirectorGroup">
                                                     <input type="text" class="form-control" id="directorName" placeholder="Director Name">
@@ -204,7 +205,7 @@
                                 <div class="publish-files audio-tracks">
                                     <h5>
                                         <object type="image/svg+xml" data="assets/svg/media-16px-2_note-03.svg"></object>
-                                        Video Files
+                                        Media Files
                                     </h5>
                                     <table class="table" id='mediaFilesTable'>
                                         <colgroup>

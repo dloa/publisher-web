@@ -5,42 +5,47 @@ var duration = 0;
 
 $('#previewButton').click(function(e){
 	var hasPaymentInfo = false;
+	var mediaType = "#" + $("#metainfo div.active").attr('id');
+	console.log(mediaType);
 	// Validate form.
 	// Required: Video Title
-	if (isBlank($('#videoTitle').val())){
+	if (isBlank($(mediaType + ' #title').val())){
 		swal("Error!", "You must provide a title", "error");
-        $("#artifactTitleGroup").addClass('has-error');
+        $(mediaType + " #artifactTitleGroup").addClass('has-error');
         return;
 	} else {
-		$("#artifactTitleGroup").removeClass('has-error');
-	}
-	// Optional: Director Name
-	if (isBlank($('#directorName').val())){
-        $("#artifactDirectorGroup").addClass('has-warning');
-	} else {
-		$("#artifactDirectorGroup").removeClass('has-warning');
-	}
-	// Optional: Distributor
-	if (isBlank($('#distributor').val())){
-        $("#artifactDistributorGroup").addClass('has-warning');
-	} else {
-		$("#artifactDistributorGroup").removeClass('has-warning');
+		$(mediaType + " #artifactTitleGroup").removeClass('has-error');
 	}
 	// Required: Date
-	if (isBlank($('#releaseDate').val()) || isNaN(parseInt($('#releaseDate').val())) || parseInt($('#releaseDate').val()) <= 0){
+	if (isBlank($(mediaType + ' #releaseDate').val()) || isNaN(parseInt($('#releaseDate').val())) || parseInt($('#releaseDate').val()) <= 0){
 		swal("Error!", "You must provide a release year", "error");
-        $("#artifactDateGroup").addClass('has-error');
+        $(mediaType + " #artifactDateGroup").addClass('has-error');
         return;
 	} else {
-		$("#artifactDateGroup").removeClass('has-error');
+		$(mediaType + " #artifactDateGroup").removeClass('has-error');
 	}
 	// Required: Description
-	if (isBlank($('#description').val())){
+	if (isBlank($(mediaType + ' #description').val())){
 		swal("Error!", "You must provide a description", "error");
-        $("#artifactDescriptionGroup").addClass('has-error');
+        $(mediaType + " #artifactDescriptionGroup").addClass('has-error');
         return;
 	} else {
-		$("#artifactDescriptionGroup").removeClass('has-error');
+		$(mediaType + " #artifactDescriptionGroup").removeClass('has-error');
+	}
+
+	if (mediaType == 'video'){
+		// Optional: Director Name
+		if (isBlank($(mediaType + ' #directorName').val())){
+	        $(mediaType + " #artifactDirectorGroup").addClass('has-warning');
+		} else {
+			$(mediaType + " #artifactDirectorGroup").removeClass('has-warning');
+		}
+		// Optional: Distributor
+		if (isBlank($(mediaType + ' #distributor').val())){
+	        $(mediaType + " #artifactDistributorGroup").addClass('has-warning');
+		} else {
+			$(mediaType + " #artifactDistributorGroup").removeClass('has-warning');
+		}
 	}
 	// Optional: Suggested Price to Play
 	if (isBlank($('#suggestedPlay').val())){
@@ -81,11 +86,11 @@ $('#previewButton').click(function(e){
 
     // Set all of the items in the preview.
     // Set title.
-    $('#previewTitle').text($('#videoTitle').val());
+    $('#previewTitle').text($(mediaType + ' #title').val());
     // Set Publisher
-    $('#previewArtist').text($('#directorName').val());
+    $('#previewArtist').text($(mediaType + ' #directorName').val());
     // Set Description
-    $('#previewDescription').text($('#description').val());
+    $('#previewDescription').text($(mediaType + ' #description').val());
     // Set Video
     try {
         var newURL = URL.createObjectURL(mediaFiles[0]);
@@ -231,7 +236,7 @@ function publishArtifact(){
 
 		// Load the selected and only keep the address that is inside the parens.
 		var walletAddress = $("#publisherSelect").val().replace(/[^()](?=([^()]*\([^()]*\))*[^()]*$)/g, '').replace('(', '').replace(')', '');
-		var title = $('#videoTitle').val();
+		var title = $('#title').val();
 		var description = $('#description').val();
 		var year = parseInt($('#releaseDate').val());
 		var bitcoinAddress = $('#bitcoinAddress').val();

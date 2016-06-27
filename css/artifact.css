@@ -555,6 +555,26 @@ td.unpin {
   display: table-cell; 
 }
 
+.publish .cover-art-square {
+  width: 250px;
+  height: 250px;
+  display: table;
+  border: 1px dashed rgba(0,0,0, .1);
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  padding: 5px;
+  transition: all 0.1s;
+  background-size: 250px 150px;
+  background-repeat: no-repeat;
+}
+
+.publish .cover-art-square p {
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell; 
+}
+
 .publish label {
   font-weight: 300; }
 
