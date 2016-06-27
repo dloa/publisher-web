@@ -13,6 +13,7 @@ function show (elements, specifiedDisplay) {
 }
 
 function continueToArtifact() {
+  if (document.getElementById("publisherSelect").value != 'None Registered...'){
 	var $active = $('.wizard .nav-tabs li.active');
 	$active.next().removeClass('disabled');
 	nextTab($active);
