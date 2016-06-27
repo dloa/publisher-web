@@ -95,10 +95,13 @@ $('#previewButton').click(function(e){
     // Set title.
     $('#previewTitle').text($(mediaType + ' #title').val());
     // Set Publisher
-    $('#previewArtist').text($(mediaType + ' #directorName').val());
+    if (mediaType == 'music')
+    	$('#previewArtist').text($(mediaType + ' #artist').val());
+    else if (mediaType == 'video')
+    	$('#previewArtist').text($(mediaType + ' #directorName').val());
     // Set Description
     $('#previewDescription').text($(mediaType + ' #description').val());
-    // Set Video
+    // Set Media
     try {
         var newURL = URL.createObjectURL(mediaFiles[0]);
         $('#previewVideo').attr('src', newURL);
@@ -112,7 +115,7 @@ $('#previewButton').click(function(e){
 	    reader.onload = function (e) {
 	      $('#previewVideo').attr('poster', e.target.result);
 	    };
-	    reader.readAsDataURL($('#posterFile').prop('files')[0]);
+	    reader.readAsDataURL($(mediaType + ' #posterFile').prop('files')[0]);
     } catch(e) { }
     // Get and set runtime
 	window.URL = window.URL || window.webkitURL;
@@ -138,7 +141,7 @@ function submitArtifact(){
 
     swal({
         title: "Are you sure?",
-        text: "You will not be able to change this later without deleting it completely!",
+        text: "You will not be able to change this later! Please make sure everything is correct!",
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: "btn-success",
@@ -241,11 +244,14 @@ function publishArtifact(){
 	function allFilesAddedToIPFS(hashes){
 		document.getElementById('publishWell').innerHTML += "All files added to IPFS, publishing artifact...</br>";
 
+		// Select media type based off of pill nav
+		var mediaType = "#" + $("#metainfo div.active").attr('id');
+
 		// Load the selected and only keep the address that is inside the parens.
 		var walletAddress = $("#publisherSelect").val().replace(/[^()](?=([^()]*\([^()]*\))*[^()]*$)/g, '').replace('(', '').replace(')', '');
-		var title = $('#title').val();
-		var description = $('#description').val();
-		var year = parseInt($('#releaseDate').val());
+		var title = $(mediaType + ' #title').val();
+		var description = $(mediaType + ' #description').val();
+		var year = parseInt($(mediaType + ' #releaseDate').val());
 		var bitcoinAddress = $('#bitcoinAddress').val();
 
 		var videoHashIndex = 0;
@@ -256,7 +262,7 @@ function publishArtifact(){
             "torrent": hashes[hashes.length-1].Hash,
             "publisher": walletAddress,
             "timestamp": Date.now(),
-            "type": "video",
+            "type": mediaType.replace('#',''),
             "payment": {
             	// Commented out because Libraryd hates me :c
             	//"fiat": "USD", // Hardcode USD, unknown if is needed yet.
@@ -276,24 +282,42 @@ function publishArtifact(){
             }
         };
 
-        // Optional Fields
-        var director = $('#directorName').val();
-        var distributor = $('#distributor').val();
-        var poster = $('#posterFile').val();
-        var suggPricePer = $('#suggestedPlay').val();
-        var minPricePer = $('#minPlay').val();
-        var suggPriceBuy = $('#suggestedBuy').val();
-        var minPriceBuy = $('#minBuy').val();
-
         // If item is not blank, then add it, otherwise just continue as these are all optional.
         if (!isBlank(bitcoinAddress))
         	alexandriaMedia["info"]["extra-info"]["Bitcoin Address"] = bitcoinAddress;
 
-        if (!isBlank(director))
-        	alexandriaMedia["info"]["extra-info"]["artist"] = director;
+        // Optional Fields
+        var poster = $(mediaType + ' #posterFile').val();
 
-        if (!isBlank(distributor))
-        	alexandriaMedia["info"]["extra-info"]["company"] = distributor;
+        // Metadata per artifact type
+        if (mediaType == '#music'){
+        	var artistName = $(mediaType + ' #artistName').val();
+        	var genere = $(mediaType + ' #genere').val();
+        	var tags = $(mediaType + ' #tags').val();
+        	var recordLabel = $(mediaType + ' #recordLabel').val();
+
+        	if (!isBlank(artistName))
+	        	alexandriaMedia["info"]["extra-info"]["artist"] = artistName;
+
+	        if (!isBlank(genere))
+	        	alexandriaMedia["info"]["extra-info"]["genere"] = genere;
+
+	        if (!isBlank(genere))
+	        	alexandriaMedia["info"]["extra-info"]["tags"] = tags;
+
+	        if (!isBlank(recordLabel))
+	        	alexandriaMedia["info"]["extra-info"]["company"] = recordLabel;
+        }
+        else if (mediaType == '#video'){
+        	var director = $(mediaType + ' #directorName').val();
+        	var distributor = $(mediaType + ' #distributor').val();	
+
+        	if (!isBlank(director))
+	        	alexandriaMedia["info"]["extra-info"]["artist"] = director;
+
+	        if (!isBlank(distributor))
+	        	alexandriaMedia["info"]["extra-info"]["company"] = distributor;
+        }
 
         if (!isBlank(mediaFiles)){
         	for (var i = 0; i < mediaFiles.length; i++) {
@@ -318,7 +342,7 @@ function publishArtifact(){
         		var fileJSON = {
 	        		"fname": mediaFiles[i].name,
 	        		//"duration": duration,
-	        		"type": 'video'
+	        		"type": mediaType.replace('#','')
 	        	}
 
 	        	// Set all optional fields
@@ -348,10 +372,16 @@ function publishArtifact(){
         }
 
         if (!isBlank(poster)){
+        	var type = 'preview'
+        	if (mediaType == '#music')
+        		type = 'coverArt';
+        	else if (mediaType == '#video')
+        		type = 'preview'
+
         	alexandriaMedia["info"]["extra-info"]["posterFrame"] = hashes[0].Name;
         	alexandriaMedia["info"]["extra-info"]["files"].push({
         		"fname": hashes[0].Name,
-        		"type": "preview"
+        		"type": type
         	})
         }
 
