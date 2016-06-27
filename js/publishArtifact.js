@@ -27,7 +27,7 @@ $('#previewButton').click(function(e){
 		$("#artifactDistributorGroup").removeClass('has-warning');
 	}
 	// Required: Date
-	if (isBlank($('#releaseDate').val())){
+	if (isBlank($('#releaseDate').val()) || isNaN(parseInt($('#releaseDate').val())) || parseInt($('#releaseDate').val()) <= 0){
 		swal("Error!", "You must provide a release year", "error");
         $("#artifactDateGroup").addClass('has-error');
         return;
@@ -71,7 +71,7 @@ $('#previewButton').click(function(e){
 		hasPaymentInfo = true;
 	}
 	// Required: Bitcoin Address
-	if (hasPaymentInfo && isBlank($('#bitcoinAddress').val())){
+	if (hasPaymentInfo && isBlank($('#bitcoinAddressGroup input').val())){
 		swal("Error!", "You must provide a Bitcoin address", "error");
         $("#bitcoinAddressGroup").addClass('has-error');
         return;
@@ -88,7 +88,7 @@ $('#previewButton').click(function(e){
     $('#previewDescription').text($('#description').val());
     // Set Video
     try {
-        var newURL = URL.createObjectURL($('#mediaFiles').prop('files')[0]);
+        var newURL = URL.createObjectURL(mediaFiles[0]);
         $('#previewVideo').attr('src', newURL);
     } catch(e) {
         swal('Error', 'You must select a video file.', 'error');
@@ -103,11 +103,10 @@ $('#previewButton').click(function(e){
 	    reader.readAsDataURL($('#posterFile').prop('files')[0]);
     } catch(e) { }
     // Get and set runtime
-    var mediaFiles = document.getElementById("mediaFiles").files;
 	window.URL = window.URL || window.webkitURL;
 	var video = document.createElement('video');
-	  video.preload = 'metadata';
-	  video.onloadedmetadata = function() {
+	video.preload = 'metadata';
+	video.onloadedmetadata = function() {
 	    window.URL.revokeObjectURL(this.src)
 	    duration = video.duration;
 	    mediaFiles[0].duration = duration;
@@ -122,6 +121,9 @@ $('#previewButton').click(function(e){
 })
 
 function submitArtifact(){
+	// Pause the preview video to stop it playing
+    $('#previewVideo').get(0).pause();
+
     swal({
         title: "Are you sure?",
         text: "You will not be able to change this later without deleting it completely!",
@@ -132,6 +134,9 @@ function submitArtifact(){
         closeOnConfirm: true
     },
     function(){
+    	window.onbeforeunload = function() {
+			return "You are currently publishing, are you sure you want to navigate away?";
+		}
     	var walletAddress = $("#publisherSelect").val().replace(/[^()](?=([^()]*\([^()]*\))*[^()]*$)/g, '').replace('(', '').replace(')', '');
     	console.log(wallet.balances[walletAddress]);
     	if (wallet.balances[walletAddress] < 1){
@@ -167,8 +172,7 @@ function addFilesToIPFS(files, count, callback){
 
 function publishArtifact(){
 	var poster = document.getElementById("posterFile").files;
-	var mediaFiles = document.getElementById("mediaFiles").files;
-	var extraFiles = document.getElementById("extraFiles").files;
+	// mediaFiles and extraFiles are defined in dropzone.js
 
 	// count will store the current readable index, total the total amount of files.
 	var count = 0;
@@ -254,13 +258,8 @@ function publishArtifact(){
                 "extra-info": {
                 	"DHT Hash": hashes[hashes.length-1].Hash,
                     "filename": hashes[videoHashIndex].Name,
-                    "runtime": duration.toFixed(0),
-                    "files": [{
-		            	"dname": "", // Display Name
-		            	"fname": hashes[videoHashIndex].Name, // File Name
-		            	"runtime": duration.toFixed(0),
-		            	"type": "video"
-		            }]
+                    //"runtime": duration.toFixed(0),
+                    "files": []
                 }
             }
         };
@@ -284,35 +283,124 @@ function publishArtifact(){
         if (!isBlank(distributor))
         	alexandriaMedia["info"]["extra-info"]["company"] = distributor;
 
+        if (!isBlank(mediaFiles)){
+        	for (var i = 0; i < mediaFiles.length; i++) {
+        		// Get Display Name from Table
+        		var displayName = $('#' + sanitizeID(mediaFiles[i].name) + ' #name').val();
+        		if (displayName == mediaFiles[i].name)
+        			displayName = "";
+        		// Get Type from Table
+        		var type = $('#' + sanitizeID(mediaFiles[i].name) + ' #type').val();
+        		// Get duration from table
+        		//var duration = duration.toFixed(0); // Need to un-hardcode this...
+        		// Get prices from table
+        		var priceSelector = '#' + sanitizeID(mediaFiles[i].name) + 'price';
+        		var minPlay = $(priceSelector + ' #minPlay').val();
+        		var sugPlay = $(priceSelector + ' #sugPlay').val();
+        		var minBuy = $(priceSelector + ' #minBuy').val();
+        		var sugBuy = $(priceSelector + ' #sugBuy').val();
+        		// Get checkboxes from pricing table
+        		var disallowPlay = $(priceSelector + ' #disPlay').is(':checked');
+        		var disallowBuy = $(priceSelector + ' #disBuy').is(':checked');
+
+        		var fileJSON = {
+	        		"fname": mediaFiles[i].name,
+	        		//"duration": duration,
+	        		"type": 'video'
+	        	}
+
+	        	// Set all optional fields
+	        	if (!isBlank(displayName))
+	        		fileJSON['dname'] = displayName
+
+	        	if (!isBlank(minPlay))
+	        		fileJSON['minPlay'] = minPlay;
+
+	        	if (!isBlank(sugPlay))
+	        		fileJSON['sugPlay'] = sugPlay;
+
+	        	if (!isBlank(minBuy))
+	        		fileJSON['minBuy'] = minBuy;
+
+	        	if (!isBlank(sugBuy))
+	        		fileJSON['sugBuy'] = sugBuy;
+
+	        	if (disallowPlay)
+	        		fileJSON['disallowPlay'] = true;
+
+	        	if (disallowBuy)
+	        		fileJSON['disallowBuy'] = true;
+
+        		alexandriaMedia["info"]["extra-info"]["files"].push(fileJSON)
+        	}
+        }
+
         if (!isBlank(poster)){
         	alexandriaMedia["info"]["extra-info"]["posterFrame"] = hashes[0].Name;
         	alexandriaMedia["info"]["extra-info"]["files"].push({
-        		"dname": "",
         		"fname": hashes[0].Name,
         		"type": "preview"
         	})
         }
-        
-        if (!isBlank(suggPricePer))
-        	alexandriaMedia["info"]["extra-info"]["files"][0]["sugPlay"] = suggPricePer; // Hardcode to first file for now as that is the main file.
 
-        if (!isBlank(minPricePer))
-        	alexandriaMedia["info"]["extra-info"]["files"][0]["minPlay"] = minPricePer;
+        if (!isBlank(extraFiles)){
+        	for (var i = 0; i < extraFiles.length; i++) {
+        		// Get Display Name from Table
+        		var displayName = $('#' + sanitizeID(extraFiles[i].name) + ' #name').val();
+        		if (displayName == extraFiles[i].name)
+        			displayName = "";
+        		// Get Type from Table
+        		var type = $('#' + sanitizeID(extraFiles[i].name) + ' #type').val();
+        		// Get prices from table
+        		var priceSelector = '#' + sanitizeID(extraFiles[i].name) + 'price';
+        		var minPlay = $(priceSelector + ' #minPlay').val();
+        		var sugPlay = $(priceSelector + ' #sugPlay').val();
+        		var minBuy = $(priceSelector + ' #minBuy').val();
+        		var sugBuy = $(priceSelector + ' #sugBuy').val();
+        		// Get checkboxes from pricing table
+        		var disallowPlay = $(priceSelector + ' #disPlay').is(':checked');
+        		var disallowBuy = $(priceSelector + ' #disBuy').is(':checked');
 
-        if (!isBlank(suggPriceBuy))
-        	alexandriaMedia["info"]["extra-info"]["files"][0]["sugBuy"] = suggPriceBuy;
+        		var fileJSON = {
+	        		"fname": extraFiles[i].name,
+	        		"type": type
+	        	}
 
-        if (!isBlank(minPriceBuy))
-        	alexandriaMedia["info"]["extra-info"]["files"][0]["minBuy"] = minPriceBuy;
+	        	// Set all optional fields
+	        	if (!isBlank(displayName))
+	        		fileJSON['dname'] = displayName
+
+	        	if (!isBlank(minPlay))
+	        		fileJSON['minPlay'] = minPlay;
+
+	        	if (!isBlank(sugPlay))
+	        		fileJSON['sugPlay'] = sugPlay;
+
+	        	if (!isBlank(minBuy))
+	        		fileJSON['minBuy'] = minBuy;
+
+	        	if (!isBlank(sugBuy))
+	        		fileJSON['sugBuy'] = sugBuy;
+
+	        	if (disallowPlay)
+	        		fileJSON['disallowPlay'] = true;
+
+	        	if (disallowBuy)
+	        		fileJSON['disallowBuy'] = true;
+
+        		alexandriaMedia["info"]["extra-info"]["files"].push(fileJSON)
+        	}
+        }
 
 
-        document.getElementById('publishWell').innerHTML += JSON.stringify(alexandriaMedia) + "<br>";
+        document.getElementById('publishWell').innerHTML += '<pre>' + JSON.stringify(alexandriaMedia, null, 4) + "</pre><br>";
 
 		LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, function(err, data){
 			if (err != null){
 				swal("Error!", "There was an error publishing your artifact: " + err, "error");
 			} else {
 				document.getElementById('publishWell').innerHTML += "Successfully published artifact! <br>";
+				window.onbeforeunload = function() {}
 				swal({
 				  title: "Success!",
 				  text: "Your artifact was published successfully! It should take around two minutes to show up on the Media Browser depending on Florincoin block times.",
@@ -333,21 +421,6 @@ function publishArtifact(){
 
 function isBlank(str) {
     return (!str || /^\s*$/.test(str));
-}
-
-function validatePricing(){
-	$('#suggestedPlay').val(parseFloat($('#suggestedPlay').val()).toFixed(3));
-	if($('#suggestedPlay').val() == "NaN")
-		$('#suggestedPlay').val("");
-	$('#minPlay').val(parseFloat($('#minPlay').val()).toFixed(3));
-	if($('#minPlay').val() == "NaN")
-		$('#minPlay').val("");
-	$('#suggestedBuy').val(parseFloat($('#suggestedBuy').val()).toFixed(3));
-	if($('#suggestedBuy').val() == "NaN")
-		$('#suggestedBuy').val("");
-	$('#minBuy').val(parseFloat($('#minBuy').val()).toFixed(3));
-	if($('#minBuy').val() == "NaN")
-		$('#minBuy').val("");
 }
 
 function formatRuntime(runtimeInt) {

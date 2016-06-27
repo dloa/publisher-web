@@ -110,11 +110,11 @@
                                         <div id="poster" class="cover-art">
                                             <p id="posterText">Preview Image</p>
                                         </div>
-                                        <input type="file" name="posterFile" id="posterFile">
+                                        <input type="file" name="posterFile" id="posterFile" accept="image/*">
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" id='bitcoinAddressField'>
                                 <div class="col-sm-12">
                                     <h3>Pricing/Payment Information</h3>
                                     <div class="form-group" id="bitcoinAddressGroup">
@@ -124,58 +124,29 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="publish-section publish-pricing">
+                            <div class="publish-section publish-pricing" id='pricing'>
                                 <div class="row">
                                     <div class="col-sm-10">
-                                        <p class="small">Pick the price for your video. You are allowed to enter up to one tenth of a cent.</p>
+                                        <p class="small">Pick the price for each file. You are allowed to enter up to one tenth of a cent.</p>
                                     </div>
                                 </div>
                                 <div class="row">
-                                   <div class="col col-sm-6">
-                                        <h5>Price to Play</h5>
-                                        <form class="form-horizontal">
-                                            <div class="form-group" style="margin-bottom: 65px" id="suggestedPricePer">
-                                                <label for="" class="col-sm-5 control-label">Suggested:</label>
-                                                <div class="col-sm-7">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">$</div>
-                                                        <input type="text" class="form-control" id="suggestedPlay" onblur="validatePricing()" placeholder="0.000">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group" id="minimumPricePer">
-                                                <label for="" class="col-sm-5 control-label">Minimum:</label>
-                                                <div class="col-sm-7">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">$</div>
-                                                        <input type="text" class="form-control" id="minPlay" onblur="validatePricing()" placeholder="0.000">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                   <div class="col col-sm-6">
-                                        <h5>Price to Purchase</h5>
-                                        <form class="form-horizontal">
-                                            <div class="form-group" id="suggestedPriceBuy">
-                                                <label for="" class="col-sm-5 control-label">Suggested:</label>
-                                                <div class="col-sm-7">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">$</div>
-                                                        <input type="text" class="form-control" id="suggestedBuy" onblur="validatePricing()" placeholder="0.000">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group" id="minimumPriceBuy">
-                                                <label for="" class="col-sm-5 control-label">Minimum:</label>
-                                                <div class="col-sm-7">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">$</div>
-                                                        <input type="text" class="form-control" id="minBuy" onblur="validatePricing()" placeholder="0.000">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
+                                    <div class="col col-lg-12">
+                                        <table class="table" id='pricingTable'>
+                                            <thead>
+                                                <tr>
+                                                    <th>File Name</th>
+                                                    <th>Suggested Play</th>
+                                                    <th>Minimum Play</th>
+                                                    <th>Suggested Buy</th>
+                                                    <th>Minimum Buy</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr></tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -185,7 +156,35 @@
                                         <object type="image/svg+xml" data="assets/svg/media-16px-2_note-03.svg"></object>
                                         Video Files
                                     </h5>
-                                    <input type="file" name="mediaFiles" id="mediaFiles" multiple></input>
+                                    <table class="table" id='mediaFilesTable'>
+                                        <colgroup>
+                                            <col class="">
+                                            <col class="">
+                                            <col style="width: 75px;">
+                                            <col style="width: 75px;">
+                                            <col style="">
+                                            <col class="width: 75px;">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>File</th>
+                                                <th>File Name</th>
+                                                <th>File Size</th>
+                                                <th>Duration</th>
+                                                <th>Display name</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="mediaTable">
+                                            <tr>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
+                                    <div class="upload-area" id="mediaDrop">
+                                        <object data="assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
+                                    </div>
+                                    <input type="file" name="mediaFiles" id="mediaFiles" multiple accept="video/*"></input>
                                 </div>
                             </div>
                            <div class="publish-section">
@@ -194,6 +193,31 @@
                                         <object type="image/svg+xml" data="assets/svg/files-16px_single-folded-content.svg"></object>
                                         Extra Files
                                     </h5>
+                                    <table class="table" id='extraTable'>
+                                        <colgroup>
+                                            <col class="">
+                                            <col class="">
+                                            <col style="width: 125px;">
+                                            <col class="">
+                                            <col class="">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>File</th>
+                                                <th>File Name</th>
+                                                <th>File Type</th>
+                                                <th>Display name</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr></tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
+                                    <div class="upload-area" id="extraDrop">
+                                        <object data="assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
+                                    </div>
                                     <input type='file' id="extraFiles" name="extraFiles" multiple />
                                 </div>
                             </div>
@@ -307,7 +331,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal" onclick="$('#previewVideo').get(0).pause();">Cancel</button>
 
                     <button type="button" class="btn btn-success pull-right" data-dismiss="modal" onclick="submitArtifact()">Submit</button>
                 </div>
@@ -396,18 +420,20 @@
                                 <div class="tab-content">
                                     <div role="tabpanel" class="tab-pane active" id="main">
                                         <h4>Identifier <code id="identifier"></code></h4>
-                                        <table class="table table-bordered" id="addressTable">
-                                            <thead>
-                                                <tr>
-                                                    <th>Address</th>
-                                                    <th style="width: 30%">Balance</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr></tr>
-                                            </tbody>
-                                        </table>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-condensed" id="addressTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Address</th>
+                                                        <th style="width: 30%">Balance</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         <button class="btn btn-default" onclick="newAddress();">New Address</button>
                                         <button class="btn btn-danger" onclick="location.reload();">Log Out</button>
                                     </div>
@@ -491,6 +517,7 @@
             </div>
         </div>
     </div>
+    <video src="" width="1" height="1" id="video_player"></video>
 </div>
 </body>
 
@@ -503,6 +530,7 @@
     <script src="js/libraryd-js.js"></script>
     <script src="js/wallet.js"></script>
     <!-- Other JS -->
+    <script src="js/dropzone.js"></script>
     <script src="js/sweet-alert.min.js"></script>
     <script src="js/date-format.js"></script>
     <script src="js/ipfs.js"></script>
@@ -510,12 +538,14 @@
     <script src="js/tradebot.js"></script>
     <script src="js/createPublisher.js"></script>
     <script src="js/publishArtifact.js"></script>
-    <script src="js/dropzone.js"></script>
 
 	<script type="text/javascript">
     $(document).ready(function () {
-        //Initialize tooltips
+        //Initialize
         $('.nav-tabs > li a[title]').tooltip();
+        $('#pricing').hide();
+        $('#mediaFilesTable').hide();
+        $('#extraTable').hide();
         
         //Wizard
         $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
