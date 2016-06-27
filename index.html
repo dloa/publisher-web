@@ -87,8 +87,8 @@
                             <div class="publish-section artifact-type">
                                 <h5>Select Artifact type</h5> 
                                 <ul class="nav nav-pills" role="tablist">
-                                    <li class="active"><a href="#music" data-toggle="tab">Music</a></li>
-                                    <li><a href="#video" data-toggle="tab">Video</a></li>
+                                    <li class="active" onclick="changeArtifactType()"><a href="#music" data-toggle="tab">Music</a></li>
+                                    <li onclick="changeArtifactType()"><a href="#video" data-toggle="tab">Video</a></li>
                                 </ul>
                             </div>
                             <div class="publish-section information tab-content" id='metainfo' style="margin-top: -50px;">
@@ -671,6 +671,12 @@
     }
 
     $('#walletModal').modal('show');
+    function changeArtifactType(){
+        // Remove all media files when artifact type is changed.
+        $('.mediaRow').each(function(){
+            $(this).find('.btn-danger').click();
+        });
+    }
     //$('#walletInfoModal').modal('show');
     //$('#tradebotModal').modal('show');
 

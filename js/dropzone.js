@@ -153,7 +153,7 @@ function ParseMedia(file) {
     }
     video.src = URL.createObjectURL(file);
     $('#mediaFilesTable tr:last').after(
-        '<tr id="' + sanitizeID(file.name) + '">' +
+        '<tr class="mediaRow" id="' + sanitizeID(file.name) + '">' +
             '<td>' + tableLength + '</td>' +
             '<td>' + file.name + '</td>' +
             '<td>' + humanFileSize(file.size, true) + '</td>' +
