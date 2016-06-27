@@ -75,34 +75,13 @@ $('#previewButton').click(function(e){
 			$(mediaType + " #artifactDistributorGroup").removeClass('has-warning');
 		}
 	}
-	// Optional: Suggested Price to Play
-	if (isBlank($('#suggestedPlay').val())){
-        $("#suggestedPricePer").addClass('has-warning');
-	} else {
-		$("#suggestedPricePer").removeClass('has-warning');
-		hasPaymentInfo = true;
-	}
-	// Optional: Minimum Price to Play
-	if (isBlank($('#minPlay').val())){
-        $("#minimumPricePer").addClass('has-warning');
-	} else {
-		$("#minimumPricePer").removeClass('has-warning');
-		hasPaymentInfo = true;
-	}
-	// Optional: Suggested Price to Purchase
-	if (isBlank($('#suggestedBuy').val())){
-        $("#suggestedPriceBuy").addClass('has-warning');
-	} else {
-		$("#suggestedPriceBuy").removeClass('has-warning');
-		hasPaymentInfo = true;
-	}
-	// Optional: Minimum Price to Purchase
-	if (isBlank($('#minBuy').val())){
-        $("#minimumPriceBuy").addClass('has-warning');
-	} else {
-		$("#minimumPriceBuy").removeClass('has-warning');
-		hasPaymentInfo = true;
-	}
+
+	// Check if there is any pricing info entered at all
+	// Optional: Pricing
+	$('.price').each(function(){
+		if (!isBlank($(this).val()))
+			hasPaymentInfo = true;
+	});
 	// Required: Bitcoin Address
 	if (hasPaymentInfo && isBlank($('#bitcoinAddressGroup input').val())){
 		swal("Error!", "You must provide a Bitcoin address", "error");

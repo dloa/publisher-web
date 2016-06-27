@@ -171,25 +171,25 @@ function AddPricingRow(file){
         '<td>' +
             '<div class="input-group">' +
                 '<div class="input-group-addon">$</div>' +
-                '<input type="text" class="form-control" id="sugPlay" onblur="validatePricing(\'' + sanitizeID(file.name) + '\')" placeholder="0.000">' +
+                '<input type="text" class="price form-control" id="sugPlay" onblur="validatePricing(\'' + sanitizeID(file.name) + '\')" placeholder="0.000">' +
             '</div>' +
         '</td>' +
         '<td>' +
             '<div class="input-group">' +
                 '<div class="input-group-addon">$</div>' +
-                '<input type="text" class="form-control" id="minPlay" onblur="validatePricing(\'' + sanitizeID(file.name) + '\')" placeholder="0.000">' +
+                '<input type="text" class="price form-control" id="minPlay" onblur="validatePricing(\'' + sanitizeID(file.name) + '\')" placeholder="0.000">' +
             '</div>' +
        '</td>' +
         '<td>' +
             '<div class="input-group">' +
                 '<div class="input-group-addon">$</div>' +
-                '<input type="text" class="form-control" id="sugBuy" onblur="validatePricing(\'' + sanitizeID(file.name) + '\')" placeholder="0.000">' +
+                '<input type="text" class="price form-control" id="sugBuy" onblur="validatePricing(\'' + sanitizeID(file.name) + '\')" placeholder="0.000">' +
             '</div>' +
         '</td>' +
         '<td>' +
             '<div class="input-group">' +
                 '<div class="input-group-addon">$</div>' +
-                '<input type="text" class="form-control" id="minBuy" onblur="validatePricing(\'' + sanitizeID(file.name) + '\')" placeholder="0.000">' +
+                '<input type="text" class="price form-control" id="minBuy" onblur="validatePricing(\'' + sanitizeID(file.name) + '\')" placeholder="0.000">' +
             '</div>' +
         '</td>' +
         '<td style="width:15%"><input type="checkbox" id="disPlay" onclick="checkboxToggle(\'' + sanitizeID(file.name) + '\', \'play\')"> Disallow Play' +
