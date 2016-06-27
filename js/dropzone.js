@@ -5,19 +5,19 @@ $("#music #posterFile").change(function(input){ changePoster(input); });
 $("#video #posterFile").change(function(input){ changePoster(input); });
 
 function changePoster(input){
-    var files = input.files ? input.files : input.currentTarget.files;
-    if (files) {
-        var reader = new FileReader();
+	var files = input.files ? input.files : input.currentTarget.files;
+	if (files) {
+		var reader = new FileReader();
 
-        var mediaType = $("#metainfo div.active").attr('id');
+		var mediaType = $("#metainfo div.active").attr('id');
 
-        reader.onload = function (e) {
-            $('#' + mediaType + ' #poster').css("background-image", "url('" + e.target.result + "')");
-            $('#' + mediaType + ' #posterText').text(' ');
-        }
+		reader.onload = function (e) {
+			$('#' + mediaType + ' #poster').css("background-image", "url('" + e.target.result + "')");
+			$('#' + mediaType + ' #posterText').text(' ');
+		}
 
-        reader.readAsDataURL(files[0]);
-    }
+		reader.readAsDataURL(files[0]);
+	}
 }
 
 // getElementById
@@ -130,9 +130,10 @@ function ParseExtra(file) {
 			'<td>' + file.name + '</td>' +
 			'<td>' +
 				'<select class="form-control" id="type">' +
-                    '<option>Artwork</option>' +
+					'<option>Artwork</option>' +
 					'<option>Music Video</option>' +
 					'<option>Zip File</option>' +
+					'<option>License Notes</option>' +
 				'</select>' +
 			'</td>' +
 			'<td><input type="text" class="form-control" id="name" value="' + file.name + '"></td>' +
@@ -153,26 +154,17 @@ function ParseMedia(file) {
 	console.log(file);
 	var tableLength = $('#mediaFilesTable tr').length-1;
 
-	// Get length if video
-	var video = document.createElement('video');
-	video.preload = 'metadata';
-	video.onloadedmetadata = function() {
-		console.log('hi');
-		window.URL.revokeObjectURL(this.src)
-		duration = video.duration;
-		console.log(duration);
-		$('#' + file.name + ' td:eq(3)').html(video.duration);
-	}
-	video.src = URL.createObjectURL(file);
 	$('#mediaFilesTable tr:last').after(
 		'<tr class="mediaRow" id="' + sanitizeID(file.name) + '">' +
 			'<td>' + tableLength + '</td>' +
 			'<td>' + file.name + '</td>' +
 			'<td>' + humanFileSize(file.size, true) + '</td>' +
-			'<td>...</td>' +
+			'<td id="duration">...</td>' +
 			'<td><input type="text" class="form-control" id="name" value="' + file.name + '"></td>' +
 			'<td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(\'' + sanitizeID(file.name) + '\')">x</button></td>' +
 		'</tr>');
+
+	calculateLength(file);
 	AddPricingRow(file);
 }
 
@@ -249,10 +241,6 @@ function removeRow(name){
 		$('#pricing').hide();
 }
 
-function sanitizeID(name){
-	return name.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/\s]/gi, '');
-}
-
 function validatePricing(id){
 	// Round to 3 digits
 	$('#' + id + 'price #sugPlay').val(parseFloat($('#' + id + 'price #sugPlay').val()).toFixed(3));
@@ -302,4 +290,25 @@ function checkboxToggle(id, checkbox){
 		if ($('#' + id + 'price #disPlay').is(':checked'))
 			$('#' + id + 'price #disPlay').prop("checked", false);
 	}
+}
+
+function calculateLength(file){
+	// Use a timeout of 0 to simulate async
+	setTimeout(function(){
+		window.URL = window.URL || window.webkitURL;
+		var video = document.createElement('video');
+		video.preload = 'metadata';
+		video.onloadedmetadata = function() {
+			window.URL.revokeObjectURL(this.src)
+			duration = video.duration;
+			console.log(duration);
+			mediaFiles[mediaFiles.indexOf(file)].duration = duration;
+			$('#' + sanitizeID(file.name) + " #duration").text(formatRuntime(duration.toFixed(0).toString()));
+		}
+		video.src = window.URL.createObjectURL(file);
+	}, 0)
+}
+
+function sanitizeID(name){
+	return name.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/\s]/gi, '');
 }
