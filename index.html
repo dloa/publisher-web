@@ -87,8 +87,8 @@
                             <div class="publish-section artifact-type">
                                 <h5>Select Artifact type</h5> 
                                 <ul class="nav nav-pills" role="tablist">
-                                    <li class="active" onclick="changeArtifactType()"><a href="#music" data-toggle="tab">Music</a></li>
-                                    <li onclick="changeArtifactType()"><a href="#video" data-toggle="tab">Video</a></li>
+                                    <li class="active" onclick="changeArtifactType('music')"><a href="#music" data-toggle="tab">Music</a></li>
+                                    <li onclick="changeArtifactType('video')"><a href="#video" data-toggle="tab">Video</a></li>
                                 </ul>
                             </div>
                             <div class="publish-section information tab-content" id='metainfo' style="margin-top: -50px;">
@@ -235,7 +235,7 @@
                                     <div class="upload-area" id="mediaDrop">
                                         <object data="assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
                                     </div>
-                                    <input type="file" name="mediaFiles" id="mediaFiles" multiple accept="video/*"></input>
+                                    <input type="file" name="mediaFiles" id="mediaFiles" multiple accept="audio/*"></input>
                                 </div>
                             </div>
                            <div class="publish-section">
@@ -671,11 +671,21 @@
     }
 
     $('#walletModal').modal('show');
-    function changeArtifactType(){
+    function changeArtifactType(mediaType){
         // Remove all media files when artifact type is changed.
         $('.mediaRow').each(function(){
             $(this).find('.btn-danger').click();
         });
+        // Change supported files to be uploaded
+        // Get type in order to validate files
+        if (mediaType == 'music')
+            mediaType = 'audio';
+
+        mediaType += '/*';
+
+        console.log(mediaType);
+
+        $('#mediaFiles').attr('accept', mediaType);
     }
     //$('#walletInfoModal').modal('show');
     //$('#tradebotModal').modal('show');
