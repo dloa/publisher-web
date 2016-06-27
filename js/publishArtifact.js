@@ -33,7 +33,35 @@ $('#previewButton').click(function(e){
 		$(mediaType + " #artifactDescriptionGroup").removeClass('has-error');
 	}
 
-	if (mediaType == 'video'){
+	// Validate optional items for music metadata
+	if (mediaType == '#music'){
+		// Optional: Artist Name
+		if (isBlank($(mediaType + ' #artistName').val())){
+	        $(mediaType + " #artifactArtistGroup").addClass('has-warning');
+		} else {
+			$(mediaType + " #artifactArtistGroup").removeClass('has-warning');
+		}
+		// Optional: Genere
+		if (isBlank($(mediaType + ' #genere').val())){
+	        $(mediaType + " #artifactGenereGroup").addClass('has-warning');
+		} else {
+			$(mediaType + " #artifactGenereGroup").removeClass('has-warning');
+		}
+		// Optional: Tags
+		if (isBlank($(mediaType + ' #tags').val())){
+	        $(mediaType + " #artifactTagsGroup").addClass('has-warning');
+		} else {
+			$(mediaType + " #artifactTagsGroup").removeClass('has-warning');
+		}
+		// Optional: Record Label
+		if (isBlank($(mediaType + ' #recordLabel').val())){
+	        $(mediaType + " #artifactRecordLabelGroup").addClass('has-warning');
+		} else {
+			$(mediaType + " #artifactRecordLabelGroup").removeClass('has-warning');
+		}
+	}
+	// Validate optional items for video metadata
+	if (mediaType == '#video'){
 		// Optional: Director Name
 		if (isBlank($(mediaType + ' #directorName').val())){
 	        $(mediaType + " #artifactDirectorGroup").addClass('has-warning');
