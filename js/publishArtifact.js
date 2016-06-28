@@ -17,7 +17,7 @@ $('#previewButton').click(function(e){
 		$(mediaType + " #artifactTitleGroup").removeClass('has-error');
 	}
 	// Required: Date
-	if (isBlank($(mediaType + ' #releaseDate').val()) || isNaN(parseInt($('#releaseDate').val())) || parseInt($('#releaseDate').val()) <= 0){
+	if (isBlank($(mediaType + ' #releaseDate').val()) || isNaN(parseInt($(mediaType + ' #releaseDate').val())) || parseInt($(mediaType + ' #releaseDate').val()) <= 0){
 		swal("Error!", "You must provide a release year", "error");
 		$(mediaType + " #artifactDateGroup").addClass('has-error');
 		return;
