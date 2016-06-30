@@ -186,7 +186,8 @@ function addFilesToIPFS(files, count, callback){
 }
 
 function publishArtifact(){
-	var poster = document.getElementById("posterFile").files;
+	var mediaType = "#" + $("#metainfo div.active").attr('id');
+	var poster = $(mediaType + " #posterFile").prop('files');
 	// mediaFiles and extraFiles are defined in dropzone.js
 
 	// count will store the current readable index, total the total amount of files.
