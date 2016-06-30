@@ -373,12 +373,14 @@ function publishArtifact(){
 
 		if (!isBlank(poster)){
 			var type = 'preview'
-			if (mediaType == '#music')
+			if (mediaType == '#music'){
 				type = 'coverArt';
-			else if (mediaType == '#video')
+				alexandriaMedia["info"]["extra-info"]["coverArt"] = hashes[0].Name;
+			} else if (mediaType == '#video'){
 				type = 'preview'
+				alexandriaMedia["info"]["extra-info"]["posterFrame"] = hashes[0].Name;
+			}
 
-			alexandriaMedia["info"]["extra-info"]["posterFrame"] = hashes[0].Name;
 			alexandriaMedia["info"]["extra-info"]["files"].push({
 				"dname": 'Cover Art',
 				"fname": hashes[0].Name,
