@@ -255,9 +255,9 @@ function publishArtifact(){
 		var year = parseInt($(mediaType + ' #releaseDate').val());
 		var bitcoinAddress = $('#bitcoinAddress').val();
 
-		var videoHashIndex = 0;
-		if (!isBlank($('#posterFile').val()))
-			videoHashIndex = 1;
+		var mainHashIndex = 0;
+		if (!isBlank($(mediaType + ' #posterFile').val()))
+			mainHashIndex = 1;
 
 		var alexandriaMedia = {
 			"torrent": hashes[hashes.length-1].Hash,
@@ -276,7 +276,7 @@ function publishArtifact(){
 				"year": year,
 				"extra-info": {
 					"DHT Hash": hashes[hashes.length-1].Hash,
-					"filename": hashes[videoHashIndex].Name,
+					"filename": hashes[mainHashIndex].Name,
 					//"runtime": duration.toFixed(0),
 					"files": []
 				}
