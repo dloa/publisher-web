@@ -129,11 +129,9 @@ LibraryDJS.sendToBlockChain = function (wallet, txComment, address, amount, call
 	// change returns to sender currently
 
 	// over sized?
-	if (txComment.length > (CHOP_MAX_LEN * 10))
+	if (txComment.length > (CHOP_MAX_LEN * 10)) {
 		callback("txComment is too large to fit within 10 multipart transactions. try making it smaller!");
-
-
-	if (txComment.length > TXCOMMENT_MAX_LEN) {
+	} else 	if (txComment.length > TXCOMMENT_MAX_LEN) {
 		LibraryDJS.multiPart(wallet, txComment, address, amount, callback);
 	}
 	else {
