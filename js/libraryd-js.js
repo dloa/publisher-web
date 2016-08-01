@@ -145,54 +145,60 @@ LibraryDJS.sendToBlockChain = function (wallet, txComment, address, amount, call
 
 // callback is (errorString, txIDs Array)
 LibraryDJS.multiPart = function (wallet, txComment, address, amount, callback) {
-	var txIDs = [];
+    var txIDs = [];
 
-	var multiPartPrefix = "alexandria-media-multipart(";
+    var multiPartPrefix = "alexandria-media-multipart(";
 
-	var chop = LibraryDJS.chopString(txComment);
+    var chop = LibraryDJS.chopString(txComment);
 
-	var part = 0;
-	var max = chop.length - 1;
+    var part = 0;
+    var max = chop.length - 1;
 
-	// the first reference tx id is always 64 zeros
-	var reference = new Array(65).join("0");
+    // the first reference tx id is always 64 zeros
+    var reference = new Array(65).join("0");
 
-	var data = chop[part];
-	var preImage = part.toString() + "-" + max.toString() + "-" + address + "-" + reference + "-" + data;
+    var data = chop[part];
+    var preImage = part.toString() + "-" + max.toString() + "-" + address + "-" + reference + "-" + data;
 
-	var signature = wallet.signMessage(address, preImage);
+    var signature = wallet.signMessage(address, preImage);
 
-	var multiPart = multiPartPrefix + part.toString() + "," + max.toString() +
-		"," + address + "," + reference + "," + signature + "," + "):" + data;
+    var multiPart = multiPartPrefix + part.toString() + "," + max.toString() +
+        "," + address + "," + reference + "," + signature + "," + "):" + data;
 
-	wallet.sendCoins(address, address, amount, multiPart, function (err, data) {
-		txIDs[txIDs.length] = data.txid;
-		reference = data.txid;
+    wallet.sendCoins(address, address, amount, multiPart, function (err, data) {
+        txIDs[txIDs.length] = data.txid;
+        reference = data.txid;
 
-		var count = 0;
-		for (var i = 1; i <= max; ++i) {
-			part = i;
-			data = chop[part];
-			preImage = part.toString() + "-" + max.toString() + "-" + address + "-" + reference + "-" + data;
-			signature = wallet.signMessage(address, preImage);
-
-			multiPart = multiPartPrefix + part.toString() + "," + max.toString() +
-				"," + address + "," + reference + "," + signature + "," + "):" + data;
-
-			(function (i, address, amount, multiPart) {
-				setTimeout(function () {
-					wallet.sendCoins(address, address, amount, multiPart, function (err, data) {
-						txIDs[txIDs.length] = data.txid;
-						++count;
-						if (count == max) {
-							callback(null, txIDs);
-						}
-					});
-				}, i * 1000);
-			})(i, address, amount, multiPart);
-		}
-	});
+        publishPart(chop, max, 0, reference, address, amount, multiPartPrefix, function(txids){
+        	console.log("Completed publishing parts! Here ya go.")
+        	callback(null, txids);
+        })
+    });
 };
+
+var txIDs = [];
+// Callback contains txIDs
+function publishPart(chopPieces, numberOfPieces, lastPiecesCompleted, reference, address, amount, multiPartPrefix, callback){
+    var part = lastPiecesCompleted + 1;
+
+    var data = chopPieces[part];
+    var preImage = part.toString() + "-" + numberOfPieces.toString() + "-" + address + "-" + reference + "-" + data;
+
+    var signature = wallet.signMessage(address, preImage);
+
+    var multiPart = multiPartPrefix + part.toString() + "," + numberOfPieces.toString() +
+        "," + address + "," + reference + "," + signature + "," + "):" + data;
+
+    wallet.sendCoins(address, address, amount, multiPart, function (err, data) {
+    	txIDs[txIDs.length] = data.txid;
+
+    	if (part < numberOfPieces){
+        	publishPart(chopPieces, numberOfPieces, part, reference, address, amount, multiPartPrefix, callback);
+    	} else {
+    		callback(txIDs);
+    	}
+    });
+}
 
 LibraryDJS.chopString = function (input) {
 	input = input.toString();
