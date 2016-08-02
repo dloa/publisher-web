@@ -1,4 +1,4 @@
-ipfs.setProvider({host: 'ipfs.alexandria.io', port: '443', protocol: 'https'});
+ipfs.setProvider({host: '192.99.6.117', port: '5001', protocol: 'http'});
 
 // Set up here so that it is accessable in other methods.
 var duration = 0;
@@ -188,6 +188,7 @@ function addFilesToIPFS(files, count, callback){
 		if (evt.lengthComputable){
 			var progress = Math.ceil(((evt.loaded) / evt.total) * 100);
 			$('#progressBar').css('width', progress + '%');
+			$('#progressBar').html(progress + '%');
 		}
 	});
 }
@@ -215,12 +216,17 @@ function publishArtifact(){
 		document.getElementById('publishWell').innerHTML += "[IPFS] Adding " + count + " files to IPFS...</br>";
   		addFilesToIPFS(file, index, function(hash, callIndex){ 
   			var hashes = "";
+  			var hashArray = [];
   			for (var i = 0; i < hash.length-1; i++) {
-  				hashes += "\"" + hash[i].Name + "\", ";
+  				// Build the new hashes
+  				if (hash[i].Hash){
+  					hashes += "\"" + hash[i].Name + "\", ";
+  					hashArray.push(hash[i]);
+  				}
   			}
   			document.getElementById('publishWell').innerHTML += "[IPFS] Files added to IPFS: " + hashes + "</br>";
 
-  			allFilesAddedToIPFS(hash);
+  			allFilesAddedToIPFS(hashArray);
 		});
 	}
 

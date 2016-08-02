@@ -32,7 +32,7 @@
 	<script src="js/ipfs.js"></script>
 
 	<script type="text/javascript">
-	ipfs.setProvider({host: 'ipfs.alexandria.io', port: '443', protocol: 'https'});
+	ipfs.setProvider({host: '192.99.6.117', port: '5001', protocol: 'http'});
 	function testUpload(){
 		ipfs.add($('#file').prop('files')[0], function(err, hash){
 			console.log('callback');
