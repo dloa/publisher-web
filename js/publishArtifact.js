@@ -226,7 +226,7 @@ function publishArtifact(){
   			}
   			document.getElementById('publishWell').innerHTML += "[IPFS] Files added to IPFS: " + hashes + "</br>";
 
-  			allFilesAddedToIPFS(hashArray);
+  			allFilesAddedToIPFS(hash);
 		});
 	}
 
