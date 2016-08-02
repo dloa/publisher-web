@@ -1,4 +1,4 @@
-ipfs.setProvider({host: '163.172.10.4', port: '5001', protocol: 'http'});
+ipfs.setProvider({host: '192.99.6.117', port: '5001', protocol: 'http'});
 
 // Set up here so that it is accessable in other methods.
 var duration = 0;
