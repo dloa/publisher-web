@@ -175,6 +175,7 @@ function addFilesToIPFS(files, count, callback){
 
 	// Since we are not null, add the files to IPFS
 	ipfs.add(files, function (err, hash) {
+		console.log('callback');
 		if (err || !hash){
 			callback("ERROR: " + err, count);
 			return;
@@ -182,6 +183,12 @@ function addFilesToIPFS(files, count, callback){
 		console.log(hash);
 		callback(hash, count);
 		return;
+	}, function(evt){
+		// Progress function
+		if (evt.lengthComputable){
+			var progress = Math.ceil(((evt.loaded) / evt.total) * 100);
+			$('#progressBar').css('width', progress + '%');
+		}
 	});
 }
 
