@@ -90,7 +90,7 @@ function FileSelectHandler(e) {
 
 	// process all File objects
 	for (var i = 0, f; f = files[i]; i++) {
-		if (e.srcElement.id == "mediaDrop" || e.srcElement.id == "mediaFiles"){
+		if (e.target.id == "mediaDrop" || e.target.id == "mediaFiles"){
 			if (f.type.indexOf(mediaType) > -1)
 				ParseMedia(f);
 			else
