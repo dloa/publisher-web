@@ -15,6 +15,15 @@ function loginToWallet() {
 			// Load wallet into page
 			loadAddresses();
 			refreshWalletInfo();
+			// Check if we should remember this.
+			if ($('#login-remember').prop("checked")){
+				if (typeof(Storage) !== "undefined") {
+				    localStorage.setItem("identifier", $('#loginWalletIdentifier').val());
+				    localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt($('#loginWalletPassword').val(), $('#loginWalletIdentifier').val()));
+				} else {
+				    Console.log('No Support for storing locally.')
+				}
+			}
 			// Dismiss modal then open success.
 			$('#walletModal').modal('hide');
 			swal("Success!", "Successfully logged into wallet!", "success");
@@ -122,4 +131,14 @@ function newAddress(){
 	wallet.generateAddress();
 	wallet.store();
 	refreshWalletInfo();
+}
+
+if (typeof(Storage) !== "undefined") {
+	if (localStorage.getItem("identifier") != ''){
+		$("#loginWalletIdentifier").val(localStorage.getItem("identifier"));
+		$("#loginWalletPassword").val(CryptoJS.AES.decrypt(localStorage.getItem("loginWalletEnc"), localStorage.getItem("identifier")).toString(CryptoJS.enc.Utf8));
+		loginToWallet();
+	}
+} else {
+    Console.log('No Support for storing locally.')
 }

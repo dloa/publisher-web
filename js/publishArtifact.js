@@ -175,6 +175,7 @@ function addFilesToIPFS(files, count, callback){
 
 	// Since we are not null, add the files to IPFS
 	ipfs.add(files, function (err, hash) {
+		console.log('callback');
 		if (err || !hash){
 			callback("ERROR: " + err, count);
 			return;
@@ -182,6 +183,13 @@ function addFilesToIPFS(files, count, callback){
 		console.log(hash);
 		callback(hash, count);
 		return;
+	}, function(evt){
+		// Progress function
+		if (evt.lengthComputable){
+			var progress = Math.ceil(((evt.loaded) / evt.total) * 100);
+			$('#progressBar').css('width', progress + '%');
+			$('#progressBar').html(progress + '%');
+		}
 	});
 }
 
@@ -208,8 +216,13 @@ function publishArtifact(){
 		document.getElementById('publishWell').innerHTML += "[IPFS] Adding " + count + " files to IPFS...</br>";
   		addFilesToIPFS(file, index, function(hash, callIndex){ 
   			var hashes = "";
+  			var hashArray = [];
   			for (var i = 0; i < hash.length-1; i++) {
-  				hashes += "\"" + hash[i].Name + "\", ";
+  				// Build the new hashes
+  				if (hash[i].Hash){
+  					hashes += "\"" + hash[i].Name + "\", ";
+  					hashArray.push(hash[i]);
+  				}
   			}
   			document.getElementById('publishWell').innerHTML += "[IPFS] Files added to IPFS: " + hashes + "</br>";
 
