@@ -15,9 +15,10 @@
 	<div class="container">
 	<div class="row">
 		<section>
-		<div style="margin-top:50px;">
+		<div>
+			<button type="button" class="btn btn-danger pull-right" onclick="signout();">Sign Out</button>
 		</div>
-		<div class="wizard">
+		<div style="padding-top:10px;" class="wizard">
 			<div class="wizard-inner">
 				<div class="connecting-line"></div>
 				<ul class="nav nav-tabs" role="tablist">
@@ -693,6 +694,11 @@
 		$('#mediaFiles').attr('accept', mediaType);
 	}
 
-    //continueToArtifact();
+	function next(){
+		var $active = $('.wizard .nav-tabs li.active');
+		$active.next().removeClass('disabled');
+		nextTab($active);
+	}
+
     $('#walletModal').modal('show');
 	</script>

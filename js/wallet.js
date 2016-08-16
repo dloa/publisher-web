@@ -133,6 +133,12 @@ function newAddress(){
 	refreshWalletInfo();
 }
 
+function signout(){
+	localStorage.setItem("identifier", '');
+	localStorage.setItem("loginWalletEnc", '');
+	location.reload();
+}
+
 if (typeof(Storage) !== "undefined") {
 	if (localStorage.getItem("identifier") != ''){
 		$("#loginWalletIdentifier").val(localStorage.getItem("identifier"));
