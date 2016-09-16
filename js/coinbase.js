@@ -4,6 +4,8 @@ var buyWidgetSettings = {
 	crypto_currency: 'BTC',
 	state: 123
 }
+// Default create the coinbase modal
+createCoinbaseModal('', 0);
 
 // Recieve message if purchase failed or succeeded. 
 function receiveMessage(event) {
@@ -13,10 +15,8 @@ function receiveMessage(event) {
 	console.log(event.data);
 }
 function fillCoinbaseBuyWidget(bitcoinAddress, amount){
-	console.log(bitcoinAddress);
-	$('#coinbase_button').attr('data-address', bitcoinAddress);
-	$('#coinbase_button').attr('data-amount', 123);
-	console.log($('#coinbase_widget'));
+	if (document.getElementById("coinbase_widget") == null)
+		updateCoinbaseModal(bitcoinAddress, amount);
 }
 function testDomain(){
 	if(location.hostname != "alexandria.io" && location.hostname != "localhost:5757"){

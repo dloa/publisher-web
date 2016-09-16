@@ -144,7 +144,7 @@ function updateQR(){
 	qrcode.makeCode(qrstring);
 
 	// Fill in coinbase buy widget attributes
-	fillCoinbaseBuyWidget(btcAddress, btc);
+	fillCoinbaseBuyWidget(btcAddress, usd);
 }
 
 function getMarketData(callback){
