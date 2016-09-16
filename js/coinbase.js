@@ -19,8 +19,9 @@ function fillCoinbaseBuyWidget(bitcoinAddress, amount){
 		updateCoinbaseModal(bitcoinAddress, amount);
 }
 function testDomain(){
-	if(location.hostname != "alexandria.io" && location.hostname != "localhost:5757"){
-		$('#coinbase_button_iframe').hide();
+	if(window.location.hostname != "alexandria.io" && location.hostname != "localhost"){
+		$('#coinbase_button_iframe').remove();
+		$('#coinbase_widget').remove();
 	}
 }
 
