@@ -25,6 +25,8 @@ function testDomain(){
 	}
 }
 
+// Code taken from: https://buy.coinbase.com/static/widget.js
+// Needs comments, just a base function pulled directly out of their application with a few modifications to make it work in a function.
 function createCoinbaseModal(bitcoinAddress, amount) {
 	var a = function i(){
 		var n = document.getElementById("coinbase_widget");
@@ -75,8 +77,12 @@ function createCoinbaseModal(bitcoinAddress, amount) {
 }
 
 function updateCoinbaseModal(bitcoinAddress, amount){
+	// Remove the old modal
 	$('#coinbase_modal_iframe').remove();
+	// Create a new modal
 	var e = document.createElement("div");
+	// Fill in all the modal HTML
 	e.innerHTML = "<iframe src='https://buy.coinbase.com?address=" + encodeURIComponent(bitcoinAddress) + ("&amount=" + encodeURIComponent(amount)) + ("&code=" + encodeURIComponent(buyWidgetSettings.code)) + ("&currency=" + encodeURIComponent(buyWidgetSettings.currency)) + ("&crypto_currency=" + encodeURIComponent(buyWidgetSettings.crypto_currency)) + ("&state=" + encodeURIComponent(buyWidgetSettings.state)) + "'\n                    id='coinbase_modal_iframe'\n                    name='coinbase_modal_iframe'\n                    style='" + "\n      transition: all 0.3s ease-out;\n      background-color: transparent;\n      border: 0px none transparent;\n      display: none;\n      position: fixed;\n      visibility: visible;\n      margin: 0px;\n      padding: 0px;\n      left: 0px;\n      top: 0px;\n      width: 100%;\n      height: 100%;\n      z-index: 9999;\n    " + "'\n                    scrolling='no'\n                    allowtransparency='true' frameborder='0'>\n      </iframe>";
+	// Add the modal to the end of the page. We do not include the div by using "e.firstChild"
 	document.body.appendChild(e.firstChild);
 }
