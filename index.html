@@ -549,7 +549,7 @@
 									<a class="coinbase-widget"
 										id="coinbase_widget"
 										data-address="15ML3J4PwyLuHBmVwuGKX1SVnaP2oZc1vg"
-										data-amount="0.00016263"
+										data-amount="1"
 										data-code="169c6c3a-d404-55f4-82f4-24cd25f5c5f6"
 										data-currency="USD"
 										data-crypto_currency="BTC"
@@ -604,32 +604,9 @@
 
 	<!-- Coinbase JS -->
 	<script type='text/javascript' id='coinbase_widget_loader' class='coinbase-widget-async-loader'>
-	document.currentScript.src ='';
-	(function() {
-		function asyncLoad() {
-			var s = document.createElement('script');
-			s.type = 'text/javascript';
-			s.async = true;
-			var theUrl = "https://buy.coinbase.com/static/widget.js";
-			s.src = theUrl+ (theUrl.indexOf("?") >= 0 ? '&' : '?') + 'ref=' + encodeURIComponent(window.location.href);
-			var embedder = document.getElementById('coinbase_widget_loader');
-			embedder.parentNode.insertBefore(s, embedder);
-		}
-		if (window.attachEvent) {
-			window.attachEvent('onload', asyncLoad);
-		} else {
-		window.addEventListener('load', asyncLoad, false);
-		}
-	})();
-
-	// Recieve message if purchase failed or succeeded. 
-	function receiveMessage(event) {
-		// Only trust Coinbase with messages
-		if (event.origin !== "https://buy.coinbase.com")
-			return;
-		console.log(event.data);
-	}
+	
 	</script>
+	<script src="js/coinbase.js"></script>
 
 	<!-- Visual JS -->
 	<script type="text/javascript">
@@ -735,6 +712,9 @@
 		$active.next().removeClass('disabled');
 		nextTab($active);
 	}
+
+	// Hide the coinbase buy button if not on alexandria.io as it will not work
+	testDomain();
 
     $('#walletModal').modal('show');
 	</script>
