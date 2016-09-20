@@ -151,13 +151,13 @@ function getMarketData(callback){
 }
 
 function getTradeBotBitcoinAddress(floaddress, callback){
-	$.get("http://tradebot.alexandria.io/depositaddress?floaddress=" + floaddress + "&raw", function(data){
+	$.get("https://api.alexandria.io/tradebot/depositaddress?floaddress=" + floaddress + "&raw", function(data){
 		callback(data);
 	})
 }
 
 function getTradeBotBalance(callback){
-	$.get("http://tradebot.alexandria.io/flobalance", function(data){
+	$.get("https://api.alexandria.io/tradebot/flobalance", function(data){
 		callback(data);
 	})
 }
