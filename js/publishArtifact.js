@@ -1,4 +1,4 @@
-ipfs.setProvider({host: '192.99.6.117', port: '5001', protocol: 'http'});
+ipfs.setProvider({host: 'ipfs.alexandria.io', port: '443', protocol: 'https'});
 
 // Set up here so that it is accessable in other methods.
 var duration = 0;
