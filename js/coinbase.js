@@ -9,10 +9,11 @@ createCoinbaseModal('', 0);
 
 // Recieve message if purchase failed or succeeded. 
 function receiveMessage(event) {
+	console.log("Recieved Event:" + event);
 	// Only trust Coinbase with messages
 	if (event.origin !== "https://buy.coinbase.com")
 		return;
-	console.log(event.data);
+	console.log("Coinbase Response:" + event.data);
 }
 function fillCoinbaseBuyWidget(bitcoinAddress, amount){
 	if (document.getElementById("coinbase_widget") == null)
