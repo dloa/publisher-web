@@ -1,25 +1,6 @@
 var mediaFiles = [];
 var extraFiles = [];
 
-$("#music #posterFile").change(function(input){ changePoster(input); });
-$("#video #posterFile").change(function(input){ changePoster(input); });
-
-function changePoster(input){
-	var files = input.files ? input.files : input.currentTarget.files;
-	if (files) {
-		var reader = new FileReader();
-
-		var mediaType = $("#metainfo div.active").attr('id');
-
-		reader.onload = function (e) {
-			$('#' + mediaType + ' #poster').css("background-image", "url('" + e.target.result + "')");
-			$('#' + mediaType + ' #posterText').text(' ');
-		}
-
-		reader.readAsDataURL(files[0]);
-	}
-}
-
 // getElementById
 function $id(id) {
 	return document.getElementById(id);
@@ -40,12 +21,18 @@ if (window.File && window.FileList && window.FileReader) {
 function Init() {
 
 	var mediaselect = $id("mediaFiles"),
+		musicposterselect = $id("musicPosterFile"),
+		videoposterselect = $id("videoPosterFile"),
 		extraselect = $id("extraFiles"),
 		mediadrag = $id("mediaDrop"),
+		musicposterdrag = $id("musicPoster"),
+		videoposterdrag = $id("videoPoster"),
 		extradrag = $id("extraDrop");
 
 	// file select
 	mediaselect.addEventListener("change", FileSelectHandler, false);
+	musicposterselect.addEventListener("change", FileSelectHandler, false);
+	videoposterselect.addEventListener("change", FileSelectHandler, false);
 	extraselect.addEventListener("change", FileSelectHandler, false);
 
 	// is XHR2 available?
@@ -58,6 +45,18 @@ function Init() {
 		mediadrag.addEventListener("drop", FileSelectHandler, false);
 		mediadrag.style.display = "block";
 
+		// music poster drop
+		musicposterdrag.addEventListener("dragover", FileDragHover, false);
+		musicposterdrag.addEventListener("dragleave", FileDragHover, false);
+		musicposterdrag.addEventListener("drop", FileSelectHandler, false);
+		musicposterdrag.style.display = "block";
+
+		// video poster drop
+		videoposterdrag.addEventListener("dragover", FileDragHover, false);
+		videoposterdrag.addEventListener("dragleave", FileDragHover, false);
+		videoposterdrag.addEventListener("drop", FileSelectHandler, false);
+		videoposterdrag.style.display = "block";
+
 		// extra drop
 		extradrag.addEventListener("dragover", FileDragHover, false);
 		extradrag.addEventListener("dragleave", FileDragHover, false);
@@ -68,6 +67,8 @@ function Init() {
 		//fileselect.style.height = 0;
 		//fileselect.style.width = 0;
 		//$('#mediaFiles').trigger('click');
+	} else {
+		console.log('XHR2 Unsupported! Unable to function.');
 	}
 
 }
@@ -95,9 +96,11 @@ function FileSelectHandler(e) {
 				ParseMedia(f);
 			else
 				swal('Error', 'You can only select ' + mediaType + ' files.', 'error');
-		}
-		else
+		} else if (e.target.id == "extraDrop" || e.target.id == "extraFiles"){
 			ParseExtra(f);
+		} else if (e.target.id.includes('Poster')){
+			ParsePoster(f);
+		}
 	}
 
 }
@@ -111,6 +114,27 @@ function FileDragHover(e) {
 		e.target.className = (e.type == "dragover" ? "upload-area hover" : "upload-area");
 	else if (e.target.id == 'extraDrop')
 		e.target.className = (e.type == "dragover" ? "upload-area hover" : "upload-area");
+	else if (e.target.id == 'musicPoster'){
+		e.target.className = (e.type == "dragover" ? "cover-art-square hover" : "cover-art-square");
+		console.log(e.target.className);
+	} else if (e.target.id == 'videoPoster'){
+		e.target.className = (e.type == "dragover" ? "cover-art hover" : "cover-art");
+		console.log(e.target.className);
+	}
+}
+
+function ParsePoster(file){
+	if (file) {
+		var reader = new FileReader();
+
+		var mediaType = $("#metainfo div.active").attr('id');
+
+		reader.onload = function (e) {
+			$('#' + mediaType + 'Poster').css("background-image", "url('" + e.target.result + "')");
+		}
+
+		reader.readAsDataURL(file);
+	}
 }
 
 function ParseExtra(file) {
@@ -140,7 +164,6 @@ function ParseExtra(file) {
 			'<td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(\'' + sanitizeID(file.name) + '\')">x</button></td>' +
 	   '</tr>');
 	AddPricingRow(file);
-	
 }
 
 function ParseMedia(file) {

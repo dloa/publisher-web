@@ -1,4 +1,4 @@
-ipfs.setProvider({host: '192.99.6.117', port: '5001', protocol: 'http'});
+ipfs.setProvider({host: 'ipfs.alexandria.io', port: '443', protocol: 'https'});
 
 // Set up here so that it is accessable in other methods.
 var duration = 0;
@@ -115,7 +115,7 @@ $('#previewButton').click(function(e){
 		reader.onload = function (e) {
 		  $('#previewVideo').attr('poster', e.target.result);
 		};
-		reader.readAsDataURL($(mediaType + ' #posterFile').prop('files')[0]);
+		reader.readAsDataURL($(mediaType + 'PosterFile').prop('files')[0]);
 	} catch(e) { }
 	// Get and set runtime
 	window.URL = window.URL || window.webkitURL;
@@ -195,7 +195,8 @@ function addFilesToIPFS(files, count, callback){
 
 function publishArtifact(){
 	var mediaType = "#" + $("#metainfo div.active").attr('id');
-	var poster = $(mediaType + " #posterFile").prop('files');
+	var poster = $(mediaType + "PosterFile").prop('files');
+
 	// mediaFiles and extraFiles are defined in dropzone.js
 
 	// count will store the current readable index, total the total amount of files.
@@ -269,7 +270,8 @@ function publishArtifact(){
 		var bitcoinAddress = $('#bitcoinAddress').val();
 
 		var mainHashIndex = 0;
-		if (!isBlank($(mediaType + ' #posterFile').val()))
+
+		if (!isBlank($(mediaType + 'PosterFile').val()))
 			mainHashIndex = 1;
 
 		var alexandriaMedia = {
@@ -301,7 +303,7 @@ function publishArtifact(){
 			alexandriaMedia["info"]["extra-info"]["Bitcoin Address"] = bitcoinAddress;
 
 		// Optional Fields
-		var poster = $(mediaType + ' #posterFile').val();
+		var poster = $(mediaType + 'PosterFile').val();
 
 		// Metadata per artifact type
 		if (mediaType == '#music'){

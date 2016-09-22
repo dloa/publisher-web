@@ -15,9 +15,10 @@
 	<div class="container">
 	<div class="row">
 		<section>
-		<div style="margin-top:50px;">
+		<div>
+			<button type="button" class="btn btn-danger pull-right" onclick="signout();">Sign Out</button>
 		</div>
-		<div class="wizard">
+		<div style="padding-top:10px;" class="wizard">
 			<div class="wizard-inner">
 				<div class="connecting-line"></div>
 				<ul class="nav nav-tabs" role="tablist">
@@ -128,10 +129,9 @@
 										</div>
 										<div class="col-sm-4">
 											<h5>Cover Art</h5>
-											<div class="cover-art-square" id='poster'>
-												<p id="posterText">Cover art</p>
+											<div class="cover-art-square" id='musicPoster'>
 											</div>
-											<input type="file" name="posterFile" id="posterFile" accept="image/*">
+											<input type="file" name="musicPosterFile" id="musicPosterFile" accept="image/*">
 										</div>
 									</div>
 								</div>
@@ -157,10 +157,9 @@
 										</div>
 										<div class="col-sm-4">
 											<h5>Preview Image</h5>
-											<div id="poster" class="cover-art">
-												<p id="posterText">Preview Image</p>
+											<div id="videoPoster" class="cover-art">
 											</div>
-											<input type="file" name="posterFile" id="posterFile" accept="image/*">
+											<input type="file" name="videoPosterFile" id="videoPosterFile" accept="image/*">
 										</div>
 									</div>
 								</div>
@@ -547,6 +546,7 @@
 										</div>
 									  </div>
 									</form>
+									<a class="coinbase-widget" id="coinbase_widget" href="">Buy FLO with Debit/Credit</a>
 								</center>
 							</div>
 							<div class="col-md-6" id="tradebotPending" style="opacity: 0; display: none;">
@@ -595,6 +595,10 @@
 	<script src="js/createPublisher.js"></script>
 	<script src="js/publishArtifact.js"></script>
 
+	<!-- Coinbase JS -->
+	<script src="js/coinbase.js"></script>
+
+	<!-- Visual JS -->
 	<script type="text/javascript">
 	$(document).ready(function () {
 		//Initialize
@@ -693,6 +697,14 @@
 		$('#mediaFiles').attr('accept', mediaType);
 	}
 
-    //continueToArtifact();
+	function next(){
+		var $active = $('.wizard .nav-tabs li.active');
+		$active.next().removeClass('disabled');
+		nextTab($active);
+	}
+
+	// Hide the coinbase buy button if not on alexandria.io as it will not work
+	testDomain();
+
     $('#walletModal').modal('show');
 	</script>

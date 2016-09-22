@@ -548,6 +548,22 @@ td.unpin {
   background-repeat: no-repeat;
 }
 
+.publish .cover-art:hover {
+  padding: 10px;
+  margin: 5px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.025);
+  transition: all 0.1s; 
+}
+
+.publish .cover-art.hover {
+  padding: 10px;
+  margin: 5px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.025);
+  transition: all 0.1s; 
+}
+
 .publish .cover-art p {
   text-align: center;
   vertical-align: middle;
@@ -566,6 +582,22 @@ td.unpin {
   transition: all 0.1s;
   background-size: 250px 250px;
   background-repeat: no-repeat;
+}
+
+.publish .cover-art-square:hover {
+  padding: 10px;
+  margin: 5px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.025);
+  transition: all 0.1s; 
+}
+
+.publish .cover-art-square.hover {
+  padding: 10px;
+  margin: 5px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.025);
+  transition: all 0.1s; 
 }
 
 .publish .cover-art-square p {
@@ -653,7 +685,7 @@ td.unpin {
   background-color: rgba(0, 0, 0, 0.025);
   transition: all 0.1s; }
 
-  .publish .upload-area.hover {
+.publish .upload-area.hover {
   padding: 10px;
   margin: -5px;
   border: 1px dashed rgba(0, 0, 0, 0.1);
