@@ -28,6 +28,9 @@ function testDomain(){
 // Code taken from: https://buy.coinbase.com/static/widget.js
 // Needs comments, just a base function pulled directly out of their application with a few modifications to make it work in a function.
 function createCoinbaseModal(bitcoinAddress, amount) {
+	// Coinbase enforces a minimum $1 transaction
+	if (amount < 1)
+		amount = 1;
 	var a = function i(){
 		var n = document.getElementById("coinbase_widget");
 		console.log(n);
@@ -77,6 +80,9 @@ function createCoinbaseModal(bitcoinAddress, amount) {
 }
 
 function updateCoinbaseModal(bitcoinAddress, amount){
+	// Coinbase enforces a minimum $1 transaction
+	if (amount < 1)
+		amount = 1;
 	// Remove the old modal
 	$('#coinbase_modal_iframe').remove();
 	// Create a new modal
