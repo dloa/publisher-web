@@ -546,6 +546,7 @@ td.unpin {
   transition: all 0.1s;
   background-size: 250px 150px;
   background-repeat: no-repeat;
+  display: block;
 }
 
 .publish .cover-art:hover {
@@ -554,6 +555,7 @@ td.unpin {
   border: 1px dashed rgba(0, 0, 0, 0.1);
   background-color: rgba(0, 0, 0, 0.025);
   transition: all 0.1s; 
+  display: block;
 }
 
 .publish .cover-art.hover {
@@ -562,6 +564,7 @@ td.unpin {
   border: 1px dashed rgba(0, 0, 0, 0.1);
   background-color: rgba(0, 0, 0, 0.025);
   transition: all 0.1s; 
+  display: block;
 }
 
 .publish .cover-art p {
@@ -582,6 +585,7 @@ td.unpin {
   transition: all 0.1s;
   background-size: 250px 250px;
   background-repeat: no-repeat;
+  display: block;
 }
 
 .publish .cover-art-square:hover {
@@ -590,6 +594,7 @@ td.unpin {
   border: 1px dashed rgba(0, 0, 0, 0.1);
   background-color: rgba(0, 0, 0, 0.025);
   transition: all 0.1s; 
+  display: block;
 }
 
 .publish .cover-art-square.hover {
@@ -598,9 +603,49 @@ td.unpin {
   border: 1px dashed rgba(0, 0, 0, 0.1);
   background-color: rgba(0, 0, 0, 0.025);
   transition: all 0.1s; 
+  display: block;
 }
 
 .publish .cover-art-square p {
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell; 
+}
+
+.publish .cover-art-poster {
+  width: 175px;
+  height: 250px;
+  display: table;
+  border: 1px dashed rgba(0,0,0, .1);
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  padding: 5px;
+  transition: all 0.1s;
+  background-size: 250px 250px;
+  background-repeat: no-repeat;
+  display: block;
+}
+
+.publish .cover-art-poster:hover {
+  padding: 10px;
+  margin: 5px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.025);
+  transition: all 0.1s; 
+  display: block;
+}
+
+.publish .cover-art-poster.hover {
+  padding: 10px;
+  margin: 5px;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.025);
+  transition: all 0.1s; 
+  display: block;
+}
+
+.publish .cover-art-poster p {
   text-align: center;
   vertical-align: middle;
   display: table-cell; 
