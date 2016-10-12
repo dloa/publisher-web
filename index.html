@@ -111,8 +111,8 @@
 												</div>
 												<div class="row">
 													<div class="col col-sm-6">
-														<div class="form-group" id="artifactGenereGroup">
-															<input type="text" class="form-control" id="genere" placeholder="Genre">
+														<div class="form-group" id="artifactgenreGroup">
+															<input type="text" class="form-control" id="genre" placeholder="Genre">
 														</div>
 													</div>
 													<div class="col col-sm-6">
@@ -156,6 +156,18 @@
 												<div class="form-group" id="artifactDateGroup">
 													<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
 												</div>
+												<div class="row">
+													<div class="col col-sm-6">
+														<div class="form-group" id="artifactgenreGroup">
+															<input type="text" class="form-control" id="genre" placeholder="Genre">
+														</div>
+													</div>
+													<div class="col col-sm-6">
+														<div class="form-group" id="artifactTagsGroup">
+															<input type="text" class="form-control" id="tags" placeholder="Tags">
+														</div>
+													</div>
+												</div>
 												<div class="form-group" id="artifactDescriptionGroup">
 													<textarea row="3" class="form-control" id="description" placeholder="Video Description"></textarea>
 												</div>
@@ -178,17 +190,17 @@
 													<p class="help-block">This will be auto formatted with "Podcast Title": "Episode Title"</p>
 												</div>
 												<div class="form-group" id="artifactArtistGroup">
-													<input type="text" class="form-control" id="artistName" placeholder="Episode Title">
+													<input type="text" class="form-control" id="episodeTitle" placeholder="Episode Title">
 												</div>
 												<div class="row">
 													<div class="col col-sm-3">
 														<div class="form-group" id="artifactDateGroup">
-															<input type="text" class="form-control" id="releaseDate" placeholder="Season Number">
+															<input type="text" class="form-control" id="seasonNum" placeholder="Season Number">
 														</div>
 													</div>
 													<div class="col col-sm-3">
 														<div class="form-group" id="artifactDateGroup">
-															<input type="text" class="form-control" id="releaseDate" placeholder="Episode Number">
+															<input type="text" class="form-control" id="episodeNum" placeholder="Episode Number">
 														</div>
 													</div>
 													<div class="col col-sm-3">
@@ -197,8 +209,8 @@
 														</div>
 													</div>
 													<div class="col col-sm-3">
-														<div class="form-group" id="artifactGenereGroup">
-															<input type="text" class="form-control" id="genere" placeholder="Genre">
+														<div class="form-group" id="artifactgenreGroup">
+															<input type="text" class="form-control" id="genre" placeholder="Genre">
 														</div>
 													</div>
 												</div>
@@ -218,16 +230,16 @@
 										</div>
 									</div>
 								</div>
-								<div id='book' class="tab-pane fade in">
+								<div id='pdf' class="tab-pane fade in">
 									<div class="row">
 										<div class="col-sm-8">
-											<h5>Book Information</h5>
+											<h5>PDF Information</h5>
 											<form>
 												<div class="form-group" id="artifactTitleGroup">
-													<input type="text" class="form-control" id="title" placeholder="Book Title">
+													<input type="text" class="form-control" id="title" placeholder="Title">
 												</div>
 												<div class="form-group" id="artifactArtistGroup">
-													<input type="text" class="form-control" id="artistName" placeholder="Author Name">
+													<input type="text" class="form-control" id="authorName" placeholder="Author Name">
 												</div>
 												<div class="row">
 													<div class="col col-sm-6">
@@ -236,8 +248,8 @@
 														</div>
 													</div>
 													<div class="col col-sm-6">
-														<div class="form-group" id="artifactGenereGroup">
-															<input type="text" class="form-control" id="genere" placeholder="Genre">
+														<div class="form-group" id="artifactgenreGroup">
+															<input type="text" class="form-control" id="genre" placeholder="Genre">
 														</div>
 													</div>
 												</div>
@@ -245,15 +257,15 @@
 													<input type="text" class="form-control" id="tags" placeholder="Tags">
 												</div>
 												<div class="form-group" id="artifactDescriptionGroup">
-													<textarea row="3" class="form-control" id="description" placeholder="Book Description"></textarea>
+													<textarea row="3" class="form-control" id="description" placeholder="Description"></textarea>
 												</div>
 											</form>
 										</div>
 										<div class="col-sm-4">
-											<h5>Book Cover</h5>
-											<div class="cover-art-poster" id='bookPoster'>
+											<h5>PDF Cover</h5>
+											<div class="cover-art-poster" id='pdfPoster'>
 											</div>
-											<input type="file" name="bookPosterFile" id="bookPosterFile" accept="image/*">
+											<input type="file" name="pdfPosterFile" id="pdfPosterFile" accept="image/*">
 										</div>
 									</div>
 								</div>
@@ -288,12 +300,12 @@
 								<div id='thing' class="tab-pane fade in">
 									<div class="row">
 										<div class="col-sm-8">
-										   <h5>General Information</h5>
+										   <h5>Thing Information</h5>
 												<div class="form-group" id="artifactTitleGroup">
 													<input type="text" class="form-control" id="title" placeholder="Title">
 												</div>
 												<div class="form-group" id="artifactDirectorGroup">
-													<input type="text" class="form-control" id="directorName" placeholder="Creator">
+													<input type="text" class="form-control" id="creatorName" placeholder="Creator">
 												</div>
 												<div class="form-group" id="artifactDateGroup">
 													<input type="text" class="form-control" id="releaseDate" placeholder="Year">
@@ -318,7 +330,7 @@
 													<input type="text" class="form-control" id="title" placeholder="Title">
 												</div>
 												<div class="form-group" id="artifactDirectorGroup">
-													<input type="text" class="form-control" id="directorName" placeholder="Creator">
+													<input type="text" class="form-control" id="creatorName" placeholder="Creator">
 												</div>
 												<div class="form-group" id="artifactDateGroup">
 													<input type="text" class="form-control" id="releaseDate" placeholder="Year">
