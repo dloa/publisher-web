@@ -41,11 +41,11 @@ $('#previewButton').click(function(e){
 		} else {
 			$(mediaType + " #artifactArtistGroup").removeClass('has-warning');
 		}
-		// Optional: Genere
-		if (isBlank($(mediaType + ' #genere').val())){
-			$(mediaType + " #artifactGenereGroup").addClass('has-warning');
+		// Optional: genre
+		if (isBlank($(mediaType + ' #genre').val())){
+			$(mediaType + " #artifactgenreGroup").addClass('has-warning');
 		} else {
-			$(mediaType + " #artifactGenereGroup").removeClass('has-warning');
+			$(mediaType + " #artifactgenreGroup").removeClass('has-warning');
 		}
 		// Optional: Tags
 		if (isBlank($(mediaType + ' #tags').val())){
@@ -302,27 +302,32 @@ function publishArtifact(){
 
 		// Optional Fields
 		var poster = $(mediaType + 'PosterFile').val();
+		var genre = $(mediaType + ' #genre').val();
+		var tags = $(mediaType + ' #tags').val();
+		// Check if the tags are set, if they are, then set them.
+		if (!isBlank(tags))
+			alexandriaMedia["info"]["extra-info"]["tags"] = tags;
+		// Check if the genre is set, if it is, set it.
+		if (!isBlank(genre))
+				alexandriaMedia["info"]["extra-info"]["genre"] = genre;
 
 		// Metadata per artifact type
 		if (mediaType == '#music'){
+			//################################
+			//            MUSIC
+			//################################
 			var artistName = $(mediaType + ' #artistName').val();
-			var genere = $(mediaType + ' #genere').val();
-			var tags = $(mediaType + ' #tags').val();
 			var recordLabel = $(mediaType + ' #recordLabel').val();
 
 			if (!isBlank(artistName))
 				alexandriaMedia["info"]["extra-info"]["artist"] = artistName;
 
-			if (!isBlank(genere))
-				alexandriaMedia["info"]["extra-info"]["genere"] = genere;
-
-			if (!isBlank(genere))
-				alexandriaMedia["info"]["extra-info"]["tags"] = tags;
-
 			if (!isBlank(recordLabel))
 				alexandriaMedia["info"]["extra-info"]["company"] = recordLabel;
-		}
-		else if (mediaType == '#video'){
+		} else if (mediaType == '#video'){
+			//################################
+			//            VIDEO
+			//################################
 			var director = $(mediaType + ' #directorName').val();
 			var distributor = $(mediaType + ' #distributor').val();	
 
@@ -331,6 +336,59 @@ function publishArtifact(){
 
 			if (!isBlank(distributor))
 				alexandriaMedia["info"]["extra-info"]["company"] = distributor;
+		} else if (mediaType == '#podcast'){
+			//################################
+			//            PODCAST
+			//################################
+			var episodeTitle = $(mediaType + ' #directorName').val();
+			var seasonNum = $(mediaType + ' #distributor').val();	
+			var episodeNum = $(mediaType + ' #distributor').val();	
+
+			if (!isBlank(episodeTitle))
+				alexandriaMedia["info"]["extra-info"]["epTitle"] = episodeTitle;
+
+			if (!isBlank(seasonNum))
+				alexandriaMedia["info"]["extra-info"]["season"] = seasonNum;
+
+			if (!isBlank(episodeNum))
+				alexandriaMedia["info"]["extra-info"]["episode"] = episodeNum;
+
+		} else if (mediaType == '#pdf'){
+			//################################
+			//              PDF
+			//################################
+			var authorName = $(mediaType + ' #authorName').val();
+
+			if (!isBlank(authorName))
+				alexandriaMedia["info"]["extra-info"]["author"] = director;
+		} else if (mediaType == '#movie'){
+			//################################
+			//            MOVIE
+			//################################
+			var director = $(mediaType + ' #directorName').val();
+			var distributor = $(mediaType + ' #distributor').val();	
+
+			if (!isBlank(director))
+				alexandriaMedia["info"]["extra-info"]["artist"] = director;
+
+			if (!isBlank(distributor))
+				alexandriaMedia["info"]["extra-info"]["company"] = distributor;
+		} else if (mediaType == '#thing'){
+			//################################
+			//            THING
+			//################################
+			var creatorName = $(mediaType + ' #creatorName').val();
+
+			if (!isBlank(creatorName))
+				alexandriaMedia["info"]["extra-info"]["creator"] = creatorName;
+		} else if (mediaType == '#html'){
+			//################################
+			//             HTML
+			//################################
+			var creatorName = $(mediaType + ' #creatorName').val();
+
+			if (!isBlank(creatorName))
+				alexandriaMedia["info"]["extra-info"]["creator"] = creatorName;
 		}
 
 		if (!isBlank(mediaFiles)){
@@ -393,6 +451,8 @@ function publishArtifact(){
 			} else if (mediaType == '#video'){
 				type = 'preview'
 				alexandriaMedia["info"]["extra-info"]["posterFrame"] = hashes[0].Name;
+			} else {
+				alexandriaMedia["info"]["extra-info"]["preview"] = hashes[0].Name;
 			}
 
 			alexandriaMedia["info"]["extra-info"]["files"].push({
