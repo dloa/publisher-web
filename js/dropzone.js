@@ -214,6 +214,8 @@ function ParseExtra(file) {
 				'<select class="form-control" id="type">' +
 					'<option>Artwork</option>' +
 					'<option>Music Video</option>' +
+					'<option>Trailer</option>' +
+					'<option>Featurette</option>' +
 					'<option>Zip File</option>' +
 					'<option>License Notes</option>' +
 				'</select>' +
