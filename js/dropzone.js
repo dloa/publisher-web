@@ -24,7 +24,7 @@ function Init() {
 		musicPosterSelect = $id("musicPosterFile"),
 		videoPosterSelect = $id("videoPosterFile"),
 		podcastPosterSelect = $id("podcastPosterFile"),
-		pdfPosterSelect = $id("pdfPosterFile"),
+		bookPosterSelect = $id("bookPosterFile"),
 		moviePosterSelect = $id("moviePosterFile"),
 		thingPosterSelect = $id("thingPosterFile"),
 		htmlPosterSelect = $id("htmlPosterFile"),
@@ -33,7 +33,7 @@ function Init() {
 		musicPosterDrag = $id("musicPoster"),
 		videoPosterDrag = $id("videoPoster"),
 		podcastPosterDrag = $id("podcastPoster"),
-		pdfPosterDrag = $id("pdfPoster"),
+		bookPosterDrag = $id("bookPoster"),
 		moviePosterDrag = $id("moviePoster"),
 		thingPosterDrag = $id("thingPoster"),
 		htmlPosterDrag = $id("htmlPoster"),
@@ -44,7 +44,7 @@ function Init() {
 	musicPosterSelect.addEventListener("change", FileSelectHandler, false);
 	videoPosterSelect.addEventListener("change", FileSelectHandler, false);
 	podcastPosterSelect.addEventListener("change", FileSelectHandler, false);
-	pdfPosterSelect.addEventListener("change", FileSelectHandler, false);
+	bookPosterSelect.addEventListener("change", FileSelectHandler, false);
 	moviePosterSelect.addEventListener("change", FileSelectHandler, false);
 	thingPosterSelect.addEventListener("change", FileSelectHandler, false);
 	htmlPosterSelect.addEventListener("change", FileSelectHandler, false);
@@ -59,6 +59,12 @@ function Init() {
 		mediaDrag.addEventListener("dragleave", FileDragHover, false);
 		mediaDrag.addEventListener("drop", FileSelectHandler, false);
 		mediaDrag.style.display = "block";
+
+		// extra drop
+		extraDrag.addEventListener("dragover", FileDragHover, false);
+		extraDrag.addEventListener("dragleave", FileDragHover, false);
+		extraDrag.addEventListener("drop", FileSelectHandler, false);
+		extraDrag.style.display = "block";
 
 		// music poster drop
 		musicPosterDrag.addEventListener("dragover", FileDragHover, false);
@@ -78,11 +84,11 @@ function Init() {
 		podcastPosterDrag.addEventListener("drop", FileSelectHandler, false);
 		podcastPosterDrag.style.display = "block";
 
-		// pdf poster drop
-		pdfPosterDrag.addEventListener("dragover", FileDragHover, false);
-		pdfPosterDrag.addEventListener("dragleave", FileDragHover, false);
-		pdfPosterDrag.addEventListener("drop", FileSelectHandler, false);
-		pdfPosterDrag.style.display = "block";
+		// book poster drop
+		bookPosterDrag.addEventListener("dragover", FileDragHover, false);
+		bookPosterDrag.addEventListener("dragleave", FileDragHover, false);
+		bookPosterDrag.addEventListener("drop", FileSelectHandler, false);
+		bookPosterDrag.style.display = "block";
 
 		// movie poster drop
 		moviePosterDrag.addEventListener("dragover", FileDragHover, false);
@@ -101,12 +107,6 @@ function Init() {
 		htmlPosterDrag.addEventListener("dragleave", FileDragHover, false);
 		htmlPosterDrag.addEventListener("drop", FileSelectHandler, false);
 		htmlPosterDrag.style.display = "block";
-
-		// extra drop
-		extraDrag.addEventListener("dragover", FileDragHover, false);
-		extraDrag.addEventListener("dragleave", FileDragHover, false);
-		extraDrag.addEventListener("drop", FileSelectHandler, false);
-		extraDrag.style.display = "block";
 	} else {
 		console.log('XHR2 Unsupported! Unable to function.');
 	}
@@ -131,7 +131,7 @@ function FileSelectHandler(e) {
 	if (mediaType == 'music' || mediaType == 'podcast'){
 		mimeType[0] = 'audio';
 	}
-	else if (mediaType == 'pdf'){
+	else if (mediaType == 'book'){
 		mimeType = ['pdf', 'text'];
 	}
 	else if (mediaType == 'movie'){
@@ -175,7 +175,7 @@ function FileDragHover(e) {
 	else if (e.target.id == 'musicPoster'){
 		e.target.className = (e.type == "dragover" ? "cover-art-square hover" : "cover-art-square");
 		console.log(e.target.className);
-	} else if (e.target.id == 'videoPoester' || e.target.id == 'podcastPoster' || e.target.id == 'pdfPoster' || e.target.id == 'moviePoster' || e.target.id == 'thingPoster' || e.target.id == 'htmlPoster'){
+	} else if (e.target.id == 'videoPoester' || e.target.id == 'podcastPoster' || e.target.id == 'bookPoster' || e.target.id == 'moviePoster' || e.target.id == 'thingPoster' || e.target.id == 'htmlPoster'){
 		e.target.className = (e.type == "dragover" ? "cover-art hover" : "cover-art");
 		console.log(e.target.className);
 	}

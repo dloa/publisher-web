@@ -91,7 +91,7 @@
 									<li class="active" onclick="changeArtifactType('music')"><a href="#music" data-toggle="tab">Music</a></li>
 									<li onclick="changeArtifactType('video')"><a href="#video" data-toggle="tab">Video</a></li>
 									<li onclick="changeArtifactType('podcast')"><a href="#podcast" data-toggle="tab">Podcast</a></li>
-									<li onclick="changeArtifactType('pdf')"><a href="#pdf" data-toggle="tab">PDF</a></li>
+									<li onclick="changeArtifactType('book')"><a href="#book" data-toggle="tab">Book</a></li>
 									<li onclick="changeArtifactType('movie')"><a href="#movie" data-toggle="tab">Movie</a></li>
 									<li onclick="changeArtifactType('thing')"><a href="#thing" data-toggle="tab">Thing</a></li>
 									<li onclick="changeArtifactType('html')"><a href="#html" data-toggle="tab">HTML</a></li>
@@ -230,13 +230,13 @@
 										</div>
 									</div>
 								</div>
-								<div id='pdf' class="tab-pane fade in">
+								<div id='book' class="tab-pane fade in">
 									<div class="row">
 										<div class="col-sm-8">
-											<h5>PDF Information</h5>
+											<h5>Book Information</h5>
 											<form>
 												<div class="form-group" id="artifactTitleGroup">
-													<input type="text" class="form-control" id="title" placeholder="Title">
+													<input type="text" class="form-control" id="title" placeholder="Book Title">
 												</div>
 												<div class="form-group" id="artifactArtistGroup">
 													<input type="text" class="form-control" id="authorName" placeholder="Author Name">
@@ -257,15 +257,15 @@
 													<input type="text" class="form-control" id="tags" placeholder="Tags">
 												</div>
 												<div class="form-group" id="artifactDescriptionGroup">
-													<textarea row="3" class="form-control" id="description" placeholder="Description"></textarea>
+													<textarea row="3" class="form-control" id="description" placeholder="Book Description"></textarea>
 												</div>
 											</form>
 										</div>
 										<div class="col-sm-4">
 											<h5>PDF Cover</h5>
-											<div class="cover-art-poster" id='pdfPoster'>
+											<div class="cover-art-poster" id='bookPoster'>
 											</div>
-											<input type="file" name="pdfPosterFile" id="pdfPosterFile" accept="image/*">
+											<input type="file" name="bookPosterFile" id="bookPosterFile" accept="image/*">
 										</div>
 									</div>
 								</div>
@@ -880,7 +880,7 @@
 		else if (mediaType == 'podcast'){
 			mediaType = 'audio/*';
 		}
-		else if (mediaType == 'pdf'){
+		else if (mediaType == 'book'){
 			mediaType = 'application/pdf,text/*';
 		}
 		else if (mediaType == 'movie'){
