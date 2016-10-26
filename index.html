@@ -90,6 +90,11 @@
 								<ul class="nav nav-pills" role="tablist">
 									<li class="active" onclick="changeArtifactType('music')"><a href="#music" data-toggle="tab">Music</a></li>
 									<li onclick="changeArtifactType('video')"><a href="#video" data-toggle="tab">Video</a></li>
+									<li onclick="changeArtifactType('podcast')"><a href="#podcast" data-toggle="tab">Podcast</a></li>
+									<li onclick="changeArtifactType('book')"><a href="#book" data-toggle="tab">Book</a></li>
+									<li onclick="changeArtifactType('movie')"><a href="#movie" data-toggle="tab">Movie</a></li>
+									<li onclick="changeArtifactType('thing')"><a href="#thing" data-toggle="tab">Thing</a></li>
+									<li onclick="changeArtifactType('html')"><a href="#html" data-toggle="tab">HTML</a></li>
 								</ul>
 							</div>
 							<div class="publish-section information tab-content" id='metainfo' style="margin-top: -50px;">
@@ -106,8 +111,8 @@
 												</div>
 												<div class="row">
 													<div class="col col-sm-6">
-														<div class="form-group" id="artifactGenereGroup">
-															<input type="text" class="form-control" id="genere" placeholder="Genre">
+														<div class="form-group" id="artifactgenreGroup">
+															<input type="text" class="form-control" id="genre" placeholder="Genre">
 														</div>
 													</div>
 													<div class="col col-sm-6">
@@ -151,6 +156,18 @@
 												<div class="form-group" id="artifactDateGroup">
 													<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
 												</div>
+												<div class="row">
+													<div class="col col-sm-6">
+														<div class="form-group" id="artifactgenreGroup">
+															<input type="text" class="form-control" id="genre" placeholder="Genre">
+														</div>
+													</div>
+													<div class="col col-sm-6">
+														<div class="form-group" id="artifactTagsGroup">
+															<input type="text" class="form-control" id="tags" placeholder="Tags">
+														</div>
+													</div>
+												</div>
 												<div class="form-group" id="artifactDescriptionGroup">
 													<textarea row="3" class="form-control" id="description" placeholder="Video Description"></textarea>
 												</div>
@@ -160,6 +177,173 @@
 											<div id="videoPoster" class="cover-art">
 											</div>
 											<input type="file" name="videoPosterFile" id="videoPosterFile" accept="image/*">
+										</div>
+									</div>
+								</div>
+								<div id='podcast' class="tab-pane fade in">
+									<div class="row">
+										<div class="col-sm-8">
+											<h5>Podcast Information</h5>
+											<form>
+												<div class="form-group" id="artifactTitleGroup">
+													<input type="text" class="form-control" id="title" placeholder="Podcast Title">
+													<p class="help-block">This will be auto formatted with "Podcast Title": "Episode Title"</p>
+												</div>
+												<div class="form-group" id="artifactArtistGroup">
+													<input type="text" class="form-control" id="episodeTitle" placeholder="Episode Title">
+												</div>
+												<div class="row">
+													<div class="col col-sm-3">
+														<div class="form-group" id="artifactDateGroup">
+															<input type="text" class="form-control" id="seasonNum" placeholder="Season Number">
+														</div>
+													</div>
+													<div class="col col-sm-3">
+														<div class="form-group" id="artifactDateGroup">
+															<input type="text" class="form-control" id="episodeNum" placeholder="Episode Number">
+														</div>
+													</div>
+													<div class="col col-sm-3">
+														<div class="form-group" id="artifactDateGroup">
+															<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
+														</div>
+													</div>
+													<div class="col col-sm-3">
+														<div class="form-group" id="artifactgenreGroup">
+															<input type="text" class="form-control" id="genre" placeholder="Genre">
+														</div>
+													</div>
+												</div>
+												<div class="form-group" id="artifactTagsGroup">
+													<input type="text" class="form-control" id="tags" placeholder="Tags">
+												</div>
+												<div class="form-group" id="artifactDescriptionGroup">
+													<textarea row="3" class="form-control" id="description" placeholder="Episode Description"></textarea>
+												</div>
+											</form>
+										</div>
+										<div class="col-sm-4">
+											<h5>Cover Art</h5>
+											<div class="cover-art-square" id='podcastPoster'>
+											</div>
+											<input type="file" name="podcastPosterFile" id="podcastPosterFile" accept="image/*">
+										</div>
+									</div>
+								</div>
+								<div id='book' class="tab-pane fade in">
+									<div class="row">
+										<div class="col-sm-8">
+											<h5>Book Information</h5>
+											<form>
+												<div class="form-group" id="artifactTitleGroup">
+													<input type="text" class="form-control" id="title" placeholder="Book Title">
+												</div>
+												<div class="form-group" id="artifactArtistGroup">
+													<input type="text" class="form-control" id="authorName" placeholder="Author Name">
+												</div>
+												<div class="row">
+													<div class="col col-sm-6">
+														<div class="form-group" id="artifactDateGroup">
+															<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
+														</div>
+													</div>
+													<div class="col col-sm-6">
+														<div class="form-group" id="artifactgenreGroup">
+															<input type="text" class="form-control" id="genre" placeholder="Genre">
+														</div>
+													</div>
+												</div>
+												<div class="form-group" id="artifactTagsGroup">
+													<input type="text" class="form-control" id="tags" placeholder="Tags">
+												</div>
+												<div class="form-group" id="artifactDescriptionGroup">
+													<textarea row="3" class="form-control" id="description" placeholder="Book Description"></textarea>
+												</div>
+											</form>
+										</div>
+										<div class="col-sm-4">
+											<h5>PDF Cover</h5>
+											<div class="cover-art-poster" id='bookPoster'>
+											</div>
+											<input type="file" name="bookPosterFile" id="bookPosterFile" accept="image/*">
+										</div>
+									</div>
+								</div>
+								<div id='movie' class="tab-pane fade in">
+									<div class="row">
+										<div class="col-sm-8">
+										   <h5>Movie Information</h5>
+												<div class="form-group" id="artifactTitleGroup">
+													<input type="text" class="form-control" id="title" placeholder="Movie Title">
+												</div>
+												<div class="form-group" id="artifactDirectorGroup">
+													<input type="text" class="form-control" id="directorName" placeholder="Director Name">
+												</div>
+												<div class="form-group" id="artifactDistributorGroup">
+													<input type="text" class="form-control" id="distributor" placeholder="Distributor">
+												</div>
+												<div class="form-group" id="artifactDateGroup">
+													<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
+												</div>
+												<div class="form-group" id="artifactDescriptionGroup">
+													<textarea row="3" class="form-control" id="description" placeholder="Movie Description"></textarea>
+												</div>
+										</div>
+										<div class="col-sm-4">
+											<h5>Poster Art</h5>
+											<div id="moviePoster" class="cover-art-poster">
+											</div>
+											<input type="file" name="moviePosterFile" id="moviePosterFile" accept="image/*">
+										</div>
+									</div>
+								</div>
+								<div id='thing' class="tab-pane fade in">
+									<div class="row">
+										<div class="col-sm-8">
+										   <h5>Thing Information</h5>
+												<div class="form-group" id="artifactTitleGroup">
+													<input type="text" class="form-control" id="title" placeholder="Title">
+												</div>
+												<div class="form-group" id="artifactDirectorGroup">
+													<input type="text" class="form-control" id="creatorName" placeholder="Creator">
+												</div>
+												<div class="form-group" id="artifactDateGroup">
+													<input type="text" class="form-control" id="releaseDate" placeholder="Year">
+												</div>
+												<div class="form-group" id="artifactDescriptionGroup">
+													<textarea row="3" class="form-control" id="description" placeholder="Description"></textarea>
+												</div>
+										</div>
+										<div class="col-sm-4">
+											<h5>Preview Image</h5>
+											<div id="thingPoster" class="cover-art">
+											</div>
+											<input type="file" name="thingPosterFile" id="thingPosterFile" accept="image/*">
+										</div>
+									</div>
+								</div>
+								<div id='html' class="tab-pane fade in">
+									<div class="row">
+										<div class="col-sm-8">
+										   <h5>HTML Information</h5>
+												<div class="form-group" id="artifactTitleGroup">
+													<input type="text" class="form-control" id="title" placeholder="Title">
+												</div>
+												<div class="form-group" id="artifactDirectorGroup">
+													<input type="text" class="form-control" id="creatorName" placeholder="Creator">
+												</div>
+												<div class="form-group" id="artifactDateGroup">
+													<input type="text" class="form-control" id="releaseDate" placeholder="Year">
+												</div>
+												<div class="form-group" id="artifactDescriptionGroup">
+													<textarea row="3" class="form-control" id="description" placeholder="Description"></textarea>
+												</div>
+										</div>
+										<div class="col-sm-4">
+											<h5>Preview Image</h5>
+											<div id="htmlPoster" class="cover-art">
+											</div>
+											<input type="file" name="htmlPosterFile" id="htmlPosterFile" accept="image/*">
 										</div>
 									</div>
 								</div>
@@ -687,12 +871,27 @@
 		});
 		// Change supported files to be uploaded
 		// Get type in order to validate files
-		if (mediaType == 'music')
-			mediaType = 'audio';
-
-		mediaType += '/*';
-
-		console.log(mediaType);
+		if (mediaType == 'video'){
+			mediaType = 'video/*';
+		}
+		else if (mediaType == 'music'){
+			mediaType = 'audio/*';
+		}
+		else if (mediaType == 'podcast'){
+			mediaType = 'audio/*';
+		}
+		else if (mediaType == 'book'){
+			mediaType = 'application/pdf,text/*';
+		}
+		else if (mediaType == 'movie'){
+			mediaType = 'video/*';
+		}
+		else if (mediaType == 'thing'){
+			mediaType = '*/*';
+		}
+		else if (mediaType == 'html'){
+			mediaType = '*/*';
+		}
 
 		$('#mediaFiles').attr('accept', mediaType);
 	}

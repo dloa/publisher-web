@@ -316,6 +316,12 @@ var Wallet = (function () {
 				version = this.coin_network.pubKeyHash;
 			}
 			var decoded = Bitcoin.base58check.decode(key);
+			
+			if( this.coin_network == Bitcoin.networks.florincoin && priv == true) {
+				// Backwards compatibility for private keys saved under litecoin settings.
+				return decoded[0] == Bitcoin.networks.florincoin.wif || decoded[0] == Bitcoin.networks.litecoin.wif
+			}
+			
 			// is this address for the right network?
 			return (decoded[0] == version);
 		}

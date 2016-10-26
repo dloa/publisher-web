@@ -20,53 +20,93 @@ if (window.File && window.FileList && window.FileReader) {
 // initialize
 function Init() {
 
-	var mediaselect = $id("mediaFiles"),
-		musicposterselect = $id("musicPosterFile"),
-		videoposterselect = $id("videoPosterFile"),
-		extraselect = $id("extraFiles"),
-		mediadrag = $id("mediaDrop"),
-		musicposterdrag = $id("musicPoster"),
-		videoposterdrag = $id("videoPoster"),
-		extradrag = $id("extraDrop");
+	var mediaSelect = $id("mediaFiles"),
+		musicPosterSelect = $id("musicPosterFile"),
+		videoPosterSelect = $id("videoPosterFile"),
+		podcastPosterSelect = $id("podcastPosterFile"),
+		bookPosterSelect = $id("bookPosterFile"),
+		moviePosterSelect = $id("moviePosterFile"),
+		thingPosterSelect = $id("thingPosterFile"),
+		htmlPosterSelect = $id("htmlPosterFile"),
+		extraSelect = $id("extraFiles"),
+		mediaDrag = $id("mediaDrop"),
+		musicPosterDrag = $id("musicPoster"),
+		videoPosterDrag = $id("videoPoster"),
+		podcastPosterDrag = $id("podcastPoster"),
+		bookPosterDrag = $id("bookPoster"),
+		moviePosterDrag = $id("moviePoster"),
+		thingPosterDrag = $id("thingPoster"),
+		htmlPosterDrag = $id("htmlPoster"),
+		extraDrag = $id("extraDrop");
 
 	// file select
-	mediaselect.addEventListener("change", FileSelectHandler, false);
-	musicposterselect.addEventListener("change", FileSelectHandler, false);
-	videoposterselect.addEventListener("change", FileSelectHandler, false);
-	extraselect.addEventListener("change", FileSelectHandler, false);
+	mediaSelect.addEventListener("change", FileSelectHandler, false);
+	musicPosterSelect.addEventListener("change", FileSelectHandler, false);
+	videoPosterSelect.addEventListener("change", FileSelectHandler, false);
+	podcastPosterSelect.addEventListener("change", FileSelectHandler, false);
+	bookPosterSelect.addEventListener("change", FileSelectHandler, false);
+	moviePosterSelect.addEventListener("change", FileSelectHandler, false);
+	thingPosterSelect.addEventListener("change", FileSelectHandler, false);
+	htmlPosterSelect.addEventListener("change", FileSelectHandler, false);
+	extraSelect.addEventListener("change", FileSelectHandler, false);
 
 	// is XHR2 available?
 	var xhr = new XMLHttpRequest();
 	if (xhr.upload) {
 	
 		// media drop
-		mediadrag.addEventListener("dragover", FileDragHover, false);
-		mediadrag.addEventListener("dragleave", FileDragHover, false);
-		mediadrag.addEventListener("drop", FileSelectHandler, false);
-		mediadrag.style.display = "block";
-
-		// music poster drop
-		musicposterdrag.addEventListener("dragover", FileDragHover, false);
-		musicposterdrag.addEventListener("dragleave", FileDragHover, false);
-		musicposterdrag.addEventListener("drop", FileSelectHandler, false);
-		musicposterdrag.style.display = "block";
-
-		// video poster drop
-		videoposterdrag.addEventListener("dragover", FileDragHover, false);
-		videoposterdrag.addEventListener("dragleave", FileDragHover, false);
-		videoposterdrag.addEventListener("drop", FileSelectHandler, false);
-		videoposterdrag.style.display = "block";
+		mediaDrag.addEventListener("dragover", FileDragHover, false);
+		mediaDrag.addEventListener("dragleave", FileDragHover, false);
+		mediaDrag.addEventListener("drop", FileSelectHandler, false);
+		mediaDrag.style.display = "block";
 
 		// extra drop
-		extradrag.addEventListener("dragover", FileDragHover, false);
-		extradrag.addEventListener("dragleave", FileDragHover, false);
-		extradrag.addEventListener("drop", FileSelectHandler, false);
-		extradrag.style.display = "block";
-		
-		// hide file select button
-		//fileselect.style.height = 0;
-		//fileselect.style.width = 0;
-		//$('#mediaFiles').trigger('click');
+		extraDrag.addEventListener("dragover", FileDragHover, false);
+		extraDrag.addEventListener("dragleave", FileDragHover, false);
+		extraDrag.addEventListener("drop", FileSelectHandler, false);
+		extraDrag.style.display = "block";
+
+		// music poster drop
+		musicPosterDrag.addEventListener("dragover", FileDragHover, false);
+		musicPosterDrag.addEventListener("dragleave", FileDragHover, false);
+		musicPosterDrag.addEventListener("drop", FileSelectHandler, false);
+		musicPosterDrag.style.display = "block";
+
+		// video poster drop
+		videoPosterDrag.addEventListener("dragover", FileDragHover, false);
+		videoPosterDrag.addEventListener("dragleave", FileDragHover, false);
+		videoPosterDrag.addEventListener("drop", FileSelectHandler, false);
+		videoPosterDrag.style.display = "block";
+
+		// podcast poster drop
+		podcastPosterDrag.addEventListener("dragover", FileDragHover, false);
+		podcastPosterDrag.addEventListener("dragleave", FileDragHover, false);
+		podcastPosterDrag.addEventListener("drop", FileSelectHandler, false);
+		podcastPosterDrag.style.display = "block";
+
+		// book poster drop
+		bookPosterDrag.addEventListener("dragover", FileDragHover, false);
+		bookPosterDrag.addEventListener("dragleave", FileDragHover, false);
+		bookPosterDrag.addEventListener("drop", FileSelectHandler, false);
+		bookPosterDrag.style.display = "block";
+
+		// movie poster drop
+		moviePosterDrag.addEventListener("dragover", FileDragHover, false);
+		moviePosterDrag.addEventListener("dragleave", FileDragHover, false);
+		moviePosterDrag.addEventListener("drop", FileSelectHandler, false);
+		moviePosterDrag.style.display = "block";
+
+		// thing poster drop
+		thingPosterDrag.addEventListener("dragover", FileDragHover, false);
+		thingPosterDrag.addEventListener("dragleave", FileDragHover, false);
+		thingPosterDrag.addEventListener("drop", FileSelectHandler, false);
+		thingPosterDrag.style.display = "block";
+
+		// html poster drop
+		htmlPosterDrag.addEventListener("dragover", FileDragHover, false);
+		htmlPosterDrag.addEventListener("dragleave", FileDragHover, false);
+		htmlPosterDrag.addEventListener("drop", FileSelectHandler, false);
+		htmlPosterDrag.style.display = "block";
 	} else {
 		console.log('XHR2 Unsupported! Unable to function.');
 	}
@@ -86,13 +126,31 @@ function FileSelectHandler(e) {
 	// Get type in order to validate files
 	var mediaType = $("#metainfo div.active").attr('id');
 
-	if (mediaType == 'music')
-		mediaType = 'audio';
+	var mimeType = [mediaType];
+
+	if (mediaType == 'music' || mediaType == 'podcast'){
+		mimeType[0] = 'audio';
+	}
+	else if (mediaType == 'book'){
+		mimeType = ['pdf', 'text'];
+	}
+	else if (mediaType == 'movie'){
+		mimeType[0] = 'video';
+	}
+	else if (mediaType == 'thing' || mediaType == 'html'){
+		mimeType[0] = 'any';
+	}
 
 	// process all File objects
 	for (var i = 0, f; f = files[i]; i++) {
 		if (e.target.id == "mediaDrop" || e.target.id == "mediaFiles"){
-			if (f.type.indexOf(mediaType) > -1)
+			// Check if it contains that mime type of files.
+			var validFileType = false;
+			for (var i = 0; i < mimeType.length; i++) {
+				if (mimeType[0] == 'any' || f.type.indexOf(mimeType[i]) > -1)
+					validFileType = true;
+			}
+			if (validFileType)
 				ParseMedia(f);
 			else
 				swal('Error', 'You can only select ' + mediaType + ' files.', 'error');
@@ -117,7 +175,7 @@ function FileDragHover(e) {
 	else if (e.target.id == 'musicPoster'){
 		e.target.className = (e.type == "dragover" ? "cover-art-square hover" : "cover-art-square");
 		console.log(e.target.className);
-	} else if (e.target.id == 'videoPoster'){
+	} else if (e.target.id == 'videoPoester' || e.target.id == 'podcastPoster' || e.target.id == 'bookPoster' || e.target.id == 'moviePoster' || e.target.id == 'thingPoster' || e.target.id == 'htmlPoster'){
 		e.target.className = (e.type == "dragover" ? "cover-art hover" : "cover-art");
 		console.log(e.target.className);
 	}
@@ -156,6 +214,8 @@ function ParseExtra(file) {
 				'<select class="form-control" id="type">' +
 					'<option>Artwork</option>' +
 					'<option>Music Video</option>' +
+					'<option>Trailer</option>' +
+					'<option>Featurette</option>' +
 					'<option>Zip File</option>' +
 					'<option>License Notes</option>' +
 				'</select>' +
