@@ -48,8 +48,13 @@ function setupWebsocket(){
 		var received_msg = evt.data;
 		var message = JSON.parse(received_msg);
 		if (message.op == "utx"){
+			// Log the incoming transaction
 			console.log(message);
 			console.log("Recieved transaction, hash: " + message.x.hash);
+
+			// Close coinbase modal if visible
+			hideCoinbaseModal();
+			
 			fade(document.getElementById("tradebotBuy"));
 			setTimeout(function(){ unfade(document.getElementById("tradebotPending")); }, 229);
 			var checkWalletInterval = setInterval(function(){

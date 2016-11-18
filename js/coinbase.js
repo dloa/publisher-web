@@ -25,6 +25,9 @@ function testDomain(){
 		$('#coinbase_widget').remove();
 	}
 }
+function hideCoinbaseModal(){
+	document.getElementById('coinbase_modal_iframe').style.display = "none";
+}
 
 // Code taken from: https://buy.coinbase.com/static/widget.js
 // Needs comments, just a base function pulled directly out of their application with a few modifications to make it work in a function.
