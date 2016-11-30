@@ -161,7 +161,7 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, callback) {
     var signature = wallet.signMessage(address, preImage);
 
     var multiPart = multiPartPrefix + part.toString() + "," + max.toString() +
-        "," + address + "," + reference + "," + signature + "," + "):" + data;
+        "," + address + "," + reference + "," + signature + "):" + data;
 
     wallet.sendCoins(address, address, amount, multiPart, function (err, data) {
         txIDs[txIDs.length] = data.txid;
