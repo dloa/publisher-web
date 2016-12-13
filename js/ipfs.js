@@ -63,7 +63,7 @@ function request(opts) {
 	if (opts.payload) {
 		req.enctype = "multipart/form-data";
 		console.log(opts);
-		//req.timeout = 100*60*1000; // Don't time out.
+		req.timeout = 100*60*1000; // Don't time out.
 		req.send(opts.payload);
 	} else {
 		req.send()
