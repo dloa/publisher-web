@@ -215,6 +215,10 @@ function publishArtifact(){
 	function addFile(file, index){
 		document.getElementById('publishWell').innerHTML += "[IPFS] Adding " + count + " files to IPFS...</br>";
   		addFilesToIPFS(file, index, function(hash, callIndex){ 
+  			if (hash == ""){
+  				swal("Error", "There was an error publishing the files to IPFS. Please try again later or contact us on our Slack: http://dloaslack.bitspill.net/");
+  				return;
+  			}
   			var hashes = "";
   			var hashArray = [];
   			for (var i = 0; i < hash.length-1; i++) {
@@ -511,10 +515,7 @@ function publishArtifact(){
 			}
 		}
 
-
-		document.getElementById('publishWell').innerHTML += '<pre>' + JSON.stringify(alexandriaMedia, null, 4) + "</pre><br>";
-
-		LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, function(err, data){
+		function LibraryDCallback(err, data){
 			if (err != null){
 				swal("Error!", "There was an error publishing your artifact: " + err, "error");
 			} else {
@@ -534,7 +535,12 @@ function publishArtifact(){
 				  	window.location.replace("http://alexandria.io/browser/");
 				});
 			}
-		});
+		}
+
+		document.getElementById('publishWell').innerHTML += '<pre>' + JSON.stringify(alexandriaMedia, null, 4) + "</pre><br>";
+
+		LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, LibraryDCallback);
+
 	}
 }
 

@@ -32,10 +32,13 @@ function request(opts) {
 		//console.log(evt);
 		console.log(req);
 		console.log(req.responseText);
+		console.log(req.status);
 		if (req.readyState == XMLHttpRequest.DONE){
-			if (req.status != 200)
+			if (req.status != 200){
 				opts.callback(req.responseText,null);
-			else {
+			} else if (req.responseText == "") {
+				opts.callback("Upload failed with no response.", null);
+			} else {
 				var response = req.responseText;
 				if (opts.transform) {
 				response = opts.transform(response);
@@ -45,6 +48,14 @@ function request(opts) {
 		}
 	};
 	req.upload.onprogress = opts.progressFunction;
+	req.ontimeout = function(){
+		console.log("Operation Timed Out");
+		opts.callback("Upload timed out, please try again later.");
+	}
+	req.error = function(){
+		console.error("Error uploading files to IPFS");
+		opts.callback("There was an error uploading files to IPFS, please try again later");
+	}
 	req.open(opts.method || "GET", ipfs.api_url(opts.uri), true);
 	if (opts.accept) {
 		req.setRequestHeader("accept", opts.accept);
@@ -52,6 +63,7 @@ function request(opts) {
 	if (opts.payload) {
 		req.enctype = "multipart/form-data";
 		console.log(opts);
+		//req.timeout = 100*60*1000; // Don't time out.
 		req.send(opts.payload);
 	} else {
 		req.send()
