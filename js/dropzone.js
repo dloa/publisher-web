@@ -143,6 +143,7 @@ function FileSelectHandler(e) {
 
 	// process all File objects
 	for (var i = 0; i < files.length; i++) {
+		var f = files[i];
 		if (e.target.id == "mediaDrop" || e.target.id == "mediaFiles"){
 			// Check if it contains that mime type of files.
 			var validFileType = false;
