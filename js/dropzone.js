@@ -142,12 +142,12 @@ function FileSelectHandler(e) {
 	}
 
 	// process all File objects
-	for (var i = 0, f; f = files[i]; i++) {
+	for (var i = 0; i < files.length; i++) {
 		if (e.target.id == "mediaDrop" || e.target.id == "mediaFiles"){
 			// Check if it contains that mime type of files.
 			var validFileType = false;
-			for (var i = 0; i < mimeType.length; i++) {
-				if (mimeType[0] == 'any' || f.type.indexOf(mimeType[i]) > -1)
+			for (var j = 0; j < mimeType.length; j++) {
+				if (mimeType[0] == 'any' || f.type.indexOf(mimeType[j]) > -1)
 					validFileType = true;
 			}
 			if (validFileType)
