@@ -761,7 +761,7 @@
 </div>
 <footer class="sticky-footer">
 	<div class="container sticky-footer-container">
-		<p class="sticky-footer-text-muted" id="footerText">Alexandria Web Publisher v0.7.5 - Questions? Comments? Want to Help? Join us on our <a href='http://dloaslack.bitspill.net/'>Slack chat</a>!</p>
+		<p class="sticky-footer-text-muted" id="footerText"></p>
 	</div>
 </footer>
 </body>
@@ -787,10 +787,9 @@
 
 	<!-- Visual JS -->
 	<script type="text/javascript">
-	var version = 0.7.5;
-
 	// Set the version number in the footer
-	//document.getElementById("footerText").innerHTML = "Alexandria Web Publisher v" + version + " - Questions? Comments? Want to Help? Join us on our <a href='http://dloaslack.bitspill.net/'>Slack chat</a>!";
+	var version = "0.7.6";
+	document.getElementById("footerText").innerHTML = "Alexandria Web Publisher v" + version + " - Questions? Comments? Want to Help? Join us on our <a href='http://dloaslack.bitspill.net/'>Slack chat</a>!";
 
 	$(document).ready(function () {
 		//Initialize
