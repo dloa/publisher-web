@@ -376,7 +376,7 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
-.footer {
+.sticky-footer {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -390,11 +390,12 @@ body {
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
 
-.container {
+.sticky-footer-container {
   width: auto;
   max-width: 680px;
   padding: 0 15px;
 }
-.container .text-muted {
+.sticky-footer-container .sticky-footer-text-muted {
   margin: 20px 0;
+  text-align: center;
 }
