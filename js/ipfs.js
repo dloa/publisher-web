@@ -50,11 +50,11 @@ function request(opts) {
 	req.upload.onprogress = opts.progressFunction;
 	req.ontimeout = function(){
 		console.log("Operation Timed Out");
-		opts.callback("Upload timed out, please try again later.");
+		opts.callback("Upload timed out, please try again later.", null);
 	}
 	req.error = function(){
 		console.error("Error uploading files to IPFS");
-		opts.callback("There was an error uploading files to IPFS, please try again later");
+		opts.callback("There was an error uploading files to IPFS, please try again later", null);
 	}
 	req.open(opts.method || "GET", ipfs.api_url(opts.uri), true);
 	if (opts.accept) {
@@ -63,7 +63,6 @@ function request(opts) {
 	if (opts.payload) {
 		req.enctype = "multipart/form-data";
 		console.log(opts);
-		req.timeout = 100*60*1000; // Don't time out.
 		req.send(opts.payload);
 	} else {
 		req.send()

@@ -175,9 +175,9 @@ function addFilesToIPFS(files, count, callback){
 
 	// Since we are not null, add the files to IPFS
 	ipfs.add(files, function (err, hash) {
-		console.log('callback');
 		if (err || !hash){
-			callback("ERROR: " + err, count);
+			console.error("Error adding files to IPFS, please try again later.")
+			callback('', null);
 			return;
 		}
 		console.log(hash);
