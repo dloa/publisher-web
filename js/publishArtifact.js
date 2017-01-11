@@ -216,7 +216,7 @@ function publishArtifact(){
 		document.getElementById('publishWell').innerHTML += "[IPFS] Adding " + count + " files to IPFS...</br>";
   		addFilesToIPFS(file, index, function(hash, callIndex){ 
   			if (hash == ""){
-  				swal("Error", "There was an error publishing the files to IPFS. Please try again later or contact us on our Slack: http://dloaslack.bitspill.net/");
+  				swal("Error", "There was an error publishing the files to IPFS. Please try again later or contact us on our Slack: http://dloaslack.bitspill.net/", "error");
   				return;
   			}
   			var hashes = "";
