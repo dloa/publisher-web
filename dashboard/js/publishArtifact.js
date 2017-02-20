@@ -159,7 +159,7 @@ function submitArtifact(){
 		}
 		console.log(walletAddress);
 		console.log(wallet.balances[walletAddress]);
-		if (wallet.balances[walletAddress] < 1){
+		if (wallet.balances[walletAddress] < 1 && !wallet.known_unspent[0]){
 			tradebot(walletAddress, function(){
 				// Publish once done!
 				var $active = $('.wizard .nav-tabs li.active');
