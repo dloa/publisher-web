@@ -13,7 +13,7 @@ function loginToWallet() {
 			console.log("Wallet Post-Load");
 			console.log(wallet);
 			// Load wallet into page
-			//loadAddresses();
+			loadAddresses();
 			refreshWalletInfo();
 			// Check if we should remember this.
 			if ($('#login-remember').prop("checked")){
@@ -108,10 +108,55 @@ function loadAddresses(){
 				}
 			}
 		}
-		if (document.getElementById("publisherSelect").length == 1){
+		if (document.getElementById("publisherSelect").length == 1 && document.getElementById("publisherSelect").value != 'None Registered...'){
 			continueToArtifact();
 		}
 	});
+
+	if (document.getElementById("publisherSelect").value == 'None Registered...'){
+		if (localStorage.getItem("justSignedUp") == "true"){
+			var data = localStorage.getItem("justSignedUpData").split('/');
+
+			var inwal = false;
+			for (var addr in wallet.addresses){
+				if (addr == data[0])
+					inwal = true;
+			}
+
+			if (inwal){
+				var x = document.getElementById("publisherSelect");
+				var option = document.createElement("option");
+				option.value = data[0];
+				option.text = data[1] + " (" + data[0] + ")";
+				x.add(option);
+
+				$("#publisherSelect option[value='None Registered...']").remove();
+
+				// Set the just added option to be active.
+				x.value = option.value;
+
+				$.getJSON( "https://api.alexandria.io/alexandria/v1/publisher/get/all", function( data ) {
+					var addrInPubs = false;
+					for (var i = 0; i < data.length; i++) {
+						//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
+						for (var addr in wallet.addresses) {
+							var address = wallet.addresses[addr].addr;
+							if (data[i]["publisher-data"]["alexandria-publisher"].address == address){
+								addrInPubs = true;
+							}
+						}
+					}
+
+					//continueToArtifact();
+
+					if (addrInPubs){
+						localStorage.setItem("justSignedUp", '');
+						localStorage.setItem("justSignedUpData", '');
+					}
+				});
+			}
+		}
+	}
 }
 
 function refreshWalletInfo(){
@@ -161,36 +206,47 @@ if (typeof(Storage) !== "undefined") {
 
 		if (localStorage.getItem("justSignedUp") == "true"){
 			var data = localStorage.getItem("justSignedUpData").split('/');
-			var x = document.getElementById("publisherSelect");
-			var option = document.createElement("option");
-			option.value = data[0];
-			option.text = data[1] + " (" + data[0] + ")";
-			x.add(option);
 
-			$("#publisherSelect option[value='None Registered...']").remove();
+			var inwal = false;
+			for (var addr in wallet.addresses){
+				if (addr == data[0])
+					inwal = true;
+			}
 
-			// Set the just added option to be active.
-			x.value = option.value;
+			if (inwal){
+				var x = document.getElementById("publisherSelect");
+				var option = document.createElement("option");
+				option.value = data[0];
+				option.text = data[1] + " (" + data[0] + ")";
+				x.add(option);
 
-			$.getJSON( "https://api.alexandria.io/alexandria/v1/publisher/get/all", function( data ) {
-				var addrInPubs = false;
-				for (var i = 0; i < data.length; i++) {
-					//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
-					for (var addr in wallet.addresses) {
-						var address = wallet.addresses[addr].addr;
-						if (data[i]["publisher-data"]["alexandria-publisher"].address == address){
-							addrInPubs = true;
+				$("#publisherSelect option[value='None Registered...']").remove();
+
+				// Set the just added option to be active.
+				x.value = option.value;
+
+				$.getJSON( "https://api.alexandria.io/alexandria/v1/publisher/get/all", function( data ) {
+					var addrInPubs = false;
+					for (var i = 0; i < data.length; i++) {
+						//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
+						for (var addr in wallet.addresses) {
+							var address = wallet.addresses[addr].addr;
+							if (data[i]["publisher-data"]["alexandria-publisher"].address == address){
+								addrInPubs = true;
+							}
 						}
 					}
-				}
 
-				continueToArtifact();
+					continueToArtifact();
 
-				if (addrInPubs){
-					localStorage.setItem("justSignedUp", '');
-					localStorage.setItem("justSignedUpData", '');
-				}
-			});
+					if (addrInPubs){
+						localStorage.setItem("justSignedUp", '');
+						localStorage.setItem("justSignedUpData", '');
+					}
+				});
+			} else {
+				loadAddresses();
+			}
 		} else {
 			loadAddresses();
 		}
