@@ -13,7 +13,7 @@ function loginToWallet() {
 			console.log("Wallet Post-Load");
 			console.log(wallet);
 			// Load wallet into page
-			loadAddresses();
+			//loadAddresses();
 			refreshWalletInfo();
 			// Check if we should remember this.
 			if ($('#login-remember').prop("checked")){
@@ -109,9 +109,7 @@ function loadAddresses(){
 			}
 		}
 		if (document.getElementById("publisherSelect").length == 1){
-			var $active = $('.wizard .nav-tabs li.active');
-			$active.next().removeClass('disabled');
-			nextTab($active);
+			continueToArtifact();
 		}
 	});
 }
@@ -186,9 +184,7 @@ if (typeof(Storage) !== "undefined") {
 					}
 				}
 
-				var $active = $('.wizard .nav-tabs li.active');
-				$active.next().removeClass('disabled');
-				nextTab($active);
+				continueToArtifact();
 
 				if (addrInPubs){
 					localStorage.setItem("justSignedUp", '');
