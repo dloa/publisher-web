@@ -108,6 +108,11 @@ function loadAddresses(){
 				}
 			}
 		}
+		if (document.getElementById("publisherSelect").length == 1){
+			var $active = $('.wizard .nav-tabs li.active');
+			$active.next().removeClass('disabled');
+			nextTab($active);
+		}
 	});
 }
 
@@ -144,7 +149,7 @@ if (typeof(Storage) !== "undefined") {
 		$("#loginWalletIdentifier").val(localStorage.getItem("identifier"));
 		$("#loginWalletPassword").val(CryptoJS.AES.decrypt(localStorage.getItem("loginWalletEnc"), localStorage.getItem("identifier")).toString(CryptoJS.enc.Utf8));
 
-		if (window.location.pathname.includes('login.html')){
+		if (window.location.pathname.includes('login.html') || !window.location.pathname.includes('.html')){
 			window.location.href = 'index.html';
 		} else if (window.location.pathname.includes('index.html')){
 			loginToWallet();
@@ -180,6 +185,10 @@ if (typeof(Storage) !== "undefined") {
 						}
 					}
 				}
+
+				var $active = $('.wizard .nav-tabs li.active');
+				$active.next().removeClass('disabled');
+				nextTab($active);
 
 				if (addrInPubs){
 					localStorage.setItem("justSignedUp", '');
