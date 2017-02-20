@@ -36,7 +36,6 @@ function createCoinbaseModal(bitcoinAddress, amount) {
 	if (amount < 1)
 		amount = 1;
 	var a = function i(){
-		/*
 		var n = document.getElementById("coinbase_widget");
 		console.log(n);
 		var tmp = this;
@@ -78,43 +77,7 @@ function createCoinbaseModal(bitcoinAddress, amount) {
 				case "button_clicked":
 					document.getElementById('coinbase_modal_iframe').style.display = "block"
 			}
-		}*/
-
-
-		var n = this;
-        this.init = function() {
-            n.domain = "https://buy.coinbase.com", n.link = document.getElementById("coinbase_widget"), n.button = n.generateIframe(n.buttonIframe()), n.link.parentNode.appendChild(n.button), n.modal = n.generateIframe(n.modalIframe()), document.body.appendChild(n.modal), n.link.onclick = function(e) {
-                e.preventDefault(), n.modal.style.display = "block"
-            }, window.addEventListener("message", n.handleMessage, !1)
-        }, this.generateIframe = function(n) {
-            var e = document.createElement("div");
-            return e.innerHTML = n, e.firstChild
-        }, this.generateParams = function(n) {
-            return "?address=" + encodeURIComponent(bitcoinAddress) + ("&amount=" + encodeURIComponent(amount)) + ("&code=" + encodeURIComponent(buyWidgetSettings.code)) + ("&currency=" + encodeURIComponent(buyWidgetSettings.currency)) + ("&prefill_name=" + encodeURIComponent(n.prefill_name)) + ("&prefill_phone=" + encodeURIComponent(n.prefill_phone)) + ("&prefill_email=" + encodeURIComponent(n.prefill_email)) + ("&crypto_currency=" + encodeURIComponent(buyWidgetSettings.crypto_currency)) + ("&state=" + encodeURIComponent(n.state))
-        }, this.modalIframeStyle = function() {
-            return "\n      transition: all 0.3s ease-out;\n      background-color: transparent;\n      border: 0px none transparent;\n      display: none;\n      position: fixed;\n      visibility: visible;\n      margin: 0px;\n      padding: 0px;\n      left: 0px;\n      top: 0px;\n      width: 100%;\n      height: 100%;\n      z-index: 9999;\n    "
-        }, this.modalIframe = function() {
-            var e = n.generateParams(n.link.dataset);
-            return "<iframe src='" + n.domain + "/" + e + "'\n                    id='coinbase_modal_iframe'\n                    name='coinbase_modal_iframe'\n                    style='" + n.modalIframeStyle() + "'\n                    scrolling='no'\n                    allowtransparency='true' frameborder='0'>\n      </iframe>"
-        }, this.buttonIframeStyle = function() {
-            return "\n      width: 273px;\n      height: 53px;\n      border: none;\n      overflow: hidden;\n      display: none;\n      border-radius: 5px;\n    "
-        }, this.buttonParams = function(n) {
-            return "?crypto_currency=" + encodeURIComponent(buyWidgetSettings.crypto_currency)
-        }, this.buttonIframe = function() {
-            var e = n.buttonParams(n.link.dataset);
-            return "<iframe src='" + n.domain + "/button" + e + "'\n                    id='coinbase_button_iframe'\n                    name='coinbase_button_iframe'\n                    style='" + n.buttonIframeStyle() + "'\n                    scrolling='no'\n                    allowtransparency='true'\n                    frameborder='0'>\n      </iframe>"
-        }, this.handleMessage = function(e) {
-            switch (e.data.event) {
-                case "modal_closed":
-                    n.modal.style.display = "none", n.modal.src = n.modal.src;
-                    break;
-                case "button_loaded":
-                    n.link.parentNode.removeChild(n.link), n.button.style.display = null;
-                    break;
-                case "button_clicked":
-                    n.modal.style.display = "block"
-            }
-        }
+		}
 	}
 	var r = new a;
 	r.init();
