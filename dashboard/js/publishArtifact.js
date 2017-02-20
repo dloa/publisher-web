@@ -152,31 +152,11 @@ function submitArtifact(){
 		window.onbeforeunload = function() {
 			return "You are currently publishing, are you sure you want to navigate away?";
 		}
-		var walletAddress = '';
-		for (var addr in wallet.addresses){
-			if ($("#publisherSelect").val().includes(addr))
-				walletAddress = addr;
-		}
-		console.log(walletAddress);
-		console.log(wallet.balances[walletAddress]);
-		if (wallet.balances[walletAddress] < 1 && !wallet.known_unspent[0]){
-			tradebot(walletAddress, function(){
-				// Publish once done!
-				var $active = $('.wizard .nav-tabs li.active');
-				$active.next().removeClass('disabled');
-				nextTab($active);
-				publishArtifact();
-			});
-			setTimeout(function(){
-				swal("Error!", "You must have at least 1 FLO in your wallet to publish an artifact.", "error");
-			}, 1000);
-			return;
-		} else {
-			var $active = $('.wizard .nav-tabs li.active');
-			$active.next().removeClass('disabled');
-			nextTab($active);
-			publishArtifact();
-		}
+		
+		var $active = $('.wizard .nav-tabs li.active');
+		$active.next().removeClass('disabled');
+		nextTab($active);
+		publishArtifact();
 	});
 }
 
@@ -287,6 +267,10 @@ function publishArtifact(){
 		var description = $(mediaType + ' #description').val();
 		var year = parseInt($(mediaType + ' #releaseDate').val());
 		var bitcoinAddress = $('#bitcoinAddress').val();
+
+		// Info calc
+		var totMinPlay = 0;
+		var totSugBuy = 0;
 
 		var mainHashIndex = 0;
 		if (!isBlank($(mediaType + 'PosterFile').val()))
@@ -441,8 +425,10 @@ function publishArtifact(){
 				if (!isBlank(displayName))
 					fileJSON['dname'] = displayName
 
-				if (!isBlank(minPlay))
+				if (!isBlank(minPlay)){
 					fileJSON['minPlay'] = minPlay;
+					totMinPlay += parseFloat(minPlay);
+				}
 
 				if (!isBlank(sugPlay))
 					fileJSON['sugPlay'] = sugPlay;
@@ -450,8 +436,10 @@ function publishArtifact(){
 				if (!isBlank(minBuy))
 					fileJSON['minBuy'] = minBuy;
 
-				if (!isBlank(sugBuy))
+				if (!isBlank(sugBuy)){
 					fileJSON['sugBuy'] = sugBuy;
+					totSugBuy += parseFloat(sugBuy);
+				}
 
 				if (disallowPlay)
 					fileJSON['disallowPlay'] = true;
@@ -509,8 +497,10 @@ function publishArtifact(){
 				if (!isBlank(displayName))
 					fileJSON['dname'] = displayName
 
-				if (!isBlank(minPlay))
+				if (!isBlank(minPlay)){
 					fileJSON['minPlay'] = minPlay;
+					totMinPlay += parseFloat(minPlay);
+				}
 
 				if (!isBlank(sugPlay))
 					fileJSON['sugPlay'] = sugPlay;
@@ -518,8 +508,10 @@ function publishArtifact(){
 				if (!isBlank(minBuy))
 					fileJSON['minBuy'] = minBuy;
 
-				if (!isBlank(sugBuy))
+				if (!isBlank(sugBuy)){
 					fileJSON['sugBuy'] = sugBuy;
+					totSugBuy += parseFloat(sugBuy);
+				}
 
 				if (disallowPlay)
 					fileJSON['disallowPlay'] = true;
@@ -553,11 +545,55 @@ function publishArtifact(){
 			}
 		}
 
-		document.getElementById('publishWell').innerHTML += '<pre>' + JSON.stringify(alexandriaMedia, null, 4) + "</pre><br>";
+		calculatArtifactCost(totMinPlay, totSugBuy, alexandriaMedia, function(data){
+			document.getElementById('publishWell').innerHTML += JSON.stringify(data);
 
-		LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, LibraryDCallback);
+
+			var walletAddress = '';
+			for (var addr in wallet.addresses){
+				if ($("#publisherSelect").val().includes(addr))
+					walletAddress = addr;
+			}
+			console.log(walletAddress);
+			console.log(wallet.balances[walletAddress]);
+
+			if (wallet.balances[walletAddress] < (data.pubFeeFLO + 1) && (wallet.known_unspent[0].amount < (data.pubFeeFLO + 1))){
+				tradebot(walletAddress, function(){
+					// Publish once done!
+					LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, data.pubFeeFLO, LibraryDCallback);
+				});
+				setTimeout(function(){
+					swal("Warning!", "You need more FLO to publish this artifact.", "warning");
+				}, 1000);
+				return;
+			} else {
+				LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, data.pubFeeFLO, LibraryDCallback);
+			}
+		})
 
 	}
+}
+
+function calculatArtifactCost(totMinPlay, totSugBuy, oipArtifact, callback){
+	$.getJSON("https://api.alexandria.io/alexandria/v2/info", function(info){
+		$.getJSON("https://api.alexandria.io/flo-market-data/v1/getAll", function(getAll){
+			var artCost = (totMinPlay + totSugBuy) / 2;
+
+			function s(x) {return x.charCodeAt(0);}
+			var postData = {
+				"artCost": artCost,
+				"avgArtCost": info.avgArtCost,
+				"artSize": JSON.stringify(oipArtifact).split('').map(s).length,
+				"floPerKb": 0.01,
+				"USDperFLO": parseFloat(getAll.USD)
+			}
+			console.log(postData);
+
+			$.post('https://api.alexandria.io/alexandria/v2/calcpubfee', JSON.stringify(postData), function(res){
+				callback(JSON.parse(res));
+			})
+		})
+	})
 }
 
 function isBlank(str) {

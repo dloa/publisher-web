@@ -18,7 +18,7 @@ LibraryDJS.signArtifact = function (wallet, ipfs, address, time) {
 	return wallet.signMessage(address, toSign);
 };
 // callback is (errorString, response) response=http://api.alexandria.io/#publish-new-artifact
-LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, callback) {
+LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, publishFee, callback) {
 	var time = unixTime();
 
 	var test = {
@@ -52,7 +52,7 @@ LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, c
 	data["alexandria-media"].timestamp = parseInt(time);
 	data["alexandria-media"].publisher = address;
 
-	LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.001, function (err, txIDs) {
+	LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.001, publishFee, function (err, txIDs) {
 		if (err != null)
 			callback(err,
 				JSON.stringify({
@@ -113,14 +113,18 @@ function unixTime() {
 }
 
 // callback is (errorString, txIDs Array)
-LibraryDJS.Send = function (wallet, jsonData, address, amount, callback) {
-	LibraryDJS.sendToBlockChain(wallet, jsonData, address, amount, function (err, txIDs) {
+LibraryDJS.Send = function (wallet, jsonData, address, amount, publishFee, callback) {
+	if (typeof publishFee == 'function'){
+		callback = publishFee;
+		publishFee = 0.001;
+	}
+	LibraryDJS.sendToBlockChain(wallet, jsonData, address, amount, publishFee, function (err, txIDs) {
 		callback(err, txIDs);
 	});
 };
 
 // callback is (errorString, txIDs Array)
-LibraryDJS.sendToBlockChain = function (wallet, txComment, address, amount, callback) {
+LibraryDJS.sendToBlockChain = function (wallet, txComment, address, amount, publishFee, callback) {
 
 	// set tx fee
 	// feature non existent in js currently
@@ -132,7 +136,7 @@ LibraryDJS.sendToBlockChain = function (wallet, txComment, address, amount, call
 	if (txComment.length > (CHOP_MAX_LEN * 10)) {
 		callback("txComment is too large to fit within 10 multipart transactions. try making it smaller!");
 	} else 	if (txComment.length > TXCOMMENT_MAX_LEN) {
-		LibraryDJS.multiPart(wallet, txComment, address, amount, callback);
+		LibraryDJS.multiPart(wallet, txComment, address, amount, publishFee, callback);
 	}
 	else {
 		wallet.sendCoins(address, address, amount, txComment, function (err, data) {
@@ -142,7 +146,7 @@ LibraryDJS.sendToBlockChain = function (wallet, txComment, address, amount, call
 };
 
 // callback is (errorString, txIDs Array)
-LibraryDJS.multiPart = function (wallet, txComment, address, amount, callback) {
+LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee, callback) {
     var txIDs = [];
 
     var multiPartPrefix = "alexandria-media-multipart(";

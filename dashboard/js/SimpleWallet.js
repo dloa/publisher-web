@@ -354,7 +354,12 @@ var Wallet = (function () {
 		}
 		return allTransactions;
 	};
-	Wallet.prototype.sendCoins = function (fromAddress, toAddress, amount, txComment, callback) {
+	Wallet.prototype.sendCoins = function (fromAddress, toAddress, amount, txComment, pubFee, callback) {
+		if (typeof pubFee == "function"){
+			callback = pubFee;
+			pubFee = 0.01;
+		}
+
 		if (typeof txComment == "undefined")
 			txComment = '';
 		if (typeof txComment == typeof Function) {
@@ -403,6 +408,10 @@ var Wallet = (function () {
 					tx.addOutput(toAddress, amount);
 					console.log(tx);
 					var estimatedFee = _this.coin_network.estimateFee(tx);
+
+					if (pubFee > estimatedFee)
+						estimatedFee = pubFee;
+					
 					if (estimatedFee > 0) {
 						// Temporary fix for "stuck" transactions
 					   // estimatedFee = estimatedFee * 3;
