@@ -65,7 +65,7 @@ function setupWebsocket(){
 					var tmpVout = 1;
 					for (var i = 0; i < json.vout.length; i++){
 						if (json.vout[i].scriptPubKey.addresses[0] == floAddress)
-							tmpVout = txinfo.vout[i].n;
+							tmpVout = json.vout[i].n;
 					}
 
 					wallet.known_unspent.push({ address: floAddress, amount: 1, confirmations: 0, txid: res.txid, vout: tmpVout});
