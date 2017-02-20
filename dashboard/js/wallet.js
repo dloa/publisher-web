@@ -150,6 +150,21 @@ if (typeof(Storage) !== "undefined") {
 			localStorage.setItem("loginWalletEnc", '');
 		}
 
+		if (localStorage.getItem("justSignedUp") == "true"){
+			var data = localStorage.getItem("justSignedUpData").split('/');
+			var x = document.getElementById("publisherSelect");
+			var option = document.createElement("option");
+			option.value = data[0];
+			option.text = data[1] + "(" + data[0] + ")";
+			x.add(option);
+
+			// Set the just added option to be active.
+			x.value = option.text;
+
+			localStorage.setItem("justSignedUp", "");
+			localStorage.setItem("justSignedUpData", "");
+		}
+
 		if (window.location.pathname.includes('login.html')){
 			window.location.href = 'index.html';
 		}

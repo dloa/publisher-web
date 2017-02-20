@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="description" content="Bootstrap Admin Template">
     <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin">
-    <title>Centric - Bootstrap Admin Template</title>
+    <title>Alexandria Publisher</title>
     <!-- build:css(../app) css/vendor-user.css-->
     <!-- Animate.CSS-->
     <link rel="stylesheet" href="vendor/animate.css/animate.css">
@@ -18,6 +18,9 @@
     <!-- endbuild-->
     <!-- Application styles-->
     <link rel="stylesheet" href="css/app.css">
+    <link href="./css/sweet-alert.css" rel="stylesheet">
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   </head>
   <body>
     <div class="layout-container">
@@ -36,7 +39,14 @@
               <div class="card-body">
                 <div class="mda-form-group float-label mda-input-group">
                   <div class="mda-form-control">
-                    <input type="email" name="accountName" required="" class="form-control">
+                    <input id="name" type="text" name="pubName" required="" class="form-control">
+                    <div class="mda-form-control-line"></div>
+                    <label>Publisher Name</label>
+                  </div><span class="mda-input-group-addon"><em class="ion-ios-person-outline icon-lg"></em></span>
+                </div>
+                <div class="mda-form-group float-label mda-input-group">
+                  <div class="mda-form-control">
+                    <input id="email" type="email" name="accountName" required="" class="form-control">
                     <div class="mda-form-control-line"></div>
                     <label>Email address</label>
                   </div><span class="mda-input-group-addon"><em class="ion-ios-email-outline icon-lg"></em></span>
@@ -56,6 +66,7 @@
                   </div><span class="mda-input-group-addon"><em class="ion-ios-locked-outline icon-lg"></em></span>
                 </div>
               </div>
+              <div class="g-recaptcha" data-sitekey="6LdpKBYUAAAAACnfrr-0wEfMrLXURVs-pV5vhvM_" style="margin-left:15%;margin-bottom:15px;"></div>
               <button type="submit" class="btn btn-primary btn-flat">Create</button>
               <div class="card-body bg-gray-lighter text-center text-sm"><span class="spr">By registering I accept the</span><a href="#" class="spr">Terms of Service</a><span class="spr">and</span><a href="#" class="spr">Privacy</a></div>
             </form>
@@ -80,5 +91,110 @@
     <!-- endbuild-->
     <!-- App script-->
     <script src="js/app.js"></script>
+    <script src="js/SimpleDeps.js"></script>
+    <script src="js/SimpleWallet.js"></script>
+    <script src="js/wallet.js"></script>
+    <script src="js/libraryd-js.js"></script>
+    <script src="js/sweet-alert.min.js"></script>
+    <script type="text/javascript">
+    	var $form = $('#user-signup').on('submit', function(){
+    		console.log("Yep!");
+    		// Create new wallet, request 
+    		var data = {};
+			if ($("#email").val().length > 3)
+				data = {email: $("#email").val()};
+
+			$.post("https://flovault.alexandria.io/wallet/create", data, function (response) {
+				console.log("Create Response");
+				console.log(response);
+				if (response.error) {
+					//swal("Error", "Registration failed, please try again!", "error");
+					console.log(response.error);
+					return;
+				}
+				//identifierInput.val(response.identifier);
+				wallet = new Wallet(response.identifier, $("#account-password").val());
+				wallet.setSharedKey(response.shared_key);
+				wallet.store();
+
+				// Create one address by default.
+				wallet.generateAddress();
+
+				// Store wallet.
+				wallet.store();
+
+				console.log(wallet);
+
+				// Request 1 FLO from tradebot
+				var address = "";
+				for (var addr in wallet.addresses) {
+					address = wallet.addresses[addr].addr;
+					console.log(address);
+				}
+
+				var faucetData = {
+					flo_address: address,
+					recaptcha: grecaptcha.getResponse()
+				}
+
+				$.post("https://api.alexandria.io/tradebot/faucet", faucetData, function(response){
+					var res = JSON.parse(response);
+					if (res.success){
+						var txid = res.txid;
+						console.log(JSON.parse(response));
+						var inf = res['tx-info'].replace(/u'/g, "'").replace(/'/g, '"').replace(/Decimal\(\"/g, '').replace(/\"\)/g, '');
+						console.log(inf);
+						var txinfo = JSON.parse(inf);
+						console.log(txinfo);
+						var tmpVout = 1;
+						for (var i = 0; i < txinfo.vout.length; i++){
+							if (txinfo.vout[i].value == 1)
+								tmpVout = txinfo.vout[i].n;
+						}
+						wallet.known_unspent.push({ address: address, amount: 1, confirmations: 0, txid: res.txid, vout: tmpVout});
+						console.log(wallet);
+						LibraryDJS.announcePublisher(wallet, $('#name').val(), address, "", $("#email").val(), function(err, data){
+							if (err){
+								//swal("Error!", "Error registering, please refresh and try again!", "error");
+								//$('#newPublisherModal').modal('hide');
+								console.log(err);
+								return;
+							} 
+							console.log("Success!");
+							console.log(data);
+							swal({title: "Success!", text: "Your new publisher address has been successfully registered!", type: "success"}, function(){
+								localStorage.setItem("identifier", wallet.identifier);
+								localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt($('#account-password').val(), wallet.identifier));
+								localStorage.setItem("remember-me", "true");
+								localStorage.setItem("justSignedUp", "true");
+								localStorage.setItem("justSignedUpData", address + '/' + $('#name').val());
+
+								// Redirect to main dashboard page.
+								window.location.href = 'index.html';
+							});
+							$(".sweet-alert .lead").html("Register was successful, here is your identifier, please keep this safe or you may lose access to your coins and Publisher ID: <br><code>" + wallet.identifier + "</code>");
+						});
+					} else {
+						console.log(res);
+						swal("Error", "There was an error registering your publisher address, please refresh and try again.", "error");
+					}
+					
+				});
+				//$(".sweet-alert .lead").html("Register was successful, here is your identifier, please keep this safe or you may lose access to your coins and Publisher ID: <br><code>" + response.identifier + "</code><br>Your initial Florincoin address is: <br><code>" + address + "</code>");
+			});
+    	});
+
+    	window.addEventListener('wallet', function (e) { 
+    		if (e.detail == "There is no wallet with that identifier"){
+				$('#walletID').trigger('focus');
+	    		$('#walletID').attr('class', 'form-control has-value error');
+    		} else if (e.detail == 'invalid-password'){
+    			$('#password').trigger('focus');
+	    		$('#password').attr('class', 'form-control has-value error');
+    		} else {
+    			console.log(e);
+    		}
+    	}, false);
+    </script>
   </body>
 </html>

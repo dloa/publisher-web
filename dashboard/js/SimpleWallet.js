@@ -160,17 +160,23 @@ var Wallet = (function () {
 			wallet_data: encWalletDataCipher
 		}, function (data) {
 			if (data.error !== false) {
-				swal("Error", data.error.message, "error");
-				swal("Error", 'WARNING: There was an error saving your wallet. ' +
-					'If you have created new addresses in the past few minutes, ' +
-					'please save their private keys ASAP, as your encrypted wallet' +
-					' may not have been updated properly on our servers.', "error");
+				//swal("Error", data.error.message, "error");
+				//swal("Error", 'WARNING: There was an error saving your wallet. ' +
+				//	'If you have created new addresses in the past few minutes, ' +
+				//	'please save their private keys ASAP, as your encrypted wallet' +
+				//	' may not have been updated properly on our servers.', "error");
+				var event = new CustomEvent('wallet', {'detail': 'store-error'});
+					
+				window.dispatchEvent(event);
 			}
 		}, "json").fail(function () {
-			swal("Error", 'WARNING: There was an error saving your wallet. ' +
-				'If you have created new addresses in the past few minutes, ' +
-				'please save their private keys ASAP, as your encrypted wallet' +
-				' may not have been updated properly on our servers.', error);
+			//swal("Error", 'WARNING: There was an error saving your wallet. ' +
+			//	'If you have created new addresses in the past few minutes, ' +
+			//	'please save their private keys ASAP, as your encrypted wallet' +
+			//	' may not have been updated properly on our servers.', error);
+			var event = new CustomEvent('wallet', {'detail': 'store-post-error'});
+					
+			window.dispatchEvent(event);
 		});
 	};
 
@@ -240,14 +246,11 @@ var Wallet = (function () {
 
 		for (var i = 0; i < this.known_unspent.length; ++i) {
 			// note: we delete from known_unspent on spend, so we need to check if it's undefined
-			if (this.known_unspent[i]		   !== undefined && 
-				this.known_spent[i]			 !== null && 
-				this.known_unspent[i].address	== address) 
+			if (this.known_unspent[i] !== undefined && this.known_spent[i] !== null && this.known_unspent[i].address == address) 
 			{
 				var dupe = false;
 				for (var j = 0; j < unspent.length; ++j)
-					if (this.known_unspent[i].txid == merged[j].txid &&
-						this.known_unspent[i].vout == merged[j].vout) {
+					if (this.known_unspent[i].txid == merged[j].txid && this.known_unspent[i].vout == merged[j].vout) {
 						dupe = true;
 						break;
 					}
@@ -366,8 +369,11 @@ var Wallet = (function () {
 		if (this.validateKey(toAddress) && this.validateKey(fromAddress)) {
 			if (fromAddress in this.addresses && this.validateKey(this.addresses[fromAddress].priv, true)) {
 				this.refreshBalances();
-				if (this.balances[fromAddress] < amount) {
-					swal("Error!", "You don't have enough coins to do that", "error");
+				console.log(this);
+				if (this.balances[fromAddress] < amount && this.known_unspent.length <= 0) {
+					var event = new CustomEvent('wallet', {'detail': 'balance-too-low'});
+					
+					window.dispatchEvent(event);
 					return;
 				}
 				this.getUnspent(fromAddress, function (data) {
@@ -389,7 +395,7 @@ var Wallet = (function () {
 					var unspents = data.unspent;
 					_this.putSpent.bind(_this);
 					for (var v in unspents) {
-						if (unspents[v].confirmations) {
+						if (unspents[v].confirmations >= 0) {
 							tx.addInput(unspents[v].txid, unspents[v].vout);
 							_this.putSpent(unspents[v]);
 						}
@@ -477,15 +483,22 @@ var Wallet = (function () {
 		}
 		var _this = this;
 		$.post(flovaultBaseURL + '/wallet/pushtx', {hex: tx}, function (data) {
+			console.log(data);
 			if (!data.txid) {
-				swal("Error", 'There was an error pushing your transaction. May be a temporary problem, please try again later.', "error");
+				var event = new CustomEvent('wallet', {'detail': 'txpush-post'});
+				
+				window.dispatchEvent(event);
 			}
 			else {
 				callback(data);
 			}
 			_this.refreshBalances();
-		}, "json").fail(function () {
-			swal("Error", 'There was an error pushing your transaction. May be a temporary problem, please try again later.', "error");
+		}, "json").fail(function (data) {
+			console.log(data);
+			//swal("Error", 'There was an error pushing your transaction. May be a temporary problem, please try again later.', "error");
+			var event = new CustomEvent('wallet', {'detail': 'txpush-post'});
+			
+			window.dispatchEvent(event);
 		});
 	};
 	Wallet.prototype.setBalance = function (address, balance) {
