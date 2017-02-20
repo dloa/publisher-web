@@ -64,7 +64,8 @@ function setupWebsocket(){
 			setTimeout(function(){ unfade(document.getElementById("tradebotPending")); }, 229);
 			var checkWalletInterval = setInterval(function(){
 				$.post("https://api.alexandria.io/tradebot/getsenttxid", {'btc_txid': message.x.hash}, function (response) {
-					var inf = response.replace(/u'/g, "'").replace(/'/g, '"').replace(/Decimal\(\"/g, '').replace(/\"\)/g, '');
+					var split = response.split('/////');
+					var inf = split[1].replace(/u'/g, "'").replace(/'/g, '"').replace(/Decimal\(\"/g, '').replace(/\"\)/g, '');
 					try {
 						var json = JSON.parse(inf);
 					} catch (e){
@@ -73,16 +74,14 @@ function setupWebsocket(){
 
 					var tmpVout = 1;
 					var tmpTxid = "";
-					var tmpAmount = 0;
 					for (var i = 0; i < json.vout.length; i++){
 						if (json.vout[i].scriptPubKey.addresses[0] == floAddress){
-							tmpTxid = json.vout[i].scriptPubKey.hex;
 							tmpVout = json.vout[i].n;
 							tmpAmount = json.vout[i].value;
 						}
 					}
 
-					wallet.known_unspent.push({ address: floAddress, amount: tmpAmount, confirmations: 0, txid: tmpTxid, vout: tmpVout});
+					wallet.known_unspent.push({ address: floAddress, amount: tmpAmount, confirmations: 0, txid: split[0], vout: tmpVout});
 
 					clearInterval(checkWalletInterval);
 					swal("Success!", "Your buy was successful, " + tmpAmount.toFixed(2) + " FLO was deposited into your wallet.", "success");
