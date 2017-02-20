@@ -278,7 +278,11 @@ function publishArtifact(){
 		var mediaType = "#" + $("#metainfo div.active").attr('id');
 
 		// Load the selected and only keep the address that is inside the parens.
-		var walletAddress = $("#publisherSelect").val().replace(/[^()](?=([^()]*\([^()]*\))*[^()]*$)/g, '').replace('(', '').replace(')', '');
+		var walletAddress = '';
+		for (var addr in wallet.addresses){
+			if ($("#publisherSelect").val().includes(addr))
+				walletAddress = addr;
+		}
 		var title = $(mediaType + ' #title').val();
 		var description = $(mediaType + ' #description').val();
 		var year = parseInt($(mediaType + ' #releaseDate').val());
