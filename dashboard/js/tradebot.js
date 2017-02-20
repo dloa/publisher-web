@@ -58,6 +58,20 @@ function setupWebsocket(){
 			fade(document.getElementById("tradebotBuy"));
 			setTimeout(function(){ unfade(document.getElementById("tradebotPending")); }, 229);
 			var checkWalletInterval = setInterval(function(){
+				$.post("api.alexandria.io/tradebot/getsenttxid", {'btc_txid': message.x.hash}, function (response) {
+					var inf = response.replace(/u'/g, "'").replace(/'/g, '"').replace(/Decimal\(\"/g, '').replace(/\"\)/g, '');
+					var json = JSON.parse(inf);
+
+					var tmpVout = 1;
+					for (var i = 0; i < json.vout.length; i++){
+						if (json.vout[i].scriptPubKey.addresses[0] == floAddress)
+							tmpVout = txinfo.vout[i].n;
+					}
+
+					wallet.known_unspent.push({ address: floAddress, amount: 1, confirmations: 0, txid: res.txid, vout: tmpVout});
+					console.log(wallet);
+					console.log("doneeeeeee~!!!");
+				}
 				wallet.refreshBalances(function(data){
 					console.log("wallet balance: " + wallet.balances[floAddress])
 					if (wallet.balances[floAddress] > startingBalance){
