@@ -71,15 +71,17 @@ function setupWebsocket(){
 					var tmpAmount = 0;
 					for (var i = 0; i < json.vout.length; i++){
 						if (json.vout[i].scriptPubKey.addresses[0] == floAddress){
-							tmpTxid = json.vout[i].hex;
+							tmpTxid = json.vout[i].scriptPubKey.hex;
 							tmpVout = json.vout[i].n;
 							tmpAmount = json.vout[i].value;
 						}
 					}
 
 					wallet.known_unspent.push({ address: floAddress, amount: tmpAmount, confirmations: 0, txid: tmpTxid, vout: tmpVout});
-					console.log(wallet);
-					console.log("doneeeeeee~!!!");
+
+					clearInterval(checkWalletInterval);
+					swal("Success!", "Your buy was successful, " + tmpAmount.toFixed(2) + " FLO was deposited into your wallet.", "success");
+						$('#tradebotModal').modal('hide');
 				});
 				wallet.refreshBalances(function(data){
 					console.log("wallet balance: " + wallet.balances[floAddress])
