@@ -85,7 +85,7 @@ function setupWebsocket(){
 
 					clearInterval(checkWalletInterval);
 					swal("Success!", "Your buy was successful, " + tmpAmount.toFixed(2) + " FLO was deposited into your wallet.", "success");
-						$('#tradebotModal').modal('hide');
+					$('#tradebotModal').modal('hide');
 
 					tbcallback();
 				});

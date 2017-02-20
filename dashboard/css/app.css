@@ -3147,7 +3147,7 @@ fieldset[disabled] .btn-inverse.active {
   filter: alpha(opacity=30);
 }
 .modal-backdrop {
-  position: fixed;
+  position: relative;
   bottom: 0;
 }
 
