@@ -395,7 +395,7 @@ var Wallet = (function () {
 					var unspents = data.unspent;
 					_this.putSpent.bind(_this);
 					for (var v in unspents) {
-						if (unspents[v].confirmations >= 0) {
+						if (unspents[v].confirmations) {
 							tx.addInput(unspents[v].txid, unspents[v].vout);
 							_this.putSpent(unspents[v]);
 						}
