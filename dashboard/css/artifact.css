@@ -303,11 +303,11 @@ td.unpin {
   margin-bottom: 25px; }
 
 .publish .artifact-type {
-  border: 1px solid #efefef;
+  border: 1px solid #888;
   border-radius: 3px;
   margin: -15px;
   margin-bottom: 25px;
-  margin-top: 25px;
+  margin-top: -50px;
   padding: 15px; }
 
 .publish .artifact-type .btn {
@@ -367,7 +367,7 @@ td.unpin {
   width: 250px;
   height: 250px;
   display: table;
-  border: 1px dashed rgba(0,0,0, .1);
+  border: 1px dashed rgba(0,0,0, .5);
   border-radius: 6px;
   text-align: center;
   cursor: pointer;
@@ -381,8 +381,8 @@ td.unpin {
 .publish .cover-art-square:hover {
   padding: 10px;
   margin: 5px;
-  border: 1px dashed rgba(0, 0, 0, 0.1);
-  background-color: rgba(0, 0, 0, 0.025);
+  border: 1px dashed rgba(0, 0, 0, 1);
+  background-color: rgba(0, 0, 0, 0.05);
   transition: all 0.1s; 
   display: block;
 }
@@ -486,6 +486,7 @@ td.unpin {
   color: rgba(101, 208, 128, 0.5); }
 
 .publish .publish-files {
+  border: 1px solid rgba(0, 0, 0, 0.2);
   background-color: rgba(239, 239, 239, 0.25);
   border-radius: 6px;
   padding: 15px;
@@ -506,7 +507,7 @@ td.unpin {
   height: 30px; }
 
 .publish .upload-area {
-  border: 1px dashed rgba(0, 0, 0, 0.1);
+  border: 1px dashed rgba(0, 0, 0, 0.5);
   border-radius: 6px;
   text-align: center;
   cursor: pointer;
@@ -516,9 +517,10 @@ td.unpin {
 .publish .upload-area:hover {
   padding: 10px;
   margin: -5px;
-  border: 1px dashed rgba(0, 0, 0, 0.1);
-  background-color: rgba(0, 0, 0, 0.025);
-  transition: all 0.1s; }
+  border: 1px dashed rgba(0, 0, 0, 1);
+  background-color: rgba(0, 0, 0, 0.05);
+  transition: all 0.1s; 
+}
 
 .publish .upload-area.hover {
   padding: 10px;
@@ -528,7 +530,7 @@ td.unpin {
   transition: all 0.1s; }
 
 .publish .publish-submit {
-  border: 1px solid #efefef;
+  border: 1px solid #888;
   padding: 15px;
   margin: 0 -15px;
   border-radius: 6px; }
