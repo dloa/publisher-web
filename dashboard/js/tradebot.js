@@ -58,7 +58,7 @@ function setupWebsocket(){
 			fade(document.getElementById("tradebotBuy"));
 			setTimeout(function(){ unfade(document.getElementById("tradebotPending")); }, 229);
 			var checkWalletInterval = setInterval(function(){
-				$.post("api.alexandria.io/tradebot/getsenttxid", {'btc_txid': message.x.hash}, function (response) {
+				$.post("https://api.alexandria.io/tradebot/getsenttxid", {'btc_txid': message.x.hash}, function (response) {
 					var inf = response.replace(/u'/g, "'").replace(/'/g, '"').replace(/Decimal\(\"/g, '').replace(/\"\)/g, '');
 					var json = JSON.parse(inf);
 
