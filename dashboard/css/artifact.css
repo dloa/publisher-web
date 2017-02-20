@@ -269,11 +269,11 @@ td.unpin {
 
 /* Tabs */
 .nav-pills li.active a {
-  background-color: rgba(83, 139, 212, 0.1);
+  background-color: rgba(83, 139, 212, 0.3);
   color: #538bd4; }
 
 .nav-pills li.active a:hover, .nav-pills li.active a:focus {
-  background-color: rgba(83, 139, 212, 0.1);
+  background-color: rgba(83, 139, 212, 0.3);
   color: #538bd4;
   transition: 0.1s all; }
 
@@ -286,7 +286,7 @@ td.unpin {
   transition: 0.1s all; }
 
 .nav-pills li a:hover, .nav-pills li a:focus {
-  background: rgba(83, 139, 212, 0.05);
+  background: rgba(83, 139, 212, 0.2);
   color: #8e8e90;
   transition: 0.1s all; }
 
