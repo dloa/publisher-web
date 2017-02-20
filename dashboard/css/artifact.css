@@ -328,7 +328,7 @@ td.unpin {
   width: 250px;
   height: 150px;
   display: table;
-  border: 1px dashed rgba(0,0,0, .1);
+  border: 1px dashed rgba(0,0,0, .5);
   border-radius: 6px;
   text-align: center;
   cursor: pointer;
@@ -342,8 +342,8 @@ td.unpin {
 .publish .cover-art:hover {
   padding: 10px;
   margin: 5px;
-  border: 1px dashed rgba(0, 0, 0, 0.1);
-  background-color: rgba(0, 0, 0, 0.025);
+  border: 1px dashed rgba(0, 0, 0, 1);
+  background-color: rgba(0, 0, 0, 0.05);
   transition: all 0.1s; 
   display: block;
 }
@@ -406,7 +406,7 @@ td.unpin {
   width: 175px;
   height: 250px;
   display: table;
-  border: 1px dashed rgba(0,0,0, .1);
+  border: 1px dashed rgba(0,0,0, .5);
   border-radius: 6px;
   text-align: center;
   cursor: pointer;
@@ -420,8 +420,8 @@ td.unpin {
 .publish .cover-art-poster:hover {
   padding: 10px;
   margin: 5px;
-  border: 1px dashed rgba(0, 0, 0, 0.1);
-  background-color: rgba(0, 0, 0, 0.025);
+  border: 1px dashed rgba(0, 0, 0, 1);
+  background-color: rgba(0, 0, 0, 0.05);
   transition: all 0.1s; 
   display: block;
 }
