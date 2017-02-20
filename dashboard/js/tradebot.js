@@ -60,15 +60,24 @@ function setupWebsocket(){
 			var checkWalletInterval = setInterval(function(){
 				$.post("https://api.alexandria.io/tradebot/getsenttxid", {'btc_txid': message.x.hash}, function (response) {
 					var inf = response.replace(/u'/g, "'").replace(/'/g, '"').replace(/Decimal\(\"/g, '').replace(/\"\)/g, '');
-					var json = JSON.parse(inf);
-
-					var tmpVout = 1;
-					for (var i = 0; i < json.vout.length; i++){
-						if (json.vout[i].scriptPubKey.addresses[0] == floAddress)
-							tmpVout = json.vout[i].n;
+					try {
+						var json = JSON.parse(inf);
+					} catch (e){
+						return;
 					}
 
-					wallet.known_unspent.push({ address: floAddress, amount: 1, confirmations: 0, txid: res.txid, vout: tmpVout});
+					var tmpVout = 1;
+					var tmpTxid = "";
+					var tmpAmount = 0;
+					for (var i = 0; i < json.vout.length; i++){
+						if (json.vout[i].scriptPubKey.addresses[0] == floAddress){
+							tmpTxid = json.vout[i].hex;
+							tmpVout = json.vout[i].n;
+							tmpAmount = json.vout[i].value;
+						}
+					}
+
+					wallet.known_unspent.push({ address: floAddress, amount: tmpAmount, confirmations: 0, txid: tmpTxid, vout: tmpVout});
 					console.log(wallet);
 					console.log("doneeeeeee~!!!");
 				});
