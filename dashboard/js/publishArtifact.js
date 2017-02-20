@@ -160,7 +160,13 @@ function submitArtifact(){
 		console.log(walletAddress);
 		console.log(wallet.balances[walletAddress]);
 		if (wallet.balances[walletAddress] < 1){
-			tradebot(walletAddress);
+			tradebot(walletAddress, function(){
+				// Publish once done!
+				var $active = $('.wizard .nav-tabs li.active');
+				$active.next().removeClass('disabled');
+				nextTab($active);
+				publishArtifact();
+			});
 			setTimeout(function(){
 				swal("Error!", "You must have at least 1 FLO in your wallet to publish an artifact.", "error");
 			}, 1000);

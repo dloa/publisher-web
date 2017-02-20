@@ -4,13 +4,18 @@ var qrcode = new QRCode("qrcode");
 var MAX_BUY = 2.00; // $2
 var MIN_BUY = 0.03; // 3¢
 
-var marketData, tradebotBalance, btcAddress, btc, usd, flo, perBTC, bitcoinWebsocket, floAddress, startingBalance, restartWebSocket;
+var marketData, tradebotBalance, btcAddress, btc, usd, flo, perBTC, bitcoinWebsocket, floAddress, startingBalance, restartWebSocket, tbcallback;
 
 btcValueText = $("#btcValue");
 usdValueText = $("#usdValue");
 floValueText = $("#floValue");
 
-function tradebot(address){
+function tradebot(address, callback){
+	if (typeof callback != 'function')
+		callback = function(){}
+
+	tbcallback = callback;
+
 	console.log("Creating tradebot interface with address: " + address);
 
 	// Save the address and starting balance
@@ -82,6 +87,8 @@ function setupWebsocket(){
 					clearInterval(checkWalletInterval);
 					swal("Success!", "Your buy was successful, " + tmpAmount.toFixed(2) + " FLO was deposited into your wallet.", "success");
 						$('#tradebotModal').modal('hide');
+
+					tbcallback();
 				});
 				wallet.refreshBalances(function(data){
 					console.log("wallet balance: " + wallet.balances[floAddress])
@@ -91,6 +98,7 @@ function setupWebsocket(){
 						refreshWalletInfo();
 						swal("Success!", "Your buy was successful, " + (wallet.balances[floAddress]-startingBalance).toFixed(2) + " FLO was deposited into your wallet.", "success");
 						$('#tradebotModal').modal('hide');
+						tbcallback();
 					}
 				});
 			}, 6000);
