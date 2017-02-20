@@ -532,7 +532,7 @@ function publishArtifact(){
 				},
 				function(){
 					// Redirect to browser :)
-				  	window.location.replace("http://alexandria.io/browser/");
+				  	//window.location.replace("http://alexandria.io/browser/");
 				});
 			}
 		}
