@@ -152,7 +152,12 @@ function submitArtifact(){
 		window.onbeforeunload = function() {
 			return "You are currently publishing, are you sure you want to navigate away?";
 		}
-		var walletAddress = $("#publisherSelect").val().replace(/[^()](?=([^()]*\([^()]*\))*[^()]*$)/g, '').replace('(', '').replace(')', '');
+		var walletAddress = '';
+		for (var addr in wallet.addresses){
+			if ($("#publisherSelect").val().includes(addr))
+				walletAddress = addr;
+		}
+		console.log(walletAddress);
 		console.log(wallet.balances[walletAddress]);
 		if (wallet.balances[walletAddress] < 1){
 			tradebot(walletAddress);
@@ -160,11 +165,12 @@ function submitArtifact(){
 				swal("Error!", "You must have at least 1 FLO in your wallet to publish an artifact.", "error");
 			}, 1000);
 			return;
+		} else {
+			var $active = $('.wizard .nav-tabs li.active');
+			$active.next().removeClass('disabled');
+			nextTab($active);
+			publishArtifact();
 		}
-		var $active = $('.wizard .nav-tabs li.active');
-		$active.next().removeClass('disabled');
-		nextTab($active);
-		publishArtifact();
 	});
 }
 
