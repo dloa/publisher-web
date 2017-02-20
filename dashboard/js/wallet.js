@@ -144,6 +144,12 @@ if (typeof(Storage) !== "undefined") {
 		$("#loginWalletIdentifier").val(localStorage.getItem("identifier"));
 		$("#loginWalletPassword").val(CryptoJS.AES.decrypt(localStorage.getItem("loginWalletEnc"), localStorage.getItem("identifier")).toString(CryptoJS.enc.Utf8));
 
+		if (window.location.pathname.includes('login.html')){
+			window.location.href = 'index.html';
+		} else if (window.location.pathname.includes('index.html')){
+			loginToWallet();
+		}
+
 		// If remember me is false then wipe the data, we just needed to store it until after redirect
 		if (localStorage.getItem("remember-me") == "false"){
 			localStorage.setItem("identifier", '');
@@ -155,20 +161,34 @@ if (typeof(Storage) !== "undefined") {
 			var x = document.getElementById("publisherSelect");
 			var option = document.createElement("option");
 			option.value = data[0];
-			option.text = data[1] + "(" + data[0] + ")";
+			option.text = data[1] + " (" + data[0] + ")";
 			x.add(option);
 
+			$("#publisherSelect option[value='None Registered...']").remove();
+
 			// Set the just added option to be active.
-			x.value = option.text;
+			x.value = option.value;
 
-			localStorage.setItem("justSignedUp", "");
-			localStorage.setItem("justSignedUpData", "");
-		}
+			$.getJSON( "https://api.alexandria.io/alexandria/v1/publisher/get/all", function( data ) {
+				var addrInPubs = false;
+				for (var i = 0; i < data.length; i++) {
+					//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
+					for (var addr in wallet.addresses) {
+						var address = wallet.addresses[addr].addr;
+						if (data[i]["publisher-data"]["alexandria-publisher"].address == address){
+							addrInPubs = true;
+						}
+					}
+				}
 
-		if (window.location.pathname.includes('login.html')){
-			window.location.href = 'index.html';
+				if (addrInPubs){
+					localStorage.setItem("justSignedUp", '');
+					localStorage.setItem("justSignedUpData", '');
+				}
+			});
+		} else {
+			loadAddresses();
 		}
-		loginToWallet();
 	} else {
 		if (window.location.pathname.includes('index.html')){
 			window.location.href = 'login.html';
