@@ -90,7 +90,7 @@ function createCoinbaseModal(bitcoinAddress, amount) {
             var e = document.createElement("div");
             return e.innerHTML = n, e.firstChild
         }, this.generateParams = function(n) {
-            return "?address=" + encodeURIComponent(n.address) + ("&amount=" + encodeURIComponent(n.amount)) + ("&code=" + encodeURIComponent(n.code)) + ("&currency=" + encodeURIComponent(n.currency)) + ("&prefill_name=" + encodeURIComponent(n.prefill_name)) + ("&prefill_phone=" + encodeURIComponent(n.prefill_phone)) + ("&prefill_email=" + encodeURIComponent(n.prefill_email)) + ("&crypto_currency=" + encodeURIComponent(n.crypto_currency)) + ("&state=" + encodeURIComponent(n.state))
+            return "?address=" + encodeURIComponent(bitcoinAddress) + ("&amount=" + encodeURIComponent(amount)) + ("&code=" + encodeURIComponent(buyWidgetSettings.code)) + ("&currency=" + encodeURIComponent(buyWidgetSettings.currency)) + ("&prefill_name=" + encodeURIComponent(n.prefill_name)) + ("&prefill_phone=" + encodeURIComponent(n.prefill_phone)) + ("&prefill_email=" + encodeURIComponent(n.prefill_email)) + ("&crypto_currency=" + encodeURIComponent(buyWidgetSettings.crypto_currency)) + ("&state=" + encodeURIComponent(n.state))
         }, this.modalIframeStyle = function() {
             return "\n      transition: all 0.3s ease-out;\n      background-color: transparent;\n      border: 0px none transparent;\n      display: none;\n      position: fixed;\n      visibility: visible;\n      margin: 0px;\n      padding: 0px;\n      left: 0px;\n      top: 0px;\n      width: 100%;\n      height: 100%;\n      z-index: 9999;\n    "
         }, this.modalIframe = function() {
@@ -99,7 +99,7 @@ function createCoinbaseModal(bitcoinAddress, amount) {
         }, this.buttonIframeStyle = function() {
             return "\n      width: 273px;\n      height: 53px;\n      border: none;\n      overflow: hidden;\n      display: none;\n      border-radius: 5px;\n    "
         }, this.buttonParams = function(n) {
-            return "?crypto_currency=" + encodeURIComponent(n.crypto_currency)
+            return "?crypto_currency=" + encodeURIComponent(buyWidgetSettings.crypto_currency)
         }, this.buttonIframe = function() {
             var e = n.buttonParams(n.link.dataset);
             return "<iframe src='" + n.domain + "/button" + e + "'\n                    id='coinbase_button_iframe'\n                    name='coinbase_button_iframe'\n                    style='" + n.buttonIframeStyle() + "'\n                    scrolling='no'\n                    allowtransparency='true'\n                    frameborder='0'>\n      </iframe>"
