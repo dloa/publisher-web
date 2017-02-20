@@ -71,7 +71,7 @@ function setupWebsocket(){
 					wallet.known_unspent.push({ address: floAddress, amount: 1, confirmations: 0, txid: res.txid, vout: tmpVout});
 					console.log(wallet);
 					console.log("doneeeeeee~!!!");
-				}
+				});
 				wallet.refreshBalances(function(data){
 					console.log("wallet balance: " + wallet.balances[floAddress])
 					if (wallet.balances[floAddress] > startingBalance){
