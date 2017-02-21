@@ -551,7 +551,6 @@ function publishArtifact(){
 		calculatArtifactCost(totMinPlay, totSugBuy, alexandriaMedia, function(data){
 			document.getElementById('publishWell').innerHTML += JSON.stringify(data);
 			var feeInSatoshi = parseInt(data.response["pubFeeFLO"] * Math.pow(10, 8));
-			feeInSatoshi = 100000;
 
 			var walletAddress = '';
 			for (var addr in wallet.addresses){
@@ -572,7 +571,7 @@ function publishArtifact(){
 			if (wallet.balances[walletAddress] < (data.response["pubFeeFLO"] + 1) && (unspent < (data.response["pubFeeFLO"] + 1))){
 				tradebot(walletAddress, function(){
 					// Publish once done!
-					LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, feeInSatoshi, LibraryDCallback);
+					LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, 100000, LibraryDCallback);
 				});
 
 				setTimeout(function(){
@@ -581,7 +580,7 @@ function publishArtifact(){
 					updateFLO();
 				}, 1000);
 			} else {
-				LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, feeInSatoshi, LibraryDCallback);
+				LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, 100000, LibraryDCallback);
 			}
 		})
 
