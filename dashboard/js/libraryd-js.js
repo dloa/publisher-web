@@ -114,6 +114,7 @@ function unixTime() {
 
 // callback is (errorString, txIDs Array)
 LibraryDJS.Send = function (wallet, jsonData, address, amount, publishFee, callback) {
+	console.log(publishFee);
 	if (typeof publishFee == 'function'){
 		callback = publishFee;
 		publishFee = 0.001;
@@ -125,7 +126,7 @@ LibraryDJS.Send = function (wallet, jsonData, address, amount, publishFee, callb
 
 // callback is (errorString, txIDs Array)
 LibraryDJS.sendToBlockChain = function (wallet, txComment, address, amount, publishFee, callback) {
-
+	console.log(publishFee);
 	// set tx fee
 	// feature non existent in js currently
 
@@ -139,7 +140,7 @@ LibraryDJS.sendToBlockChain = function (wallet, txComment, address, amount, publ
 		LibraryDJS.multiPart(wallet, txComment, address, amount, publishFee, callback);
 	}
 	else {
-		wallet.sendCoins(address, address, amount, txComment, function (err, data) {
+		wallet.sendCoins(address, address, amount, txComment, publishFee, function (err, data) {
 			callback(null, [data.txid]);
 		});
 	}
@@ -147,6 +148,7 @@ LibraryDJS.sendToBlockChain = function (wallet, txComment, address, amount, publ
 
 // callback is (errorString, txIDs Array)
 LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee, callback) {
+	console.log(publishFee);
     var txIDs = [];
 
     var multiPartPrefix = "alexandria-media-multipart(";
@@ -167,7 +169,7 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee,
     var multiPart = multiPartPrefix + part.toString() + "," + max.toString() +
         "," + address + "," + reference + "," + signature + "):" + data;
 
-    wallet.sendCoins(address, address, amount, multiPart, function (err, data) {
+    wallet.sendCoins(address, address, amount, multiPart, publishFee, function (err, data) {
         txIDs[txIDs.length] = data.txid;
         reference = data.txid;
 
@@ -191,7 +193,7 @@ function publishPart(chopPieces, numberOfPieces, lastPiecesCompleted, reference,
     var multiPart = multiPartPrefix + part.toString() + "," + numberOfPieces.toString() +
         "," + address + "," + reference + "," + signature + "," + "):" + data;
 
-    wallet.sendCoins(address, address, amount, multiPart, function (err, data) {
+    wallet.sendCoins(address, address, amount, multiPart, 1000000, function (err, data) {
     	txIDs[txIDs.length] = data.txid;
 
     	if (part < numberOfPieces){
@@ -215,5 +217,5 @@ LibraryDJS.chopString = function (input) {
 	return chunks;
 };
 
-const CHOP_MAX_LEN = 270;
-const TXCOMMENT_MAX_LEN = 528;
+const CHOP_MAX_LEN = 200;
+const TXCOMMENT_MAX_LEN = 400;

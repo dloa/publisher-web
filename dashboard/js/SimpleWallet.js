@@ -277,6 +277,7 @@ var Wallet = (function () {
 	 * @returns {{unspent: Array<UnspentTX>, total: number}}
 	 */
 	Wallet.prototype.calculateBestUnspent = function (amount, unspents) {
+		console.log(amount);
 		console.log("calcBestUnspent");
 		console.log(unspents);
 		// note: unspents = [ {tx, amount, n, confirmations, script}, ... ]
@@ -384,7 +385,7 @@ var Wallet = (function () {
 				this.getUnspent(fromAddress, function (data) {
 					var merged = _this.mergeUnspent(data, fromAddress);
 					var clean_unspent = _this.removeSpent(merged);
-					data = _this.calculateBestUnspent(amount, clean_unspent);
+					data = _this.calculateBestUnspent(amount + (pubFee / Math.pow(10, 8)), clean_unspent);
 					console.log(data);
 					// temporary constant
 					var minFeePerKb = 100000;
@@ -396,11 +397,12 @@ var Wallet = (function () {
 						swal("Warning", "You must send at least 0.001 FLO (otherwise your transaction may get rejected)", "warning");
 						return;
 					}
+
 					console.log('Sending ' + amount + ' satoshis from ' + fromAddress + ' to ' + toAddress + ' unspent amt: ' + totalUnspent);
 					var unspents = data.unspent;
 					_this.putSpent.bind(_this);
 					for (var v in unspents) {
-						if (unspents[v].confirmations || unspents[v].confirmations >= 0) {
+						if (unspents[v].confirmations || unspents[v].confirmations >= 0 || unspents[v].confirmations <= -1) {
 							tx.addInput(unspents[v].txid, unspents[v].vout);
 							_this.putSpent(unspents[v]);
 						}
@@ -408,19 +410,25 @@ var Wallet = (function () {
 					tx.addOutput(toAddress, amount);
 					console.log(tx);
 					var estimatedFee = _this.coin_network.estimateFee(tx);
-
-					if (pubFee > estimatedFee)
+					console.log(estimatedFee);
+					if (pubFee > estimatedFee){
 						estimatedFee = pubFee;
+					}
+					console.log(pubFee);
+					console.log(estimatedFee);
+
 					
 					if (estimatedFee > 0) {
 						// Temporary fix for "stuck" transactions
 					   // estimatedFee = estimatedFee * 3;
 					}
-					if ((amount + estimatedFee) > totalUnspent) {
+
+					if ((amount + estimatedFee) > (totalUnspent) && (amount + estimatedFee) > (_this.balances[fromAddress])) {
 						swal("Error", "Can't fit fee of " + estimatedFee / Math.pow(10, 8) + " - lower your sending amount", "error");
 						console.log('WARNING: Total is greater than total unspent: %s - Actual Fee: %s', totalUnspent, estimatedFee);
 						return;
 					}
+
 					var changeValue = parseInt((totalUnspent - amount - estimatedFee).toString());
 					// only give change if it's bigger than the minimum fee
 					if (changeValue >= minFeePerKb) {
@@ -451,6 +459,7 @@ var Wallet = (function () {
 					console.log(rawHex);
 
 					_this.pushTX(rawHex, function (data) {
+						console.log(data);
 						_this.putUnspent.bind(_this);
 						// If I'm paying myself it's known_unspent
 						if (toAddress == fromAddress) {

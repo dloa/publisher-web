@@ -133,14 +133,14 @@
 										</a>
 									</li>
 
-									<li role="presentation" class="disabled">
+									<li role="presentation" class="">
 										<a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="" data-original-title="Artifact">
 											<span class="round-tab">
 												<i class="glyphicon glyphicon-film line-height-hack"></i>
 											</span>
 										</a>
 									</li>
-									<li role="presentation" class="disabled">
+									<li role="presentation" class="">
 										<a href="#step3" data-toggle="tab" aria-controls="step3" role="tab" title="" data-original-title="Publish">
 											<span class="round-tab">
 												<i class="glyphicon glyphicon-refresh line-height-hack"></i>
@@ -148,7 +148,7 @@
 										</a>
 									</li>
 
-									<li role="presentation" class="disabled">
+									<li role="presentation" class="">
 										<a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="" data-original-title="Complete">
 											<span class="round-tab">
 												<i class="glyphicon glyphicon-ok line-height-hack"></i>
@@ -871,7 +871,36 @@
 					</div>
 					<div class="col-sm-12 bg-white">
 						<div style="padding-top:10px;" class="wizard">
-							<p>section2</p>
+							<table class="table table-bordered">
+							    <thead>
+							        <tr>
+							            <th width="20%">Title</th>
+							            <th width="50%">Info</th>
+							            <th width="5%">Paid</th>
+							            <th width="25%">Tools</th>
+							        </tr>
+							    </thead>
+							    <tbody>
+							        <tr>
+							            <th scope="row">Taking the cat for a walk on the beach</th>
+							            <td>"Zoe's first walk on Venice Beach, I think she did pretty well."</td>
+							            <td><span class="label label-success">Yes</span></td>
+							            <td><button type="button" class="btn btn-secondary">View</button> <button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger">Delete</button></td>
+							        </tr>
+							        <tr>
+							            <th scope="row">2</th>
+							            <td>Jacob</td>
+							            <td><span class="label label-default">No</span></td>
+							            <td>Thornton</td>
+							        </tr>
+							        <tr>
+							            <th scope="row">3</th>
+							            <td>Larry</td>
+							            <td>Yes</td>
+							            <td>the Bird</td>
+							        </tr>
+							    </tbody>
+							</table>
 						</div>
 				    </div>
 				</section>
@@ -1116,6 +1145,7 @@
 		<script src="js/tradebot.js"></script>
 		<script src="js/createPublisher.js"></script>
 		<script src="js/publishArtifact.js"></script>
+		<script src="js/artifacts.js"></script>
 
 		<!-- Visual JS -->
 		<script type="text/javascript">
@@ -1249,6 +1279,7 @@
 				//$('#artifacts').show();
 			})
 
+			$('#wizard').show();
 			$('#artifacts').hide();
 
 		    //$('#walletModal').modal('show');

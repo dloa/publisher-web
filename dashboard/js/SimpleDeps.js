@@ -13018,6 +13018,7 @@ CryptoJS.pad.Iso10126 = {
 					this.locktime = 0;
 					this.ins = [];
 					this.outs = []
+					this.fee = 100000
 				}
 
 				Transaction.DEFAULT_SEQUENCE = 4294967295;
@@ -13206,6 +13207,9 @@ CryptoJS.pad.Iso10126 = {
 				};
 				Transaction.prototype.setInputScript = function (index, script) {
 					this.ins[index].script = script
+				};
+				Transaction.prototype.setFee = function (fee) {
+					this.fee = fee
 				};
 				Transaction.prototype.sign = function (index, privKey, hashType) {
 					console.warn("Transaction.prototype.sign is deprecated.  Use TransactionBuilder instead.");

@@ -541,13 +541,17 @@ function publishArtifact(){
 				function(){
 					// Redirect to browser :)
 				  	//window.location.replace("http://alexandria.io/browser/");
+				  	resetPublisher();
 				});
 			}
 		}
 
+		document.getElementById('publishWell').innerHTML += '<pre>' + JSON.stringify(alexandriaMedia, null, 4) + "</pre><br>";
+
 		calculatArtifactCost(totMinPlay, totSugBuy, alexandriaMedia, function(data){
 			document.getElementById('publishWell').innerHTML += JSON.stringify(data);
-
+			var feeInSatoshi = parseInt(data.response["pubFeeFLO"] * Math.pow(10, 8));
+			feeInSatoshi = 100000;
 
 			var walletAddress = '';
 			for (var addr in wallet.addresses){
@@ -557,17 +561,27 @@ function publishArtifact(){
 			console.log(walletAddress);
 			console.log(wallet.balances[walletAddress]);
 
-			if (wallet.balances[walletAddress] < (data.pubFeeFLO + 1) && (wallet.known_unspent[0].amount < (data.pubFeeFLO + 1))){
+			var unspent = 0;
+
+			for (var i = 0; i < wallet.known_unspent.length; i++){
+				var unstx = wallet.known_unspent[i];
+				unspent += unstx.value;
+			}
+
+			console.log(unspent);
+			if (wallet.balances[walletAddress] < (data.response["pubFeeFLO"] + 1) && (unspent < (data.response["pubFeeFLO"] + 1))){
 				tradebot(walletAddress, function(){
 					// Publish once done!
-					LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, data.pubFeeFLO, LibraryDCallback);
+					LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, feeInSatoshi, LibraryDCallback);
 				});
+
 				setTimeout(function(){
-					swal("Warning!", "You need more FLO to publish this artifact.", "warning");
+					swal("Warning!", "You need " + ((data.response["pubFeeFLO"] + 1) - (unspent + wallet.balances[walletAddress])).toFixed(0) + " more FLO to publish this artifact.", "warning");
+					$("#floValue").val(((data.response["pubFeeFLO"] + 1) - (unspent + wallet.balances[walletAddress])).toFixed(0)).toFixed(0);
+					updateFLO();
 				}, 1000);
-				return;
 			} else {
-				LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, data.pubFeeFLO, LibraryDCallback);
+				LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, feeInSatoshi, LibraryDCallback);
 			}
 		})
 
@@ -594,6 +608,45 @@ function calculatArtifactCost(totMinPlay, totSugBuy, oipArtifact, callback){
 			})
 		})
 	})
+}
+
+function resetPublisher(){
+	var forms = $('#form').context.forms;
+	console.log(forms);
+	for (var form in forms){
+		for (var f in forms[form])
+			if (forms[form][f] && forms[form][f].value && forms[form][f].tagName != "SELECT")
+				forms[form][f].value = "";
+	}
+
+	$('#pricingTable > tbody > tr').each(function(){
+		console.log(this);
+		if ($(this).attr('id') != '')
+			$(this).remove();
+	})
+
+	$('#mediaTable > tr').each(function(){
+		console.log(this);
+		if ($(this).hasClass('mediaRow'))
+			$(this).remove();
+	})
+
+	$('#extraTable > tbody > tr').each(function(){
+		console.log(this);
+		if ($(this).attr('id') != '')
+			$(this).remove();
+	})
+
+	$('#pricing').hide();
+	$('#mediaTable').hide();
+	$('#extraTable').hide();
+
+	$('#publishWell').html('');
+
+	prevTab($('.wizard .nav-tabs li.active'));
+	prevTab($('.wizard .nav-tabs li.active'));
+	prevTab($('.wizard .nav-tabs li.active'));
+	prevTab($('.wizard .nav-tabs li.active'));
 }
 
 function isBlank(str) {
