@@ -95,9 +95,9 @@ $('#previewButton').click(function(e){
 	// Set title.
 	$('#previewTitle').text($(mediaType + ' #title').val());
 	// Set Publisher
-	if (mediaType == 'music')
+	if (mediaType == '#music')
 		$('#previewArtist').text($(mediaType + ' #artist').val());
-	else if (mediaType == 'video')
+	else if (mediaType == '#video')
 		$('#previewArtist').text($(mediaType + ' #directorName').val());
 	// Set Description
 	$('#previewDescription').text($(mediaType + ' #description').val());
@@ -172,7 +172,9 @@ function addFilesToIPFS(files, count, callback){
 			callback('', null);
 			return;
 		}
-		console.log(hash);
+		document.getElementById('publishWell').innerHTML += "<br />Hash Results: " + JSON.stringify(hash, null, 4) + "<br /";
+		document.getElementById('publishWell').innerHTML += "<br />File count: " + count + "<br />";
+		document.getElementById('publishWell').innerHTML += "Hashes: " + hash.length + "<br />";
 		callback(hash, count);
 		return;
 	}, function(evt){
@@ -206,10 +208,31 @@ function publishArtifact(){
 
 	function addFile(file, index){
 		document.getElementById('publishWell').innerHTML += "[IPFS] Adding " + count + " files to IPFS...</br>";
+		console.info(file);
+		console.log(index);
+		/*
+		for (var i = 0; i < index-1; i++) {
+			document.getElementById('publishWell').innerHTML += "File: " + JSON.stringify(file[i], null, 4) + "<br /";
+		}
+		*/		
   		addFilesToIPFS(file, index, function(hash, callIndex){ 
   			if (hash == ""){
-  				swal("Error", "There was an error publishing the files to IPFS. Please try again later or contact us on our Slack: http://dloaslack.bitspill.net/", "error");
-  				return;
+				swal({
+					title: "Something went wrong.",
+					text: "There was an error publishing the files to IPFS. Please try again later or contact us on our Slack: http://dloaslack.bitspill.net/",
+					type: "error",
+					showCancelButton: true,
+					confirmButtonClass: "btn-success",
+					confirmButtonText: "Try again!",
+					closeOnConfirm: true
+				},
+				function(){
+					// Log the error
+		  			document.getElementById('publishWell').innerHTML += "<br />[IPFS] Error adding files. Trying again ...</br>";
+					// Try to publish again
+					publishArtifact();
+				});
+ 				return false;
   			}
   			var hashes = "";
   			var hashArray = [];
@@ -247,7 +270,6 @@ function publishArtifact(){
 			count++;
 		}
 	}
-
 	addFile(ipfsFiles, count);
 
 	// This function will be called once all files have been added
@@ -275,6 +297,29 @@ function publishArtifact(){
 		var mainHashIndex = 0;
 		if (!isBlank($(mediaType + 'PosterFile').val()))
 			mainHashIndex = 1;
+
+		console.info(hashes);
+		console.log(mainHashIndex);
+
+		// Catch the mainHashIndex error and try again.
+		if (!hashes[mainHashIndex]){
+			swal({
+				title: "Something went wrong.",
+				text: "Not all files were added to IPFS!",
+				type: "error",
+				showCancelButton: true,
+				confirmButtonClass: "btn-success",
+				confirmButtonText: "Try again!",
+				closeOnConfirm: true
+			},
+			function(){
+				// Log the error
+	  			document.getElementById('publishWell').innerHTML += "<br />[IPFS] Error adding files. Trying again ...</br>";
+				// Try to publish again
+				publishArtifact();
+			});
+			return false;
+		}
 
 		var alexandriaMedia = {
 			"torrent": hashes[hashes.length-1].Hash,
@@ -528,6 +573,7 @@ function publishArtifact(){
 				swal("Error!", "There was an error publishing your artifact: " + err, "error");
 			} else {
 				document.getElementById('publishWell').innerHTML += "Successfully published artifact! <br>";
+				console.info(data);
 				window.onbeforeunload = function() {}
 				swal({
 				  title: "Success!",
