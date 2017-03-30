@@ -24,6 +24,7 @@ function loginToWallet() {
 				    Console.log('No Support for storing locally.')
 				}
 			}
+
 			// Dismiss modal then open success.
 			//$('#walletModal').modal('hide');
 			//swal("Success!", "Successfully logged into wallet!", "success");

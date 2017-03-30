@@ -1638,6 +1638,11 @@
 					prevTab($active);
 
 				});
+
+				// Redirect to login if user is not logged into wallet.
+				if(!wallet) {
+					window.location = window.location.href.slice(0, -1 * window.location.pathname.split('/')[window.location.pathname.split('/').length - 1].length) + 'login.html';
+				}
 			});
 
 			function nextTab(elem) {
@@ -1756,6 +1761,7 @@
 			$('#WalletPage').hide();
 
 				//$('#walletModal').modal('show');
+	
 		</script>
 	</body>
 </html>
