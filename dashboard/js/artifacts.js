@@ -27,14 +27,19 @@ window.loadArtifacts = function(pubAddress){
 	var results = searchAPI('media', 'publisher', pubAddress);
 
 	$("#ArtifactsTable > tbody > tr").remove();
-	$('#wizard').hide();
-	$('#artifacts').show();
 
 	console.log(results);
 	
 	for (var i in results){
 		AppendOneArtifact(results, i);
 	}
+}
+
+function newArtifact(){
+	$('#wizard').show();
+	$('#artifacts').hide();
+	$('#editArtifact').hide();
+	$('#WalletPage').hide();
 }
 
 function AppendOneArtifact(results, i){
