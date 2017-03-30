@@ -193,12 +193,18 @@ var Wallet = (function () {
 			callback = function (balances) {
 			};
 		}
+		this.totBal = 0;
+		this.updateBal = function(balance){
+			$('#walletBalance').text(balance.toFixed(5));
+		}
 		var _this = this;
 		for (var i in this.addresses) {
 			$.get(flovaultBaseURL + '/wallet/getbalances/' + this.addresses[i].addr, function (data) {
 				if (data) {
 					var addr_data = data;
-					_this.setBalance(addr_data['addrStr'], addr_data['balance']);
+					_this.setBalance(addr_data['addrStr'], parseFloat(addr_data['balance']));
+					_this.totBal += addr_data['balance'];
+					_this.updateBal(_this.totBal);
 					callback(data);
 				}
 			}, "json");

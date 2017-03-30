@@ -17,6 +17,15 @@ LibraryDJS.signArtifact = function (wallet, ipfs, address, time) {
 
 	return wallet.signMessage(address, toSign);
 };
+
+// returns signature directly
+LibraryDJS.signArtifactDeactivate = function (wallet, address, txid) {
+	// https://api.alexandria.io/docs/#sign-an-artifact-deactivation-message
+	var toSign = address + "-" + txid;
+
+	return wallet.signMessage(address, toSign);
+};
+
 // callback is (errorString, response) response=http://api.alexandria.io/#publish-new-artifact
 LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, publishFee, callback) {
 	var time = unixTime();
@@ -87,6 +96,36 @@ LibraryDJS.announcePublisher = function (wallet, name, address, bitMessage, emai
 			"timestamp": parseInt(time),
 			"bitmessage": bitMessage,
 			"email": CryptoJS.MD5(email).toString()
+		},
+		"signature": signature
+	};
+
+	LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.001, function (err, txIDs) {
+		if (err != null)
+			callback(err,
+				JSON.stringify({
+					status: "failure",
+					response: err
+				}));
+		else
+			callback(null,
+				JSON.stringify({
+					status: "success",
+					response: txIDs
+				}));
+	});
+};
+
+// callback is (errorString, response) response=https://api.alexandria.io/docs/#deactivate-an-artifact
+LibraryDJS.sendDeactivationMessage = function (wallet, address, txid, callback) {
+	var time = unixTime();
+
+	var signature = LibraryDJS.signArtifactDeactivate(wallet, address, txid);
+
+	var data = {
+		"alexandria-deactivation": {
+			"address": address,
+			"txid": txid
 		},
 		"signature": signature
 	};

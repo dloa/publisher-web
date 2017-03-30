@@ -89,11 +89,17 @@ function loadAddresses(){
 
 	// Next check alexandria for all publishers and see if any wallets match. If they do, add them to the option list.
 	$.getJSON( "https://api.alexandria.io/alexandria/v1/publisher/get/all", function( data ) {
+		var nameSet = false;
 		for (var i = 0; i < data.length; i++) {
 			//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
 			for (var addr in wallet.addresses) {
 				var address = wallet.addresses[addr].addr;
 				if (data[i]["publisher-data"]["alexandria-publisher"].address == address){
+					if (!nameSet){
+						console.log("SET NAME");
+						$('#pub-name').text(data[i]["publisher-data"]["alexandria-publisher"].name);
+						nameSet = true;
+					}
 					// Remove the "None Registered..." text
 					$("#publisherSelect option[value='None Registered...']").remove();
 					// Add the publisher as an option then select it.
@@ -104,7 +110,9 @@ function loadAddresses(){
 					// Set the just added option to be active.
 					x.value = option.text;
 					// Remove the option from the register publisher page
-					$('#newPublisherFlorincoinAddress option[value="' + address + '"]').remove()
+					$('#newPublisherFlorincoinAddress option[value="' + address + '"]').remove();
+
+					loadArtifacts(data[i]["publisher-data"]["alexandria-publisher"].address);
 				}
 			}
 		}
@@ -150,8 +158,8 @@ function loadAddresses(){
 					//continueToArtifact();
 
 					if (addrInPubs){
-						localStorage.setItem("justSignedUp", '');
-						localStorage.setItem("justSignedUpData", '');
+						localStorage.setItem('justSignedUp', '');
+						localStorage.setItem('justSignedUpData', '');
 					}
 				});
 			}

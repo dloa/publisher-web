@@ -53,6 +53,8 @@
 		<!-- Application styles-->
 		<link rel="stylesheet" href="css/app.css">
 
+		<link rel="stylesheet" href="./css/bootstrap.v4a6.tables.css">
+
 		<link href="./css/main.css" rel="stylesheet">
 		<link href="./css/artifact.css" rel="stylesheet">
 		<link href="./css/sweet-alert.css" rel="stylesheet">
@@ -97,11 +99,12 @@
 				</div>
 				<div class="sidebar-content">
 					<div class="sidebar-toolbar text-center"><a href=""><img src="img/user/01.jpg" alt="Profile" class="img-circle thumb64"></a>
-						<div class="mt">Welcome, DLOA Publisher</div>
+						<div class="mt">Welcome, <span id="pub-name"></span></div>
+						<div> <strong>FLO</strong>: <code><span id="walletBalance"></span></code></strong></div>
 					</div>
 					<nav class="sidebar-nav">
 						<ul>
-							<li><a href="#" class="ripple"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/clipboard.svg" alt="MenuItem"></span><span>Publisher</span></a></li>
+							<li><a href="#" class="ripple" id="publisherNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/clipboard.svg" alt="MenuItem"></span><span>Publisher</span></a></li>
 							<li><a href="#" class="ripple" id="artifactsNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/navicon.svg" alt="MenuItem"></span><span>My Artifacts</span></a></li>
 						</ul>
 					</nav>
@@ -245,7 +248,7 @@
 												<div id='video' class="tab-pane fade">
 													<div class="row">
 														<div class="col-sm-8">
-														   <h5>Video Information</h5>
+															 <h5>Video Information</h5>
 																<div class="form-group" id="artifactTitleGroup">
 																	<input type="text" class="form-control" id="title" placeholder="Video Title">
 																</div>
@@ -374,7 +377,7 @@
 												<div id='movie' class="tab-pane fade in">
 													<div class="row">
 														<div class="col-sm-8">
-														   <h5>Movie Information</h5>
+															 <h5>Movie Information</h5>
 																<div class="form-group" id="artifactTitleGroup">
 																	<input type="text" class="form-control" id="title" placeholder="Movie Title">
 																</div>
@@ -402,7 +405,7 @@
 												<div id='thing' class="tab-pane fade in">
 													<div class="row">
 														<div class="col-sm-8">
-														   <h5>Thing Information</h5>
+															 <h5>Thing Information</h5>
 																<div class="form-group" id="artifactTitleGroup">
 																	<input type="text" class="form-control" id="title" placeholder="Title">
 																</div>
@@ -427,7 +430,7 @@
 												<div id='html' class="tab-pane fade in">
 													<div class="row">
 														<div class="col-sm-8">
-														   <h5>HTML Information</h5>
+															 <h5>HTML Information</h5>
 																<div class="form-group" id="artifactTitleGroup">
 																	<input type="text" class="form-control" id="title" placeholder="Title">
 																</div>
@@ -486,10 +489,10 @@
 													</div>
 												</div>
 											</div>
-										   <div class="publish-section">
+											 <div class="publish-section">
 												<div class="publish-files audio-tracks">
 													<h5>
-														<object type="image/svg+xml" data="assets/svg/media-16px-2_note-03.svg"></object>
+														<object type="image/svg+xml" data="./assets/svg/media-16px-2_note-03.svg"></object>
 														Media Files
 													</h5>
 													<table class="table" id='mediaFilesTable'>
@@ -518,12 +521,12 @@
 													</table>
 													<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
 													<div class="upload-area" id="mediaDrop">
-														<object data="assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
+														<object data="./assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
 													</div>
 													<input type="file" name="mediaFiles" id="mediaFiles" multiple accept="audio/*"></input>
 												</div>
 											</div>
-										   <div class="publish-section">
+											 <div class="publish-section">
 												<div class="publish-files extra-files">
 													<h5>
 														<object type="image/svg+xml" data="assets/svg/files-16px_single-folded-content.svg"></object>
@@ -552,12 +555,12 @@
 													</table>
 													<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
 													<div class="upload-area" id="extraDrop">
-														<object data="assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
+														<object data="./assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
 													</div>
 													<input type='file' id="extraFiles" name="extraFiles" multiple />
 												</div>
 											</div>
-										   <div class="publish-section publish-submit">
+											 <div class="publish-section publish-submit">
 												<div class="row">
 													<div class="col-sm-9">
 														<p class="small">You will be able to submit your artifact after you preview it. Be sure it looks exactly like what you desire as you will be unable to change this later.</p>
@@ -573,7 +576,7 @@
 									<div class="tab-pane" role="tabpanel" id="step3">
 										<h3>Publishing...</h3>
 										<div class="progress">
-										  	<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%;" id='progressBar'></div>
+												<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%;" id='progressBar'></div>
 										</div>
 										<div>
 											<div class="well well-sm" id="publishWell" style="margin-top: 0px; height: 500px; font-family:monospace; font-size: 12px;"></div>
@@ -603,23 +606,23 @@
 									</div>
 									<div id="newPublisherFormDiv" style="display:block">
 										<form>
-										  <div class="form-group" id="pubNameFormGroup">
+											<div class="form-group" id="pubNameFormGroup">
 											<label for="newPublisherName">Publisher Name</label>
 											<input type="email" class="form-control" id="newPublisherName" placeholder="Publisher Name">
 											<p class="help-block">This is your display name for your publisher, i.e. Imogen Heap</p>
-										  </div>
-										  <div class="form-group" id="pubEmailFormGroup">
+											</div>
+											<div class="form-group" id="pubEmailFormGroup">
 											<label for="newPublisherEmail">Email (optional)</label>
 											<input type="email" class="form-control" id="newPublisherEmail" placeholder="Email">
 											<p class="help-block">An MD5 hash will be generated from your email address, which will be published publicly. This is used for Gravatar’s dynamic Avatar lookup service, but your email address itself will not be published in plaintext.</p>
-										  </div>
-										  <div class="form-group" id="pubFloAddressFormGroup">
+											</div>
+											<div class="form-group" id="pubFloAddressFormGroup">
 											<label for="newPublisherFlorincoinAddress">Florincoin Address</label>
 											<select id="newPublisherFlorincoinAddress" class="form-control">
 												<!--<option>Create new address...</option> // Disabled until Tradebot works.-->
 											</select>
 											<p class="help-block">This is your Florincoin address that you will use to publish items. Please note that you will need at least 1 FLO on this wallet. If you select a wallet with 0 FLO you will be prompted to buy some using Bitcoin.</p>
-										  </div>
+											</div>
 										</form>
 										<button class="btn btn-default" onclick="registerNewPublisher();">Register Publisher</button>
 									</div>
@@ -809,26 +812,26 @@
 														<br>
 														<br>
 														<form class="form-inline">
-														  <div class="form-group">
+															<div class="form-group">
 															<div class="input-group">
 																<div class="input-group-addon">$</div>
 																<input type="text" class="form-control" id="usdValue" placeholder="" style="width: 75px;" onblur="updateUSD()">
 																<div class="input-group-addon">USD</div>
 															</div>
-														  </div>
-														  <div class="form-group">
-															<div class="input-group">
-															  <input type="text" class="form-control" id="btcValue" placeholder="" style="width: 75px;" onblur="updateBTC()">
-															  <div class="input-group-addon">BTC</div>
 															</div>
-														  </div>
-														  
-														  <div class="form-group">
+															<div class="form-group">
+															<div class="input-group">
+																<input type="text" class="form-control" id="btcValue" placeholder="" style="width: 75px;" onblur="updateBTC()">
+																<div class="input-group-addon">BTC</div>
+															</div>
+															</div>
+															
+															<div class="form-group">
 															<div class="input-group">
 																<input type="text" class="form-control" id="floValue" placeholder="" style="width: 75px;" onblur="updateFLO()">
 																<div class="input-group-addon">FLO</div>
 															</div>
-														  </div>
+															</div>
 														</form>
 														<a class="coinbase-widget" id="coinbase_widget" href="">Buy FLO with Debit/Credit</a>
 													</center>
@@ -865,44 +868,72 @@
 					<div class="content-heading bg-white">
 						<div class="row">
 							<div class="col-sm-12">
-								<h4 class="m0 text-thin">Welcome to Alexandria Publisher</h4><small>Please fill in the fields below</small>
+								<h4 class="m0 text-thin">Published Artifacts</h4><small></small>
 							</div>
 						</div>
 					</div>
 					<div class="col-sm-12 bg-white">
-						<div style="padding-top:10px;" class="wizard">
-							<table class="table table-bordered">
-							    <thead>
-							        <tr>
-							            <th width="20%">Title</th>
-							            <th width="50%">Info</th>
-							            <th width="5%">Paid</th>
-							            <th width="25%">Tools</th>
-							        </tr>
-							    </thead>
-							    <tbody>
-							        <tr>
-							            <th scope="row">Taking the cat for a walk on the beach</th>
-							            <td>"Zoe's first walk on Venice Beach, I think she did pretty well."</td>
-							            <td><span class="label label-success">Yes</span></td>
-							            <td><button type="button" class="btn btn-secondary">View</button> <button type="button" class="btn btn-warning">Edit</button> <button type="button" class="btn btn-danger">Delete</button></td>
-							        </tr>
-							        <tr>
-							            <th scope="row">2</th>
-							            <td>Jacob</td>
-							            <td><span class="label label-default">No</span></td>
-							            <td>Thornton</td>
-							        </tr>
-							        <tr>
-							            <th scope="row">3</th>
-							            <td>Larry</td>
-							            <td>Yes</td>
-							            <td>the Bird</td>
-							        </tr>
-							    </tbody>
-							</table>
-						</div>
-				    </div>
+						<button class="pull-right btn btn-success" style="margin-bottom: 10px;">+ New Artifact</button>
+						<table class="table table-hover table-bordered" id="ArtifactsTable">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Name</th>
+									<th>Status</th>
+									<th>Tools</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">1</th>
+									<td><code>Apollo 11</code></td>
+									<td>Pinned: <code><span style="color: red">3</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$3.14</span> = <span style="color: orange">Ƀ0.0314</span> | Views: <code>387</code></td>
+									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
+								</tr>
+								<tr>
+									<th scope="row">2</th>
+									<td><code>Apollo 12</code></td>
+									<td>Pinned: <code><span style="color: orange">7</span>/<span style="color: green">8</span></code> | Profit: <span style="color: green">$2.13</span> = <span style="color: orange">Ƀ0.0213</span> | Views: <code>9,071</code></td>
+									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
+								</tr>
+								<tr>
+									<th scope="row">3</th>
+									<td><code>Apollo 13</code></td>
+									<td>Pinned: <code><span style="color: green">10</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$1,490</span> = <span style="color: orange">Ƀ1.43</span> | Views: <code>387,076</code></td>
+									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
+								</tr>
+								<tr class="table-danger">
+									<th scope="row">4</th>
+									<td><code>Apollo 14</code></td>
+									<td>Pinned: <code><span style="color: red">0</span>/<span style="color: green">1</span></code> | Profit: <span style="color: green">$</span>0 = <span style="color: orange">Ƀ</span>0 | Views: <code>13</code></td>
+									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
+								</tr>
+								<tr class="table-danger">
+									<th scope="row"></th>
+									<td colspan="2"><h4 style="margin-top: 0px; margin-bottom: 0px;">Error: "Apollo 14" does not have any pins of this file, please re-upload.</h4></td>
+									<td><button class="btn btn-success">Reupload</button></td>
+								</tr>
+								<tr>
+									<th scope="row">5</th>
+									<td><code>Apollo 15</code></td>
+									<td>Pinned: <code><span style="color: green">10</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$1,490</span> = <span style="color: orange">Ƀ1.43</span> | Views: <code>387,076</code></td>
+									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
+								</tr>
+								<tr class="table-warning">
+									<th scope="row">6</th>
+									<td><code>Apollo 16</code></td>
+									<td>Pinned: <code><span style="color: green">9</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$1,490</span> = <span style="color: orange">Ƀ1.43</span> | Views: <code>387,076</code></td>
+									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-success">Publish</button></td>
+								</tr>
+								<tr>
+									<th scope="row">7</th>
+									<td><code>Apollo 17</code></td>
+									<td>Pinned: <code><span style="color: orange">5</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$149</span> = <span style="color: orange">Ƀ0.15</span> | Views: <code>3,869</code></td>
+									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</section>
 				<!-- Page footer-->
 			</main>
@@ -1131,21 +1162,21 @@
 		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 		<!-- Wallet JS -->
-		<script src="js/SimpleDeps.js"></script>
-		<script src="js/SimpleWallet.js"></script>
-		<script src="js/libraryd-js.js"></script>
-		<script src="js/wallet.js"></script>
+		<script src="./js/SimpleDeps.js"></script>
+		<script src="./js/SimpleWallet.js"></script>
+		<script src="./js/libraryd-js.js"></script>
+		<script src="./js/artifacts.js"></script>
+		<script src="./js/wallet.js"></script>
 		<!-- Other JS -->
-		<script src="js/dropzone.js"></script>
-		<script src="js/sweet-alert.min.js"></script>
-		<script src="js/date-format.js"></script>
-		<script src="js/ipfs.js"></script>
-		<script src="js/qrcode.min.js"></script>
-		<script src="js/coinbase.js"></script>
-		<script src="js/tradebot.js"></script>
-		<script src="js/createPublisher.js"></script>
-		<script src="js/publishArtifact.js"></script>
-		<script src="js/artifacts.js"></script>
+		<script src="./js/dropzone.js"></script>
+		<script src="./js/sweet-alert.min.js"></script>
+		<script src="./js/date-format.js"></script>
+		<script src="./js/ipfs.js"></script>
+		<script src="./js/qrcode.min.js"></script>
+		<script src="./js/coinbase.js"></script>
+		<script src="./js/tradebot.js"></script>
+		<script src="./js/createPublisher.js"></script>
+		<script src="./js/publishArtifact.js"></script>
 
 		<!-- Visual JS -->
 		<script type="text/javascript">
@@ -1208,7 +1239,7 @@
 			});
 
 			function fade(element) {
-				var op = 1;  // initial opacity
+				var op = 1;	// initial opacity
 				var timer = setInterval(function () {
 					if (op <= 0.1){
 						clearInterval(timer);
@@ -1221,7 +1252,7 @@
 			}
 
 			function unfade(element) {
-				var op = 0.01;  // initial opacity
+				var op = 0.01;	// initial opacity
 				element.style.display = 'block';
 				var timer = setInterval(function () {
 					if (op >= 1){
@@ -1274,15 +1305,20 @@
 			// Hide the coinbase buy button if not on alexandria.io as it will not work
 			testDomain();
 
+			$('#publisherNav').on('click', function(evt){
+				$('#wizard').show();
+				$('#artifacts').hide();
+			})
+
 			$('#artifactsNav').on('click', function(evt){
-				//$('#wizard').hide();
-				//$('#artifacts').show();
+				$('#wizard').hide();
+				$('#artifacts').show();
 			})
 
 			$('#wizard').show();
 			$('#artifacts').hide();
 
-		    //$('#walletModal').modal('show');
+				//$('#walletModal').modal('show');
 		</script>
 	</body>
 </html>

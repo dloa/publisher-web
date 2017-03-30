@@ -1,0 +1,5 @@
+var LoadArtifactsTable = function(){
+	
+}
+
+ArtifactsTable
