@@ -138,6 +138,33 @@ span.round-tab:hover {
 	pointer-events: all;
 }
 
+#previewModal .container {
+	max-width: 100%;
+}
+
+#previewModal audio, #previewModal canvas, #previewModal video {
+	width: 100%;
+}
+
+#previewModal h2 {
+	font-size: 24px;
+	margin-top: 0;
+	margin-bottom: 10px;
+	color: #444;
+	letter-spacing: 1px;
+	line-height: 1.4;	
+}
+
+#previewModal h3 {
+	font-size: 18px;
+	margin: 0;
+	line-height: 1.6;
+}
+
+#previewModal .entity-meta-content {
+	margin-bottom: 15px;
+}
+
 .loading-spinner {
   position: absolute;
   top: 50%;
