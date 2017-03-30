@@ -1,3 +1,7 @@
+if(!wallet) {
+	window.location = window.location.href.slice(0, -1 * window.location.pathname.split('/')[window.location.pathname.split('/').length - 1].length) + 'login.html';
+}
+
 ipfs.setProvider({host: 'ipfs.alexandria.io', port: '443', protocol: 'https'});
 
 // Set up here so that it is accessable in other methods.
