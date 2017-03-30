@@ -106,6 +106,7 @@
 						<ul>
 							<li><a href="#" class="ripple" id="publisherNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/clipboard.svg" alt="MenuItem"></span><span>Publisher</span></a></li>
 							<li><a href="#" class="ripple" id="artifactsNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/navicon.svg" alt="MenuItem"></span><span>My Artifacts</span></a></li>
+							<li><a href="#" class="ripple" id="walletNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/aperture.svg" alt="MenuItem"></span><span>Wallet</span></a></li>
 						</ul>
 					</nav>
 				</div>
@@ -760,10 +761,10 @@
 
 													<!-- Tab panes -->
 													<div class="tab-content">
-														<div role="tabpanel" class="tab-pane active" id="main">
-															<h4>Identifier <code id="identifier"></code></h4>
+														<div role="tabpanel" class="tab-pane active" id="mainx">
+															<h4>Identifier <code id="identifierx"></code></h4>
 															<div class="table-responsive">
-																<table class="table table-bordered table-condensed" id="addressTable">
+																<table class="table table-bordered table-condensed" id="addressTablex">
 																	<thead>
 																		<tr>
 																			<th>Address</th>
@@ -933,6 +934,48 @@
 								</tr>
 							</tbody>
 						</table>
+					</div>
+				</section>
+
+				<section class="bg-white" style="height: 100%" id="editArtifact">
+					<div class="content-heading bg-white">
+						<div class="row">
+							<div class="col-sm-12">
+								<h4 class="m0 text-thin">Edit Artifact</h4><small></small>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-12 bg-white">
+						<button class="pull-right btn btn-success" style="margin-bottom: 10px;">Publish Changes</button>
+						
+					</div>
+				</section>
+
+				<section class="bg-white" style="height: 100%" id="WalletPage">
+					<div class="content-heading bg-white">
+						<div class="row">
+							<div class="col-sm-12">
+								<h4 class="m0 text-thin">Wallet</h4><small></small>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-12 bg-white">
+						<h4>Identifier <code id="identifier"></code></h4>
+						<div class="table-responsive">
+							<table class="table table-bordered table-condensed" id="addressTable">
+								<thead>
+									<tr>
+										<th>Address</th>
+										<th style="width: 30%">Balance</th>
+										<th>Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr></tr>
+								</tbody>
+							</table>
+						</div>
+						<button class="btn btn-default" onclick="newAddress();">New Address</button>
 					</div>
 				</section>
 				<!-- Page footer-->
@@ -1308,15 +1351,28 @@
 			$('#publisherNav').on('click', function(evt){
 				$('#wizard').show();
 				$('#artifacts').hide();
+				$('#editArtifact').hide();
+				$('#WalletPage').hide();
 			})
 
 			$('#artifactsNav').on('click', function(evt){
 				$('#wizard').hide();
 				$('#artifacts').show();
+				$('#editArtifact').hide();
+				$('#WalletPage').hide();
+			})
+
+			$('#walletNav').on('click', function(evt){
+				$('#wizard').hide();
+				$('#artifacts').hide();
+				$('#editArtifact').hide();
+				$('#WalletPage').show();
 			})
 
 			$('#wizard').show();
 			$('#artifacts').hide();
+			$('#editArtifact').hide();
+			$('#WalletPage').hide();
 
 				//$('#walletModal').modal('show');
 		</script>

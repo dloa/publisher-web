@@ -588,6 +588,10 @@ function publishArtifact(){
 					// Redirect to browser :)
 				  	//window.location.replace("http://alexandria.io/browser/");
 				  	resetPublisher();
+
+				  	AppendOneArtifact([data], 0);
+				  	$('#wizard').hide();
+					$('#artifacts').show();
 				});
 			}
 		}
@@ -614,7 +618,7 @@ function publishArtifact(){
 			}
 
 			console.log(unspent);
-			if (wallet.balances[walletAddress] < (data.response["pubFeeFLO"] + 0.001) && (unspent < (data.response["pubFeeFLO"] + 0.001))){
+			if (wallet.balances[walletAddress] < (data.response["pubFeeFLO"] + 0.0001) && (unspent < (data.response["pubFeeFLO"] + 0.0001))){
 				tradebot(walletAddress, function(){
 					// Publish once done!
 					LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, 100000, LibraryDCallback);
