@@ -43,13 +43,15 @@ function newArtifact(){
 }
 
 function AppendOneArtifact(results, i){
-	var markup = "<tr id='" + results[i].txid + "'>\
-					<th scope='row'>" + (1+parseInt(i)) + "</th>\
-					<td><code>" + results[i]['media-data']['alexandria-media'].info.title + "</code></td>\
-					<td>TXID: <code>.." + results[i].txid.substr(results[i].txid.length - 8) + "</code></td>\
-					<td><button onClick='ArtifactInfo(\"" + results[i].txid + "\");' class='btn btn-info'>Info</button> <button onClick='EditArtifact(\"" + results[i].txid + "\");' class='btn btn-warning'>Edit</button> <button onClick='DeactivateArtifact(\"" + results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
-				</tr>";
-	$("#ArtifactsTable > tbody").append(markup);
+	if (results[i]['media-data']) {
+		var markup = "<tr id='" + results[i].txid + "'>\
+						<th scope='row'>" + (1+parseInt(i)) + "</th>\
+						<td><code>" + results[i]['media-data']['alexandria-media'].info.title + "</code></td>\
+						<td>TXID: <code>.." + results[i].txid.substr(results[i].txid.length - 8) + "</code></td>\
+						<td><button onClick='ArtifactInfo(\"" + results[i].txid + "\");' class='btn btn-info'>Info</button> <button onClick='EditArtifact(\"" + results[i].txid + "\");' class='btn btn-warning'>Edit</button> <button onClick='DeactivateArtifact(\"" + results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
+					</tr>";
+		$("#ArtifactsTable > tbody").append(markup);
+	}
 }
 
 function DeactivateArtifact(artifactTxid){
