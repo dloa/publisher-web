@@ -236,7 +236,7 @@ function ParseMedia(file) {
 	mediaFiles.push(file);
 
 	console.log(file);
-	var tableLength = $('#mediaFilesTable tr').length-1;
+	var tableLength = $('#mediaFilesTable tr.mediaRow').length + 1;
 
 	$('#mediaFilesTable tr:last').after(
 		'<tr class="mediaRow" id="' + sanitizeID(file.name) + '">' +

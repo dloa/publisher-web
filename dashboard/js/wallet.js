@@ -1,5 +1,16 @@
 var wallet;
 
+function checkLogin(timerCount) {
+	if(!wallet) {
+		if (timerCount > 3) {
+			window.location = window.location.href.slice(0, -1 * window.location.pathname.split('/')[window.location.pathname.split('/').length - 1].length) + 'login.html';
+		} else {
+			timerCount++;
+			setTimeout(function(){ checkLogin(timerCount) }, 500);
+		}
+	}
+}
+
 function loginToWallet() {
 	$.get("https://flovault.alexandria.io/wallet/checkload/" + $("#loginWalletIdentifier").val(), function (response) {
 		console.log("Check Load Response");

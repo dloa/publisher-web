@@ -1609,6 +1609,10 @@
 			//document.getElementById("footerText").innerHTML = "Alexandria Web Publisher v" + version + " - Questions? Comments? Want to Help? Join us on our <a href='http://dloaslack.bitspill.net/'>Slack chat</a>!";
 
 			$(document).ready(function () {
+
+				// Redirect to login if user is not logged into wallet.
+				checkLogin(0);
+
 				//Initialize
 				$('.nav-tabs > li a[title]').tooltip();
 				$('#pricing').hide();
@@ -1719,6 +1723,7 @@
 				}
 
 				$('#mediaFiles').attr('accept', mediaType);
+
 			}
 
 			function next(){
