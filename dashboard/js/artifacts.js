@@ -55,23 +55,37 @@ function AppendOneArtifact(results, i){
 }
 
 function DeactivateArtifact(artifactTxid){
-	var results = searchAPI('media', 'txid', artifactTxid);
+	swal({   
+		animation: true,
+		title: "Are you sure?",   
+		text: "This will remove it from all OIP Libraries!",   
+		type: "warning",
+		showCancelButton: true,   
+		confirmButtonColor: "#f44336",
+		confirmButtonText: "Yes, deactivate it!",   
+		closeOnConfirm: false 
+	}, function(){   
+		var results = searchAPI('media', 'txid', artifactTxid);
 
-	if (!results)
-		return;
-
-	LibraryDJS.sendDeactivationMessage(wallet, results[0]["media-data"]["alexandria-media"].publisher, artifactTxid, function(error, response){
-		if (error) {
-			console.log(error);
+		if (!results){
+			console.error("ERR: No results from API when trying to Deactivate TXID: " + artifactTxid);
 			swal("Error", "Deactivation not Successful!", "error");
 			return;
 		}
 
-		console.log(response);
+		LibraryDJS.sendDeactivationMessage(wallet, results[0]["media-data"]["alexandria-media"].publisher, artifactTxid, function(error, response){
+			if (error) {
+				console.log(error);
+				swal("Error", "Deactivation not Successful!", "error");
+				return;
+			}
 
-		$('#' + artifactTxid).remove();
+			console.log(response);
 
-		swal("Success!", "Deactivation Successful!", "success")
+			$('#' + artifactTxid).remove();
+
+			swal("Success!", "Deactivation Successful!", "success")
+		});
 	});
 }
 
