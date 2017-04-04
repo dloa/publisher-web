@@ -75,10 +75,6 @@ form .form-last {
   box-shadow: none;
   background-color: rgba(83, 139, 212, 0.1); }
 
-.progress .progress-bar {
-  box-shadow: none;
-  background-color: #538bd4; }
-
 /* Console */
 .console-output {
   font-family: 'Source Code Pro', 'Consolas', monospace;

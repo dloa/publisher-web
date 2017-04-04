@@ -598,7 +598,7 @@ function publishArtifact(){
 
 		document.getElementById('publishWell').innerHTML += '<pre>' + JSON.stringify(alexandriaMedia, null, 4) + "</pre><br>";
 
-		calculatArtifactCost(totMinPlay, totSugBuy, alexandriaMedia, function(data){
+		calculateArtifactCost(totMinPlay, totSugBuy, alexandriaMedia, function(data){
 			document.getElementById('publishWell').innerHTML += JSON.stringify(data);
 			var feeInSatoshi = parseInt(data.response["pubFeeFLO"] * Math.pow(10, 8));
 
@@ -637,7 +637,7 @@ function publishArtifact(){
 	}
 }
 
-function calculatArtifactCost(totMinPlay, totSugBuy, oipArtifact, callback){
+function calculateArtifactCost(totMinPlay, totSugBuy, oipArtifact, callback){
 	$.getJSON("https://api.alexandria.io/alexandria/v2/info", function(info){
 		$.getJSON("https://api.alexandria.io/flo-market-data/v1/getAll", function(getAll){
 			var artCost = (totMinPlay + totSugBuy) / 2;
@@ -661,7 +661,7 @@ function calculatArtifactCost(totMinPlay, totSugBuy, oipArtifact, callback){
 
 function resetPublisher(){
 	var forms = $('#form').context.forms;
-	console.log(forms);
+	
 	for (var form in forms){
 		for (var f in forms[form])
 			if (forms[form][f] && forms[form][f].value && forms[form][f].tagName != "SELECT")
@@ -669,19 +669,16 @@ function resetPublisher(){
 	}
 
 	$('#pricingTable > tbody > tr').each(function(){
-		console.log(this);
 		if ($(this).attr('id') != '')
 			$(this).remove();
 	})
 
 	$('#mediaTable > tr').each(function(){
-		console.log(this);
 		if ($(this).hasClass('mediaRow'))
 			$(this).remove();
 	})
 
 	$('#extraTable > tbody > tr').each(function(){
-		console.log(this);
 		if ($(this).attr('id') != '')
 			$(this).remove();
 	})

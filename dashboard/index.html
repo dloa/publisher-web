@@ -103,7 +103,7 @@
 					<nav class="sidebar-nav">
 						<ul>
 							<li><a href="#" class="ripple" id="publisherNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/clipboard.svg" alt="MenuItem"></span><span>Publisher</span></a></li>
-							<li class="dev"><a href="#" class="ripple" id="artifactsNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/navicon.svg" alt="MenuItem"></span><span>My Artifacts</span></a></li>
+							<li><a href="#" class="ripple" id="artifactsNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/navicon.svg" alt="MenuItem"></span><span>My Artifacts</span></a></li>
 							<li><a href="#" class="ripple" id="walletNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/aperture.svg" alt="MenuItem"></span><span>Wallet</span></a></li>
 						</ul>
 					</nav>
@@ -864,15 +864,9 @@
 				</section>
 
 				<section class="bg-white" style="height: 100%" id="artifacts">
-					<div class="content-heading bg-white">
-						<div class="row">
-							<div class="col-sm-12">
-								<h4 class="m0 text-thin">Published Artifacts</h4><small></small>
-							</div>
-						</div>
-					</div>
 					<div class="col-sm-12 bg-white">
-						<button class="pull-right btn btn-success" style="margin-bottom: 10px;" onclick="newArtifact();">+ New Artifact</button>
+						<h4 class="pull-left" style="margin-bottom: -40px;">Published Artifacts</h4>
+						<button class="pull-right btn btn-success" style="margin-bottom: 10px; margin-top: 40px;" onclick="newArtifact();">+ New Artifact</button>
 						<table class="table table-hover table-bordered" id="ArtifactsTable">
 							<thead>
 								<tr>
@@ -929,6 +923,47 @@
 									<td><code>Apollo 17</code></td>
 									<td>Pinned: <code><span style="color: orange">5</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$149</span> = <span style="color: orange">Ƀ0.15</span> | Views: <code>3,869</code></td>
 									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
+								</tr>
+							</tbody>
+						</table>
+						<hr />
+						<h4 class="dev">Retry Failed Publish Attempt</h4>
+						<table class="dev table table-hover table-bordered" id="ArtifactsFPTable">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Name</th>
+									<th style="width: 100px"></th>
+									<th>Status</th>
+									<th>Tools</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th scope="row">1</th>
+									<td><code>Apollo 11</code></td>
+									<td>
+										<div class="progress">
+											<div class="progress-bar bg-danger" role="progressbar" style="width: 65%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+										</div>
+									</td>
+									<td>
+										IPFS File Upload Failed, Please Retry Upload.
+									</td>
+									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-success">Select Files</button></td>
+								</tr>
+								<tr>
+									<th scope="row">2</th>
+									<td><code>Apollo 12</code></td>
+									<td>
+										<div class="progress">
+											<div class="progress-bar bg-warning" role="progressbar" style="width: 85%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+										</div>
+									</td>
+									<td>
+										TX Send Failure
+									</td>
+									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-success">Retry TX Send</button></td>
 								</tr>
 							</tbody>
 						</table>
@@ -1621,8 +1656,8 @@
 		<!-- Visual JS -->
 		<script type="text/javascript">
 			// Set the version number in the footer
-			var version = "0.7.9";
-			var env = "dev";
+			var version = "1.2.4";
+			var env = "production";
 			//document.getElementById("footerText").innerHTML = "Alexandria Web Publisher v" + version + " - Questions? Comments? Want to Help? Join us on our <a href='http://dloaslack.bitspill.net/'>Slack chat</a>!";
 
 			$(document).ready(function () {
@@ -1788,15 +1823,18 @@
 			// #  						Want to help us develop this new technology? 							#
 			// # Join our Slack at: dloaslack.bitspill.net or Check out our Github at: https://github.com/dloa/ #
 			// ##################################################################################################
-			if (env == "dev"){
-				$('.dev').each(function(index){
-					$(this).show();
-				});
-			} else {
-				$('.dev').each(function(index){
-					$(this).hide();
-				});
+			var checkEnv = function(){
+				if (env == "dev"){
+					$('.dev').each(function(index){
+						$(this).show();
+					});
+				} else {
+					$('.dev').each(function(index){
+						$(this).hide();
+					});
+				}
 			}
+			checkEnv();
 
 		</script>
 	</body>
