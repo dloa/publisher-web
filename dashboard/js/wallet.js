@@ -209,7 +209,6 @@ function signout(){
 }
 
 function AppendOneTX(tx, i){
-	console.log(tx);
 	var markup = "<tr id='" + tx.txid + "'>\
 					<th>" + tx.txid.substr(tx.txid.length - 14) + "</th>\
 					<td>" + tx['tx-comment'] + "</td>\
@@ -228,8 +227,6 @@ function loadTransactions(){
 		$.ajax(url, { async: false, success: function(data){
 			// Add each tx to the array individually.
 			for (var i in data.txs){
-				console.log(data.txs);
-				console.log(i);
 				TransactionsArray.push({timestamp: data.txs[i].time, address: addr, tx: data.txs[i]});
 			}
 		}});
