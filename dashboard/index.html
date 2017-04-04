@@ -1342,13 +1342,13 @@
 					</div>
 					<div class="col-sm-12 bg-white">
 						<h4>Identifier <code id="identifier"></code></h4>
+						<button class="btn btn-info pull-right" onclick="newAddress();">+ New Address</button>
 						<div class="table-responsive">
 							<table class="table table-bordered table-condensed" id="addressTable">
 								<thead>
 									<tr>
 										<th>Address</th>
-										<th style="width: 30%">Balance</th>
-										<th>Actions</th>
+										<th>Balance</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -1356,7 +1356,25 @@
 								</tbody>
 							</table>
 						</div>
-						<button class="btn btn-default" onclick="newAddress();">New Address</button>
+						<h4>Recent Transactions</h4>
+						<div class="table-responsive">
+							<table class="table table-bordered table-condensed" id="txTable">
+								<thead>
+									<tr>
+										<th>TXID</th>
+										<th style="width: 30%">Message</th>
+										<th>Tools</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>61e56ffa</code></td>
+										<td style="word-wrap: break-all; text-align: justify"><div style="word-wrap: break-all;">alexandria-media-multipart(0,2,FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme,0000000000000000000000000000000000000000000000000000000000000000,IKaDQY0eeOg4t0j9JoJ731w4T/1yF6ahq/sx42Hy/nIaVd6qmtDkd61l2GAfl7LoOztugQvGnVCJ5rSvbUBZzgg=):{"alexandria-media":{"torrent":"QmSAcZAWj59jgNg2cNcY4oVoZw4CKkdT88a9XMU4UEHvwt","publisher":"FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme","timestamp":1490840225,"type":"thing","payment":{},"info":{"title":"a",</div></td>
+										<td><a href="https://explorer.alexandria.io/tx/?txid=61e56ffa200e1ab887eb630307a95e99ea1797c32784d47e5ebdd4ce714d7446" class="btn btn-info">Info</a></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</section>
 				<!-- Page footer-->
