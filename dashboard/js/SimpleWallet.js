@@ -196,18 +196,30 @@ var Wallet = (function () {
 		this.totBal = 0;
 		var _this = this;
 		this.updateBal = function(balance){
-			$('#walletBalance').text(balance.toFixed(5));
+			try {
+				if (balance < 10000) {
+					$('#walletBalance').text(balance.toFixed(5));
+				} else {
+					$('#walletBalance').text(balance.toFixed(3));
+				}
+			} catch (e) { 
+				// Oh well, give up setting balance.
+			}
 		}
 		for (var i in this.addresses) {
-			$.get(flovaultBaseURL + '/wallet/getbalances/' + this.addresses[i].addr, function (data) {
-				if (data) {
-					var addr_data = data;
-					_this.setBalance(addr_data['addrStr'], parseFloat(addr_data['balance']));
-					_this.totBal += addr_data['balance'];
-					_this.updateBal(_this.totBal);
-					callback(data);
+			$.ajax(flovaultBaseURL + '/wallet/getbalances/' + this.addresses[i].addr, {
+				async: false,
+				dataType: "json",
+				success: function (data) {
+					if (data) {
+						var addr_data = data;
+						_this.setBalance(addr_data['addrStr'], parseFloat(addr_data['balance']));
+						_this.totBal += addr_data['balance'];
+						_this.updateBal(_this.totBal);
+						callback(data);
+					}
 				}
-			}, "json");
+			});
 		}
 		this.totBal = 0;
 	};
