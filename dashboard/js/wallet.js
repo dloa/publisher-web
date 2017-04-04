@@ -12,7 +12,7 @@ function checkLogin(timerCount) {
 }
 
 function loginToWallet() {
-	$.get("https://flovault.alexandria.io/wallet/checkload/" + $("#loginWalletIdentifier").val(), function (response) {
+	$.ajax("https://flovault.alexandria.io/wallet/checkload/" + $("#loginWalletIdentifier").val(), { async: false, success: function (response) {
 		console.log("Check Load Response");
 		console.log(response);
 		if (response.gauth_enabled) {
@@ -43,7 +43,7 @@ function loginToWallet() {
 			//updateAddressList();
 			setTimeout(function(){ refreshWalletInfo() }, 100)
 		});
-	});
+	} });
 }
 
 function registerWallet() {
