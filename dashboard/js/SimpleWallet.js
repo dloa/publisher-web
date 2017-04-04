@@ -194,10 +194,10 @@ var Wallet = (function () {
 			};
 		}
 		this.totBal = 0;
+		var _this = this;
 		this.updateBal = function(balance){
 			$('#walletBalance').text(balance.toFixed(5));
 		}
-		var _this = this;
 		for (var i in this.addresses) {
 			$.get(flovaultBaseURL + '/wallet/getbalances/' + this.addresses[i].addr, function (data) {
 				if (data) {
@@ -209,6 +209,7 @@ var Wallet = (function () {
 				}
 			}, "json");
 		}
+		this.totBal = 0;
 	};
 	Wallet.prototype.getUnspent = function (address, callback) {
 		$.get(florinsightBaseURL + '/api/addr/' + address + '/utxo', function (data) {
