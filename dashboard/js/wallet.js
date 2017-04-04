@@ -208,6 +208,45 @@ function signout(){
 	window.location.href = 'login.html';
 }
 
+function AppendOneTX(tx, i){
+	console.log(tx);
+	var markup = "<tr id='" + tx.txid + "'>\
+					<th>" + tx.txid.substr(tx.txid.length - 14) + "</th>\
+					<td>" + tx['tx-comment'] + "</td>\
+					<td><a href=\"https://explorer.alexandria.io/tx/?txid=" + tx.txid + "\"class=\"btn btn-info\">More Info</a></td>\
+				</tr>";
+	$("#TXTable > tbody").append(markup);
+	checkEnv();
+}
+
+function loadTransactions(){
+	// Load all transactions into an array.
+	var TransactionsArray = [];
+
+	for (var addr in wallet.addresses){
+		var url = florinsightBaseURL + "/api/txs/?address=" + addr;
+		$.ajax(url, { async: false, success: function(data){
+			// Add each tx to the array individually.
+			for (var i in data.txs){
+				console.log(data.txs);
+				console.log(i);
+				TransactionsArray.push({timestamp: data.txs[i].time, address: addr, tx: data.txs[i]});
+			}
+		}});
+	}
+
+	TransactionsArray.sort(function(a, b){ 
+		if (a.timestamp < b.timestamp)
+			return 1;
+		else
+			return -1;
+	});
+
+	for (var tx in TransactionsArray){
+		AppendOneTX(TransactionsArray[tx].tx, tx);
+	}
+}
+
 if (typeof(Storage) !== "undefined") {
 	if (localStorage.getItem("identifier") != ''){
 		$("#loginWalletIdentifier").val(localStorage.getItem("identifier"));

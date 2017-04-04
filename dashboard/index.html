@@ -1403,20 +1403,18 @@
 							</table>
 						</div>
 						<h4 class="dev">Recent Transactions</h4>
+						<button class="btn btn-info pull-right" onclick="loadTransactions();">Load Transactions</button>
 						<div class="dev table-responsive">
-							<table class="table table-bordered table-condensed" id="txTable">
+							<table class="table table-bordered table-condensed" id="TXTable" style=" word-wrap: break-word; word-break: break-all; table-layout: fixed;">
 								<thead>
 									<tr>
 										<th>TXID</th>
-										<th style="width: 30%">Message</th>
+										<th style="width: 85%">Message</th>
 										<th>Tools</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td><code>61e56ffa</code></td>
-										<td style="word-wrap: break-all; text-align: justify"><div style="word-wrap: break-all;">alexandria-media-multipart(0,2,FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme,0000000000000000000000000000000000000000000000000000000000000000,IKaDQY0eeOg4t0j9JoJ731w4T/1yF6ahq/sx42Hy/nIaVd6qmtDkd61l2GAfl7LoOztugQvGnVCJ5rSvbUBZzgg=):{"alexandria-media":{"torrent":"QmSAcZAWj59jgNg2cNcY4oVoZw4CKkdT88a9XMU4UEHvwt","publisher":"FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme","timestamp":1490840225,"type":"thing","payment":{},"info":{"title":"a",</div></td>
-										<td><a href="https://explorer.alexandria.io/tx/?txid=61e56ffa200e1ab887eb630307a95e99ea1797c32784d47e5ebdd4ce714d7446" class="btn btn-info">Info</a></td>
 									</tr>
 								</tbody>
 							</table>
@@ -1656,6 +1654,7 @@
 		<script src="./js/artifacts.js"></script>
 		<script src="./js/wallet.js"></script>
 		<!-- Other JS -->
+		<script src="./js/localStorage.js"></script>
 		<script src="./js/dropzone.js"></script>
 		<script src="./js/sweet-alert.min.js"></script>
 		<script src="./js/date-format.js"></script>
@@ -1670,7 +1669,7 @@
 		<script type="text/javascript">
 			// Set the version number in the footer
 			var version = "1.2.4";
-			var env = "dev";
+			var env = "production";
 			//document.getElementById("footerText").innerHTML = "Alexandria Web Publisher v" + version + " - Questions? Comments? Want to Help? Join us on our <a href='http://dloaslack.bitspill.net/'>Slack chat</a>!";
 
 			$(document).ready(function () {
@@ -1848,6 +1847,8 @@
 				}
 			}
 			checkEnv();
+
+			loadTransactions();
 
 		</script>
 	</body>

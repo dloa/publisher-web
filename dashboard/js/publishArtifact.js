@@ -217,7 +217,8 @@ function publishArtifact(){
 		*/		
   		addFilesToIPFS(file, index, function(hash, callIndex){ 
   			if (hash == ""){
-				swal({
+  				// OstlerDev - Disable & reroute (4/2/17)
+				/*swal({
 					title: "Something went wrong.",
 					text: "There was an error publishing the files to IPFS. Please try again later or contact us on our Slack: http://dloaslack.bitspill.net/",
 					type: "error",
@@ -232,7 +233,11 @@ function publishArtifact(){
 					// Try to publish again
 					publishArtifact();
 				});
- 				return false;
+ 				return false;*/
+
+ 				// Instead of the old fail method, we set the hash to a special value, then send it through. This allows us to generate the JSON while preventing it being published into the blockchain.
+ 				var uploadFailure = [ { Name: 'ipfs-upload-failure', Hash: 'ipfs-upload-failure' } ];
+ 				allFilesAddedToIPFS(uploadFailure);
   			}
   			var hashes = "";
   			var hashArray = [];
@@ -303,7 +308,7 @@ function publishArtifact(){
 
 		// Catch the mainHashIndex error and try again.
 		if (!hashes[mainHashIndex]){
-			swal({
+			/*swal({
 				title: "Something went wrong.",
 				text: "Not all files were added to IPFS!",
 				type: "error",
@@ -318,7 +323,11 @@ function publishArtifact(){
 				// Try to publish again
 				publishArtifact();
 			});
-			return false;
+			return false;*/
+
+			// Check if it is a failure.
+			if (hashes[0].Hash == 'ipfs-upload-failure')
+				mainHashIndex = 0;
 		}
 
 		var alexandriaMedia = {
@@ -594,6 +603,12 @@ function publishArtifact(){
 					$('#artifacts').show();
 				});
 			}
+		}
+
+		if (hashes[0].Hash == "ipfs-upload-failure"){
+			PubLS.addArtifact(alexandriaMedia.timestamp, alexandriaMedia, "ipfs-upload-failure");
+			swal("Error!", "There was an error uploading your files, please try again later...", "error");
+			return false;
 		}
 
 		document.getElementById('publishWell').innerHTML += '<pre>' + JSON.stringify(alexandriaMedia, null, 4) + "</pre><br>";
