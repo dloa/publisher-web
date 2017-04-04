@@ -105,7 +105,7 @@
 					<nav class="sidebar-nav">
 						<ul>
 							<li><a href="#" class="ripple" id="publisherNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/clipboard.svg" alt="MenuItem"></span><span>Publisher</span></a></li>
-							<li><a href="#" class="ripple" id="artifactsNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/navicon.svg" alt="MenuItem"></span><span>My Artifacts</span></a></li>
+							<li class="dev"><a href="#" class="ripple" id="artifactsNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/navicon.svg" alt="MenuItem"></span><span>My Artifacts</span></a></li>
 							<li><a href="#" class="ripple" id="walletNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/aperture.svg" alt="MenuItem"></span><span>Wallet</span></a></li>
 						</ul>
 					</nav>
@@ -1624,6 +1624,7 @@
 		<script type="text/javascript">
 			// Set the version number in the footer
 			var version = "0.7.9";
+			var env = "production";
 			//document.getElementById("footerText").innerHTML = "Alexandria Web Publisher v" + version + " - Questions? Comments? Want to Help? Join us on our <a href='http://dloaslack.bitspill.net/'>Slack chat</a>!";
 
 			$(document).ready(function () {
@@ -1780,6 +1781,24 @@
 			$('#WalletPage').hide();
 
 				//$('#walletModal').modal('show');
+
+			// ##################################################################################################
+			// #           			 					Hello There!       										#
+			// #   Looking for the latest features and don't mind a little instability?  You can enable the 	#
+			// #  "dev" version by just setting the env variable to "dev". This will show all of the current 	#
+			// #  			WIP features. You are likely to see a lot of non-working features & bugs.			#
+			// #  						Want to help us develop this new technology? 							#
+			// # Join our Slack at: dloaslack.bitspill.net or Check out our Github at: https://github.com/dloa/ #
+			// ##################################################################################################
+			if (env == "dev"){
+				$('.dev').each(function(index){
+					$(this).show();
+				});
+			} else {
+				$('.dev').each(function(index){
+					$(this).hide();
+				});
+			}
 
 		</script>
 	</body>
