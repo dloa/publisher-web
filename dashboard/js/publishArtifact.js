@@ -308,26 +308,18 @@ function publishArtifact(){
 
 		// Catch the mainHashIndex error and try again.
 		if (!hashes[mainHashIndex]){
-			/*swal({
-				title: "Something went wrong.",
-				text: "Not all files were added to IPFS!",
-				type: "error",
-				showCancelButton: true,
-				confirmButtonClass: "btn-success",
-				confirmButtonText: "Try again!",
-				closeOnConfirm: true
-			},
-			function(){
-				// Log the error
-	  			document.getElementById('publishWell').innerHTML += "<br />[IPFS] Error adding files. Trying again ...</br>";
+			// Log the error
+  			document.getElementById('publishWell').innerHTML += "<br />[IPFS] Error adding files. Trying again ...</br>";
+			setTimeout(function(){
 				// Try to publish again
 				publishArtifact();
-			});
-			return false;*/
+			}, 1000);
+			return false;
 
 			// Check if it is a failure.
-			if (hashes[0].Hash == 'ipfs-upload-failure')
+/*			if (hashes[0].Hash == 'ipfs-upload-failure')
 				mainHashIndex = 0;
+*/
 		}
 
 		var alexandriaMedia = {
