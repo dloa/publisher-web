@@ -661,23 +661,9 @@ function publishArtifact(){
 						updateUSD();
 					}, 1000);
 				});
-			}
-/*
-			if (wallet.balances[walletAddress] < (data.response["pubFeeFLO"] + 0.0001) && (unspent < (data.response["pubFeeFLO"] + 0.0001))){
-				tradebot(walletAddress, function(){
-					// Publish once done!
-					LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, 100000, LibraryDCallback);
-				});
-
-				setTimeout(function(){
-					swal("Warning!", "You need " + ((data.response["pubFeeFLO"]) - (unspent + wallet.balances[walletAddress])) + " more FLO to publish this artifact.", "warning");
-					$("#floValue").val(((data.response["pubFeeFLO"]) - (unspent + wallet.balances[walletAddress])));
-					updateFLO();
-				}, 1000);
 			} else {
 				LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, 100000, LibraryDCallback);
 			}
-*/
 		})
 
 	}
