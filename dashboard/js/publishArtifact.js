@@ -633,6 +633,36 @@ function publishArtifact(){
 			}
 
 			console.log(unspent);
+			console.log(data.response["pubFeeFLO"]);
+
+			if (wallet.balances[walletAddress] < (data.response["pubFeeFLO"] + 0.0001) && (unspent < (data.response["pubFeeFLO"] + 0.0001))){
+				swal({
+					title: "Not enough Florincoin",
+					text: "You need " + ((data.response["pubFeeFLO"]) - (unspent + wallet.balances[walletAddress])) + " more FLO to publish this artifact.",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonClass: "btn-success",
+					confirmButtonText: "Buy some FLO!",
+					closeOnConfirm: true
+				},
+				function(){
+					tradebot(walletAddress, function(){
+						// Publish once done!
+						LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, 100000, LibraryDCallback);
+					});
+					setTimeout(function(){
+						var purchaseAmount = ((data.response["pubFeeFLO"]) - (unspent + wallet.balances[walletAddress])) * marketData.USD;
+						console.log(purchaseAmount);
+						if  (purchaseAmount < MIN_BUY) {
+							purchaseAmount = MIN_BUY;
+						}
+						console.log(purchaseAmount);
+						$("#usdValue").val(purchaseAmount);
+						updateUSD();
+					}, 1000);
+				});
+			}
+/*
 			if (wallet.balances[walletAddress] < (data.response["pubFeeFLO"] + 0.0001) && (unspent < (data.response["pubFeeFLO"] + 0.0001))){
 				tradebot(walletAddress, function(){
 					// Publish once done!
@@ -640,13 +670,14 @@ function publishArtifact(){
 				});
 
 				setTimeout(function(){
-					swal("Warning!", "You need " + ((data.response["pubFeeFLO"] + 1) - (unspent + wallet.balances[walletAddress])).toFixed(0) + " more FLO to publish this artifact.", "warning");
-					$("#floValue").val(((data.response["pubFeeFLO"] + 1) - (unspent + wallet.balances[walletAddress])).toFixed(0)).toFixed(0);
+					swal("Warning!", "You need " + ((data.response["pubFeeFLO"]) - (unspent + wallet.balances[walletAddress])) + " more FLO to publish this artifact.", "warning");
+					$("#floValue").val(((data.response["pubFeeFLO"]) - (unspent + wallet.balances[walletAddress])));
 					updateFLO();
 				}, 1000);
 			} else {
 				LibraryDJS.publishArtifact(wallet, hashes[hashes.length-1].Hash, walletAddress, alexandriaMedia, 100000, LibraryDCallback);
 			}
+*/
 		})
 
 	}
