@@ -90,6 +90,7 @@ function registerWallet() {
 }
 
 function loadAddresses(){
+	console.log('Loading Addresses!');
 	// First load addresses into new publisher modal
 	for (var addr in wallet.addresses) {
 		var address = wallet.addresses[addr].addr;
@@ -105,8 +106,10 @@ function loadAddresses(){
 	// Next check alexandria for all publishers and see if any wallets match. If they do, add them to the option list.
 	$.getJSON( "https://api.alexandria.io/alexandria/v1/publisher/get/all", function( data ) {
 		var nameSet = false;
+		console.log(data.length);
 		for (var i = 0; i < data.length; i++) {
 			//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
+			console.info(wallet.addresses);
 			for (var addr in wallet.addresses) {
 				var address = wallet.addresses[addr].addr;
 				if (data[i]["publisher-data"]["alexandria-publisher"].address == address){
