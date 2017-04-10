@@ -188,6 +188,26 @@ function ParsePoster(file){
 
 		var mediaType = $("#metainfo div.active").attr('id');
 
+		// Verify that poster image filename does not match any media filename
+		if ( (!isBlank(mediaFiles)) || (!isBlank(extraFiles)) ){
+			for (var i = 0; i < mediaFiles.length; i++) {
+				if (mediaFiles[i].name == file.name) {
+					swal("Error!", "Poster image cannot have the same name as any media files", "error");
+					$('#' + mediaType + 'Poster').css("background-image", "none");
+					$('#' + mediaType + 'PosterFile').val('');
+					return;
+				}
+			}
+			for (var i = 0; i < extraFiles.length; i++) {
+				if (extraFiles[i].name == file.name) {
+					swal("Error!", "Poster image cannot have the same name as any media files", "error");
+					$('#' + mediaType + 'Poster').css("background-image", "none");
+					$('#' + mediaType + 'PosterFile').val('');
+					return;
+				}
+			}			
+		}
+
 		reader.onload = function (e) {
 			$('#' + mediaType + 'Poster').css("background-image", "url('" + e.target.result + "')");
 		}
@@ -197,6 +217,14 @@ function ParsePoster(file){
 }
 
 function ParseExtra(file) {
+
+	// Verify that poster image filename does not match any media filename
+	if (file.name == $('#' + $('#metainfo .active').attr('id') + 'PosterFile').val()) {
+		swal("Error!", "Poster image cannot have the same name as any media files", "error");
+		$('#extraFiles').val('');
+		return;
+	}
+
 	// Show the two tables by default now that we have a file.
 	$('#pricing').show();
 	$('#extraTable').show();
@@ -205,7 +233,7 @@ function ParseExtra(file) {
 	extraFiles.push(file);
 
 	console.log(file);
-	var tableLength = $('#extraTable tr').length-1;
+	var tableLength = $('#extraTable tbody tr').length-1;
 
 	$('#extraTable tr:last').after(
 		'<tr id="' + file.name.split('.').join('') + '">' +
@@ -228,6 +256,14 @@ function ParseExtra(file) {
 }
 
 function ParseMedia(file) {
+
+	// Verify that poster image filename does not match any media filename
+	if (file.name == $('#' + $('#metainfo .active').attr('id') + 'PosterFile').val()) {
+		swal("Error!", "Poster image cannot have the same name as any media files", "error");
+		$('#mediaFiles').val('');
+		return;
+	}
+
 	// Show the two tables by default now that we have some media.
 	$('#pricing').show();
 	$('#mediaFilesTable').show();
@@ -236,6 +272,7 @@ function ParseMedia(file) {
 	mediaFiles.push(file);
 
 	console.log(file);
+
 	var tableLength = $('#mediaFilesTable tr.mediaRow').length + 1;
 
 	$('#mediaFilesTable tr:last').after(
