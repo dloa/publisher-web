@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Demo of Data gathering/statistics</title>
+	</head>
+	<body>
+		<div id="content"></div>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="js/artifacts.js"></script>
+		<script type="text/javascript">
+			function createCORSRequest(method, url) {
+			  var xhr = new XMLHttpRequest();
+			  if ("withCredentials" in xhr) {
+
+			    // Check if the XMLHttpRequest object has a "withCredentials" property.
+			    // "withCredentials" only exists on XMLHTTPRequest2 objects.
+			    xhr.open(method, url, true);
+
+			  } else if (typeof XDomainRequest != "undefined") {
+
+			    // Otherwise, check if XDomainRequest.
+			    // XDomainRequest only exists in IE, and is IE's way of making CORS requests.
+			    xhr = new XDomainRequest();
+			    xhr.open(method, url);
+
+			  } else {
+
+			    // Otherwise, CORS is not supported by the browser.
+			    xhr = null;
+
+			  }
+			  return xhr;
+			}
+		</script>
+		<script type="text/javascript">
+			var publisherAddress = "FMfFCGFLvn8rKEuEnDpLrzJExM2rm2XJmg";
+
+			var artifacts = searchAPI('media', 'publisher', publisherAddress);
+
+			var oipAddresses = []
+
+			for (var i = 0; i < artifacts.length; i++) {
+				// Test if OIP or the Older format
+				if (artifacts[i]['media-data']){
+					if (artifacts[i]['media-data']['alexandria-media']){
+						if (artifacts[i]['media-data']['alexandria-media'].payment){
+						}
+					}
+				} else if (artifacts[i]['oip-041']) {
+					if (artifacts[i]['oip-041'].artifact.payment){
+							// Following the format in artifact txid 9ab0c49659e026dbdb3763996d8a1467e59290c6f283e3eb5601b74282a44aac for this if chain.
+						if (artifacts[i]['oip-041'].artifact.payment.addresses){
+							if (artifacts[i]['oip-041'].artifact.payment.addresses.length){
+								var addrs = artifacts[i]['oip-041'].artifact.payment.addresses;
+								for (var y = 0; y < addrs.length; y++) {
+									if (addrs[y].address != ""){
+										addrs[y].artifactTXID = artifacts[i].txid;
+										console.log(artifacts[i]);
+										// console.log(addrs[y]);
+										oipAddresses.push(addrs[y]);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			var addrString = "";
+			for (var i = 0; i < oipAddresses.length; i++) {
+				if (oipAddresses[i].token == "BTC"){
+					if (i == 0)
+						addrString += oipAddresses[i].address;
+					else
+						addrString += '|' + oipAddresses[i].address;
+				}
+			}
+
+			$.get("https://blockchain.info/multiaddr?active=" + addrString + "&format=json&cors=true", null, function(err, res){
+				console.log(err);
+				console.log(res);
+			})
+
+			console.log(artifacts,oipAddresses);
+
+		</script>
+	</body>
+</html>

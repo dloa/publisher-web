@@ -7,8 +7,8 @@
 	}
 ]*/
 var PubLS = (function () {
-	function PubLS() {
-		
+	function PubLS(something) {
+		this.artifacts = [];
 	};
 
 	PubLS.prototype.addArtifact = function(timestamp, status, artifactJSON){
@@ -32,4 +32,6 @@ var PubLS = (function () {
 	PubLS.prototype.getAllArtifacts = function(){
 		
 	};
-});
+
+	return PubLS;
+})();

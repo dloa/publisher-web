@@ -37,14 +37,14 @@
               <div class="card-body">
                 <div class="mda-form-group float-label mda-input-group">
                   <div class="mda-form-control">
-                    <input id="walletID" type="text" name="accountName" required="" class="form-control">
+                    <input id="username" type="text" name="username" required="true" class="form-control">
                     <div class="mda-form-control-line"></div>
                     <label>Wallet Identifier</label>
                   </div><span class="mda-input-group-addon"><em class="ion-ios-email-outline icon-lg"></em></span>
                 </div>
                 <div class="mda-form-group float-label mda-input-group">
                   <div class="mda-form-control">
-                    <input id="password" type="password" name="accountPassword" required="" class="form-control">
+                    <input id="password" type="password" name="accountPassword" required="true" class="form-control">
                     <div class="mda-form-control-line"></div>
                     <label>Password</label>
                   </div><span class="mda-input-group-addon"><em class="ion-ios-locked-outline icon-lg"></em></span>
@@ -86,13 +86,13 @@
     <script type="text/javascript">
     	var $form = $('#user-login').on('submit', function(){
     		// Validate login info
-    		wallet = new Wallet($('#walletID').val(), $('#password').val());
+    		wallet = new Wallet($('#username').val(), $('#password').val());
 			wallet.load(function () {
 				console.log("Wallet Post-Load");
 				console.log(wallet);
 
-				localStorage.setItem("identifier", $('#walletID').val());
-				localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt($('#password').val(), $('#walletID').val()));
+				localStorage.setItem("identifier", $('#username').val());
+				localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt($('#password').val(), $('#username').val()));
 				localStorage.setItem("remember-me", document.getElementById('remember-me').checked);
 
 				// Redirect to main dashboard page.
@@ -102,8 +102,8 @@
 
     	window.addEventListener('wallet', function (e) { 
     		if (e.detail == "There is no wallet with that identifier"){
-				$('#walletID').trigger('focus');
-	    		$('#walletID').attr('class', 'form-control has-value error');
+				$('#username').trigger('focus');
+	    		$('#username').attr('class', 'form-control has-value error');
     		} else if (e.detail == 'invalid-password'){
     			$('#password').trigger('focus');
 	    		$('#password').attr('class', 'form-control has-value error');

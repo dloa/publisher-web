@@ -11,8 +11,7 @@ window.searchAPI = function(module, searchOn, searchFor) {
 	var mediaData;
 	$.ajax({
 		type: "POST",
-		//url: librarianHost +'/alexandria/v2/search',
-		url: librarianHost +'/alexandria/v1/search',
+		url: librarianHost +'/alexandria/v2/search',
 		data: queryString.toString(),
 		success: function (e) {
 			mediaData = $.parseJSON(e).response;

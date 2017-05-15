@@ -109,7 +109,7 @@ function loadAddresses(){
 		console.log(data.length);
 		for (var i = 0; i < data.length; i++) {
 			//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
-			console.info(wallet.addresses);
+			//console.info(wallet.addresses);
 			for (var addr in wallet.addresses) {
 				var address = wallet.addresses[addr].addr;
 				if (data[i]["publisher-data"]["alexandria-publisher"].address == address){
