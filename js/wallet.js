@@ -269,11 +269,10 @@ function refreshWalletInfo(){
 																</div>\
 															</div>\
 															<div class="row">\
-																<!--<div class="col-xs-6">-->\
-																<div class="col-xs-12">\
+																<!--<div class="col-xs-6">\
 																	<label><abbr title="" data-original-title="the amount to pay in network miner fees - 0.0004 or more recommended for a faster processing time">Transaction Fee</abbr>&nbsp;&nbsp;<a href="https://bitcoinfees.21.co/" target="_blank" data-ytta-id="-"><span class="glyphicon glyphicon-question-sign"></span></a></label>\
 																	<input type="text" class="form-control txFee" value="0.0004" id="txFee" data-original-title="" title="">\
-																</div>\
+																</div>-->\
 																<!--<div class="col-xs-5">\
 																	<label><abbr title="" data-original-title="the amount to donate to coinb.in">Donation</abbr></label>\
 																	<input type="text" class="form-control" value="0.003" id="developerDonation" data-original-title="" title="">\
@@ -303,15 +302,15 @@ function sendFromInterface(id){
 	var addressFrom = $('#' + id + ' .walletAddress').text();
 	var addressTo = $('#' + id + ' .addressTo').val();
 	var amount = $('#' + id + ' .amount').val() ;
-	var txFee = $('#' + id + ' .txFee').val() * Math.pow(10,8);
+	//var txFee = $('#' + id + ' .txFee').val() * Math.pow(10,8);
 
 	console.log(addressFrom);
 	console.log(addressTo);
 	console.log(amount);
-	console.log(txFee);
+	//console.log(txFee);
 
 	//if (addressFrom && addressTo && amount && txFee && addressFrom != "" && addressTo != "" && amount != "" && amount > 0 && txFee > 0)
-	wallet.sendCoins(addressFrom, addressTo, amount, '', txFee, function(err, res){ 
+	wallet.sendCoins(addressFrom, addressTo, amount, '', 0, function(err, res){ 
 		console.log(res);
 		swal("Success!", "Successfully sent " + amount + " FLO to " + addressTo, "success"); 
 	});

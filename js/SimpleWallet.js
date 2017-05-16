@@ -404,7 +404,7 @@ var Wallet = (function () {
 				this.getUnspent(fromAddress, function (data) {
 					var merged = _this.mergeUnspent(data, fromAddress);
 					var clean_unspent = _this.removeSpent(merged);
-					data = _this.calculateBestUnspent(amount + (pubFee / Math.pow(10, 8)), clean_unspent);
+					data = _this.calculateBestUnspent(parseFloat(amount) + parseFloat(pubFee / Math.pow(10, 8)), clean_unspent);
 					console.log(data);
 					// temporary constant
 					var minFeePerKb = 100000;
