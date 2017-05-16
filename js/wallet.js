@@ -92,7 +92,7 @@ function registerWallet() {
 function loadAddresses(){
 	console.log('Loading Addresses!');
 	// First load addresses into new publisher modal
-	for (var addr in wallet.addresses) {
+	/*for (var addr in wallet.addresses) {
 		var address = wallet.addresses[addr].addr;
 		console.log(address);
 		// Add the florincoin addresses to the option list.
@@ -101,12 +101,16 @@ function loadAddresses(){
 		option.value = address;
 		option.text = address;
 		x.add(option);
-	}
+	}*/
 
 	// Next check alexandria for all publishers and see if any wallets match. If they do, add them to the option list.
 	$.getJSON( "https://api.alexandria.io/alexandria/v1/publisher/get/all", function( data ) {
 		var nameSet = false;
 		console.log(data.length);
+
+		// Reset the select publisher id dropdown
+		$('#publisherSelect').html("");
+		
 		for (var i = 0; i < data.length; i++) {
 			//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
 			//console.info(wallet.addresses);
@@ -128,7 +132,7 @@ function loadAddresses(){
 					// Set the just added option to be active.
 					x.value = option.text;
 					// Remove the option from the register publisher page
-					$('#newPublisherFlorincoinAddress option[value="' + address + '"]').remove();
+					//$('#newPublisherFlorincoinAddress option[value="' + address + '"]').remove();
 
 					loadArtifacts(data[i]["publisher-data"]["alexandria-publisher"].address);
 				}

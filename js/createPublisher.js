@@ -14,9 +14,9 @@ function show (elements, specifiedDisplay) {
 
 function continueToArtifact() {
   if (document.getElementById("publisherSelect").value != 'None Registered...'){
-	var $active = $('.wizard .nav-tabs li.active');
-	$active.next().removeClass('disabled');
-	nextTab($active);
+	var artifactStepCircle = $('#artifactStepCircle');
+	$('#artifactStepCircle').removeClass('disabled');
+	$(artifactStepCircle).find('a[data-toggle="tab"]').click();
   } else {
 	swal("Error!", "You must select a publisher address to continue!", "error");
   }
