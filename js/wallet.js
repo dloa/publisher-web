@@ -212,7 +212,7 @@ function refreshWalletInfo(){
 										<div class="panel-heading" role="tab" id="heading' + i + '">\
 											<h4 class="panel-title">\
 												<div style="padding: 0px 30px; color: #000">\
-													<span>' + address + '</span><span style="float: right"><span class="color: green">$' + (parseFloat(balance)*parseFloat(FLOUSD)).toFixed(2) + '</span> - ' + balance + ' FLO</span>\
+													<span>' + address + '</span><span style="float: right"><span style="color: green">$' + (parseFloat(balance)*parseFloat(FLOUSD)).toFixed(2) + '</span> - ' + balance + ' FLO</span>\
 												</div>\
 											</h4>\
 										</div>\
@@ -223,31 +223,31 @@ function refreshWalletInfo(){
 											<div class="col-md-12" align="center">\
 												<div id="walletQrCode' + i + '" title="florincoin:' + address + '"></div> <br>\
 												<div>\
-													<span id="walletAddress">' + address + '</span>\
+													<span class="walletAddress">' + address + '</span>\
 												</div>\
 												<br>\
 												<div style="text-align:center; width:430px;">\
 													<ul class="nav nav-pills" role="tablist">\
-														<li role="presentation" class="active"><a href="javascript:;" id="walletBalance" rel="' + balance + '" style="display: block;">' + balance + ' FLO</a></li>\
-														<li role="presentation"><a href="#walletSpend" id="walletShowSpend"  aria-controls="walletSpend" role="pill" data-toggle="pill">Spend</a></li>\
+														<li role="presentation" class="active"><a href="javascript:;" id="walletBalance' + i + '" rel="' + balance + '" style="display: block;">' + balance + ' FLO</a></li>\
+														<li role="presentation"><a href="#walletSpend' + i + '" id="walletShowSpend' + i + '"  aria-controls="walletSpend' + i + '" role="pill" data-toggle="pill">Spend</a></li>\
 														<li role="presentation"><a id="walletHistory" href="http://florincoin.info/address/' + address + '" target="_blank" data-ytta-id="-">History</a></li>\
 														<li role="presentation"><a href="#tradebot" target="" >Buy</a></li>\
-														<li role="presentation"><a href="#walletKeys" id="walletShowKeys"  aria-controls="walletKeys" role="pill" data-toggle="pill">Keys</a></li>\
+														<li role="presentation"><a href="#walletKeys' + i + '" id="walletShowKeys' + i + '"  aria-controls="walletKeys' + i + '" role="pill" data-toggle="pill">Keys</a></li>\
 													</ul>\
 													<br>\
 													<div class="tab-content" style="margin-top: -40px;">\
-														<div role="tabpanel" id="walletKeys" class="tab-pane">\
+														<div role="tabpanel" id="walletKeys' + i + '" class="tab-pane">\
 															<label>Public Key</label>\
 															<input class="form-control pubkey" type="text" readonly="" data-original-title="" title="" value="' + address + '">\
 															<label>Private key</label>\
 															<div class="input-group">\
-																<input class="form-control privkey" type="password" readonly="" data-original-title="" title="" value="' + priv + '">\
+																<input id="priv' + i + '" class="form-control privkey" type="password" readonly="" data-original-title="" title="" value="' + priv + '">\
 																<span class="input-group-btn">\
-																	<button class="showKey btn btn-default" onclick="" type="button">Show</button>\
+																	<button class="showKey btn btn-default" onclick="$(\'#priv' + i + '\').clone().attr(\'type\',\'text\').insertAfter(\'#priv' + i + '\').prev().remove();" type="button">Show</button>\
 																</span>\
 															</div>\
 														</div>\
-														<div id="walletSpend" class="tab-pane active">\
+														<div id="walletSpend' + i + '" class="tab-pane active">\
 															<div class="row">\
 																<div class="form-inline output">\
 																	<div class="col-xs-8">\
@@ -271,18 +271,19 @@ function refreshWalletInfo(){
 																</div>\
 															</div>\
 															<div class="row">\
-																<div class="col-xs-6">\
+																<!--<div class="col-xs-6">-->\
+																<div class="col-xs-12">\
 																	<label><abbr title="" data-original-title="the amount to pay in network miner fees - 0.0004 or more recommended for a faster processing time">Transaction Fee</abbr>&nbsp;&nbsp;<a href="https://bitcoinfees.21.co/" target="_blank" data-ytta-id="-"><span class="glyphicon glyphicon-question-sign"></span></a></label>\
-																	<input type="text" class="form-control" value="0.0004" id="txFee" data-original-title="" title="">\
+																	<input type="text" class="form-control txFee" value="0.0004" id="txFee" data-original-title="" title="">\
 																</div>\
-																<div class="col-xs-5">\
+																<!--<div class="col-xs-5">\
 																	<label><abbr title="" data-original-title="the amount to donate to coinb.in">Donation</abbr></label>\
 																	<input type="text" class="form-control" value="0.003" id="developerDonation" data-original-title="" title="">\
-																</div>\
+																</div>-->\
 															</div>\
 															<br>\
 															<div id="walletSendStatus" class="alert alert-danger hidden"></div>\
-															<button class="btn btn-primary" type="button" id="walletSendBtn">Send</button>\
+															<button class="btn btn-primary" type="button" id="walletSendBtn" onclick="sendFromInterface(\'collapse' + i + '\')">Send</button>\
 															<button class="btn btn-default" type="button">Reset</button>\
 														</div>\
 													</div>\
@@ -298,6 +299,26 @@ function refreshWalletInfo(){
 			}
 		});
 	});
+}
+
+function sendFromInterface(id){
+	var addressFrom = $('#' + id + ' .walletAddress').text();
+	var addressTo = $('#' + id + ' .addressTo').val();
+	var amount = $('#' + id + ' .amount').val() ;
+	var txFee = $('#' + id + ' .txFee').val() * Math.pow(10,8);
+
+	console.log(addressFrom);
+	console.log(addressTo);
+	console.log(amount);
+	console.log(txFee);
+
+	//if (addressFrom && addressTo && amount && txFee && addressFrom != "" && addressTo != "" && amount != "" && amount > 0 && txFee > 0)
+	wallet.sendCoins(addressFrom, addressTo, amount, '', txFee, function(err, res){ 
+		console.log(res);
+		swal("Success!", "Successfully sent " + amount + " FLO to " + addressTo, "success"); 
+	});
+	//else
+		//alert("Unable to send. Please check the Address, Amount, and Transaction Fee.");
 }
 
 function newAddress(){
