@@ -188,14 +188,115 @@ function loadAddresses(){
 function refreshWalletInfo(){
 	wallet.refreshBalances(function(data){
 		$('#identifier').html(wallet.identifier);
-		$('#addressTable > tbody').html("");
-		for (var addr in wallet.addresses) {
-			var address = wallet.addresses[addr].addr;
-			var balance = wallet.balances[addr];
 
-			// Add the florincoin addresses and balance to the table.
-			$('#addressTable > tbody:last-child').append('<tr><td><code>' + address + '</code></td><td><code>' + balance + '</code></td>');
-		}
+		var FLOUSD
+
+		getMarketData(function(data){ 
+			marketData = data; 
+			perBTC = marketData.USD/marketData.weighted;
+			var FLOUSD = marketData.USD;
+		
+			// Wipe the div
+			$('#walletAccordian').html("");
+
+			var i = 0;
+			for (var addr in wallet.addresses) {
+				i = i + 1;
+				var address = wallet.addresses[addr].addr;
+				var priv = wallet.addresses[addr].priv;
+				var balance = wallet.balances[addr];
+
+				// Add the florincoin addresses and balance to the table.
+				$('#walletAccordian').append('<div class="panel">\
+									<a role="button" data-toggle="collapse" data-parent="#walletAccordian" href="#collapse' + i + '" aria-expanded="true" aria-controls="collapse' + i + '">\
+										<div class="panel-heading" role="tab" id="heading' + i + '">\
+											<h4 class="panel-title">\
+												<div style="padding: 0px 30px; color: #000">\
+													<span>' + address + '</span><span style="float: right"><span class="color: green">$' + (parseFloat(balance)*parseFloat(FLOUSD)).toFixed(2) + '</span> - ' + balance + ' FLO</span>\
+												</div>\
+											</h4>\
+										</div>\
+									</a>\
+									<div id="collapse' + i + '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading' + i + '">\
+										<div class="panel-body">\
+											<!-- Some HTML design code comes from https://github.com/OutCast3k/coinbin/, you can view the license for this code here: https://github.com/OutCast3k/coinbin/blob/master/LICENSE -->\
+											<div class="col-md-12" align="center">\
+												<div id="walletQrCode' + i + '" title="florincoin:' + address + '"></div> <br>\
+												<div>\
+													<span id="walletAddress">' + address + '</span>\
+												</div>\
+												<br>\
+												<div style="text-align:center; width:430px;">\
+													<ul class="nav nav-pills" role="tablist">\
+														<li role="presentation" class="active"><a href="javascript:;" id="walletBalance" rel="' + balance + '" style="display: block;">' + balance + ' FLO</a></li>\
+														<li role="presentation"><a href="#walletSpend" id="walletShowSpend"  aria-controls="walletSpend" role="pill" data-toggle="pill">Spend</a></li>\
+														<li role="presentation"><a id="walletHistory" href="http://florincoin.info/address/' + address + '" target="_blank" data-ytta-id="-">History</a></li>\
+														<li role="presentation"><a href="#tradebot" target="" >Buy</a></li>\
+														<li role="presentation"><a href="#walletKeys" id="walletShowKeys"  aria-controls="walletKeys" role="pill" data-toggle="pill">Keys</a></li>\
+													</ul>\
+													<br>\
+													<div class="tab-content" style="margin-top: -40px;">\
+														<div role="tabpanel" id="walletKeys" class="tab-pane">\
+															<label>Public Key</label>\
+															<input class="form-control pubkey" type="text" readonly="" data-original-title="" title="" value="' + address + '">\
+															<label>Private key</label>\
+															<div class="input-group">\
+																<input class="form-control privkey" type="password" readonly="" data-original-title="" title="" value="' + priv + '">\
+																<span class="input-group-btn">\
+																	<button class="showKey btn btn-default" onclick="" type="button">Show</button>\
+																</span>\
+															</div>\
+														</div>\
+														<div id="walletSpend" class="tab-pane active">\
+															<div class="row">\
+																<div class="form-inline output">\
+																	<div class="col-xs-8">\
+																		<label>Address</label>\
+																	</div>\
+																	<div class="col-xs-3">\
+																		<label>Amount</label>\
+																	</div>\
+																</div>\
+															</div>\
+															<div class="row" id="walletSpendTo">\
+																<div class="form-horizontal output">\
+																	<div class="col-xs-8">\
+																		<input type="text" class="form-control addressTo" data-original-title="" title="">\
+																	</div>\
+																	<div class="col-xs-3">\
+																		<input type="text" class="form-control amount" data-original-title="" title="" placeholder="0.00">\
+																	</div>\
+																	<a href="javascript:;" class="addressAdd" data-ytta-id="-"><span class="glyphicon glyphicon-plus"></span></a>\
+																	<br><br>\
+																</div>\
+															</div>\
+															<div class="row">\
+																<div class="col-xs-6">\
+																	<label><abbr title="" data-original-title="the amount to pay in network miner fees - 0.0004 or more recommended for a faster processing time">Transaction Fee</abbr>&nbsp;&nbsp;<a href="https://bitcoinfees.21.co/" target="_blank" data-ytta-id="-"><span class="glyphicon glyphicon-question-sign"></span></a></label>\
+																	<input type="text" class="form-control" value="0.0004" id="txFee" data-original-title="" title="">\
+																</div>\
+																<div class="col-xs-5">\
+																	<label><abbr title="" data-original-title="the amount to donate to coinb.in">Donation</abbr></label>\
+																	<input type="text" class="form-control" value="0.003" id="developerDonation" data-original-title="" title="">\
+																</div>\
+															</div>\
+															<br>\
+															<div id="walletSendStatus" class="alert alert-danger hidden"></div>\
+															<button class="btn btn-primary" type="button" id="walletSendBtn">Send</button>\
+															<button class="btn btn-default" type="button">Reset</button>\
+														</div>\
+													</div>\
+												</div>\
+											</div>\
+										</div>\
+									</div>\
+								</div>');
+
+				var walQR = new QRCode("walletQrCode" + i + "");
+				var qrStr = 'florincoin:' + address;
+				walQR.makeCode(qrStr);
+			}
+		});
 	});
 }
 
