@@ -323,32 +323,39 @@ function publishArtifact(){
 		}
 
 		var alexandriaMedia = {
-			"torrent": hashes[hashes.length-1].Hash,
-			"publisher": walletAddress,
-			"timestamp": Date.now(),
-			"type": mediaType.replace('#',''),
-			"payment": {
-				// Commented out because Libraryd hates me :c
-				//"fiat": "USD", // Hardcode USD, unknown if is needed yet.
-				//"paymentToken": "BTC", // Hardcode BTC, unknown if is needed yet
-				//"paymentAddress": bitcoinAddress
-			},
-			"info": {
-				"title": title,
-				"description": description,
-				"year": year,
-				"extra-info": {
-					"DHT Hash": hashes[hashes.length-1].Hash,
-					"filename": hashes[mainHashIndex].Name,
-					//"runtime": duration.toFixed(0),
+				"publisher": walletAddress,
+				"timestamp":parseInt(Date.now().toString().slice(0, -3)), 
+				"type": mediaType.replace('#',''),
+				"info": {
+					"title": title,
+					"description": description,
+					"year": year,
+					"extraInfo": {
+					}
+				},
+				"payment": {
+					"fiat": "USD", // Hardcode USD, unknown if is needed yet.
+					"scale": "1000:1",
+					"sugTip": [
+					1,2,3],
+					"tokens": {
+					},
+					"addresses": !isBlank(bitcoinAddress) ? [{
+						"token":"BTC",
+						"address":bitcoinAddress						
+					}] : []
+				},				
+				"storage": {
+					"network": "IPFS",
+					"location": hashes[hashes.length-1].Hash,
 					"files": []
-				}
-			}
+				
+		}
 		};
 
 		// If item is not blank, then add it, otherwise just continue as these are all optional.
-		if (!isBlank(bitcoinAddress))
-			alexandriaMedia["info"]["extra-info"]["Bitcoin Address"] = bitcoinAddress;
+//		if (!isBlank(bitcoinAddress))
+//			alexandriaMedia["payment"]["addresses"]["address"] = bitcoinAddress;
 
 		// Optional Fields
 		var poster = $(mediaType + 'PosterFile').val();
@@ -356,10 +363,10 @@ function publishArtifact(){
 		var tags = $(mediaType + ' #tags').val();
 		// Check if the tags are set, if they are, then set them.
 		if (!isBlank(tags))
-			alexandriaMedia["info"]["extra-info"]["tags"] = tags;
+			alexandriaMedia["info"]["extraInfo"]["tags"] = tags;
 		// Check if the genre is set, if it is, set it.
 		if (!isBlank(genre))
-				alexandriaMedia["info"]["extra-info"]["genre"] = genre;
+				alexandriaMedia["info"]["extraInfo"]["genre"] = genre;
 
 		// Metadata per artifact type
 		if (mediaType == '#music'){
@@ -370,10 +377,10 @@ function publishArtifact(){
 			var recordLabel = $(mediaType + ' #recordLabel').val();
 
 			if (!isBlank(artistName))
-				alexandriaMedia["info"]["extra-info"]["artist"] = artistName;
+				alexandriaMedia["info"]["extraInfo"]["artist"] = artistName;
 
 			if (!isBlank(recordLabel))
-				alexandriaMedia["info"]["extra-info"]["company"] = recordLabel;
+				alexandriaMedia["info"]["extraInfo"]["company"] = recordLabel;
 		} else if (mediaType == '#video'){
 			//################################
 			//            VIDEO
@@ -382,10 +389,10 @@ function publishArtifact(){
 			var distributor = $(mediaType + ' #distributor').val();	
 
 			if (!isBlank(director))
-				alexandriaMedia["info"]["extra-info"]["artist"] = director;
+				alexandriaMedia["info"]["extraInfo"]["artist"] = director;
 
 			if (!isBlank(distributor))
-				alexandriaMedia["info"]["extra-info"]["company"] = distributor;
+				alexandriaMedia["info"]["extraInfo"]["company"] = distributor;
 		} else if (mediaType == '#podcast'){
 			//################################
 			//            PODCAST
@@ -395,13 +402,13 @@ function publishArtifact(){
 			var episodeNum = $(mediaType + ' #distributor').val();	
 
 			if (!isBlank(episodeTitle))
-				alexandriaMedia["info"]["extra-info"]["epTitle"] = episodeTitle;
+				alexandriaMedia["info"]["extraInfo"]["epTitle"] = episodeTitle;
 
 			if (!isBlank(seasonNum))
-				alexandriaMedia["info"]["extra-info"]["season"] = seasonNum;
+				alexandriaMedia["info"]["extraInfo"]["season"] = seasonNum;
 
 			if (!isBlank(episodeNum))
-				alexandriaMedia["info"]["extra-info"]["episode"] = episodeNum;
+				alexandriaMedia["info"]["extraInfo"]["episode"] = episodeNum;
 
 		} else if (mediaType == '#pdf'){
 			//################################
@@ -410,7 +417,7 @@ function publishArtifact(){
 			var authorName = $(mediaType + ' #authorName').val();
 
 			if (!isBlank(authorName))
-				alexandriaMedia["info"]["extra-info"]["author"] = director;
+				alexandriaMedia["info"]["extraInfo"]["author"] = director;
 		} else if (mediaType == '#movie'){
 			//################################
 			//            MOVIE
@@ -419,10 +426,10 @@ function publishArtifact(){
 			var distributor = $(mediaType + ' #distributor').val();	
 
 			if (!isBlank(director))
-				alexandriaMedia["info"]["extra-info"]["artist"] = director;
+				alexandriaMedia["info"]["extraInfo"]["artist"] = director;
 
 			if (!isBlank(distributor))
-				alexandriaMedia["info"]["extra-info"]["company"] = distributor;
+				alexandriaMedia["info"]["extraInfo"]["company"] = distributor;
 		} else if (mediaType == '#thing'){
 			//################################
 			//            THING
@@ -430,7 +437,7 @@ function publishArtifact(){
 			var creatorName = $(mediaType + ' #creatorName').val();
 
 			if (!isBlank(creatorName))
-				alexandriaMedia["info"]["extra-info"]["creator"] = creatorName;
+				alexandriaMedia["info"]["extraInfo"]["creator"] = creatorName;
 		} else if (mediaType == '#html'){
 			//################################
 			//             HTML
@@ -438,7 +445,7 @@ function publishArtifact(){
 			var creatorName = $(mediaType + ' #creatorName').val();
 
 			if (!isBlank(creatorName))
-				alexandriaMedia["info"]["extra-info"]["creator"] = creatorName;
+				alexandriaMedia["info"]["extraInfo"]["creator"] = creatorName;
 		}
 
 		if (!isBlank(mediaFiles)){
@@ -457,6 +464,11 @@ function publishArtifact(){
 				var sugPlay = $(priceSelector + ' #sugPlay').val();
 				var minBuy = $(priceSelector + ' #minBuy').val();
 				var sugBuy = $(priceSelector + ' #sugBuy').val();
+				var scale = 1000;
+				minPlay = parseInt(minPlay * scale);
+				sugPlay = parseInt(sugPlay * scale);
+				minBuy = parseInt(minBuy * scale);
+				sugBuy = parseInt(sugBuy * scale);
 				// Get checkboxes from pricing table
 				var disallowPlay = $(priceSelector + ' #disPlay').is(':checked');
 				var disallowBuy = $(priceSelector + ' #disBuy').is(':checked');
@@ -493,7 +505,7 @@ function publishArtifact(){
 				if (disallowBuy)
 					fileJSON['disallowBuy'] = true;
 
-				alexandriaMedia["info"]["extra-info"]["files"].push(fileJSON)
+				alexandriaMedia["storage"]["files"].push(fileJSON)
 			}
 		}
 
@@ -501,15 +513,15 @@ function publishArtifact(){
 			var type = 'preview'
 			if (mediaType == '#music'){
 				type = 'coverArt';
-				alexandriaMedia["info"]["extra-info"]["coverArt"] = hashes[0].Name;
+//				alexandriaMedia["info"]["extraInfo"]["coverArt"] = hashes[0].Name;
 			} else if (mediaType == '#video'){
 				type = 'preview'
-				alexandriaMedia["info"]["extra-info"]["posterFrame"] = hashes[0].Name;
+				alexandriaMedia["info"]["extraInfo"]["posterFrame"] = hashes[0].Name;
 			} else {
-				alexandriaMedia["info"]["extra-info"]["preview"] = hashes[0].Name;
+				alexandriaMedia["info"]["extraInfo"]["preview"] = hashes[0].Name;
 			}
 
-			alexandriaMedia["info"]["extra-info"]["files"].push({
+			alexandriaMedia["storage"]["files"].push({
 				"dname": 'Cover Art',
 				"fname": hashes[0].Name,
 				"type": type
@@ -565,7 +577,7 @@ function publishArtifact(){
 				if (disallowBuy)
 					fileJSON['disallowBuy'] = true;
 
-				alexandriaMedia["info"]["extra-info"]["files"].push(fileJSON)
+				alexandriaMedia["storage"]["files"].push(fileJSON)
 			}
 		}
 

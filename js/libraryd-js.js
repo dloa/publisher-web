@@ -54,12 +54,12 @@ LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, p
 	var signature = LibraryDJS.signArtifact(wallet, ipfs, address, time);
 
 	var data = {
-			"alexandria-media": alexandriaMedia, //test,
-			signature: signature
+			"oip-041": {"artifact": alexandriaMedia, //test,
+			signature: signature}
 	};
 
-	data["alexandria-media"].timestamp = parseInt(time);
-	data["alexandria-media"].publisher = address;
+	data["oip-041"]["artifact"].timestamp = parseInt(time);
+	data["oip-041"]["artifact"].publisher = address;
 
 	LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.001, publishFee, function (err, txIDs) {
 		if (err != null)
