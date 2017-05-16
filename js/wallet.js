@@ -189,8 +189,6 @@ function refreshWalletInfo(){
 	wallet.refreshBalances(function(data){
 		$('#identifier').html(wallet.identifier);
 
-		var FLOUSD
-
 		getMarketData(function(data){ 
 			marketData = data; 
 			perBTC = marketData.USD/marketData.weighted;
