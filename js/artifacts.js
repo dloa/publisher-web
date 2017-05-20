@@ -81,7 +81,15 @@ function DeactivateArtifact(artifactTxid){
 			return;
 		}
 
-		LibraryDJS.sendDeactivationMessage(wallet, results[0]["media-data"]["alexandria-media"].publisher, artifactTxid, function(error, response){
+		var artPublisher;
+		if (results[0]["media-data"]){
+			artPublisher = results[0]["media-data"]["alexandria-media"].publisher;
+		} else if (results[0]["oip-041"]){
+			console.log(results);
+			artPublisher = results[0].publisher;
+		}
+
+		LibraryDJS.sendDeactivationMessage(wallet, artPublisher, artifactTxid, function(error, response){
 			if (error) {
 				console.log(error);
 				swal("Error", "Deactivation not Successful!", "error");
