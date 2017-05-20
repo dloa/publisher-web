@@ -50,6 +50,14 @@ function AppendOneArtifact(results, i){
 						<td><button onClick='ArtifactInfo(\"" + results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='EditArtifact(\"" + results[i].txid + "\");' class='dev btn btn-warning'>Edit</button> <button onClick='DeactivateArtifact(\"" + results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
 					</tr>";
 		$("#ArtifactsTable > tbody").append(markup);
+	} else if (results[i]['oip-041']){
+		var markup = "<tr id='" + results[i].txid + "'>\
+						<th scope='row'>" + (1+parseInt(i)) + "</th>\
+						<td><code>" + results[i]['oip-041'].artifact.info.title + "</code></td>\
+						<td>TXID: <code>.." + results[i].txid.substr(results[i].txid.length - 8) + "</code></td>\
+						<td><button onClick='ArtifactInfo(\"" + results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='EditArtifact(\"" + results[i].txid + "\");' class='dev btn btn-warning'>Edit</button> <button onClick='DeactivateArtifact(\"" + results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
+					</tr>";
+		$("#ArtifactsTable > tbody").append(markup);
 	}
 	checkEnv();
 }
