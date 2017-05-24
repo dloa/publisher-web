@@ -1,4 +1,380 @@
+var artifactTypes = [{
+	"id": "music",
+	"title": "Album",
+	"forms": [{
+			"id": "title",
+			"width": 12,
+			"placeholder": "Album Title"
+		},
+		{
+			"id": "artistName",
+			"width": 12,
+			"placeholder": "Artist Name"
+		},
+		{
+			"id": "genre",
+			"width": 6,
+			"placeholder": "Genre"
+		},
+		{
+			"id": "releaseDate",
+			"width": 6,
+			"placeholder": "Release Year"
+		},
+		{
+			"id": "tags",
+			"width": 12,
+			"placeholder": "Tags"
+		},
+		{
+			"id": "recordLabel",
+			"width": 12,
+			"placeholder": "Record Label"
+		},
+		{
+			"id": "description",
+			"width": 12,
+			"placeholder": "Album Description",
+			"type": "textarea",
+			"row": 3
+		}
+	],
+	"coverArt": {
+		"id": "cover-art",
+		"class": "cover-art-square"
+	}
+},{
+	"id": "video",
+	"title": "Video",
+	"forms": [{
+			"id": "title",
+			"width": 12,
+			"placeholder": "Video Title"
+		},
+		{
+			"id": "directorName",
+			"width": 12,
+			"placeholder": "Director Name"
+		},
+		{
+			"id": "distributor",
+			"width": 12,
+			"placeholder": "Distributor"
+		},
+		{
+			"id": "releaseDate",
+			"width": 3,
+			"placeholder": "Release Year"
+		},
+		{
+			"id": "genre",
+			"width": 4,
+			"placeholder": "Genre"
+		},
+		{
+			"id": "tags",
+			"width": 5,
+			"placeholder": "Tags"
+		},
+		{
+			"id": "description",
+			"width": 12,
+			"placeholder": "Video Description",
+			"type": "textarea",
+			"row": 3
+		}
+	],
+	"coverArt": {
+		"id": "cover-art",
+		"text": "Preview Image",
+		"class": "cover-art"
+	}
+},{
+	"id": "podcast",
+	"title": "Podcast",
+	"forms": [{
+			"id": "title",
+			"width": 12,
+			"placeholder": "Podcast Title",
+			"subtext": "This will be auto formatted with \"Podcast Title\": \"Episode Title\""
+		},
+		{
+			"id": "episodeTitle",
+			"width": 12,
+			"placeholder": "Episode Title",
+			"subtext": "This will be auto formatted with \"Podcast Title\": \"Episode Title\""
+		},
+		{
+			"id": "seasonNum",
+			"width": 3,
+			"placeholder": "Season Number"
+		},
+		{
+			"id": "episodeNum",
+			"width": 3,
+			"placeholder": "Episode Number"
+		},
+		{
+			"id": "releaseDate",
+			"width": 3,
+			"placeholder": "Release Year"
+		},
+		{
+			"id": "tags",
+			"width": 3,
+			"placeholder": "Tags"
+		},
+		{
+			"id": "description",
+			"width": 12,
+			"placeholder": "Episode Description",
+			"type": "textarea",
+			"row": 3
+		}
+	],
+	"coverArt": {
+		"id": "cover-art",
+		"class": "cover-art-square"
+	}
+},{
+	"id": "book",
+	"title": "Book",
+	"forms": [{
+			"id": "title",
+			"width": 12,
+			"placeholder": "Book Title"
+		},
+		{
+			"id": "authorName",
+			"width": 12,
+			"placeholder": "Author Name"
+		},
+		{
+			"id": "genre",
+			"width": 6,
+			"placeholder": "Genre"
+		},
+		{
+			"id": "releaseDate",
+			"width": 6,
+			"placeholder": "Release Year"
+		},
+		{
+			"id": "tags",
+			"width": 12,
+			"placeholder": "Tags"
+		},
+		{
+			"id": "description",
+			"width": 12,
+			"placeholder": "Book Description",
+			"type": "textarea",
+			"row": 3
+		}
+	],
+	"coverArt": {
+		"id": "cover-art",
+		"class": "cover-art-poster"
+	}
+},{
+	"id": "movie",
+	"title": "Movie",
+	"forms": [{
+			"id": "title",
+			"width": 12,
+			"placeholder": "Movie Title"
+		},
+		{
+			"id": "artistName",
+			"width": 12,
+			"placeholder": "Director Name"
+		},
+		{
+			"id": "genre",
+			"width": 6,
+			"placeholder": "Genre"
+		},
+		{
+			"id": "releaseDate",
+			"width": 6,
+			"placeholder": "Release Year"
+		},
+		{
+			"id": "tags",
+			"width": 12,
+			"placeholder": "Tags"
+		},
+		{
+			"id": "distributor",
+			"width": 12,
+			"placeholder": "Distributor"
+		},
+		{
+			"id": "description",
+			"width": 12,
+			"placeholder": "Movie Description",
+			"type": "textarea",
+			"row": 3
+		}
+	],
+	"coverArt": {
+		"id": "cover-art",
+		"class": "cover-art-poster"
+	}
+},{
+	"id": "thing",
+	"title": "Thing",
+	"forms": [{
+			"id": "title",
+			"width": 12,
+			"placeholder": "Title"
+		},
+		{
+			"id": "creatorName",
+			"width": 12,
+			"placeholder": "Creator"
+		},
+		{
+			"id": "genre",
+			"width": 6,
+			"placeholder": "Genre"
+		},
+		{
+			"id": "releaseDate",
+			"width": 6,
+			"placeholder": "Release Year"
+		},
+		{
+			"id": "tags",
+			"width": 12,
+			"placeholder": "Tags"
+		},
+		{
+			"id": "description",
+			"width": 12,
+			"placeholder": "Description",
+			"type": "textarea",
+			"row": 3
+		}
+	],
+	"coverArt": {
+		"id": "cover-art",
+		"class": "cover-art"
+	}
+},{
+	"id": "html",
+	"title": "Album",
+	"forms": [{
+			"id": "title",
+			"width": 12,
+			"placeholder": "Title"
+		},
+		{
+			"id": "creatorName",
+			"width": 12,
+			"placeholder": "Creator"
+		},
+		{
+			"id": "releaseDate",
+			"width": 3,
+			"placeholder": "Release Year"
+		},
+		{
+			"id": "tags",
+			"width": 9,
+			"placeholder": "Tags"
+		},
+		{
+			"id": "description",
+			"width": 12,
+			"placeholder": "Description",
+			"type": "textarea",
+			"row": 3
+		}
+	],
+	"coverArt": {
+		"id": "cover-art",
+		"class": "cover-art"
+	}
+}]
+
 ipfs.setProvider({host: 'ipfs.alexandria.io', port: '443', protocol: 'https'});
+
+var loadMetaForm = function(artifactTypeJSON){
+	var formsHTMLString = "";
+	for (var i = 0; i < artifactTypeJSON.forms.length; i++) {
+		if (artifactTypeJSON.forms[i].type == "textarea"){
+			formsHTMLString += '<div class="col col-sm-' + artifactTypeJSON.forms[i].width + ' form-group" id="' + artifactTypeJSON.forms[i].id + 'Group">\
+					<textarea row="3" class="form-control" id="' + artifactTypeJSON.forms[i].id + '" placeholder="' + artifactTypeJSON.forms[i].placeholder + '"></textarea>\
+				</div>';
+		} else {
+			formsHTMLString += '<div class="col col-sm-' + artifactTypeJSON.forms[i].width + ' form-group" id="' + artifactTypeJSON.forms[i].id + 'Group">\
+					<input type="text" class="form-control" id="' + artifactTypeJSON.forms[i].id + '" placeholder="' + artifactTypeJSON.forms[i].placeholder + '">\
+				</div>';
+		}
+	}
+	var htmlString = '\
+	<div id=' + artifactTypeJSON.id + ' class="tab-pane fade in active">\
+		<div class="row">\
+			<div class="col col-sm-8">\
+				<div class="col col-sm-12">\
+					<h5>' + artifactTypeJSON.title + ' Information</h5>\
+				</div>\
+				' + formsHTMLString + '\
+			</div>\
+			<div class="col col-sm-4">\
+				<h5>' + (artifactTypeJSON.coverArt.text ? artifactTypeJSON.coverArt.text : "Cover Art") + '</h5>\
+				<div class="' + artifactTypeJSON.coverArt.class + '" id="' + artifactTypeJSON.coverArt.id + '">\
+				</div>\
+				<input type="file" name="musicPosterFile" id="musicPosterFile" accept="image/\*">\
+			</div>\
+		</div>\
+	</div>';
+
+	$('#metainfo').empty();
+	$('#metainfo').html(htmlString);
+}
+
+// <div id='music' class="tab-pane fade in active">
+// 	<div class="row">
+// 		<div class="col col-sm-8">
+// 			<div class="col col-sm-12">
+// 				<h5>Album Information</h5>
+// 			</div>
+// 			<div class="col col-sm-12 form-group" id="artifactTitleGroup">
+// 				<input type="text" class="form-control" id="title" placeholder="Album Title">
+// 			</div>
+// 			<div class="col col-sm-12 form-group" id="artifactArtistGroup">
+// 				<input type="text" class="form-control" id="artistName" placeholder="Artist Name">
+// 			</div>
+// 			<div class="col col-sm-6">
+// 				<div class="form-group" id="artifactgenreGroup">
+// 					<input type="text" class="form-control" id="genre" placeholder="Genre">
+// 				</div>
+// 			</div>
+// 			<div class="col col-sm-6">
+// 				<div class="form-group" id="artifactDateGroup">
+// 					<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
+// 				</div>
+// 			</div>
+// 			<div class="col col-sm-12 form-group" id="artifactTagsGroup">
+// 				<input type="text" class="form-control" id="tags" placeholder="Tags">
+// 			</div>
+// 			<div class="col col-sm-12 form-group" id="artifactRecordLabelGroup">
+// 				<input type="text" class="form-control" id="recordLabel" placeholder="Record Label">
+// 			</div>
+// 			<div class="col col-sm-12 form-group" id="artifactDescriptionGroup">
+// 				<textarea row="3" class="form-control" id="description" placeholder="Album Description"></textarea>
+// 			</div>
+// 		</div>
+// 		<div class="col col-sm-4">
+// 			<h5>Cover Art</h5>
+// 			<div class="cover-art-square" id='musicPoster'>
+// 			</div>
+// 			<input type="file" name="musicPosterFile" id="musicPosterFile" accept="image/*">
+// 		</div>
+// 	</div>
+// </div>
 
 // Set up here so that it is accessable in other methods.
 var duration = 0;
