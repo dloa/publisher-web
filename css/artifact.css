@@ -1,11 +1,11 @@
 /* Form */
-.form-control {
+/*.form-control {
   box-shadow: none;
   border-color: #efefef; }
 
 .form-control:focus {
   box-shadow: none;
-  border-color: #538bd4; }
+  border-color: #538bd4; }*/
 
 .form-inline p {
   display: inline; }

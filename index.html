@@ -6,61 +6,19 @@
 		<meta name="description" content="DLOA | Publish, Manage, & Control Content like Never Before">
 		<meta name="keywords" content="DLOA, Alexandria, Bitcoin, Florincoin, Decentralized, P2P, FLO, BTC, Free, Video, Publisher">
 		<title>ΛLΞXΛNDRIΛ Publisher</title>
-		<!-- Vendor styles-->
-		<!-- build:css(../app) css/vendor.css-->
-		<!-- Animate.CSS-->
-		<link rel="stylesheet" href="vendor/animate.css/animate.css">
-		<!-- Bootstrap-->
-		<link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css">
-		<!-- Ionicons-->
-		<link rel="stylesheet" href="vendor/ionicons/css/ionicons.css">
-		<!-- Bluimp Gallery-->
-		<link rel="stylesheet" href="vendor/blueimp-gallery/css/blueimp-gallery.css">
-		<link rel="stylesheet" href="vendor/blueimp-gallery/css/blueimp-gallery-indicator.css">
-		<link rel="stylesheet" href="vendor/blueimp-gallery/css/blueimp-gallery-video.css">
-		<!-- Datepicker-->
-		<link rel="stylesheet" href="vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css">
-		<!-- Rickshaw-->
-		<link rel="stylesheet" href="vendor/rickshaw/rickshaw.css">
-		<!-- Select2-->
-		<link rel="stylesheet" href="vendor/select2/dist/css/select2.css">
-		<!-- Clockpicker-->
-		<link rel="stylesheet" href="vendor/clockpicker/dist/bootstrap-clockpicker.css">
-		<!-- Range Slider-->
-		<link rel="stylesheet" href="vendor/nouislider/distribute/nouislider.min.css">
-		<!-- ColorPicker-->
-		<link rel="stylesheet" href="vendor/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css">
-		<!-- Summernote-->
-		<link rel="stylesheet" href="vendor/summernote/dist/summernote.css">
-		<!-- Dropzone-->
-		<link rel="stylesheet" href="vendor/dropzone/dist/basic.css">
-		<link rel="stylesheet" href="vendor/dropzone/dist/dropzone.css">
-		<!-- Xeditable-->
-		<link rel="stylesheet" href="vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css">
-		<!-- Bootgrid-->
-		<link rel="stylesheet" href="vendor/jquery.bootgrid/dist/jquery.bootgrid.css">
-		<!-- Datatables-->
-		<link rel="stylesheet" href="vendor/datatables/media/css/jquery.dataTables.css">
-		<!-- Loaders.CSS-->
-		<link rel="stylesheet" href="vendor/loaders.css/loaders.css">
-		<!-- Material Floating Button-->
-		<link rel="stylesheet" href="vendor/ng-material-floating-button/mfb/dist/mfb.css">
-		<!-- Material Colors-->
-		<link rel="stylesheet" href="vendor/material-colors/dist/colors.css">
-		<!-- endbuild-->
-		<!-- Bootstrap Tour-->
-		<link href="./css/bootstrap-tour.min.css" rel="stylesheet">
+		
 		<!-- Application styles-->
-		<link rel="stylesheet" href="css/app.css">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/bootstrap-dashboard.css">
 
-		<link rel="stylesheet" href="./css/bootstrap.v4a6.tables.css">
+		<!-- <link rel="stylesheet" href="./css/bootstrap.v4a6.tables.css"> -->
 
 		<link href="./css/main.css" rel="stylesheet">
 		<link href="./css/artifact.css" rel="stylesheet">
 		<link href="./css/sweet-alert.css" rel="stylesheet">
 
 		<style type="text/css">
-			.form-control {
+			/*.form-control {
 				border:1px solid #888 !important;
 				color: #000 !important;
 			}
@@ -70,108 +28,781 @@
 			}
 			button {
 				border:1px solid #888 !important;
+			}*/
+
+			@media (min-width: 768px) {
+			    .navbar .navbar-nav {
+		            display: inline-block;
+		            float: none;
+		        }
+		        
+		        .navbar .navbar-collapse {
+		            text-align: center;
+		        }
 			}
 		</style>
 	</head>
-	<body class="theme-1">
-		<div class="layout-container">
-			<!-- top navbar-->
-			<header class="header-container">
-				<nav>
-					<ul class="visible-xs visible-sm">
-						<li><a id="sidebar-toggler" href="#" class="menu-link menu-link-slide"><span><em></em></span></a></li>
-					</ul>
-					<ul class="hidden-xs">
-						<li><a id="offcanvas-toggler" href="#" class="menu-link menu-link-slide"><span><em></em></span></a></li>
-					</ul>
-					<h2 class="header-title"></h2>
-					<ul class="pull-right">
-						<li>
-							<button type="button" class="btn btn-danger pull-right" onclick="signout();" style="margin-right: 15px; margin-top: 15px; margin-bottom: -15px;">Sign Out</button>
-						</li>
+	<body>
+		<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+			<button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<a class="navbar-brand" href="#">
+				<img src="./img/alexandria-logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+				ΛLΞXΛNDRIΛ Publisher
+			</a>
+
+			<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+				<ul class="navbar-nav mr-auto">
+					<li>
+						<select id="publisherSelect" class="custom-select navbar-center">
+							<option value="a"></option>
+							<option value="b"></option>
+							<option value="c"></option>
+							<option value="d"></option>
+							<option value="e"></option>
+						</select>
+					</li>
+				</ul>
+				<button class="btn btn-outline-danger pull-right" onclick="signout();">Sign Out</button>
+			</div>
+		</nav>
+
+		<div class="container-fluid">
+			<div class="row">
+				<nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
+					<div class="text-center">Welcome, <span id="pub-name"></span></div>
+					<div class="text-center" style="margin-bottom: 10px"> <strong>FLO</strong>: <code><span id="walletBalance"></span></code></strong></div>
+					<ul class="nav nav-pills flex-column">
+						<li class="nav-item"><a href="#" class="nav-link" id="publisherNav">Publisher</a></li>
+						<li class="nav-item"><a href="#" class="nav-link" id="artifactsNav">My Artifacts</a></li>
+						<li class="nav-item"><a href="#" class="nav-link" id="walletNav">Wallet</a></li>
 					</ul>
 				</nav>
-			</header>
-			<!-- sidebar-->
-			<aside class="sidebar-container">
-				<div class="sidebar-header">
-					<div class="pull-right pt-lg text-muted hidden"><em class="ion-close-round"></em></div><a href="#" class="sidebar-header-logo"><img src="img/logo.png" data-svg-replace="img/logo.svg" alt="Logo"><span class="sidebar-header-logo-text">ΛLΞXΛNDRIΛ</span></a>
-				</div>
-				<div class="sidebar-content">
-					<div class="sidebar-toolbar text-center"><a href=""><img src="img/user/01.jpg" alt="Profile" class="img-circle thumb64"></a>
-						<div class="mt">Welcome, <span id="pub-name"></span></div>
-						<div> <strong>FLO</strong>: <code><span id="walletBalance"></span></code></strong></div>
-					</div>
-					<nav class="sidebar-nav">
-						<ul>
-							<li><a href="#" class="ripple" id="publisherNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/clipboard.svg" alt="MenuItem"></span><span>Publisher</span></a></li>
-							<li><a href="#" class="ripple" id="artifactsNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/navicon.svg" alt="MenuItem"></span><span>My Artifacts</span></a></li>
-							<li><a href="#" class="ripple" id="walletNav"><span class="pull-right nav-label"></span><span class="nav-icon"><img src="img/icons/aperture.svg" alt="MenuItem"></span><span>Wallet</span></a></li>
-						</ul>
-					</nav>
-				</div>
-			</aside>
-			<div class="sidebar-layout-obfuscator"></div>
-			<!-- Main section-->
-			<main class="main-container">
-				<!-- Page content-->
-				<section class="bg-white" style="" id="wizard">
-					<div class="content-heading bg-white">
-						<div class="row">
-							<div class="col-sm-12">
-								<h4 class="m0 text-thin">Welcome to Alexandria Publisher</h4><small>Please fill in the fields below</small>
-							</div>
+
+				<main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+					<section class="row text-center" id="wizard">
+						<div class="col-sm-12" style="margin-top: 20px">
+							<h4 class="m0 text-thin">Welcome to Alexandria Publisher</h4><small>Please fill in the fields below</small>
 						</div>
-					</div>
-					<div class="container bg-white">
-						<div style="margin-top:100px;">
-							<div class="section publish col-lg-12">
-								<div class="publish-section artifact-type">
-									<h5>Select Artifact type</h5> 
-									<ul class="nav nav-pills" role="tablist">
-										<li class="active" onclick="changeArtifactType('music')"><a href="#music" data-toggle="tab">Music</a></li>
-										<li onclick="changeArtifactType('video')"><a href="#video" data-toggle="tab">Video</a></li>
-										<li onclick="changeArtifactType('podcast')"><a href="#podcast" data-toggle="tab">Podcast</a></li>
-										<li onclick="changeArtifactType('book')"><a href="#book" data-toggle="tab">Book</a></li>
-										<li onclick="changeArtifactType('movie')"><a href="#movie" data-toggle="tab">Movie</a></li>
-										<li onclick="changeArtifactType('thing')"><a href="#thing" data-toggle="tab">Thing</a></li>
-										<li onclick="changeArtifactType('html')"><a href="#html" data-toggle="tab">HTML</a></li>
-									</ul>
-								</div>
-								<div class="publish-section information tab-content" id='metainfo' style="margin-top: -20px;">
-									<div id='music' class="tab-pane fade in active">
-										<div class="row">
-											<div class="col col-sm-8">
-												<div class="col col-sm-12">
-													<h5>Album Information</h5>
-												</div>
-												<div class="col col-sm-12 form-group" id="artifactTitleGroup">
-													<input type="text" class="form-control" id="title" placeholder="Album Title">
-												</div>
-												<div class="col col-sm-12 form-group" id="artifactArtistGroup">
-													<input type="text" class="form-control" id="artistName" placeholder="Artist Name">
-												</div>
-												<div class="col col-sm-6">
-													<div class="form-group" id="artifactgenreGroup">
-														<input type="text" class="form-control" id="genre" placeholder="Genre">
+						<div class="container">
+							<div style="margin-top:60px;">
+								<div class="section publish col-lg-12">
+									<div class="publish-section artifact-type">
+										<h5>Select Artifact type</h5> 
+										<ul class="nav nav-pills" role="tablist">
+											<li class="active" onclick="changeArtifactType('music')"><a href="#music" data-toggle="tab">Music</a></li>
+											<li onclick="changeArtifactType('video')"><a href="#video" data-toggle="tab">Video</a></li>
+											<li onclick="changeArtifactType('podcast')"><a href="#podcast" data-toggle="tab">Podcast</a></li>
+											<li onclick="changeArtifactType('book')"><a href="#book" data-toggle="tab">Book</a></li>
+											<li onclick="changeArtifactType('movie')"><a href="#movie" data-toggle="tab">Movie</a></li>
+											<li onclick="changeArtifactType('thing')"><a href="#thing" data-toggle="tab">Thing</a></li>
+											<li onclick="changeArtifactType('html')"><a href="#html" data-toggle="tab">HTML</a></li>
+										</ul>
+									</div>
+									<div class="publish-section" id='metainfo' style="">
+										<div id='music' class="">
+											<div class="row">
+												<div class="col-sm-8">
+													<div class="row">
+														<div class="col-12">
+															<h3>Album Information</h3>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-12 form-group" id="artifactTitleGroup">
+															<input type="text" class="form-control" id="title" placeholder="Album Title">
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-12 form-group" id="artifactArtistGroup">
+															<input type="text" class="form-control" id="artistName" placeholder="Artist Name">
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-6">
+															<div class="form-group" id="artifactgenreGroup">
+																<input type="text" class="form-control" id="genre" placeholder="Genre">
+															</div>
+														</div>
+														<div class="col-6">
+															<div class="form-group" id="artifactDateGroup">
+																<input type="number" class="form-control" id="releaseDate" placeholder="Release Year">
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-12 form-group" id="artifactTagsGroup">
+															<input type="text" class="form-control" id="tags" placeholder="Tags">
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-12 form-group" id="artifactRecordLabelGroup">
+															<input type="text" class="form-control" id="recordLabel" placeholder="Record Label">
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-12 form-group" id="artifactDescriptionGroup">
+															<textarea row="3" class="form-control" id="description" placeholder="Album Description"></textarea>
+														</div>
 													</div>
 												</div>
-												<div class="col col-sm-6">
-													<div class="form-group" id="artifactDateGroup">
-														<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
-													</div>
-												</div>
-												<div class="col col-sm-12 form-group" id="artifactTagsGroup">
-													<input type="text" class="form-control" id="tags" placeholder="Tags">
-												</div>
-												<div class="col col-sm-12 form-group" id="artifactRecordLabelGroup">
-													<input type="text" class="form-control" id="recordLabel" placeholder="Record Label">
-												</div>
-												<div class="col col-sm-12 form-group" id="artifactDescriptionGroup">
-													<textarea row="3" class="form-control" id="description" placeholder="Album Description"></textarea>
+												<div class="col-4">
+													<center>
+														<h3>Cover Art</h3>
+														<div class="cover-art-square" id='musicPoster'>
+														</div>
+														<label class="custom-file text-center" style="margin-top: 10px;">
+															<input type="file" id="file" class="custom-file-input">
+															<span class="custom-file-control"></span>
+														</label>
+													</center>
 												</div>
 											</div>
-											<div class="col col-sm-4">
+										</div>
+									</div>
+									<div class="row" id='bitcoinAddressField'>
+										<div class="col-sm-12">
+											<h3>Pricing Information</h3>
+											<center style="margin-top: 15px; margin-bottom: 20px">
+												<span style="font-size: 1.5em; font-weight: 100;">I want my Artifact to be:</span>
+												<div class="btn-group" data-toggle="buttons">
+													<label class="btn btn-outline-primary active">
+														<input type="radio" name="options" id="artifactFreeBtn" autocomplete="off" checked> Free
+													</label>
+													<label class="btn btn-outline-success">
+														<input type="radio" name="options" id="artifactPaidBtn" autocomplete="off" checked> Paid
+													</label>
+												</div>
+											</center>
+											<div class="row text-left">
+												<div class="col-6">
+													<h5 class="text-center">Suggested Tips</h5>
+													<div class="row">
+														<div class="col"><input type="text" class="form-control col" id="tip1" placeholder="$0.01"></div>
+														<div class="col"><input type="text" class="form-control col" id="tip2" placeholder="$0.10"></div>
+														<div class="col"><input type="text" class="form-control col" id="tip3" placeholder="$1"></div>
+													</div>
+													<h5 class="text-center" style="margin-top: 20px;">Advanced</h5>
+													<div class="form-group row">
+														<label for="example-text-input" class="col-2 col-form-label">Promoter</label>
+														<div class="col-3">
+															<div class="input-group">
+															<input type="number" class="form-control">
+															<span class="input-group-addon">%</span>
+														</div>
+														</div>
+													</div>
+													<div class="form-group row">
+														<label for="example-text-input" class="col-2 col-form-label">Retailer</label>
+														<div class="col-3">
+															<div class="input-group">
+															<input type="number" class="form-control">
+															<span class="input-group-addon">%</span>
+														</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-6" id="bitcoinAddressGroup">
+													<!-- <span>Payment Addresses</span>
+													<input class="form-control" style="width: 30%" type="text" id="bitcoinAddress" placeholder="17aGuzA9p1ZmG49V9GmR6UgGzg1dQx9We9">
+													<p class="help-block">This is your Bitcoin address that you will use to receive payments for this artifact.</p> -->
+													<div class="form-group col-lg-12">
+														<h5 class="text-center">Payment Addresses</h5>
+														<div class="row">
+															<div class="input-group col-11" style="margin-bottom: 5px;">
+																<div class="input-group-btn">
+																	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																		<img style="height: 30px" src="./img/bitcoin.svg">
+																	</button>
+																	<div class="dropdown-menu">
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
+																	</div>
+																</div>
+																<input type="text" class="form-control" aria-label="Text input with dropdown button">
+																<span class="input-group-addon">
+																	<input type="radio">
+																</span>
+															</div>
+														</div>
+														<div class="row">
+															<div class="input-group col-11" style="margin-bottom: 5px;">
+																<div class="input-group-btn">
+																	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																		<img style="height: 30px" src="./img/FLOflat2.png">
+																	</button>
+																	<div class="dropdown-menu">
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
+																	</div>
+																</div>
+																<input type="text" class="form-control" aria-label="Text input with dropdown button">
+																<span class="input-group-addon">
+																	<input type="radio">
+																</span>
+															</div>
+														</div>
+														<div class="row">
+															<div class="input-group col-11" style="margin-bottom: 5px;">
+																<div class="input-group-btn">
+																	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																		<img style="height: 30px" src="./img/bitcoin.svg">
+																	</button>
+																	<div class="dropdown-menu">
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
+																	</div>
+																</div>
+																<input type="text" class="form-control" aria-label="Text input with dropdown button">
+																<span class="input-group-addon">
+																	<input type="radio">
+																</span>
+															</div>
+															<div class="col-1">
+																<button class="btn btn-outline-success">+</button>
+															</div>
+														</div>
+															
+														<small id="emailHelp" class="form-text text-muted">Select the default payment address using the selector on the Right side.</small>
+													</div>
+												</div>
+											</div>
+												
+										</div>
+									</div>
+									<div class="publish-section publish-pricing" id='pricing'>
+										<div class="row">
+											<div class="col-sm-10">
+												<p class="small">Pick the price for each file. You are allowed to enter up to one tenth of a cent.</p>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col col-lg-12">
+												<table class="table" id='pricingTable'>
+													<thead>
+														<tr>
+															<th>File Name</th>
+															<th>Suggested Play</th>
+															<th>Minimum Play</th>
+															<th>Suggested Buy</th>
+															<th>Minimum Buy</th>
+															<th></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr></tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+									<div class="publish-section">
+										<div class="publish-files audio-tracks">
+											<table class="table" id='mediaFilesTable'>
+												<thead>
+													<tr>
+														<th style="width: 10%"></th>
+														<th style="width: 40%"></th>
+														<th style="width: 10%"></th>
+														<th style="width: 30%"></th>
+														<th style="width: 10%"></th>
+													</tr>
+												</thead>
+												<tbody id="mediaTable">
+													<tr>
+														<th><img src="./assets/svg/arrows-24px-glyph-2_file-upload-88.svg"></th>
+														<td>Display Name</td>
+														<td>3.2MB</td>
+														<td>
+															<div class="row form-control" style="display: flex; padding: 0px 0px; width: 100%; padding-top: 1px;">
+																<select class="form-control col-6" id="exampleSelect1">
+																	<option>Audio</option>
+																	<option>2</option>
+																	<option>3</option>
+																	<option>4</option>
+																	<option>5</option>
+																</select>
+																<select class="form-control col-6" id="exampleSelect1">
+																	<option>Song</option>
+																	<option>2</option>
+																	<option>3</option>
+																	<option>4</option>
+																	<option>5</option>
+																</select>
+															</div>
+																
+															</td>
+														<td><button class="btn btn-sm btn-outline-danger">x</button></td>
+													</tr>
+												</tbody>
+											</table>
+											<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
+											<div class="upload-area" id="mediaDrop">
+												<object data="./assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
+											</div>
+											<input type="file" name="mediaFiles" id="mediaFiles" multiple accept="audio/*"></input>
+										</div>
+									</div>
+									 <div class="publish-section">
+										<div class="publish-files extra-files">
+											<h5>
+												<object type="image/svg+xml" data="assets/svg/files-16px_single-folded-content.svg"></object>
+												Extra Files
+											</h5>
+											<table class="table" id='extraTable'>
+												<colgroup>
+													<col class="">
+													<col class="">
+													<col style="width: 125px;">
+													<col class="">
+													<col class="">
+												</colgroup>
+												<thead>
+													<tr>
+														<th>File</th>
+														<th>File Name</th>
+														<th>File Type</th>
+														<th>Display name</th>
+														<th></th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr></tr>
+												</tbody>
+											</table>
+											<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
+											<div class="upload-area" id="extraDrop">
+												<object data="./assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
+											</div>
+											<input type='file' id="extraFiles" name="extraFiles" multiple />
+										</div>
+									</div>
+									 <div class="publish-section publish-submit">
+										<div class="row">
+											<div class="col-sm-9">
+												<p class="small">You will be able to submit your artifact after you preview it. Be sure it looks exactly like what you desire as you will be unable to change this later.</p>
+											</div>
+											<div class="col-sm-3 text-right">
+												<button type="button" id="previewButton" class="btn btn-primary">Preview</button>
+											</div>
+										</div>
+									</div>
+									<div style='height:30px'></div>
+								</div>
+							</div>
+						</div>
+						<div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewLabel">
+							<div class="">
+								<div class="modal-dialog" role="document" style='width:95%'>
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+											<h4 class="modal-title" id="previewLabel">Preview Artifact</h4>
+										</div>
+										<div class="modal-body">
+											<div class="container">
+											<div class="row">
+											<div class="col-md-12">
+												<div class="row media-embed">
+												<center>
+													<video id='previewVideo' controls="controls" src="" style="width: 80%">
+													</video>
+													</center>
+												</div>
+												<div class="row entity-meta-header">
+												<br>
+													<h2 id='previewTitle'>Title</h2>
+													<h3 id="previewArtist">Artist</h3>
+													<div class="entity-meta-content">
+														<div id='previewTime' class="entity-pub-time">Posted <span id="current-time">Tue Dec 08 2015 09:36:34 GMT-0700 (MST)</span></div>
+														<div id='previewRuntime' class="entity-runtime">Runtime: <span id="runtime">00:12:48</span></div>
+													</div>
+												</div>
+												<div class="row media-desc">
+													<p id='previewDescription'>Description</p>
+												</div>
+											</div>
+											</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-danger pull-left" data-dismiss="modal" onclick="$('#previewVideo').get(0).pause();">Cancel</button>
+
+											<button type="button" class="btn btn-success pull-right" data-dismiss="modal" onclick="submitArtifact()">Submit</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal fade" id="walletModal" tabindex="-1" role="dialog" aria-labelledby="walletLabel">
+							<div class="vertical-alignment-helper">
+								<div class="vertical-align-center modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h4 class="modal-title" id="walletLabel">Login to Wallet</h4>
+										</div>
+										<div class="modal-body">
+											<div class="container">
+												<div class="row">
+													<div class="col-md-6">
+														<!-- Nav tabs -->
+														<ul class="nav nav-tabs" role="tablist">
+															<li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
+															<li role="presentation"><a href="#register" aria-controls="register" role="tab" data-toggle="tab">Register</a></li>
+														</ul>
+
+														<!-- Tab panes -->
+														<div class="tab-content">
+															<div role="tabpanel" class="tab-pane active" id="login">
+																<form>
+																	<div class="form-group">
+																		<label for="loginWalletIdentifier">Wallet Identifier</label>
+																		<input type="text" class="form-control" id="loginWalletIdentifier" placeholder="xxxx-xxxx-xxx-xxx">
+																		<p class="help-block">This is your wallet identifier that you recieved after creating a wallet with Flovault.</p>
+																	</div>
+																	<div class="form-group">
+																		<label for="loginWalletPassword">Password</label>
+																		<input type="password" class="form-control" id="loginWalletPassword" placeholder="">
+																		<p class="help-block"></p>
+																	</div>
+																	<div class="form-group">
+																		<input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
+																		<p class="help-block"></p>
+																	</div>
+																</form>
+																<button class="btn btn-success" id="walletLoginButton" onclick="loginToWallet();">Login</button>
+															</div>
+															<div role="tabpanel" class="tab-pane" id="register">
+																<form>
+																	<div class="form-group">
+																		<label for="loginWalletIdentifier">Email Address</label>
+																		<input type="email" class="form-control" id="createWalletEmail" placeholder="example@me.com">
+																		<p class="help-block">Optional email, used for 2FA and if you forget your identifier.</p>
+																	</div>
+																	<div class="form-group">
+																		<label for="loginWalletPassword">Password</label>
+																		<input type="password" class="form-control" id="createWalletPassword" placeholder="">
+																		<p class="help-block">You will use this password along with your generated identifier to login to your account.</p>
+																	</div>
+																</form>
+																<button class="btn btn-success" onclick="registerWallet();">Register</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal fade" id="walletInfoModal" tabindex="-1" role="dialog" aria-labelledby="walletInfoLabel">
+							<div class="vertical-alignment-helper">
+								<div class="vertical-align-center modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+											<h4 class="modal-title" id="walletInfoLabel">Wallet Info</h4>
+										</div>
+										<div class="modal-body">
+											<div class="container">
+												<div class="row">
+													<div class="col-md-6">
+														<!-- Nav tabs -->
+														<ul class="nav nav-tabs" role="tablist">
+															<li role="presentation" class="active"><a href="#main" aria-controls="main" role="tab" data-toggle="tab">Main</a></li>
+														</ul>
+
+														<!-- Tab panes -->
+														<div class="tab-content">
+															<div role="tabpanel" class="tab-pane active" id="mainx">
+																<h4>Identifier <code id="identifierx"></code></h4>
+																<div class="table-responsive">
+																	<table class="table table-bordered table-condensed" id="addressTablex">
+																		<thead>
+																			<tr>
+																				<th>Address</th>
+																				<th style="width: 30%">Balance</th>
+																				<th>Actions</th>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<tr></tr>
+																		</tbody>
+																	</table>
+																</div>
+																<button class="btn btn-default" onclick="newAddress();">New Address</button>
+																<button class="btn btn-danger" onclick="location.reload();">Log Out</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
+											<button class="btn btn-default pull-left" onclick="refreshWalletInfo();" id="refreshButton">Refresh</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal fade" id="tradebotModal" tabindex="-1" role="dialog" aria-labelledby="tradebotLabel">
+							<div class="vertical-alignment-helper">
+								<div class="vertical-align-center modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+											<h4 class="modal-title" id="tradebotLabel">Get FLO with TradeBot</h4>
+										</div>
+										<div class="modal-body">
+											<div class="container">
+												<div class="row">
+													<div class="col-md-6" id="tradebotBuy">
+														<center>
+															<p>Please send $<span id="usdLabel"></span> in BTC to this address. You can change this amount below.</p>
+															<div id="qrcode" style="width: 80%; height: 80%;"></div>
+															<br>
+															<code style="font-size: 18px" id="btcDisplayAddress">1EV7zyqRK6qS2QnZdwXrgS2aKzXpi91jBn</code>
+															<br>
+															<br>
+															<form class="form-inline">
+																<div class="form-group">
+																<div class="input-group">
+																	<div class="input-group-addon">$</div>
+																	<input type="text" class="form-control" id="usdValue" placeholder="" style="width: 75px;" onblur="updateUSD()">
+																	<div class="input-group-addon">USD</div>
+																</div>
+																</div>
+																<div class="form-group">
+																<div class="input-group">
+																	<input type="text" class="form-control" id="btcValue" placeholder="" style="width: 7.25em;" onblur="updateBTC()">
+																	<div class="input-group-addon">BTC</div>
+																</div>
+																</div>
+																
+																<div class="form-group">
+																<div class="input-group">
+																	<input type="text" class="form-control" id="floValue" placeholder="" style="width: 75px;" onblur="updateFLO()">
+																	<div class="input-group-addon">FLO</div>
+																</div>
+																</div>
+															</form>
+															<a class="coinbase-widget" id="coinbase_widget" href="">Buy FLO with Debit/Credit</a>
+														</center>
+													</div>
+													<div class="col-md-6" id="tradebotPending" style="opacity: 0; display: none;">
+														<center>
+															<p style="padding-top: 20px;">Bitcoin transaction recieved... waiting for Tradebot to send funds...</p>
+														</center>
+														<div id="loading">
+															<ul class="bokeh">
+																<li></li>
+																<li></li>
+																<li></li>
+															</ul>
+														</div>
+														<center>
+															<p style="padding-top: -50px;">This usually takes 5-10 minutes depending on Bitcoin block times and Tradebot response times.</p>
+														</center>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-danger pull-right" data-dismiss="modal" onclick="cancelFloBuy()">Cancel</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<video src="" width="1" height="1" id="video_player"></video>
+						</div>
+					</section>
+
+					<section id="artifacts">
+						<div class="col-sm-12 bg-white">
+							<h4 class="pull-left" style="margin-bottom: -40px;">Published Artifacts</h4>
+							<button class="pull-right btn btn-success" style="margin-bottom: 10px; margin-top: 40px;" onclick="newArtifact();">+ New Artifact</button>
+							<table class="table table-hover table-bordered" id="ArtifactsTable">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Name</th>
+										<th>Status</th>
+										<th>Tools</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">1</th>
+										<td><code>Apollo 11</code></td>
+										<td>Pinned: <code><span style="color: red">3</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$3.14</span> = <span style="color: orange">Ƀ0.0314</span> | Views: <code>387</code></td>
+										<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
+									</tr>
+									<tr>
+										<th scope="row">2</th>
+										<td><code>Apollo 12</code></td>
+										<td>Pinned: <code><span style="color: orange">7</span>/<span style="color: green">8</span></code> | Profit: <span style="color: green">$2.13</span> = <span style="color: orange">Ƀ0.0213</span> | Views: <code>9,071</code></td>
+										<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
+									</tr>
+									<tr>
+										<th scope="row">3</th>
+										<td><code>Apollo 13</code></td>
+										<td>Pinned: <code><span style="color: green">10</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$1,490</span> = <span style="color: orange">Ƀ1.43</span> | Views: <code>387,076</code></td>
+										<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
+									</tr>
+									<tr class="table-danger">
+										<th scope="row">4</th>
+										<td><code>Apollo 14</code></td>
+										<td>Pinned: <code><span style="color: red">0</span>/<span style="color: green">1</span></code> | Profit: <span style="color: green">$</span>0 = <span style="color: orange">Ƀ</span>0 | Views: <code>13</code></td>
+										<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
+									</tr>
+									<tr class="table-danger">
+										<th scope="row"></th>
+										<td colspan="2"><h4 style="margin-top: 0px; margin-bottom: 0px;">Error: "Apollo 14" does not have any pins of this file, please re-upload.</h4></td>
+										<td><button class="btn btn-success">Reupload</button></td>
+									</tr>
+									<tr>
+										<th scope="row">5</th>
+										<td><code>Apollo 15</code></td>
+										<td>Pinned: <code><span style="color: green">10</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$1,490</span> = <span style="color: orange">Ƀ1.43</span> | Views: <code>387,076</code></td>
+										<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
+									</tr>
+									<tr class="table-warning">
+										<th scope="row">6</th>
+										<td><code>Apollo 16</code></td>
+										<td>Pinned: <code><span style="color: green">9</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$1,490</span> = <span style="color: orange">Ƀ1.43</span> | Views: <code>387,076</code></td>
+										<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-success">Publish</button></td>
+									</tr>
+									<tr>
+										<th scope="row">7</th>
+										<td><code>Apollo 17</code></td>
+										<td>Pinned: <code><span style="color: orange">5</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$149</span> = <span style="color: orange">Ƀ0.15</span> | Views: <code>3,869</code></td>
+										<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
+									</tr>
+								</tbody>
+							</table>
+							<hr />
+							<h4 class="dev">Publish Status</h4>
+							<table class="dev table table-hover table-bordered" id="ArtifactsFPTable">
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Name</th>
+										<th style="width: 100px"></th>
+										<th>Status</th>
+										<th>Tools</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th scope="row">1</th>
+										<td><code>Apollo 11</code></td>
+										<td>
+											<div class="progress">
+												<div class="progress-bar bg-danger" role="progressbar" style="width: 50%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										</td>
+										<td>
+											IPFS File Upload Failed, Please Retry Upload.
+										</td>
+										<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-success">Select Files</button></td>
+									</tr>
+									<tr>
+										<th scope="row">2</th>
+										<td><code>Apollo 12</code></td>
+										<td>
+											<div class="progress">
+												<div class="progress-bar bg-warning" role="progressbar" style="width: 75%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										</td>
+										<td>
+											TX Send Failure
+										</td>
+										<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-success">Retry TX Send</button></td>
+									</tr>
+									<tr>
+										<th scope="row">3</th>
+										<td><code>Apollo 13</code></td>
+										<td>
+											<div class="progress">
+												<div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 85%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+										</td>
+										<td>
+											Pending Florincoin Block
+										</td>
+										<td><button class="btn btn-info">Info</button></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</section>
+
+					<section id="editArtifact">
+						<div class="content-heading bg-white">
+							<div class="row">
+								<div class="col-sm-12">
+									<h4 class="m0 text-thin">Edit Artifact</h4><small></small>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 bg-white">
+							<div class="section publish col-lg-12" style="padding-top: 50px;">
+								<div class="publish-section artifact-type">
+									<h5>Artifact type</h5> 
+									<ul class="nav nav-pills" role="tablist" id='edit-type'>
+										<li class="active" onclick="changeArtifactType('emusic')"><a id="emusicbtn" href="#emusic" data-toggle="tab">Music</a></li>
+										<li onclick="changeArtifactType('evideo')"><a id="evideobtn" href="#evideo" data-toggle="tab">Video</a></li>
+										<li onclick="changeArtifactType('epodcast')"><a id="epodcastbtn" href="#epodcast" data-toggle="tab">Podcast</a></li>
+										<li onclick="changeArtifactType('ebook')"><a id="ebookbtn" href="#ebook" data-toggle="tab">Book</a></li>
+										<li onclick="changeArtifactType('emovie')"><a id="emoviebtn" href="#emovie" data-toggle="tab">Movie</a></li>
+										<li onclick="changeArtifactType('ething')"><a id="ethingbtn" href="#ething" data-toggle="tab">Thing</a></li>
+										<li onclick="changeArtifactType('ehtml')"><a id="ehtmlbtn" href="#ehtml" data-toggle="tab">HTML</a></li>
+									</ul>
+								</div>
+								<div class="publish-section information tab-content" id='metainfo-edit' style="margin-top: -50px;">
+									<div id='emusic' class="tab-pane fade in active">
+										<div class="row">
+											<div class="col-sm-8">
+												<h5>Album Information</h5>
+												<form>
+													<div class="form-group" id="artifactTitleGroup">
+														<input type="text" class="form-control" id="title" placeholder="Album Title">
+													</div>
+													<div class="form-group" id="artifactArtistGroup">
+														<input type="text" class="form-control" id="artistName" placeholder="Artist Name">
+													</div>
+													<div class="row">
+														<div class="col col-sm-6">
+															<div class="form-group" id="artifactgenreGroup">
+																<input type="text" class="form-control" id="genre" placeholder="Genre">
+															</div>
+														</div>
+														<div class="col col-sm-6">
+															<div class="form-group" id="artifactDateGroup">
+																<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
+															</div>
+														</div>
+													</div>
+													<div class="form-group" id="artifactTagsGroup">
+														<input type="text" class="form-control" id="tags" placeholder="Tags">
+													</div>
+													<div class="form-group" id="artifactRecordLabelGroup">
+														<input type="text" class="form-control" id="recordLabel" placeholder="Record Label">
+													</div>
+													<div class="form-group" id="artifactDescriptionGroup">
+														<textarea row="3" class="form-control" id="description" placeholder="Album Description"></textarea>
+													</div>
+												</form>
+											</div>
+											<div class="col-sm-4">
 												<h5>Cover Art</h5>
 												<div class="cover-art-square" id='musicPoster'>
 												</div>
@@ -179,15 +810,217 @@
 											</div>
 										</div>
 									</div>
+									<div id='evideo' class="tab-pane fade">
+										<div class="row">
+											<div class="col-sm-8">
+												 <h5>Video Information</h5>
+													<div class="form-group" id="artifactTitleGroup">
+														<input type="text" class="form-control" id="title" placeholder="Video Title">
+													</div>
+													<div class="form-group" id="artifactDirectorGroup">
+														<input type="text" class="form-control" id="directorName" placeholder="Director Name">
+													</div>
+													<div class="form-group" id="artifactDistributorGroup">
+														<input type="text" class="form-control" id="distributor" placeholder="Distributor">
+													</div>
+													<div class="form-group" id="artifactDateGroup">
+														<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
+													</div>
+													<div class="row">
+														<div class="col col-sm-6">
+															<div class="form-group" id="artifactgenreGroup">
+																<input type="text" class="form-control" id="genre" placeholder="Genre">
+															</div>
+														</div>
+														<div class="col col-sm-6">
+															<div class="form-group" id="artifactTagsGroup">
+																<input type="text" class="form-control" id="tags" placeholder="Tags">
+															</div>
+														</div>
+													</div>
+													<div class="form-group" id="artifactDescriptionGroup">
+														<textarea row="3" class="form-control" id="description" placeholder="Video Description"></textarea>
+													</div>
+											</div>
+											<div class="col-sm-4">
+												<h5>Preview Image</h5>
+												<div id="videoPoster" class="cover-art">
+												</div>
+												<input type="file" name="videoPosterFile" id="videoPosterFile" accept="image/*">
+											</div>
+										</div>
+									</div>
+									<div id='epodcast' class="tab-pane fade in">
+										<div class="row">
+											<div class="col-sm-8">
+												<h5>Podcast Information</h5>
+												<form>
+													<div class="form-group" id="artifactTitleGroup">
+														<input type="text" class="form-control" id="title" placeholder="Podcast Title">
+														<p class="help-block">This will be auto formatted with "Podcast Title": "Episode Title"</p>
+													</div>
+													<div class="form-group" id="artifactArtistGroup">
+														<input type="text" class="form-control" id="episodeTitle" placeholder="Episode Title">
+													</div>
+													<div class="row">
+														<div class="col col-sm-3">
+															<div class="form-group" id="artifactDateGroup">
+																<input type="text" class="form-control" id="seasonNum" placeholder="Season Number">
+															</div>
+														</div>
+														<div class="col col-sm-3">
+															<div class="form-group" id="artifactDateGroup">
+																<input type="text" class="form-control" id="episodeNum" placeholder="Episode Number">
+															</div>
+														</div>
+														<div class="col col-sm-3">
+															<div class="form-group" id="artifactDateGroup">
+																<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
+															</div>
+														</div>
+														<div class="col col-sm-3">
+															<div class="form-group" id="artifactgenreGroup">
+																<input type="text" class="form-control" id="genre" placeholder="Genre">
+															</div>
+														</div>
+													</div>
+													<div class="form-group" id="artifactTagsGroup">
+														<input type="text" class="form-control" id="tags" placeholder="Tags">
+													</div>
+													<div class="form-group" id="artifactDescriptionGroup">
+														<textarea row="3" class="form-control" id="description" placeholder="Episode Description"></textarea>
+													</div>
+												</form>
+											</div>
+											<div class="col-sm-4">
+												<h5>Cover Art</h5>
+												<div class="cover-art-square" id='podcastPoster'>
+												</div>
+												<input type="file" name="podcastPosterFile" id="podcastPosterFile" accept="image/*">
+											</div>
+										</div>
+									</div>
+									<div id='ebook' class="tab-pane fade in">
+										<div class="row">
+											<div class="col-sm-8">
+												<h5>Book Information</h5>
+												<form>
+													<div class="form-group" id="artifactTitleGroup">
+														<input type="text" class="form-control" id="title" placeholder="Book Title">
+													</div>
+													<div class="form-group" id="artifactArtistGroup">
+														<input type="text" class="form-control" id="authorName" placeholder="Author Name">
+													</div>
+													<div class="row">
+														<div class="col col-sm-6">
+															<div class="form-group" id="artifactDateGroup">
+																<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
+															</div>
+														</div>
+														<div class="col col-sm-6">
+															<div class="form-group" id="artifactgenreGroup">
+																<input type="text" class="form-control" id="genre" placeholder="Genre">
+															</div>
+														</div>
+													</div>
+													<div class="form-group" id="artifactTagsGroup">
+														<input type="text" class="form-control" id="tags" placeholder="Tags">
+													</div>
+													<div class="form-group" id="artifactDescriptionGroup">
+														<textarea row="3" class="form-control" id="description" placeholder="Book Description"></textarea>
+													</div>
+												</form>
+											</div>
+											<div class="col-sm-4">
+												<h5>PDF Cover</h5>
+												<div class="cover-art-poster" id='bookPoster'>
+												</div>
+												<input type="file" name="bookPosterFile" id="bookPosterFile" accept="image/*">
+											</div>
+										</div>
+									</div>
+									<div id='emovie' class="tab-pane fade in">
+										<div class="row">
+											<div class="col-sm-8">
+												 <h5>Movie Information</h5>
+													<div class="form-group" id="artifactTitleGroup">
+														<input type="text" class="form-control" id="title" placeholder="Movie Title">
+													</div>
+													<div class="form-group" id="artifactDirectorGroup">
+														<input type="text" class="form-control" id="directorName" placeholder="Director Name">
+													</div>
+													<div class="form-group" id="artifactDistributorGroup">
+														<input type="text" class="form-control" id="distributor" placeholder="Distributor">
+													</div>
+													<div class="form-group" id="artifactDateGroup">
+														<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
+													</div>
+													<div class="form-group" id="artifactDescriptionGroup">
+														<textarea row="3" class="form-control" id="description" placeholder="Movie Description"></textarea>
+													</div>
+											</div>
+											<div class="col-sm-4">
+												<h5>Poster Art</h5>
+												<div id="moviePoster" class="cover-art-poster">
+												</div>
+												<input type="file" name="moviePosterFile" id="moviePosterFile" accept="image/*">
+											</div>
+										</div>
+									</div>
+									<div id='ething' class="tab-pane fade in">
+										<div class="row">
+											<div class="col-sm-8">
+												 <h5>Thing Information</h5>
+													<div class="form-group" id="artifactTitleGroup">
+														<input type="text" class="form-control" id="title" placeholder="Title">
+													</div>
+													<div class="form-group" id="artifactDirectorGroup">
+														<input type="text" class="form-control" id="creatorName" placeholder="Creator">
+													</div>
+													<div class="form-group" id="artifactDateGroup">
+														<input type="text" class="form-control" id="releaseDate" placeholder="Year">
+													</div>
+													<div class="form-group" id="artifactDescriptionGroup">
+														<textarea row="3" class="form-control" id="description" placeholder="Description"></textarea>
+													</div>
+											</div>
+											<div class="col-sm-4">
+												<h5>Preview Image</h5>
+												<div id="thingPoster" class="cover-art">
+												</div>
+												<input type="file" name="thingPosterFile" id="thingPosterFile" accept="image/*">
+											</div>
+										</div>
+									</div>
+									<div id='ehtml' class="tab-pane fade in">
+										<div class="row">
+											<div class="col-sm-8">
+												 <h5>HTML Information</h5>
+													<div class="form-group" id="artifactTitleGroup">
+														<input type="text" class="form-control" id="title" placeholder="Title">
+													</div>
+													<div class="form-group" id="artifactDirectorGroup">
+														<input type="text" class="form-control" id="creatorName" placeholder="Creator">
+													</div>
+													<div class="form-group" id="artifactDateGroup">
+														<input type="text" class="form-control" id="releaseDate" placeholder="Year">
+													</div>
+													<div class="form-group" id="artifactDescriptionGroup">
+														<textarea row="3" class="form-control" id="description" placeholder="Description"></textarea>
+													</div>
+											</div>
+											<div class="col-sm-4">
+												<h5>Preview Image</h5>
+												<div id="htmlPoster" class="cover-art">
+												</div>
+												<input type="file" name="htmlPosterFile" id="htmlPosterFile" accept="image/*">
+											</div>
+										</div>
+									</div>
 								</div>
 								<div class="row" id='bitcoinAddressField'>
 									<div class="col-sm-12">
-										<h3 style="text-align: center">Pricing Information</h3>
-										<center class="row">
-											<span style="font-size: 1.5em; font-weight: 100;">I want my Artifact to be:</span>
-											<button class="btn btn-default btn-default-outline">Free</button>
-											<button class="btn btn-success btn-outline-success">Paid</button>
-										</center>
+										<h3>Pricing/Payment Information</h3>
 										<div class="form-group" id="bitcoinAddressGroup">
 											<label for="bitcoinAddress">Bitcoin Address</label>
 											<input class="form-control" style="width: 30%" type="text" id="bitcoinAddress" placeholder="17aGuzA9p1ZmG49V9GmR6UgGzg1dQx9We9">
@@ -298,1125 +1131,161 @@
 											<p class="small">You will be able to submit your artifact after you preview it. Be sure it looks exactly like what you desire as you will be unable to change this later.</p>
 										</div>
 										<div class="col-sm-3 text-right">
-											<button type="button" id="previewButton" class="btn btn-primary">Preview</button>
+											<button type="button" id="previewButton" class="btn btn-success">Publish Changes</button>
 										</div>
 									</div>
 								</div>
 								<div style='height:30px'></div>
 							</div>
 						</div>
-					</div>
-					<div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewLabel">
-						<div class="">
-							<div class="modal-dialog" role="document" style='width:95%'>
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-										<h4 class="modal-title" id="previewLabel">Preview Artifact</h4>
-									</div>
-									<div class="modal-body">
-										<div class="container">
-										<div class="row">
-										<div class="col-md-12">
-											<div class="row media-embed">
-											<center>
-												<video id='previewVideo' controls="controls" src="" style="width: 80%">
-												</video>
-												</center>
-											</div>
-											<div class="row entity-meta-header">
-											<br>
-												<h2 id='previewTitle'>Title</h2>
-												<h3 id="previewArtist">Artist</h3>
-												<div class="entity-meta-content">
-													<div id='previewTime' class="entity-pub-time">Posted <span id="current-time">Tue Dec 08 2015 09:36:34 GMT-0700 (MST)</span></div>
-													<div id='previewRuntime' class="entity-runtime">Runtime: <span id="runtime">00:12:48</span></div>
-												</div>
-											</div>
-											<div class="row media-desc">
-												<p id='previewDescription'>Description</p>
-											</div>
-										</div>
-										</div>
-										</div>
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-danger pull-left" data-dismiss="modal" onclick="$('#previewVideo').get(0).pause();">Cancel</button>
+					</section>
 
-										<button type="button" class="btn btn-success pull-right" data-dismiss="modal" onclick="submitArtifact()">Submit</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal fade" id="walletModal" tabindex="-1" role="dialog" aria-labelledby="walletLabel">
-						<div class="vertical-alignment-helper">
-							<div class="vertical-align-center modal-dialog" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h4 class="modal-title" id="walletLabel">Login to Wallet</h4>
-									</div>
-									<div class="modal-body">
-										<div class="container">
-											<div class="row">
-												<div class="col-md-6">
-													<!-- Nav tabs -->
-													<ul class="nav nav-tabs" role="tablist">
-														<li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
-														<li role="presentation"><a href="#register" aria-controls="register" role="tab" data-toggle="tab">Register</a></li>
-													</ul>
-
-													<!-- Tab panes -->
-													<div class="tab-content">
-														<div role="tabpanel" class="tab-pane active" id="login">
-															<form>
-																<div class="form-group">
-																	<label for="loginWalletIdentifier">Wallet Identifier</label>
-																	<input type="text" class="form-control" id="loginWalletIdentifier" placeholder="xxxx-xxxx-xxx-xxx">
-																	<p class="help-block">This is your wallet identifier that you recieved after creating a wallet with Flovault.</p>
-																</div>
-																<div class="form-group">
-																	<label for="loginWalletPassword">Password</label>
-																	<input type="password" class="form-control" id="loginWalletPassword" placeholder="">
-																	<p class="help-block"></p>
-																</div>
-																<div class="form-group">
-																	<input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
-																	<p class="help-block"></p>
-																</div>
-															</form>
-															<button class="btn btn-success" id="walletLoginButton" onclick="loginToWallet();">Login</button>
-														</div>
-														<div role="tabpanel" class="tab-pane" id="register">
-															<form>
-																<div class="form-group">
-																	<label for="loginWalletIdentifier">Email Address</label>
-																	<input type="email" class="form-control" id="createWalletEmail" placeholder="example@me.com">
-																	<p class="help-block">Optional email, used for 2FA and if you forget your identifier.</p>
-																</div>
-																<div class="form-group">
-																	<label for="loginWalletPassword">Password</label>
-																	<input type="password" class="form-control" id="createWalletPassword" placeholder="">
-																	<p class="help-block">You will use this password along with your generated identifier to login to your account.</p>
-																</div>
-															</form>
-															<button class="btn btn-success" onclick="registerWallet();">Register</button>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="modal-footer">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal fade" id="walletInfoModal" tabindex="-1" role="dialog" aria-labelledby="walletInfoLabel">
-						<div class="vertical-alignment-helper">
-							<div class="vertical-align-center modal-dialog" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-										<h4 class="modal-title" id="walletInfoLabel">Wallet Info</h4>
-									</div>
-									<div class="modal-body">
-										<div class="container">
-											<div class="row">
-												<div class="col-md-6">
-													<!-- Nav tabs -->
-													<ul class="nav nav-tabs" role="tablist">
-														<li role="presentation" class="active"><a href="#main" aria-controls="main" role="tab" data-toggle="tab">Main</a></li>
-													</ul>
-
-													<!-- Tab panes -->
-													<div class="tab-content">
-														<div role="tabpanel" class="tab-pane active" id="mainx">
-															<h4>Identifier <code id="identifierx"></code></h4>
-															<div class="table-responsive">
-																<table class="table table-bordered table-condensed" id="addressTablex">
-																	<thead>
-																		<tr>
-																			<th>Address</th>
-																			<th style="width: 30%">Balance</th>
-																			<th>Actions</th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr></tr>
-																	</tbody>
-																</table>
-															</div>
-															<button class="btn btn-default" onclick="newAddress();">New Address</button>
-															<button class="btn btn-danger" onclick="location.reload();">Log Out</button>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="modal-footer">
-										<button class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
-										<button class="btn btn-default pull-left" onclick="refreshWalletInfo();" id="refreshButton">Refresh</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="modal fade" id="tradebotModal" tabindex="-1" role="dialog" aria-labelledby="tradebotLabel">
-						<div class="vertical-alignment-helper">
-							<div class="vertical-align-center modal-dialog" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-										<h4 class="modal-title" id="tradebotLabel">Get FLO with TradeBot</h4>
-									</div>
-									<div class="modal-body">
-										<div class="container">
-											<div class="row">
-												<div class="col-md-6" id="tradebotBuy">
-													<center>
-														<p>Please send $<span id="usdLabel"></span> in BTC to this address. You can change this amount below.</p>
-														<div id="qrcode" style="width: 80%; height: 80%;"></div>
-														<br>
-														<code style="font-size: 18px" id="btcDisplayAddress">1EV7zyqRK6qS2QnZdwXrgS2aKzXpi91jBn</code>
-														<br>
-														<br>
-														<form class="form-inline">
-															<div class="form-group">
-															<div class="input-group">
-																<div class="input-group-addon">$</div>
-																<input type="text" class="form-control" id="usdValue" placeholder="" style="width: 75px;" onblur="updateUSD()">
-																<div class="input-group-addon">USD</div>
-															</div>
-															</div>
-															<div class="form-group">
-															<div class="input-group">
-																<input type="text" class="form-control" id="btcValue" placeholder="" style="width: 7.25em;" onblur="updateBTC()">
-																<div class="input-group-addon">BTC</div>
-															</div>
-															</div>
-															
-															<div class="form-group">
-															<div class="input-group">
-																<input type="text" class="form-control" id="floValue" placeholder="" style="width: 75px;" onblur="updateFLO()">
-																<div class="input-group-addon">FLO</div>
-															</div>
-															</div>
-														</form>
-														<a class="coinbase-widget" id="coinbase_widget" href="">Buy FLO with Debit/Credit</a>
-													</center>
-												</div>
-												<div class="col-md-6" id="tradebotPending" style="opacity: 0; display: none;">
-													<center>
-														<p style="padding-top: 20px;">Bitcoin transaction recieved... waiting for Tradebot to send funds...</p>
-													</center>
-													<div id="loading">
-														<ul class="bokeh">
-															<li></li>
-															<li></li>
-															<li></li>
-														</ul>
-													</div>
-													<center>
-														<p style="padding-top: -50px;">This usually takes 5-10 minutes depending on Bitcoin block times and Tradebot response times.</p>
-													</center>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-danger pull-right" data-dismiss="modal" onclick="cancelFloBuy()">Cancel</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						<video src="" width="1" height="1" id="video_player"></video>
-					</div>
-				</section>
-
-				<section class="bg-white" style="height: 100%" id="artifacts">
-					<div class="col-sm-12 bg-white">
-						<h4 class="pull-left" style="margin-bottom: -40px;">Published Artifacts</h4>
-						<button class="pull-right btn btn-success" style="margin-bottom: 10px; margin-top: 40px;" onclick="newArtifact();">+ New Artifact</button>
-						<table class="table table-hover table-bordered" id="ArtifactsTable">
-							<thead>
-								<tr>
-									<th>#</th>
-									<th>Name</th>
-									<th>Status</th>
-									<th>Tools</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<th scope="row">1</th>
-									<td><code>Apollo 11</code></td>
-									<td>Pinned: <code><span style="color: red">3</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$3.14</span> = <span style="color: orange">Ƀ0.0314</span> | Views: <code>387</code></td>
-									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
-								</tr>
-								<tr>
-									<th scope="row">2</th>
-									<td><code>Apollo 12</code></td>
-									<td>Pinned: <code><span style="color: orange">7</span>/<span style="color: green">8</span></code> | Profit: <span style="color: green">$2.13</span> = <span style="color: orange">Ƀ0.0213</span> | Views: <code>9,071</code></td>
-									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
-								</tr>
-								<tr>
-									<th scope="row">3</th>
-									<td><code>Apollo 13</code></td>
-									<td>Pinned: <code><span style="color: green">10</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$1,490</span> = <span style="color: orange">Ƀ1.43</span> | Views: <code>387,076</code></td>
-									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
-								</tr>
-								<tr class="table-danger">
-									<th scope="row">4</th>
-									<td><code>Apollo 14</code></td>
-									<td>Pinned: <code><span style="color: red">0</span>/<span style="color: green">1</span></code> | Profit: <span style="color: green">$</span>0 = <span style="color: orange">Ƀ</span>0 | Views: <code>13</code></td>
-									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
-								</tr>
-								<tr class="table-danger">
-									<th scope="row"></th>
-									<td colspan="2"><h4 style="margin-top: 0px; margin-bottom: 0px;">Error: "Apollo 14" does not have any pins of this file, please re-upload.</h4></td>
-									<td><button class="btn btn-success">Reupload</button></td>
-								</tr>
-								<tr>
-									<th scope="row">5</th>
-									<td><code>Apollo 15</code></td>
-									<td>Pinned: <code><span style="color: green">10</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$1,490</span> = <span style="color: orange">Ƀ1.43</span> | Views: <code>387,076</code></td>
-									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
-								</tr>
-								<tr class="table-warning">
-									<th scope="row">6</th>
-									<td><code>Apollo 16</code></td>
-									<td>Pinned: <code><span style="color: green">9</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$1,490</span> = <span style="color: orange">Ƀ1.43</span> | Views: <code>387,076</code></td>
-									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-success">Publish</button></td>
-								</tr>
-								<tr>
-									<th scope="row">7</th>
-									<td><code>Apollo 17</code></td>
-									<td>Pinned: <code><span style="color: orange">5</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$149</span> = <span style="color: orange">Ƀ0.15</span> | Views: <code>3,869</code></td>
-									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
-								</tr>
-							</tbody>
-						</table>
-						<hr />
-						<h4 class="dev">Publish Status</h4>
-						<table class="dev table table-hover table-bordered" id="ArtifactsFPTable">
-							<thead>
-								<tr>
-									<th>#</th>
-									<th>Name</th>
-									<th style="width: 100px"></th>
-									<th>Status</th>
-									<th>Tools</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<th scope="row">1</th>
-									<td><code>Apollo 11</code></td>
-									<td>
-										<div class="progress">
-											<div class="progress-bar bg-danger" role="progressbar" style="width: 50%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-										</div>
-									</td>
-									<td>
-										IPFS File Upload Failed, Please Retry Upload.
-									</td>
-									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-success">Select Files</button></td>
-								</tr>
-								<tr>
-									<th scope="row">2</th>
-									<td><code>Apollo 12</code></td>
-									<td>
-										<div class="progress">
-											<div class="progress-bar bg-warning" role="progressbar" style="width: 75%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-										</div>
-									</td>
-									<td>
-										TX Send Failure
-									</td>
-									<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-success">Retry TX Send</button></td>
-								</tr>
-								<tr>
-									<th scope="row">3</th>
-									<td><code>Apollo 13</code></td>
-									<td>
-										<div class="progress">
-											<div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 85%" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-										</div>
-									</td>
-									<td>
-										Pending Florincoin Block
-									</td>
-									<td><button class="btn btn-info">Info</button></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</section>
-
-				<section class="bg-white" style="height: 100%" id="editArtifact">
-					<div class="content-heading bg-white">
-						<div class="row">
-							<div class="col-sm-12">
-								<h4 class="m0 text-thin">Edit Artifact</h4><small></small>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-12 bg-white">
-						<div class="section publish col-lg-12" style="padding-top: 50px;">
-							<div class="publish-section artifact-type">
-								<h5>Artifact type</h5> 
-								<ul class="nav nav-pills" role="tablist" id='edit-type'>
-									<li class="active" onclick="changeArtifactType('emusic')"><a id="emusicbtn" href="#emusic" data-toggle="tab">Music</a></li>
-									<li onclick="changeArtifactType('evideo')"><a id="evideobtn" href="#evideo" data-toggle="tab">Video</a></li>
-									<li onclick="changeArtifactType('epodcast')"><a id="epodcastbtn" href="#epodcast" data-toggle="tab">Podcast</a></li>
-									<li onclick="changeArtifactType('ebook')"><a id="ebookbtn" href="#ebook" data-toggle="tab">Book</a></li>
-									<li onclick="changeArtifactType('emovie')"><a id="emoviebtn" href="#emovie" data-toggle="tab">Movie</a></li>
-									<li onclick="changeArtifactType('ething')"><a id="ethingbtn" href="#ething" data-toggle="tab">Thing</a></li>
-									<li onclick="changeArtifactType('ehtml')"><a id="ehtmlbtn" href="#ehtml" data-toggle="tab">HTML</a></li>
-								</ul>
-							</div>
-							<div class="publish-section information tab-content" id='metainfo-edit' style="margin-top: -50px;">
-								<div id='emusic' class="tab-pane fade in active">
-									<div class="row">
-										<div class="col-sm-8">
-											<h5>Album Information</h5>
-											<form>
-												<div class="form-group" id="artifactTitleGroup">
-													<input type="text" class="form-control" id="title" placeholder="Album Title">
-												</div>
-												<div class="form-group" id="artifactArtistGroup">
-													<input type="text" class="form-control" id="artistName" placeholder="Artist Name">
-												</div>
-												<div class="row">
-													<div class="col col-sm-6">
-														<div class="form-group" id="artifactgenreGroup">
-															<input type="text" class="form-control" id="genre" placeholder="Genre">
-														</div>
-													</div>
-													<div class="col col-sm-6">
-														<div class="form-group" id="artifactDateGroup">
-															<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
-														</div>
-													</div>
-												</div>
-												<div class="form-group" id="artifactTagsGroup">
-													<input type="text" class="form-control" id="tags" placeholder="Tags">
-												</div>
-												<div class="form-group" id="artifactRecordLabelGroup">
-													<input type="text" class="form-control" id="recordLabel" placeholder="Record Label">
-												</div>
-												<div class="form-group" id="artifactDescriptionGroup">
-													<textarea row="3" class="form-control" id="description" placeholder="Album Description"></textarea>
-												</div>
-											</form>
-										</div>
-										<div class="col-sm-4">
-											<h5>Cover Art</h5>
-											<div class="cover-art-square" id='musicPoster'>
-											</div>
-											<input type="file" name="musicPosterFile" id="musicPosterFile" accept="image/*">
-										</div>
-									</div>
-								</div>
-								<div id='evideo' class="tab-pane fade">
-									<div class="row">
-										<div class="col-sm-8">
-											 <h5>Video Information</h5>
-												<div class="form-group" id="artifactTitleGroup">
-													<input type="text" class="form-control" id="title" placeholder="Video Title">
-												</div>
-												<div class="form-group" id="artifactDirectorGroup">
-													<input type="text" class="form-control" id="directorName" placeholder="Director Name">
-												</div>
-												<div class="form-group" id="artifactDistributorGroup">
-													<input type="text" class="form-control" id="distributor" placeholder="Distributor">
-												</div>
-												<div class="form-group" id="artifactDateGroup">
-													<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
-												</div>
-												<div class="row">
-													<div class="col col-sm-6">
-														<div class="form-group" id="artifactgenreGroup">
-															<input type="text" class="form-control" id="genre" placeholder="Genre">
-														</div>
-													</div>
-													<div class="col col-sm-6">
-														<div class="form-group" id="artifactTagsGroup">
-															<input type="text" class="form-control" id="tags" placeholder="Tags">
-														</div>
-													</div>
-												</div>
-												<div class="form-group" id="artifactDescriptionGroup">
-													<textarea row="3" class="form-control" id="description" placeholder="Video Description"></textarea>
-												</div>
-										</div>
-										<div class="col-sm-4">
-											<h5>Preview Image</h5>
-											<div id="videoPoster" class="cover-art">
-											</div>
-											<input type="file" name="videoPosterFile" id="videoPosterFile" accept="image/*">
-										</div>
-									</div>
-								</div>
-								<div id='epodcast' class="tab-pane fade in">
-									<div class="row">
-										<div class="col-sm-8">
-											<h5>Podcast Information</h5>
-											<form>
-												<div class="form-group" id="artifactTitleGroup">
-													<input type="text" class="form-control" id="title" placeholder="Podcast Title">
-													<p class="help-block">This will be auto formatted with "Podcast Title": "Episode Title"</p>
-												</div>
-												<div class="form-group" id="artifactArtistGroup">
-													<input type="text" class="form-control" id="episodeTitle" placeholder="Episode Title">
-												</div>
-												<div class="row">
-													<div class="col col-sm-3">
-														<div class="form-group" id="artifactDateGroup">
-															<input type="text" class="form-control" id="seasonNum" placeholder="Season Number">
-														</div>
-													</div>
-													<div class="col col-sm-3">
-														<div class="form-group" id="artifactDateGroup">
-															<input type="text" class="form-control" id="episodeNum" placeholder="Episode Number">
-														</div>
-													</div>
-													<div class="col col-sm-3">
-														<div class="form-group" id="artifactDateGroup">
-															<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
-														</div>
-													</div>
-													<div class="col col-sm-3">
-														<div class="form-group" id="artifactgenreGroup">
-															<input type="text" class="form-control" id="genre" placeholder="Genre">
-														</div>
-													</div>
-												</div>
-												<div class="form-group" id="artifactTagsGroup">
-													<input type="text" class="form-control" id="tags" placeholder="Tags">
-												</div>
-												<div class="form-group" id="artifactDescriptionGroup">
-													<textarea row="3" class="form-control" id="description" placeholder="Episode Description"></textarea>
-												</div>
-											</form>
-										</div>
-										<div class="col-sm-4">
-											<h5>Cover Art</h5>
-											<div class="cover-art-square" id='podcastPoster'>
-											</div>
-											<input type="file" name="podcastPosterFile" id="podcastPosterFile" accept="image/*">
-										</div>
-									</div>
-								</div>
-								<div id='ebook' class="tab-pane fade in">
-									<div class="row">
-										<div class="col-sm-8">
-											<h5>Book Information</h5>
-											<form>
-												<div class="form-group" id="artifactTitleGroup">
-													<input type="text" class="form-control" id="title" placeholder="Book Title">
-												</div>
-												<div class="form-group" id="artifactArtistGroup">
-													<input type="text" class="form-control" id="authorName" placeholder="Author Name">
-												</div>
-												<div class="row">
-													<div class="col col-sm-6">
-														<div class="form-group" id="artifactDateGroup">
-															<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
-														</div>
-													</div>
-													<div class="col col-sm-6">
-														<div class="form-group" id="artifactgenreGroup">
-															<input type="text" class="form-control" id="genre" placeholder="Genre">
-														</div>
-													</div>
-												</div>
-												<div class="form-group" id="artifactTagsGroup">
-													<input type="text" class="form-control" id="tags" placeholder="Tags">
-												</div>
-												<div class="form-group" id="artifactDescriptionGroup">
-													<textarea row="3" class="form-control" id="description" placeholder="Book Description"></textarea>
-												</div>
-											</form>
-										</div>
-										<div class="col-sm-4">
-											<h5>PDF Cover</h5>
-											<div class="cover-art-poster" id='bookPoster'>
-											</div>
-											<input type="file" name="bookPosterFile" id="bookPosterFile" accept="image/*">
-										</div>
-									</div>
-								</div>
-								<div id='emovie' class="tab-pane fade in">
-									<div class="row">
-										<div class="col-sm-8">
-											 <h5>Movie Information</h5>
-												<div class="form-group" id="artifactTitleGroup">
-													<input type="text" class="form-control" id="title" placeholder="Movie Title">
-												</div>
-												<div class="form-group" id="artifactDirectorGroup">
-													<input type="text" class="form-control" id="directorName" placeholder="Director Name">
-												</div>
-												<div class="form-group" id="artifactDistributorGroup">
-													<input type="text" class="form-control" id="distributor" placeholder="Distributor">
-												</div>
-												<div class="form-group" id="artifactDateGroup">
-													<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
-												</div>
-												<div class="form-group" id="artifactDescriptionGroup">
-													<textarea row="3" class="form-control" id="description" placeholder="Movie Description"></textarea>
-												</div>
-										</div>
-										<div class="col-sm-4">
-											<h5>Poster Art</h5>
-											<div id="moviePoster" class="cover-art-poster">
-											</div>
-											<input type="file" name="moviePosterFile" id="moviePosterFile" accept="image/*">
-										</div>
-									</div>
-								</div>
-								<div id='ething' class="tab-pane fade in">
-									<div class="row">
-										<div class="col-sm-8">
-											 <h5>Thing Information</h5>
-												<div class="form-group" id="artifactTitleGroup">
-													<input type="text" class="form-control" id="title" placeholder="Title">
-												</div>
-												<div class="form-group" id="artifactDirectorGroup">
-													<input type="text" class="form-control" id="creatorName" placeholder="Creator">
-												</div>
-												<div class="form-group" id="artifactDateGroup">
-													<input type="text" class="form-control" id="releaseDate" placeholder="Year">
-												</div>
-												<div class="form-group" id="artifactDescriptionGroup">
-													<textarea row="3" class="form-control" id="description" placeholder="Description"></textarea>
-												</div>
-										</div>
-										<div class="col-sm-4">
-											<h5>Preview Image</h5>
-											<div id="thingPoster" class="cover-art">
-											</div>
-											<input type="file" name="thingPosterFile" id="thingPosterFile" accept="image/*">
-										</div>
-									</div>
-								</div>
-								<div id='ehtml' class="tab-pane fade in">
-									<div class="row">
-										<div class="col-sm-8">
-											 <h5>HTML Information</h5>
-												<div class="form-group" id="artifactTitleGroup">
-													<input type="text" class="form-control" id="title" placeholder="Title">
-												</div>
-												<div class="form-group" id="artifactDirectorGroup">
-													<input type="text" class="form-control" id="creatorName" placeholder="Creator">
-												</div>
-												<div class="form-group" id="artifactDateGroup">
-													<input type="text" class="form-control" id="releaseDate" placeholder="Year">
-												</div>
-												<div class="form-group" id="artifactDescriptionGroup">
-													<textarea row="3" class="form-control" id="description" placeholder="Description"></textarea>
-												</div>
-										</div>
-										<div class="col-sm-4">
-											<h5>Preview Image</h5>
-											<div id="htmlPoster" class="cover-art">
-											</div>
-											<input type="file" name="htmlPosterFile" id="htmlPosterFile" accept="image/*">
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="row" id='bitcoinAddressField'>
+					<section id="WalletPage">
+						<div class="content-heading bg-white">
+							<div class="row">
 								<div class="col-sm-12">
-									<h3>Pricing/Payment Information</h3>
-									<div class="form-group" id="bitcoinAddressGroup">
-										<label for="bitcoinAddress">Bitcoin Address</label>
-										<input class="form-control" style="width: 30%" type="text" id="bitcoinAddress" placeholder="17aGuzA9p1ZmG49V9GmR6UgGzg1dQx9We9">
-										<p class="help-block">This is your Bitcoin address that you will use to receive payments for this artifact.</p>
-									</div>
+									<h4 class="m0 text-thin">Wallet</h4><small></small>
 								</div>
-							</div>
-							<div class="publish-section publish-pricing" id='pricing'>
-								<div class="row">
-									<div class="col-sm-10">
-										<p class="small">Pick the price for each file. You are allowed to enter up to one tenth of a cent.</p>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col col-lg-12">
-										<table class="table" id='pricingTable'>
-											<thead>
-												<tr>
-													<th>File Name</th>
-													<th>Suggested Play</th>
-													<th>Minimum Play</th>
-													<th>Suggested Buy</th>
-													<th>Minimum Buy</th>
-													<th></th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr></tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-							 <div class="publish-section">
-								<div class="publish-files audio-tracks">
-									<h5>
-										<object type="image/svg+xml" data="./assets/svg/media-16px-2_note-03.svg"></object>
-										Media Files
-									</h5>
-									<table class="table" id='mediaFilesTable'>
-										<colgroup>
-											<col class="">
-											<col class="">
-											<col style="width: 75px;">
-											<col style="width: 75px;">
-											<col style="">
-											<col class="width: 75px;">
-										</colgroup>
-										<thead>
-											<tr>
-												<th>File</th>
-												<th>File Name</th>
-												<th>File Size</th>
-												<th>Duration</th>
-												<th>Display name</th>
-												<th></th>
-											</tr>
-										</thead>
-										<tbody id="mediaTable">
-											<tr>
-											</tr>
-										</tbody>
-									</table>
-									<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
-									<div class="upload-area" id="mediaDrop">
-										<object data="./assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
-									</div>
-									<input type="file" name="mediaFiles" id="mediaFiles" multiple accept="audio/*"></input>
-								</div>
-							</div>
-							 <div class="publish-section">
-								<div class="publish-files extra-files">
-									<h5>
-										<object type="image/svg+xml" data="assets/svg/files-16px_single-folded-content.svg"></object>
-										Extra Files
-									</h5>
-									<table class="table" id='extraTable'>
-										<colgroup>
-											<col class="">
-											<col class="">
-											<col style="width: 125px;">
-											<col class="">
-											<col class="">
-										</colgroup>
-										<thead>
-											<tr>
-												<th>File</th>
-												<th>File Name</th>
-												<th>File Type</th>
-												<th>Display name</th>
-												<th></th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr></tr>
-										</tbody>
-									</table>
-									<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
-									<div class="upload-area" id="extraDrop">
-										<object data="./assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
-									</div>
-									<input type='file' id="extraFiles" name="extraFiles" multiple />
-								</div>
-							</div>
-							 <div class="publish-section publish-submit">
-								<div class="row">
-									<div class="col-sm-9">
-										<p class="small">You will be able to submit your artifact after you preview it. Be sure it looks exactly like what you desire as you will be unable to change this later.</p>
-									</div>
-									<div class="col-sm-3 text-right">
-										<button type="button" id="previewButton" class="btn btn-success">Publish Changes</button>
-									</div>
-								</div>
-							</div>
-							<div style='height:30px'></div>
-						</div>
-					</div>
-				</section>
-
-				<section class="bg-white" style="height: 100%" id="WalletPage">
-					<div class="content-heading bg-white">
-						<div class="row">
-							<div class="col-sm-12">
-								<h4 class="m0 text-thin">Wallet</h4><small></small>
 							</div>
 						</div>
-					</div>
-					<div class="col-sm-12 bg-white">
-						<h4>Identifier <code id="identifier"></code></h4>
-						<button class="btn btn-info pull-right" style="margin-top: -50px;" onclick="newAddress();">+ New Address</button>
-						<!--<div class="table-responsive">
-							<table class="table table-bordered table-condensed" id="addressTable">
-								<thead>
-									<tr>
-										<th>Address</th>
-										<th>Balance</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr></tr>
-								</tbody>
-							</table>
-						</div>-->
-						<div class="panel-group" id="walletAccordian" role="tablist" aria-multiselectable="true">
-							<!--<div class="panel panel-default">
-								<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-									<div class="panel-heading" role="tab" id="headingOne">
-										<h4 class="panel-title">
-											<div style="padding: 0px 30px; color: #000">
-												FLuiVU5iDQ4a6ztcpBLwBNjBisyY2DvUTV<span style="float: right"><span class="color: green">$22.15</span> - 443.11323606 FLO</span>
-											</div>
+						<div class="col-sm-12 bg-white">
+							<h4>Identifier <code id="identifier"></code></h4>
+							<button class="btn btn-info pull-right" style="margin-top: -50px;" onclick="newAddress();">+ New Address</button>
+							<!--<div class="table-responsive">
+								<table class="table table-bordered table-condensed" id="addressTable">
+									<thead>
+										<tr>
+											<th>Address</th>
+											<th>Balance</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr></tr>
+									</tbody>
+								</table>
+							</div>-->
+							<div class="panel-group" id="walletAccordian" role="tablist" aria-multiselectable="true">
+								<!--<div class="panel panel-default">
+									<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+										<div class="panel-heading" role="tab" id="headingOne">
+											<h4 class="panel-title">
+												<div style="padding: 0px 30px; color: #000">
+													FLuiVU5iDQ4a6ztcpBLwBNjBisyY2DvUTV<span style="float: right"><span class="color: green">$22.15</span> - 443.11323606 FLO</span>
+												</div>
 
-										</h4>
-									</div>
-								</a>
-								<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-									<div class="panel-body">
-										<!\-\- Some HTML design code comes from https://github.com/OutCast3k/coinbin/, you can view the license for this code here: https://github.com/OutCast3k/coinbin/blob/master/LICENSE \-\-\>
-										<div class="col-md-12" align="center">
-											<div id="walletQrCode" title="bitcoin:FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme"><canvas width="256" height="256" style="display: none;"></canvas><img alt="Scan me!" style="display: block;" src=""></div> <br>
-											<div>
-												<span id="walletAddress">FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme</span>
-											</div>
-											<br>
-											<div style="text-align:center; width:430px;">
-												<ul class="nav nav-pills" role="tablist">
-													<li role="presentation" class="active"><a href="javascript:;" id="walletBalance" rel="0.000868" style="display: block;">443.11323606 FLO</a></li>
-													<li role="presentation"><a href="#walletSpend" id="walletShowSpend"  aria-controls="walletSpend" role="pill" data-toggle="pill">Spend</a></li>
-													<li role="presentation"><a id="walletHistory" href="http://florincoin.info/address/FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme" target="_blank" data-ytta-id="-">History</a></li>
-													<li role="presentation"><a href="#tradebot" target="" >Buy</a></li>
-													<li role="presentation"><a href="#walletKeys" id="walletShowKeys"  aria-controls="walletKeys" role="pill" data-toggle="pill">Keys</a></li>
-												</ul>
-
+											</h4>
+										</div>
+									</a>
+									<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+										<div class="panel-body">
+											<!\-\- Some HTML design code comes from https://github.com/OutCast3k/coinbin/, you can view the license for this code here: https://github.com/OutCast3k/coinbin/blob/master/LICENSE \-\-\>
+											<div class="col-md-12" align="center">
+												<div id="walletQrCode" title="bitcoin:FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme"><canvas width="256" height="256" style="display: none;"></canvas><img alt="Scan me!" style="display: block;" src=""></div> <br>
+												<div>
+													<span id="walletAddress">FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme</span>
+												</div>
 												<br>
-												<div class="tab-content" style="margin-top: -40px;">
-													<div role="tabpanel" id="walletKeys" class="tab-pane">
-														<label>Public Key</label>
-														<input class="form-control pubkey" type="text" readonly="" data-original-title="" title="" value="FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme">
-														<label>Private key</label>
-														<div class="input-group">
-															<input class="form-control privkey" type="password" readonly="" data-original-title="" title="" value="T6SQbeNm68Zy4Kpb1ufrAueC7AqaPe1VJRySZK6Jyr8YFxrMT4kK">
+												<div style="text-align:center; width:430px;">
+													<ul class="nav nav-pills" role="tablist">
+														<li role="presentation" class="active"><a href="javascript:;" id="walletBalance" rel="0.000868" style="display: block;">443.11323606 FLO</a></li>
+														<li role="presentation"><a href="#walletSpend" id="walletShowSpend"	aria-controls="walletSpend" role="pill" data-toggle="pill">Spend</a></li>
+														<li role="presentation"><a id="walletHistory" href="http://florincoin.info/address/FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme" target="_blank" data-ytta-id="-">History</a></li>
+														<li role="presentation"><a href="#tradebot" target="" >Buy</a></li>
+														<li role="presentation"><a href="#walletKeys" id="walletShowKeys"	aria-controls="walletKeys" role="pill" data-toggle="pill">Keys</a></li>
+													</ul>
 
-															<span class="input-group-btn">
-																<button class="showKey btn btn-default" onclick="$('#privKey').type == 'text' ? $('#privKey').type('password') : $('#privKey').type('text')" type="button">Show</button>
-															</span>
-														</div>
-													</div>
+													<br>
+													<div class="tab-content" style="margin-top: -40px;">
+														<div role="tabpanel" id="walletKeys" class="tab-pane">
+															<label>Public Key</label>
+															<input class="form-control pubkey" type="text" readonly="" data-original-title="" title="" value="FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme">
+															<label>Private key</label>
+															<div class="input-group">
+																<input class="form-control privkey" type="password" readonly="" data-original-title="" title="" value="T6SQbeNm68Zy4Kpb1ufrAueC7AqaPe1VJRySZK6Jyr8YFxrMT4kK">
 
-													<div id="walletSpend" class="tab-pane active">
-														<div class="row">
-															<div class="form-inline output">
-																<div class="col-xs-8">
-																	<label>Address</label>
-																</div>
-
-																<div class="col-xs-3">
-																	<label>Amount</label>
-																</div>
+																<span class="input-group-btn">
+																	<button class="showKey btn btn-default" onclick="$('#privKey').type == 'text' ? $('#privKey').type('password') : $('#privKey').type('text')" type="button">Show</button>
+																</span>
 															</div>
 														</div>
 
-														<div class="row" id="walletSpendTo">
-															<div class="form-horizontal output">
-																<div class="col-xs-8">
-																	<input type="text" class="form-control addressTo" data-original-title="" title="">
+														<div id="walletSpend" class="tab-pane active">
+															<div class="row">
+																<div class="form-inline output">
+																	<div class="col-xs-8">
+																		<label>Address</label>
+																	</div>
+
+																	<div class="col-xs-3">
+																		<label>Amount</label>
+																	</div>
 																</div>
-																<div class="col-xs-3">
-																	<input type="text" class="form-control amount" data-original-title="" title="" placeholder="0.00">
+															</div>
 
+															<div class="row" id="walletSpendTo">
+																<div class="form-horizontal output">
+																	<div class="col-xs-8">
+																		<input type="text" class="form-control addressTo" data-original-title="" title="">
+																	</div>
+																	<div class="col-xs-3">
+																		<input type="text" class="form-control amount" data-original-title="" title="" placeholder="0.00">
+
+																	</div>
+
+																	<a href="javascript:;" class="addressAdd" data-ytta-id="-"><span class="glyphicon glyphicon-plus"></span></a>
+																	<br><br>
 																</div>
-
-																<a href="javascript:;" class="addressAdd" data-ytta-id="-"><span class="glyphicon glyphicon-plus"></span></a>
-																<br><br>
 															</div>
+															<div class="row">
+																<div class="col-xs-6">
+																	<label><abbr title="" data-original-title="the amount to pay in network miner fees - 0.0004 or more recommended for a faster processing time">Transaction Fee</abbr>&nbsp;&nbsp;<a href="https://bitcoinfees.21.co/" target="_blank" data-ytta-id="-"><span class="glyphicon glyphicon-question-sign"></span></a></label>
+																	<input type="text" class="form-control" value="0.0004" id="txFee" data-original-title="" title="">
+																</div>
+																<div class="col-xs-5">
+																	<label><abbr title="" data-original-title="the amount to donate to coinb.in">Donation</abbr></label>
+																	<input type="text" class="form-control" value="0.003" id="developerDonation" data-original-title="" title="">
+																</div>
+															</div>
+															<br>
+
+															<div id="walletSendStatus" class="alert alert-danger hidden"></div>
+
+															<button class="btn btn-primary" type="button" id="walletSendBtn">Send</button>
+															<button class="btn btn-default" type="button">Reset</button>
 														</div>
-														<div class="row">
-															<div class="col-xs-6">
-																<label><abbr title="" data-original-title="the amount to pay in network miner fees - 0.0004 or more recommended for a faster processing time">Transaction Fee</abbr>&nbsp;&nbsp;<a href="https://bitcoinfees.21.co/" target="_blank" data-ytta-id="-"><span class="glyphicon glyphicon-question-sign"></span></a></label>
-																<input type="text" class="form-control" value="0.0004" id="txFee" data-original-title="" title="">
-															</div>
-															<div class="col-xs-5">
-																<label><abbr title="" data-original-title="the amount to donate to coinb.in">Donation</abbr></label>
-																<input type="text" class="form-control" value="0.003" id="developerDonation" data-original-title="" title="">
-															</div>
-														</div>
-														<br>
-
-														<div id="walletSendStatus" class="alert alert-danger hidden"></div>
-
-														<button class="btn btn-primary" type="button" id="walletSendBtn">Send</button>
-														<button class="btn btn-default" type="button">Reset</button>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-							</div>-->
-							
-						</div>
-						<h4 class="dev">Recent Transactions</h4>
-						<button class="dev btn btn-info pull-right" onclick="loadTransactions();">Load Transactions</button>
-						<div class="dev table-responsive">
-							<table class="table table-bordered table-condensed" id="TXTable" style=" word-wrap: break-word; word-break: break-all; table-layout: fixed;">
-								<thead>
-									<tr>
-										<th>TXID</th>
-										<th style="width: 85%">Message</th>
-										<th>Tools</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</section>
-				<!-- Page footer-->
-			</main>
-		</div>
-		<!-- Search template-->
-		<div tabindex="-1" role="dialog" class="modal modal-top fade modal-search">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-body">
-						<div class="pull-left">
-							<button type="button" data-dismiss="modal" class="btn btn-flat"><em class="ion-arrow-left-c icon-24"></em></button>
-						</div>
-						<div class="pull-right">
-							<button type="button" class="btn btn-flat"><em class="ion-android-microphone icon-24"></em></button>
-						</div>
-						<form action="#" class="oh">
-							<div class="mda-form-control pt0">
-								<input type="text" placeholder="Search.." data-localize="header.SEARCH" class="form-control header-input-search">
-								<div class="mda-form-control-line"></div>
+								</div>-->
+								
 							</div>
-						</form>
-					</div>
-				</div>
+							<h4 class="dev">Recent Transactions</h4>
+							<button class="dev btn btn-info pull-right" onclick="loadTransactions();">Load Transactions</button>
+							<div class="dev table-responsive">
+								<table class="table table-bordered table-condensed" id="TXTable" style=" word-wrap: break-word; word-break: break-all; table-layout: fixed;">
+									<thead>
+										<tr>
+											<th>TXID</th>
+											<th style="width: 85%">Message</th>
+											<th>Tools</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</section>
+				</main>
 			</div>
 		</div>
-		<!-- End Search template-->
-		<!-- Settings template-->
-		<div tabindex="-1" role="dialog" class="modal-settings modal modal-right fade">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<div data-dismiss="modal" class="pull-right clickable"><em class="ion-close-round text-soft"></em></div>
-						<h4 class="modal-title"><span>Settings</span></h4>
-					</div>
-					<div class="modal-body">
-						<div class="clearfix mb">
-							<div class="pull-left wd-tiny mb">
-								<div class="setting-color">
-									<label class="preview-theme-1">
-										<input type="radio" checked="checked" name="setting-theme" value="0"><span class="ion-checkmark-round"></span>
-										<div class="t-grid">
-											<div class="t-row">
-												<div class="t-col preview-header"></div>
-												<div class="t-col preview-sidebar"></div>
-												<div class="t-col preview-content"></div>
-											</div>
-										</div>
-									</label>
-								</div>
-							</div>
-							<div class="pull-left wd-tiny mb">
-								<div class="setting-color">
-									<label class="preview-theme-2">
-										<input type="radio" name="setting-theme" value="1"><span class="ion-checkmark-round"></span>
-										<div class="t-grid">
-											<div class="t-row">
-												<div class="t-col preview-header"></div>
-												<div class="t-col preview-sidebar"></div>
-												<div class="t-col preview-content"></div>
-											</div>
-										</div>
-									</label>
-								</div>
-							</div>
-							<div class="pull-left wd-tiny mb">
-								<div class="setting-color">
-									<label class="preview-theme-3">
-										<input type="radio" name="setting-theme" value="2"><span class="ion-checkmark-round"></span>
-										<div class="t-grid">
-											<div class="t-row">
-												<div class="t-col preview-header"></div>
-												<div class="t-col preview-sidebar"></div>
-												<div class="t-col preview-content"></div>
-											</div>
-										</div>
-									</label>
-								</div>
-							</div>
-							<div class="pull-left wd-tiny mb">
-								<div class="setting-color">
-									<label class="preview-theme-4">
-										<input type="radio" name="setting-theme" value="3"><span class="ion-checkmark-round"></span>
-										<div class="t-grid">
-											<div class="t-row">
-												<div class="t-col preview-header"></div>
-												<div class="t-col preview-sidebar"></div>
-												<div class="t-col preview-content"></div>
-											</div>
-										</div>
-									</label>
-								</div>
-							</div>
-							<div class="pull-left wd-tiny mb">
-								<div class="setting-color">
-									<label class="preview-theme-5">
-										<input type="radio" name="setting-theme" value="4"><span class="ion-checkmark-round"></span>
-										<div class="t-grid">
-											<div class="t-row">
-												<div class="t-col preview-header"></div>
-												<div class="t-col preview-sidebar"></div>
-												<div class="t-col preview-content"></div>
-											</div>
-										</div>
-									</label>
-								</div>
-							</div>
-							<div class="pull-left wd-tiny mb">
-								<div class="setting-color">
-									<label class="preview-theme-6">
-										<input type="radio" name="setting-theme" value="5"><span class="ion-checkmark-round"></span>
-										<div class="t-grid">
-											<div class="t-row">
-												<div class="t-col preview-header"></div>
-												<div class="t-col preview-sidebar"></div>
-												<div class="t-col preview-content"></div>
-											</div>
-										</div>
-									</label>
-								</div>
-							</div>
-							<div class="pull-left wd-tiny mb">
-								<div class="setting-color">
-									<label class="preview-theme-7">
-										<input type="radio" name="setting-theme" value="6"><span class="ion-checkmark-round"></span>
-										<div class="t-grid">
-											<div class="t-row">
-												<div class="t-col preview-header"></div>
-												<div class="t-col preview-sidebar"></div>
-												<div class="t-col preview-content"></div>
-											</div>
-										</div>
-									</label>
-								</div>
-							</div>
-							<div class="pull-left wd-tiny mb">
-								<div class="setting-color">
-									<label class="preview-theme-8">
-										<input type="radio" name="setting-theme" value="7"><span class="ion-checkmark-round"></span>
-										<div class="t-grid">
-											<div class="t-row">
-												<div class="t-col preview-header"></div>
-												<div class="t-col preview-sidebar"></div>
-												<div class="t-col preview-content"></div>
-											</div>
-										</div>
-									</label>
-								</div>
-							</div>
-							<div class="pull-left wd-tiny mb">
-								<div class="setting-color">
-									<label class="preview-theme-9">
-										<input type="radio" name="setting-theme" value="8"><span class="ion-checkmark-round"></span>
-										<div class="t-grid">
-											<div class="t-row">
-												<div class="t-col preview-header"></div>
-												<div class="t-col preview-sidebar"></div>
-												<div class="t-col preview-content"></div>
-											</div>
-										</div>
-									</label>
-								</div>
-							</div>
-						</div>
-						<hr>
-						<p>
-							<label class="mda-checkbox">
-								<input id="sidebar-showheader" type="checkbox" checked=""><em class="bg-indigo-500"></em>Sidebar header
-							</label>
-						</p>
-						<p>
-							<label class="mda-checkbox">
-								<input id="sidebar-showtoolbar" type="checkbox" checked=""><em class="bg-indigo-500"></em>Sidebar toolbar
-							</label>
-						</p>
-						<p>
-							<label class="mda-checkbox">
-								<input id="sidebar-offcanvas" type="checkbox"><em class="bg-indigo-500"></em>Sidebar offcanvas
-							</label>
-						</p>
-						<hr>
-						<p>Navigation icon</p>
-						<p>
-							<label class="mda-radio">
-								<input type="radio" name="headerMenulink" value="menu-link-close"><em class="bg-indigo-500"></em>Close icon
-							</label>
-						</p>
-						<p>
-							<label class="mda-radio">
-								<input type="radio" checked="" name="headerMenulink" value="menu-link-slide"><em class="bg-indigo-500"></em>Slide arrow
-							</label>
-						</p>
-						<p>
-							<label class="mda-radio">
-								<input type="radio" name="headerMenulink" value="menu-link-arrow"><em class="bg-indigo-500"></em>Big arrow
-							</label>
-						</p>
-						<hr>
-						<button type="button" data-toggle-fullscreen="" class="btn btn-default btn-raised">Toggle fullscreen</button>
-						<hr>
-						
-						<!-- END Language list-->
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End Settings template-->
-		<!-- Google Maps API-->
-		<!-- build:js(../app) js/vendor.js-->
-		<!-- Modernizr-->
-		<script src="vendor/modernizr/modernizr.custom.js"></script>
-		<!-- jQuery-->
-		<script src="vendor/jquery/dist/jquery.js"></script>
-		<!-- Bootstrap-->
-		<script src="vendor/bootstrap/dist/js/bootstrap.js"></script>
-		<!-- jQuery Browser-->
-		<script src="vendor/jquery.browser/dist/jquery.browser.js"></script>
-		<!-- Material Colors-->
-		<script src="vendor/material-colors/dist/colors.js"></script>
-		<!-- Bootstrap Filestyle-->
-		<script src="vendor/bootstrap-filestyle/src/bootstrap-filestyle.js"></script>
-		
-		<!-- endbuild-->
-		<!-- App script-->
-
 		<!-- Load external JS helper files -->
 		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+		<script src="./js/bootstrap.min.js"></script>
 		<!-- Bootstrap Tour JS -->
 		<script src="./js/bootstrap-tour.js"></script>
 		<!-- Wallet JS -->
@@ -1600,7 +1469,7 @@
 				//$('#walletModal').modal('show');
 
 			// ##################################################################################################
-			// #					 			          Hello There!			 								#
+			// #					 								Hello There!			 								#
 			// #	 Looking for the latest features and don't mind a little instability?	You can enable the 	#
 			// #	"dev" version by just setting the env variable to "dev". This will show all of the current 	#
 			// #				WIP features. You are likely to see a lot of non-working features & bugs.		#
