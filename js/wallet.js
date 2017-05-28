@@ -252,20 +252,20 @@ function refreshWalletInfo(){
 														<div id="walletSpend' + i + '" class="tab-pane active">\
 															<div class="row">\
 																<div class="form-inline output">\
-																	<div class="col-xs-8">\
+																	<div class="col-8">\
 																		<label>Address</label>\
 																	</div>\
-																	<div class="col-xs-3">\
+																	<div class="col-3">\
 																		<label>Amount</label>\
 																	</div>\
 																</div>\
 															</div>\
 															<div class="row" id="walletSpendTo">\
 																<div class="form-horizontal output">\
-																	<div class="col-xs-8">\
+																	<div class="col-8">\
 																		<input type="text" class="form-control addressTo" data-original-title="" title="">\
 																	</div>\
-																	<div class="col-xs-3">\
+																	<div class="col-3">\
 																		<input type="text" class="form-control amount" data-original-title="" title="" placeholder="0.00">\
 																	</div>\
 																	<a href="javascript:;" class="addressAdd" data-ytta-id="-"><span class="glyphicon glyphicon-plus"></span></a>\
@@ -273,11 +273,11 @@ function refreshWalletInfo(){
 																</div>\
 															</div>\
 															<div class="row">\
-																<!--<div class="col-xs-6">\
+																<!--<div class="col-6">\
 																	<label><abbr title="" data-original-title="the amount to pay in network miner fees - 0.0004 or more recommended for a faster processing time">Transaction Fee</abbr>&nbsp;&nbsp;<a href="https://bitcoinfees.21.co/" target="_blank" data-ytta-id="-"><span class="glyphicon glyphicon-question-sign"></span></a></label>\
 																	<input type="text" class="form-control txFee" value="0.0004" id="txFee" data-original-title="" title="">\
 																</div>-->\
-																<!--<div class="col-xs-5">\
+																<!--<div class="col-5">\
 																	<label><abbr title="" data-original-title="the amount to donate to coinb.in">Donation</abbr></label>\
 																	<input type="text" class="form-control" value="0.003" id="developerDonation" data-original-title="" title="">\
 																</div>-->\

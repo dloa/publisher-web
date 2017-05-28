@@ -626,10 +626,17 @@
 						</div>
 					</section>
 
-					<section id="artifacts">
+					<section id="artifacts" class="container">
+						<div class="row" style="padding: 20px 0px;">
+							<div class="col-8">
+								<h4 class="pull-left" style="">Published Artifacts</h4>
+							</div>
+							<div class="col-4">
+								<button class="pull-right btn btn-success" style="float:right;" onclick="newArtifact();">+ New Artifact</button>
+							</div>
+						</div>
+						
 						<div class="col-sm-12 bg-white">
-							<h4 class="pull-left" style="margin-bottom: -40px;">Published Artifacts</h4>
-							<button class="pull-right btn btn-success" style="margin-bottom: 10px; margin-top: 40px;" onclick="newArtifact();">+ New Artifact</button>
 							<table class="table table-hover table-bordered" id="ArtifactsTable">
 								<thead>
 									<tr>
@@ -1141,17 +1148,20 @@
 						</div>
 					</section>
 
-					<section id="WalletPage">
-						<div class="content-heading bg-white">
+					<section id="WalletPage" class="container">
+						<div class="content-heading bg-white" style="padding-top: 30px">
 							<div class="row">
-								<div class="col-sm-12">
-									<h4 class="m0 text-thin">Wallet</h4><small></small>
+								<div class="col-sm-8">
+									<h2 class="">Wallet</h2>
+								</div>
+								<div class="col-sm-4">
+									<button class="btn btn-info pull-right" style="float: right;" onclick="newAddress();">+ New Address</button>
 								</div>
 							</div>
 						</div>
-						<div class="col-sm-12 bg-white">
-							<h4>Identifier <code id="identifier"></code></h4>
-							<button class="btn btn-info pull-right" style="margin-top: -50px;" onclick="newAddress();">+ New Address</button>
+						<div class="col-sm-12 bg-white" style="padding-top: 25px">
+							<h4 class="text-center">Identifier: <code id="identifier"></code></h4>
+							
 							<!--<div class="table-responsive">
 								<table class="table table-bordered table-condensed" id="addressTable">
 									<thead>
