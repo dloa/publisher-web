@@ -209,20 +209,20 @@ function refreshWalletInfo(){
 				var balance = wallet.balances[addr];
 
 				// Add the florincoin addresses and balance to the table.
-				$('#walletAccordian').append('<div class="panel">\
+				$('#walletAccordian').append('<div class="card">\
 									<a role="button" data-toggle="collapse" data-parent="#walletAccordian" href="#collapse' + i + '" aria-expanded="true" aria-controls="collapse' + i + '">\
-										<div class="panel-heading" role="tab" id="heading' + i + '">\
-											<h4 class="panel-title">\
+										<div class="card-header" role="tab" id="heading' + i + '">\
+											<h4 class="card-title">\
 												<div style="padding: 0px 30px; color: #000">\
 													<span>' + address + '</span><span style="float: right"><span style="color: green">$' + (parseFloat(balance)*parseFloat(FLOUSD)).toFixed(2) + '</span> - ' + balance + ' FLO</span>\
 												</div>\
 											</h4>\
 										</div>\
 									</a>\
-									<div id="collapse' + i + '" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading' + i + '">\
-										<div class="panel-body">\
+									<div id="collapse' + i + '" class="collapse" role="tabpanel" aria-labelledby="heading' + i + '">\
+										<div class="card-body">\
 											<!-- Some HTML design code comes from https://github.com/OutCast3k/coinbin/, you can view the license for this code here: https://github.com/OutCast3k/coinbin/blob/master/LICENSE -->\
-											<div class="col-md-12" align="center">\
+											<div class="col-md-12" align="center" style="margin-top: 30px;">\
 												<div id="walletQrCode' + i + '" title="florincoin:' + address + '"></div> <br>\
 												<div>\
 													<span class="walletAddress">' + address + '</span>\

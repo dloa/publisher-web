@@ -34,6 +34,7 @@
 			    .navbar .navbar-nav {
 		            display: inline-block;
 		            float: none;
+					vertical-align: top;
 		        }
 		        
 		        .navbar .navbar-collapse {
@@ -1164,11 +1165,12 @@
 									</tbody>
 								</table>
 							</div>-->
-							<div class="panel-group" id="walletAccordian" role="tablist" aria-multiselectable="true">
-								<!--<div class="panel panel-default">
+							<div id="walletAccordian"></div>
+							<!-- <div class="card" id="walletAccordian" role="tablist" aria-multiselectable="true">
+								<div class="card-block panel-default">
 									<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-										<div class="panel-heading" role="tab" id="headingOne">
-											<h4 class="panel-title">
+										<div class="card-header" role="tab" id="headingOne">
+											<h4 class="card-title">
 												<div style="padding: 0px 30px; color: #000">
 													FLuiVU5iDQ4a6ztcpBLwBNjBisyY2DvUTV<span style="float: right"><span class="color: green">$22.15</span> - 443.11323606 FLO</span>
 												</div>
@@ -1176,91 +1178,87 @@
 											</h4>
 										</div>
 									</a>
-									<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-										<div class="panel-body">
-											<!\-\- Some HTML design code comes from https://github.com/OutCast3k/coinbin/, you can view the license for this code here: https://github.com/OutCast3k/coinbin/blob/master/LICENSE \-\-\>
-											<div class="col-md-12" align="center">
-												<div id="walletQrCode" title="bitcoin:FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme"><canvas width="256" height="256" style="display: none;"></canvas><img alt="Scan me!" style="display: block;" src=""></div> <br>
-												<div>
-													<span id="walletAddress">FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme</span>
-												</div>
+									<div class="card-body">
+										<div class="col-md-12" align="center">
+											<div id="walletQrCode" title="bitcoin:FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme"><canvas width="256" height="256" style="display: none;"></canvas><img alt="Scan me!" style="display: block;" src=""></div> <br>
+											<div>
+												<span id="walletAddress">FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme</span>
+											</div>
+											<br>
+											<div style="text-align:center; width:430px;">
+												<ul class="nav nav-pills" role="tablist">
+													<li role="presentation" class="active"><a href="javascript:;" id="walletBalance" rel="0.000868" style="display: block;">443.11323606 FLO</a></li>
+													<li role="presentation"><a href="#walletSpend" id="walletShowSpend"	aria-controls="walletSpend" role="pill" data-toggle="pill">Spend</a></li>
+													<li role="presentation"><a id="walletHistory" href="http://florincoin.info/address/FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme" target="_blank" data-ytta-id="-">History</a></li>
+													<li role="presentation"><a href="#tradebot" target="" >Buy</a></li>
+													<li role="presentation"><a href="#walletKeys" id="walletShowKeys"	aria-controls="walletKeys" role="pill" data-toggle="pill">Keys</a></li>
+												</ul>
+
 												<br>
-												<div style="text-align:center; width:430px;">
-													<ul class="nav nav-pills" role="tablist">
-														<li role="presentation" class="active"><a href="javascript:;" id="walletBalance" rel="0.000868" style="display: block;">443.11323606 FLO</a></li>
-														<li role="presentation"><a href="#walletSpend" id="walletShowSpend"	aria-controls="walletSpend" role="pill" data-toggle="pill">Spend</a></li>
-														<li role="presentation"><a id="walletHistory" href="http://florincoin.info/address/FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme" target="_blank" data-ytta-id="-">History</a></li>
-														<li role="presentation"><a href="#tradebot" target="" >Buy</a></li>
-														<li role="presentation"><a href="#walletKeys" id="walletShowKeys"	aria-controls="walletKeys" role="pill" data-toggle="pill">Keys</a></li>
-													</ul>
+												<div class="tab-content" style="margin-top: -40px;">
+													<div role="tabpanel" id="walletKeys" class="tab-pane">
+														<label>Public Key</label>
+														<input class="form-control pubkey" type="text" readonly="" data-original-title="" title="" value="FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme">
+														<label>Private key</label>
+														<div class="input-group">
+															<input class="form-control privkey" type="password" readonly="" data-original-title="" title="" value="">
 
-													<br>
-													<div class="tab-content" style="margin-top: -40px;">
-														<div role="tabpanel" id="walletKeys" class="tab-pane">
-															<label>Public Key</label>
-															<input class="form-control pubkey" type="text" readonly="" data-original-title="" title="" value="FHbt6Q7BrALUxDi1ma9SXFcPPdjgRnoPme">
-															<label>Private key</label>
-															<div class="input-group">
-																<input class="form-control privkey" type="password" readonly="" data-original-title="" title="" value="T6SQbeNm68Zy4Kpb1ufrAueC7AqaPe1VJRySZK6Jyr8YFxrMT4kK">
+															<span class="input-group-btn">
+																<button class="showKey btn btn-default" onclick="$('#privKey').type == 'text' ? $('#privKey').type('password') : $('#privKey').type('text')" type="button">Show</button>
+															</span>
+														</div>
+													</div>
 
-																<span class="input-group-btn">
-																	<button class="showKey btn btn-default" onclick="$('#privKey').type == 'text' ? $('#privKey').type('password') : $('#privKey').type('text')" type="button">Show</button>
-																</span>
+													<div id="walletSpend" class="tab-pane active">
+														<div class="row">
+															<div class="form-inline output">
+																<div class="col-xs-8">
+																	<label>Address</label>
+																</div>
+
+																<div class="col-xs-3">
+																	<label>Amount</label>
+																</div>
 															</div>
 														</div>
 
-														<div id="walletSpend" class="tab-pane active">
-															<div class="row">
-																<div class="form-inline output">
-																	<div class="col-xs-8">
-																		<label>Address</label>
-																	</div>
-
-																	<div class="col-xs-3">
-																		<label>Amount</label>
-																	</div>
+														<div class="row" id="walletSpendTo">
+															<div class="form-horizontal output">
+																<div class="col-xs-8">
+																	<input type="text" class="form-control addressTo" data-original-title="" title="">
 																</div>
+																<div class="col-xs-3">
+																	<input type="text" class="form-control amount" data-original-title="" title="" placeholder="0.00">
+
+																</div>
+
+																<a href="javascript:;" class="addressAdd" data-ytta-id="-"><span class="glyphicon glyphicon-plus"></span></a>
+																<br><br>
 															</div>
-
-															<div class="row" id="walletSpendTo">
-																<div class="form-horizontal output">
-																	<div class="col-xs-8">
-																		<input type="text" class="form-control addressTo" data-original-title="" title="">
-																	</div>
-																	<div class="col-xs-3">
-																		<input type="text" class="form-control amount" data-original-title="" title="" placeholder="0.00">
-
-																	</div>
-
-																	<a href="javascript:;" class="addressAdd" data-ytta-id="-"><span class="glyphicon glyphicon-plus"></span></a>
-																	<br><br>
-																</div>
-															</div>
-															<div class="row">
-																<div class="col-xs-6">
-																	<label><abbr title="" data-original-title="the amount to pay in network miner fees - 0.0004 or more recommended for a faster processing time">Transaction Fee</abbr>&nbsp;&nbsp;<a href="https://bitcoinfees.21.co/" target="_blank" data-ytta-id="-"><span class="glyphicon glyphicon-question-sign"></span></a></label>
-																	<input type="text" class="form-control" value="0.0004" id="txFee" data-original-title="" title="">
-																</div>
-																<div class="col-xs-5">
-																	<label><abbr title="" data-original-title="the amount to donate to coinb.in">Donation</abbr></label>
-																	<input type="text" class="form-control" value="0.003" id="developerDonation" data-original-title="" title="">
-																</div>
-															</div>
-															<br>
-
-															<div id="walletSendStatus" class="alert alert-danger hidden"></div>
-
-															<button class="btn btn-primary" type="button" id="walletSendBtn">Send</button>
-															<button class="btn btn-default" type="button">Reset</button>
 														</div>
+														<div class="row">
+															<div class="col-xs-6">
+																<label><abbr title="" data-original-title="the amount to pay in network miner fees - 0.0004 or more recommended for a faster processing time">Transaction Fee</abbr>&nbsp;&nbsp;<a href="https://bitcoinfees.21.co/" target="_blank" data-ytta-id="-"><span class="glyphicon glyphicon-question-sign"></span></a></label>
+																<input type="text" class="form-control" value="0.0004" id="txFee" data-original-title="" title="">
+															</div>
+															<div class="col-xs-5">
+																<label><abbr title="" data-original-title="the amount to donate to coinb.in">Donation</abbr></label>
+																<input type="text" class="form-control" value="0.003" id="developerDonation" data-original-title="" title="">
+															</div>
+														</div>
+														<br>
+
+														<div id="walletSendStatus" class="alert alert-danger hidden"></div>
+
+														<button class="btn btn-primary" type="button" id="walletSendBtn">Send</button>
+														<button class="btn btn-default" type="button">Reset</button>
 													</div>
 												</div>
 											</div>
 										</div>
 									</div>
-								</div>-->
-								
-							</div>
+								</div>
+							</div> -->
 							<h4 class="dev">Recent Transactions</h4>
 							<button class="dev btn btn-info pull-right" onclick="loadTransactions();">Load Transactions</button>
 							<div class="dev table-responsive">
