@@ -498,7 +498,7 @@ td.unpin {
   border-top: none; }
 
 .publish .publish-files td .form-control {
-  margin-top: -4px;
+  margin-top: -2px;
   padding: 0px 12px;
   height: 30px; }
 
@@ -507,7 +507,7 @@ td.unpin {
   border-radius: 6px;
   text-align: center;
   cursor: pointer;
-  padding: 5px;
+  padding: 7px;
   transition: all 0.1s; }
 
 .publish .upload-area:hover {

@@ -41,6 +41,31 @@
 		            text-align: center;
 		        }
 			}
+
+			h1 {
+				border-bottom: none;
+			}
+
+			.custom-file-control::before {
+			    color: #5bc0de;
+			    background-color: #fff;
+			    border: 1px solid rgba(91, 192, 222, 1);
+			    border-radius: 0 .25rem .25rem 0;
+			}
+
+			.custom-file-control::before:hover{
+			    color: #fff;
+			    background-color: #5bc0de;
+			    border: 1px solid rgba(91, 192, 222, 1);
+			    border-radius: 0 .25rem .25rem 0;
+			}
+
+			.table-icon {
+				width: 20px;
+				height: 20px;
+				color: #ccc;
+				fill: currentColor;
+			}
 		</style>
 	</head>
 	<body>
@@ -277,7 +302,7 @@
 									</div>
 									<div class="publish-section publish-pricing" id='pricing'>
 										<div class="row">
-											<div class="col-sm-10">
+											<div class="col-sm-12">
 												<p class="small">Pick the price for each file. You are allowed to enter up to one tenth of a cent.</p>
 											</div>
 										</div>
@@ -296,45 +321,86 @@
 													</thead>
 													<tbody>
 														<tr class="text-center">
-															<td><h3>Please add a file below...</h3></td>
+															
 														</tr>
 													</tbody>
 												</table>
+												<center><h3>Please add a file below...</h3></center>
 											</div>
 										</div>
 									</div>
 									<div class="publish-section">
 										<div class="publish-files audio-tracks">
-											<table class="table" id='mediaFilesTable'>
+											<table class="table" id='mediaFilesTable' style="margin-top: -15px">
 												<thead>
 													<tr>
-														<th width="5%"></th>
-														<th width="30%"></th>
-														<th width="10%"></th>
-														<th width="40%"></th>
-														<th width="10%"></th>
+														<th width="5%" class="text-center" style="border-top: none;"></th>
+														<th width="40%" class="text-center" style="border-top: none;">Display Name</th>
+														<th width="10%" class="text-center" style="border-top: none;">Size</th>
+														<th width="30%" class="text-center" style="border-top: none;">Type</th>
+														<th width="10%" class="text-center" style="border-top: none;"></th>
 													</tr>
 												</thead>
 												<tbody id="mediaTable">
 													<tr>
-														<th><img src="./assets/svg/arrows-24px-glyph-2_file-upload-88.svg"></th>
-														<td class="text-left">Display Name</td>
+														<td><img class="table-icon" src="./assets/svg/song-icon.svg"></td>
+														<td class="text-left"> <input type="text" class="form-control" name="dispName" value="Display Name"></td>
+														<td>3.2MB</td>
+														<td style="width: 100%">
+															<div class="row form-control" style="display: flex; padding: 0px 0px; width: 100%; padding-top: 1px;">
+																<select class="form-control col-6" id="exampleSelect1">
+																	<option>Audio</option>
+																	<option>Video</option>
+																	<option>Image</option>
+																	<option>Software</option>
+																	<option>Web</option>
+																	<option>Text</option>
+																</select>
+																<select class="form-control col-6" id="exampleSelect1">
+																	<option>Song</option>
+																</select>
+															</div>
+														</td>
+														<td><button class="btn btn-sm btn-outline-danger">x</button></td>
+													</tr>
+													<tr>
+														<td><img class="table-icon" src="./assets/svg/album-icon.svg"></td>
+														<td class="text-left"> <input type="text" class="form-control" name="dispName" value="Display Name"></td>
 														<td>3.2MB</td>
 														<td>
 															<div class="row form-control" style="display: flex; padding: 0px 0px; width: 100%; padding-top: 1px;">
 																<select class="form-control col-6" id="exampleSelect1">
 																	<option>Audio</option>
-																	<option>2</option>
-																	<option>3</option>
-																	<option>4</option>
-																	<option>5</option>
+																	<option>Video</option>
+																	<option>Image</option>
+																	<option>Software</option>
+																	<option>Web</option>
+																	<option>Text</option>
 																</select>
 																<select class="form-control col-6" id="exampleSelect1">
-																	<option>Song</option>
-																	<option>2</option>
-																	<option>3</option>
-																	<option>4</option>
-																	<option>5</option>
+																	<option>Album</option>
+																</select>
+															</div>
+																
+															</td>
+														<td><button class="btn btn-sm btn-outline-danger">x</button></td>
+													</tr>
+													<tr>
+														<td><img class="table-icon" src="./assets/svg/video-icon.svg"></td>
+														<td class="text-left"> <input type="text" class="form-control" name="dispName" value="Display Name"></td>
+														<td>320.2MB</td>
+														<td>
+															<div class="row form-control" style="display: flex; padding: 0px 0px; width: 100%; padding-top: 1px;">
+																<select class="form-control col-6" id="exampleSelect1">
+																	<option>Video</option>
+																	<option>Audio</option>
+																	<option>Image</option>
+																	<option>Software</option>
+																	<option>Web</option>
+																	<option>Text</option>
+																</select>
+																<select class="form-control col-6" id="exampleSelect1">
+																	<option>Movie</option>
 																</select>
 															</div>
 																
@@ -344,53 +410,23 @@
 												</tbody>
 											</table>
 											<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
-											<div class="upload-area" id="mediaDrop">
+											<div class="upload-area" id="mediaDrop" style="padding-bottom: 5px;">
 												<object data="./assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
 											</div>
-											<input type="file" name="mediaFiles" id="mediaFiles" multiple accept="audio/*"></input>
-										</div>
-									</div>
-									 <div class="publish-section">
-										<div class="publish-files extra-files">
-											<h5>
-												<object type="image/svg+xml" data="assets/svg/files-16px_single-folded-content.svg"></object>
-												Extra Files
-											</h5>
-											<table class="table" id='extraTable'>
-												<colgroup>
-													<col class="">
-													<col class="">
-													<col style="width: 125px;">
-													<col class="">
-													<col class="">
-												</colgroup>
-												<thead>
-													<tr>
-														<th>File</th>
-														<th>File Name</th>
-														<th>File Type</th>
-														<th>Display name</th>
-														<th></th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr></tr>
-												</tbody>
-											</table>
-											<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
-											<div class="upload-area" id="extraDrop">
-												<object data="./assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
-											</div>
-											<input type='file' id="extraFiles" name="extraFiles" multiple />
+											<label class="custom-file text-left" style="margin-top: 10px; float:right; margin-top: -42px; margin-right: 2px;">
+												<input type="file" name="mediaFiles" id="mediaFiles" multiple accept="audio/*" class="custom-file-input">
+												<span class="custom-file-control"></span>
+											</label>
 										</div>
 									</div>
 									 <div class="publish-section publish-submit">
-										<div class="row">
-											<div class="col-sm-9">
+										<div class="row align-items-center">
+											<div class="col-4">
 												<p class="small">You will be able to submit your artifact after you preview it. Be sure it looks exactly like what you desire as you will be unable to change this later.</p>
 											</div>
-											<div class="col-sm-3 text-right">
-												<button type="button" id="previewButton" class="btn btn-primary">Preview</button>
+											<div class="col-4 text-center" style="color: green">Cost To Publish<br /><h1 style="margin-bottom: 0px;">$4.15</h1></div>
+											<div class="col-4 text-right">
+												<button type="button" id="previewButton" class="btn btn-outline-info">Preview</button>
 											</div>
 										</div>
 									</div>
