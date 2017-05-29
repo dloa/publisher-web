@@ -151,10 +151,13 @@ function FileSelectHandler(e) {
 				if (mimeType[0] == 'any' || f.type.indexOf(mimeType[j]) > -1)
 					validFileType = true;
 			}
-			if (validFileType)
+			if (validFileType){
 				ParseMedia(f);
-			else
+			} else if (mediaType === undefined){
+				ParseMedia(f);
+			} else {
 				swal('Error', 'You can only select ' + mediaType + ' files.', 'error');
+			}
 		} else if (e.target.id == "extraDrop" || e.target.id == "extraFiles"){
 			ParseExtra(f);
 		} else if (e.target.id.includes('Poster')){

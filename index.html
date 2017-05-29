@@ -141,6 +141,12 @@
 			.things-icon {
 				background-image: url('./assets/svg/things-icon.svg');
 			}
+
+			.nav-pills li a:active {
+			    background: rgba(83, 139, 212, 0.2);
+			    color: #8e8e90;
+			    transition: 0.1s all;
+			}
 		</style>
 	</head>
 	<body>
@@ -175,9 +181,9 @@
 					<div class="text-center">Welcome, <span id="pub-name"></span></div>
 					<div class="text-center" style="margin-bottom: 10px"> <strong>FLO</strong>: <code><span id="walletBalance"></span></code></strong></div>
 					<ul class="nav nav-pills flex-column">
-						<li class="nav-item"><a href="#" class="nav-link" id="publisherNav">Publisher</a></li>
-						<li class="nav-item"><a href="#" class="nav-link" id="artifactsNav">My Artifacts</a></li>
-						<li class="nav-item"><a href="#" class="nav-link" id="walletNav">Wallet</a></li>
+						<li class="nav-item"><a href="#" class="nav-link" id="publisherNav" style="color: black"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/publish.svg">Publisher</a></li>
+						<li class="nav-item"><a href="#" class="nav-link" id="artifactsNav" style="color: black"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/menu.svg">My Artifacts</a></li>
+						<li class="nav-item"><a href="#" class="nav-link" id="walletNav" style="color: black"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/wallet.svg">Wallet</a></li>
 					</ul>
 				</nav>
 
@@ -331,7 +337,7 @@
 																</div>
 																<input type="text" class="form-control" aria-label="Text input with dropdown button">
 																<span class="input-group-addon">
-																	<input type="radio">
+																	<input type="radio" name="mainAddressRadio" checked>
 																</span>
 															</div>
 														</div>
@@ -349,7 +355,7 @@
 																</div>
 																<input type="text" class="form-control" aria-label="Text input with dropdown button">
 																<span class="input-group-addon">
-																	<input type="radio">
+																	<input type="radio" name="mainAddressRadio">
 																</span>
 															</div>
 														</div>
@@ -367,11 +373,11 @@
 																</div>
 																<input type="text" class="form-control" aria-label="Text input with dropdown button">
 																<span class="input-group-addon">
-																	<input type="radio">
+																	<input type="radio" name="mainAddressRadio">
 																</span>
 															</div>
 															<div class="col-1">
-																<button class="btn btn-outline-success">+</button>
+																<button class="btn btn-outline-success" style="height: 80%">+</button>
 															</div>
 														</div>
 															
