@@ -512,7 +512,10 @@ td.unpin {
 
 .publish .upload-area:hover {
   padding: 10px;
-  margin: -5px;
+  margin-top: -5px;
+  margin-left: -5px;
+  margin-right: -5px;
+  margin-bottom: -1px;
   border: 1px dashed rgba(0, 0, 0, 1);
   background-color: rgba(0, 0, 0, 0.05);
   transition: all 0.1s; 
@@ -520,7 +523,10 @@ td.unpin {
 
 .publish .upload-area.hover {
   padding: 10px;
-  margin: -5px;
+  margin-top: -5px;
+  margin-left: -5px;
+  margin-right: -5px;
+  margin-bottom: -1px;
   border: 1px dashed rgba(0, 0, 0, 0.1);
   background-color: rgba(0, 0, 0, 0.025);
   transition: all 0.1s; }
