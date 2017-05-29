@@ -66,6 +66,81 @@
 				color: #ccc;
 				fill: currentColor;
 			}
+
+			.type-circle {
+				margin: 0 auto;
+			    border-radius: 50%;
+			    border: 1px solid #979797;
+			    background-color: #ffffff;
+			    height: 60px;
+			    width: 60px;
+			    background-size: 40px 40px;
+			    background-repeat: no-repeat;
+			    background-position: center;
+			    color: #979797;
+				fill: currentColor;
+			}
+
+			.type-circle:hover {
+				background-color: #ddd;
+				border: 1px solid #999999;
+			}
+
+			.type-circle-active {
+				background-color: rgba(83, 139, 212, 0.3);
+			}
+
+			.song-icon {
+				background-image: url('./assets/svg/beamed-note.svg');
+			}
+
+			.video-icon {
+				background-image: url('./assets/svg/video-camera.svg');
+			}
+
+			.image-icon {
+				background-image: url('./assets/svg/image.svg');
+			}
+
+			.text-icon {
+				background-image: url('./assets/svg/text-document.svg');
+			}
+
+			.software-icon {
+				background-image: url('./assets/svg/code.svg');
+			}
+
+			.web-icon {
+				background-image: url('./assets/svg/browser.svg');
+			}
+
+			.album-icon {
+				background-image: url('./assets/svg/album-icon.svg');
+			}
+
+			.book-icon {
+				background-image: url('./assets/svg/book-icon.svg');
+			}
+
+			.media-icon {
+				background-image: url('./assets/svg/media-icon.svg');
+			}
+
+			.movie-icon {
+				background-image: url('./assets/svg/movie-icon.svg');
+			}
+
+			.podcast-icon {
+				background-image: url('./assets/svg/podcast-icon.svg');
+			}
+
+			.recipe-icon {
+				background-image: url('./assets/svg/recipe-icon.svg');
+			}
+
+			.things-icon {
+				background-image: url('./assets/svg/things-icon.svg');
+			}
 		</style>
 	</head>
 	<body>
@@ -116,14 +191,23 @@
 								<div class="section publish col-lg-12">
 									<div class="publish-section artifact-type">
 										<h5>Select Artifact type</h5> 
+										<div class="row justify-content-center" style="margin-bottom: 20px;">
+											<div class="col-2"><div class="type-circle song-icon type-circle-active"></div>Audio</div>
+											<div class="col-2"><div class="type-circle video-icon"></div>Video</div>
+											<div class="col-2"><div class="type-circle image-icon"></div>Image</div>
+											<div class="col-2"><div class="type-circle text-icon"></div>Text</div>
+											<div class="col-2"><div class="type-circle software-icon"></div>Software</div>
+											<div class="col-2"><div class="type-circle web-icon"></div>Web</div>
+										</div>
 										<ul class="nav nav-pills" role="tablist">
-											<li class="active" onclick="changeArtifactType('music')"><a href="#music" data-toggle="tab">Music</a></li>
-											<li onclick="changeArtifactType('video')"><a href="#video" data-toggle="tab">Video</a></li>
-											<li onclick="changeArtifactType('podcast')"><a href="#podcast" data-toggle="tab">Podcast</a></li>
+											<li class="active" onclick="changeArtifactType('music')"><a href="#music" data-toggle="tab">Basic</a></li>
+											<li onclick="changeArtifactType('song')"><a href="#video" data-toggle="tab">Song</a></li>
+											<li onclick="changeArtifactType('album')"><a href="#video" data-toggle="tab">Album</a></li>
+											<!-- <li onclick="changeArtifactType('podcast')"><a href="#podcast" data-toggle="tab">Podcast</a></li>
 											<li onclick="changeArtifactType('book')"><a href="#book" data-toggle="tab">Book</a></li>
 											<li onclick="changeArtifactType('movie')"><a href="#movie" data-toggle="tab">Movie</a></li>
 											<li onclick="changeArtifactType('thing')"><a href="#thing" data-toggle="tab">Thing</a></li>
-											<li onclick="changeArtifactType('html')"><a href="#html" data-toggle="tab">HTML</a></li>
+											<li onclick="changeArtifactType('html')"><a href="#html" data-toggle="tab">HTML</a></li> -->
 										</ul>
 									</div>
 									<div class="publish-section" id='metainfo' style="">
@@ -194,14 +278,14 @@
 												<span style="font-size: 1.5em; font-weight: 100;">I want my Artifact to be:</span>
 												<div class="btn-group" data-toggle="buttons">
 													<label class="btn btn-outline-primary active">
-														<input type="radio" name="options" id="artifactFreeBtn" autocomplete="off" checked> Free
+														<input type="radio" name="free" id="artifactFreeBtn" autocomplete="off" onclick="" checked> Free
 													</label>
 													<label class="btn btn-outline-success">
-														<input type="radio" name="options" id="artifactPaidBtn" autocomplete="off" checked> Paid
+														<input type="radio" name="free" id="artifactPaidBtn" autocomplete="off" onclick="$('#paymentInfo').show();" unchecked> Paid 
 													</label>
 												</div>
 											</center>
-											<div class="row text-left">
+											<div class="row text-left" id="paymentInfo">
 												<div class="col-6">
 													<h5 class="text-center">Suggested Tips</h5>
 													<div class="row">
@@ -210,22 +294,20 @@
 														<div class="col"><input type="text" class="form-control col" id="tip3" placeholder="$1"></div>
 													</div>
 													<h5 class="text-center" style="margin-top: 20px;">Advanced</h5>
-													<div class="form-group row">
-														<label for="example-text-input" class="col-2 col-form-label">Promoter</label>
+													<div class="form-group row text-right">
+														<label for="example-text-input" class="col-3 col-form-label">Promoter</label>
 														<div class="col-3">
 															<div class="input-group">
-															<input type="number" class="form-control">
-															<span class="input-group-addon">%</span>
+																<input type="number" class="form-control">
+																<span class="input-group-addon">%</span>
+															</div>
 														</div>
-														</div>
-													</div>
-													<div class="form-group row">
-														<label for="example-text-input" class="col-2 col-form-label">Retailer</label>
+														<label for="example-text-input" class="col-3 col-form-label">Retailer</label>
 														<div class="col-3">
 															<div class="input-group">
-															<input type="number" class="form-control">
-															<span class="input-group-addon">%</span>
-														</div>
+																<input type="number" class="form-control">
+																<span class="input-group-addon">%</span>
+															</div>
 														</div>
 													</div>
 												</div>
@@ -296,39 +378,40 @@
 														<small id="emailHelp" class="form-text text-muted">Select the default payment address using the selector on the Right side.</small>
 													</div>
 												</div>
+												<div class="publish-section publish-pricing col-12" id='pricing'>
+													<div class="row">
+														<div class="col-sm-12">
+															<p class="small">Pick the price for each file. You are allowed to enter up to one tenth of a cent.</p>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col col-lg-12">
+															<table class="table" id='pricingTable'>
+																<thead>
+																	<tr>
+																		<th>File Name</th>
+																		<th>Suggested Play</th>
+																		<th>Minimum Play</th>
+																		<th>Suggested Buy</th>
+																		<th>Minimum Buy</th>
+																		<th></th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr class="text-center">
+																		
+																	</tr>
+																</tbody>
+															</table>
+															<center><h3>Please add a file below...</h3></center>
+														</div>
+													</div>
+												</div>
 											</div>
 												
 										</div>
 									</div>
-									<div class="publish-section publish-pricing" id='pricing'>
-										<div class="row">
-											<div class="col-sm-12">
-												<p class="small">Pick the price for each file. You are allowed to enter up to one tenth of a cent.</p>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col col-lg-12">
-												<table class="table" id='pricingTable'>
-													<thead>
-														<tr>
-															<th>File Name</th>
-															<th>Suggested Play</th>
-															<th>Minimum Play</th>
-															<th>Suggested Buy</th>
-															<th>Minimum Buy</th>
-															<th></th>
-														</tr>
-													</thead>
-													<tbody>
-														<tr class="text-center">
-															
-														</tr>
-													</tbody>
-												</table>
-												<center><h3>Please add a file below...</h3></center>
-											</div>
-										</div>
-									</div>
+									
 									<div class="publish-section">
 										<div class="publish-files audio-tracks">
 											<table class="table" id='mediaFilesTable' style="margin-top: -15px">
@@ -1486,6 +1569,17 @@
 			// Hide the coinbase buy button if not on alexandria.io as it will not work
 			testDomain();
 
+			$(document).on("change","input[type=radio]",function(){
+			    var free = $('[name="free"]')[0].checked;
+			    var paid = $('[name="free"]')[1].checked;
+
+			    if (paid) {
+			    	$('#paymentInfo').show();
+			    } else {
+			    	$('#paymentInfo').hide();
+			    }
+			});
+
 			$('#publisherNav').on('click', function(evt){
 				$('#wizard').show();
 				$('#artifacts').hide();
@@ -1511,6 +1605,9 @@
 			$('#artifacts').hide();
 			$('#editArtifact').hide();
 			$('#WalletPage').hide();
+
+
+			$('#paymentInfo').hide();
 
 				//$('#walletModal').modal('show');
 
