@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+</head>
+<body>
+<h1 id="whatisphoenix">What is Phoenix?</h1>
+
+<p>Phoenix is the backend that runs the publisher. It has two main parts:
+- <code>phoenix-api</code> provides an object that contains the current status of the publisher overall. It emits events that you can subscribe to so that you can keep the UI updated.
+- <code>phoenix-ui</code> is a sample utilization of the event system in <code>phoenix-api</code> that updates the publisher frontend.</p>
+
+<h2 id="phoenixapi">Phoenix API</h2>
+
+<p>In order to start using the API, you will need to import the javascript file in your project. From there the <code>Phoenix</code> object becomes exposed. However, you cannot do much with the API until you &#8220;login&#8221;. After you have logged in, you then will be able to see more information specifically about the user inside the Phoenix object. For example, you can use <code>Phoenix.artifacts</code> (after the artifacts have been loaded) to access all of the currently logged in users</p>
+
+<h2 id="events">Events</h2>
+
+<p>Here are a list of the events currently used by the <code>phoenix-api</code>:
+- <code>onLogin</code>
+- <code>onLoginSuccess</code>
+- <code>onLoginFail</code>
+- <code>onArtifactsLoad</code> this event is sent out after the user has logged in and the aftifacts have been successfully retreived from LibraryD
+- <code>onArtifactValidation</code> called when the validation completes, contains pass/fail information for each artifact field.
+- <code>onPublish</code> called when the publish process is started
+- <code>onPublishSuccess</code> called every time there is any progress happening with a publisher
+- <code>onPublishFail</code> called every time there is any progress happening with a publisher
+- <code>onPublishProgress</code> called every time there is any progress happening with a publisher
+- <code>onPublishFee</code> called when the publish fee is calculated
+- <code>onIPFSUploadStart</code>
+- <code>onIPFSUploadProgress</code>
+- <code>onIPFSUploadSuccess</code>
+- <code>onIPFSUploadFail</code>
+- <code>onAutosave</code> called on every autosave (happens every 30 seconds when working on publishing an artifact if anything has changed.)
+- <code>onError</code> called every time an error happens
+- <code>onTradebotStart</code>
+- <code>onTradebotProgress</code>
+- <code>onTradebotSuccess</code>
+- <code>onTradebotFail</code>
+- <code>
+-</code>
+- <code>
+-</code></p>
+
+<h2 id="uimethods">UI Methods</h2>
+
+<p>The UI has the following methods in addition to implementing events from the PhoenixAPI event system.
+<code>
+PhoenixUI.generateArtifactJSONFromView(selectorObject) // Pulls from all the available fields on the UI to return just the JSON for the artifact.
+PhoenixUI.loadArtifactIntoView(artifactJSON) // Calls the three methods below, you can overwrite any of them in case your UI needs different code.
+PhoenixUI.loadArtifactMetadata(artifactJSON)
+PhoenixUI.loadArtifactPaymentTable(paymentJSON)
+PhoenixUI.loadArtifactFileTable(filesJSON)
+PhoenixUI.updateValidationStatus(validationStatus) // Updates the metadata fields based on the results
+PhoenixUI.
+PhoenixUI.
+</code></p>
+
+<h2 id="apimethods">API Methods</h2>
+
+<p>The API exposes the following methods.</p>
+
+<pre><code>PhoenixAPI.login() // If you attempt to login with blank then it will attempt to load credentials from the HTML5 LocalStorage
+PhoenixAPI.login(identifier, password)
+PhoenixAPI.login(floPubAddrPrivateKey) // This login method has not yet been implemented, but in the future it would allow you to login just using your wallet private key. Currently Phoenix requires users to use FLO Vault.
+PhoenixAPI.setIPFSProvider(host, port, protocol) // formats: {host: 'ipfs.alexandria.io', port: '443', protocol: 'https'}
+PhoenixAPI.uploadFilesToIPFS(files[]) // Uploads all the files to IPFS and wraps them in a directory. This method is called by `publishArtifact`
+PhoenixAPI.publishArtifact(artifact)
+PhoenixAPI.validateArtifact(artifact) // Returns information about if every field is valid, and if not, returns info object on what specifically failed/passed the validation. 
+PhoenixAPI.calculatePublishFee(artifact)
+PhoenixAPI.resumePublisherQueue()
+PhoenixAPI.pausePublisherQueue() // This entirely pauses all uploads/other.
+</code></pre>
+
+</body>
+</html>

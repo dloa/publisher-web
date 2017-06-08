@@ -9,6 +9,7 @@ In order to start using the API, you will need to import the javascript file in 
 ## Events
 Here are a list of the events currently used by the `phoenix-api`:
 - `onLogin`
+- `onLoginSuccess`
 - `onLoginFail`
 - `onArtifactsLoad` this event is sent out after the user has logged in and the aftifacts have been successfully retreived from LibraryD
 - `onArtifactValidation` called when the validation completes, contains pass/fail information for each artifact field.
@@ -23,6 +24,11 @@ Here are a list of the events currently used by the `phoenix-api`:
 - `onIPFSUploadFail`
 - `onAutosave` called on every autosave (happens every 30 seconds when working on publishing an artifact if anything has changed.)
 - `onError` called every time an error happens
+- `onTradebotStart`
+- `onTradebotProgress`
+- `onTradebotSuccess`
+- `onTradebotFail`
+- ``
 - ``
 - ``
 - ``
@@ -36,13 +42,15 @@ PhoenixUI.loadArtifactMetadata(artifactJSON)
 PhoenixUI.loadArtifactPaymentTable(paymentJSON)
 PhoenixUI.loadArtifactFileTable(filesJSON)
 PhoenixUI.updateValidationStatus(validationStatus) // Updates the metadata fields based on the results
+PhoenixUI.
+PhoenixUI.
 ```
 
 ## API Methods
 The API exposes the following methods.
 
 ```
-PhoenixAPI.login(username, password)
+PhoenixAPI.login() // If you attempt to login with blank then it will attempt to load credentials from the HTML5 LocalStorage
 PhoenixAPI.login(identifier, password)
 PhoenixAPI.login(floPubAddrPrivateKey) // This login method has not yet been implemented, but in the future it would allow you to login just using your wallet private key. Currently Phoenix requires users to use FLO Vault.
 PhoenixAPI.setIPFSProvider(host, port, protocol) // formats: {host: 'ipfs.alexandria.io', port: '443', protocol: 'https'}

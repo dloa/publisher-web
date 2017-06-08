@@ -110,7 +110,7 @@ var Wallet = (function () {
 			else {
 				var decWallet, decWalletString, decWalletJSON;
 				//console.log("Decrypting data: '" + data.wallet + "' with password " + _this.password);
-				console.log('Decrypting wallet');
+				// console.log('Decrypting wallet');
 				try {
 					// Decrypt wallet
 					decWallet = CryptoJS.AES.decrypt(data.wallet, _this.password, _this.CryptoConfig);
@@ -119,7 +119,7 @@ var Wallet = (function () {
 					decWalletJSON = JSON.parse(decWalletString);
 					_this.setSharedKey(decWalletJSON.shared_key);
 					_this.addresses = decWalletJSON.addresses;
-					console.log('Wallet loaded successfully. Refreshing balances and running success callback.');
+					// console.log('Wallet loaded successfully. Refreshing balances and running success callback.');
 					try {
 						_this.refreshBalances();
 						// run the success callback
@@ -130,7 +130,7 @@ var Wallet = (function () {
 						var event = new CustomEvent('wallet', {'detail': 'render-error'});
 					
 						window.dispatchEvent(event);
-						console.log(ex);
+						// console.log(ex);
 					}
 				}
 				catch (ex) {
@@ -138,7 +138,7 @@ var Wallet = (function () {
 					
 					window.dispatchEvent(event);
 					//swal("Error", "Error decrypting wallet - Invalid password?", "error");
-					console.log(ex);
+					// console.log(ex);
 				}
 			}
 		}, "json").fail(function () {
@@ -150,7 +150,7 @@ var Wallet = (function () {
 	};
 	Wallet.prototype.store = function () {
 		var walletData = this.wallet_serialize();
-		console.log("Encrypting data");
+		// console.log("Encrypting data");
 		var encWalletData = CryptoJS.AES.encrypt(walletData, this.password, this.CryptoConfig);
 		var encWalletDataCipher = encWalletData.toString();
 		var _this = this;
@@ -198,9 +198,9 @@ var Wallet = (function () {
 		this.updateBal = function(balance){
 			try {
 				if (balance < 10000) {
-					$('#walletBalance').text(balance.toFixed(5));
+					//$('#walletBalance').text(balance.toFixed(5));
 				} else {
-					$('#walletBalance').text(balance.toFixed(3));
+					//$('#walletBalance').text(balance.toFixed(3));
 				}
 			} catch (e) { 
 				// Oh well, give up setting balance.
@@ -208,7 +208,7 @@ var Wallet = (function () {
 		}
 		for (var i in this.addresses) {
 			$.ajax(flovaultBaseURL + '/wallet/getbalances/' + this.addresses[i].addr, {
-				async: false,
+				//async: false,
 				dataType: "json",
 				success: function (data) {
 					if (data) {
@@ -225,7 +225,7 @@ var Wallet = (function () {
 	};
 	Wallet.prototype.getUnspent = function (address, callback) {
 		$.get(florinsightBaseURL + '/api/addr/' + address + '/utxo', function (data) {
-			console.log(data);
+			// console.log(data);
 			// put into window var
 			var output;
 			// blockr's API is inconsistent and returns a bare object
@@ -245,8 +245,8 @@ var Wallet = (function () {
 	 * after eachother.
 	 */
 	Wallet.prototype.removeSpent = function (coins) {
-		console.log("removeSpent");
-		console.log(JSON.stringify(coins));
+		// console.log("removeSpent");
+		// console.log(JSON.stringify(coins));
 		var clean_coins = coins;
 		for (var v in this.known_spent) {
 			for (var k in coins) {
@@ -255,13 +255,13 @@ var Wallet = (function () {
 				}
 			}
 		}
-		console.log(JSON.stringify(clean_coins));
+		// console.log(JSON.stringify(clean_coins));
 		return clean_coins;
 	};
 	Wallet.prototype.mergeUnspent = function (unspent, address) {
 		var merged = unspent;
-		console.log("!unspent!");
-		console.log(JSON.stringify(unspent, null, 2));
+		// console.log("!unspent!");
+		// console.log(JSON.stringify(unspent, null, 2));
 
 		for (var i = 0; i < this.known_unspent.length; ++i) {
 			// note: we delete from known_unspent on spend, so we need to check if it's undefined
@@ -277,10 +277,10 @@ var Wallet = (function () {
 					merged.push(this.known_unspent[i]);
 			}
 		}
-		console.log("!known_unspent!");
-		console.log(JSON.stringify(this.known_unspent, null, 2));
-		console.log("!merged!");
-		console.log(JSON.stringify(merged, null, 2));
+		// console.log("!known_unspent!");
+		// console.log(JSON.stringify(this.known_unspent, null, 2));
+		// console.log("!merged!");
+		// console.log(JSON.stringify(merged, null, 2));
 		return merged;
 	};
 	/**
@@ -296,9 +296,9 @@ var Wallet = (function () {
 	 * @returns {{unspent: Array<UnspentTX>, total: number}}
 	 */
 	Wallet.prototype.calculateBestUnspent = function (amount, unspents) {
-		console.log(amount);
-		console.log("calcBestUnspent");
-		console.log(unspents);
+		// console.log(amount);
+		// console.log("calcBestUnspent");
+		// console.log(unspents);
 		// note: unspents = [ {tx, amount, n, confirmations, script}, ... ]
 		// TODO: implement a real algorithm to determine the best unspents
 		// e.g. compare the size to the confirmations so that larger coins
@@ -394,7 +394,7 @@ var Wallet = (function () {
 		if (this.validateKey(toAddress) && this.validateKey(fromAddress)) {
 			if (fromAddress in this.addresses && this.validateKey(this.addresses[fromAddress].priv, true)) {
 				this.refreshBalances();
-				console.log(this);
+				// console.log(this);
 				if (this.balances[fromAddress] < amount && this.known_unspent.length <= 0) {
 					var event = new CustomEvent('wallet', {'detail': 'balance-too-low'});
 					
@@ -405,7 +405,7 @@ var Wallet = (function () {
 					var merged = _this.mergeUnspent(data, fromAddress);
 					var clean_unspent = _this.removeSpent(merged);
 					data = _this.calculateBestUnspent(parseFloat(amount) + parseFloat(pubFee / Math.pow(10, 8)), clean_unspent);
-					console.log(data);
+					// console.log(data);
 					// temporary constant
 					var minFeePerKb = 100000;
 					var tx = new Bitcoin.Transaction();
@@ -417,7 +417,7 @@ var Wallet = (function () {
 						return;
 					}
 
-					console.log('Sending ' + amount + ' satoshis from ' + fromAddress + ' to ' + toAddress + ' unspent amt: ' + totalUnspent);
+					// console.log('Sending ' + amount + ' satoshis from ' + fromAddress + ' to ' + toAddress + ' unspent amt: ' + totalUnspent);
 					var unspents = data.unspent;
 					_this.putSpent.bind(_this);
 					for (var v in unspents) {
@@ -427,14 +427,14 @@ var Wallet = (function () {
 						}
 					}
 					tx.addOutput(toAddress, amount);
-					console.log(tx);
+					// console.log(tx);
 					var estimatedFee = _this.coin_network.estimateFee(tx);
-					console.log(estimatedFee);
+					// console.log(estimatedFee);
 					if (pubFee > estimatedFee){
 						estimatedFee = pubFee;
 					}
-					console.log(pubFee);
-					console.log(estimatedFee);
+					// console.log(pubFee);
+					// console.log(estimatedFee);
 
 					
 					if (estimatedFee > 0) {
@@ -444,7 +444,7 @@ var Wallet = (function () {
 
 					if ((amount + estimatedFee) > (totalUnspent) && (amount + estimatedFee) > (_this.balances[fromAddress])) {
 						swal("Error", "Can't fit fee of " + estimatedFee / Math.pow(10, 8) + " - lower your sending amount", "error");
-						console.log('WARNING: Total is greater than total unspent: %s - Actual Fee: %s', totalUnspent, estimatedFee);
+						// console.log('WARNING: Total is greater than total unspent: %s - Actual Fee: %s', totalUnspent, estimatedFee);
 						return;
 					}
 
@@ -456,12 +456,12 @@ var Wallet = (function () {
 					tx.ins.forEach(function (input, index) {
 						tx.sign(index, new Bitcoin.ECKey.fromWIF(_this.addresses[fromAddress].priv));
 					});
-					console.log('Sending amount %s to address %s - Change value: %s - Fee in satoshis: %s - Fee in standard: %s', amount / Math.pow(10, 8), toAddress, changeValue / Math.pow(10, 8), estimatedFee, (estimatedFee / Math.pow(10, 8)));
+					// console.log('Sending amount %s to address %s - Change value: %s - Fee in satoshis: %s - Fee in standard: %s', amount / Math.pow(10, 8), toAddress, changeValue / Math.pow(10, 8), estimatedFee, (estimatedFee / Math.pow(10, 8)));
 					var rawHex = tx.toHex();
-					console.log(rawHex);
+					// console.log(rawHex);
 
-					console.log("Comment:");
-					console.log(txComment);
+					// console.log("Comment:");
+					// console.log(txComment);
 
 					var lenBuffer = Bitcoin.bufferutils.varIntBuffer(txComment.length);
 					var hexComment = '';
@@ -474,11 +474,11 @@ var Wallet = (function () {
 					}
 					rawHex += hexComment;
 
-					console.log("Raw");
-					console.log(rawHex);
+					// console.log("Raw");
+					// console.log(rawHex);
 
 					_this.pushTX(rawHex, function (data) {
-						console.log(data);
+						// console.log(data);
 						_this.putUnspent.bind(_this);
 						// If I'm paying myself it's known_unspent
 						if (toAddress == fromAddress) {
@@ -520,7 +520,7 @@ var Wallet = (function () {
 		}
 		var _this = this;
 		$.post(flovaultBaseURL + '/wallet/pushtx', {hex: tx}, function (data) {
-			console.log(data);
+			// console.log(data);
 			if (!data.txid) {
 				var event = new CustomEvent('wallet', {'detail': 'txpush-post'});
 				
@@ -531,7 +531,7 @@ var Wallet = (function () {
 			}
 			_this.refreshBalances();
 		}, "json").fail(function (data) {
-			console.log(data);
+			// console.log(data);
 			//swal("Error", 'There was an error pushing your transaction. May be a temporary problem, please try again later.', "error");
 			var event = new CustomEvent('wallet', {'detail': 'txpush-post'});
 			
@@ -594,26 +594,26 @@ var Wallet = (function () {
 	return Wallet;
 })();
 
-$('#login-btn').click(function () {
-	var identifier = $('#identifier-txt').val(), password = $('#password-txt').val();
-	$.cookie('identifier', identifier);
-	wallet = new Wallet(identifier, password);
-	$.get('/wallet/checkload/' + identifier, function (data) {
-		if (data.error) {
-			swal("Error", 'Error loading wallet: ' + data.error.message, "error");
-		}
-		else {
-			console.log(data);
+// $('#login-btn').click(function () {
+// 	var identifier = $('#identifier-txt').val(), password = $('#password-txt').val();
+// 	$.cookie('identifier', identifier);
+// 	wallet = new Wallet(identifier, password);
+// 	$.get('/wallet/checkload/' + identifier, function (data) {
+// 		if (data.error) {
+// 			swal("Error", 'Error loading wallet: ' + data.error.message, "error");
+// 		}
+// 		else {
+// 			// console.log(data);
 
-			// note: if 2FA is disabled, this will also be true
-			if (data.auth_key_isvalid === true) {
-				initializeWallet(wallet);
-			}
-		}
-	}, "json").fail(function () {
-		swal("Error", 'Could not load wallet', "error");
-	});
-});
+// 			// note: if 2FA is disabled, this will also be true
+// 			if (data.auth_key_isvalid === true) {
+// 				initializeWallet(wallet);
+// 			}
+// 		}
+// 	}, "json").fail(function () {
+// 		swal("Error", 'Could not load wallet', "error");
+// 	});
+// });
 
 function toHex(d) {
 	return ("0" + (Number(d).toString(16))).slice(-2).toUpperCase()

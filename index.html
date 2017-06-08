@@ -500,7 +500,7 @@
 											</table>
 											<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
 											<div class="upload-area" id="mediaDrop" style="padding-bottom: 5px;">
-												<object data="./assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
+												<img src="./assets/svg/arrows.svg" />
 											</div>
 											<label class="custom-file text-left" style="margin-top: 10px; float:right; margin-top: -42px; margin-right: 2px;">
 												<input type="file" name="mediaFiles" id="mediaFiles" multiple accept="audio/*" class="custom-file-input">
@@ -1192,7 +1192,7 @@
 								 <div class="publish-section">
 									<div class="publish-files audio-tracks">
 										<h5>
-											<object type="image/svg+xml" data="./assets/svg/media-16px-2_note-03.svg"></object>
+											<img src="./assets/svg/media.svg" />
 											Media Files
 										</h5>
 										<table class="table" id='mediaFilesTable'>
@@ -1221,7 +1221,7 @@
 										</table>
 										<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
 										<div class="upload-area" id="mediaDrop">
-											<object data="./assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
+											<img src="./assets/svg/arrows.svg" />
 										</div>
 										<input type="file" name="mediaFiles" id="mediaFiles" multiple accept="audio/*"></input>
 									</div>
@@ -1229,7 +1229,7 @@
 								 <div class="publish-section">
 									<div class="publish-files extra-files">
 										<h5>
-											<object type="image/svg+xml" data="assets/svg/files-16px_single-folded-content.svg"></object>
+											<img src="assets/svg/files.svg" />
 											Extra Files
 										</h5>
 										<table class="table" id='extraTable'>
@@ -1255,7 +1255,7 @@
 										</table>
 										<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
 										<div class="upload-area" id="extraDrop">
-											<object data="./assets/svg/arrows-24px-glyph-2_file-upload-88.svg" type="image/svg+xml" id="uploadicon-media"></object>
+											<img src="./assets/svg/arrows.svg" />
 										</div>
 										<input type='file' id="extraFiles" name="extraFiles" multiple />
 									</div>
@@ -1419,226 +1419,222 @@
 			</div>
 		</div>
 		<!-- Load external JS helper files -->
-		<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script src="./js/jquery-3.2.1.min.js"></script>
+		<script src="./js/tether.min.js"></script>
+		<script src="./js/underscore.js"></script>
 		<script src="./js/bootstrap.min.js"></script>
+		<script src="./js/backbone-min.js"></script>
 		<!-- Bootstrap Tour JS -->
 		<script src="./js/bootstrap-tour.js"></script>
-		<!-- Wallet JS -->
+		<!-- Load Dependencies JS -->
 		<script src="./js/SimpleDeps.js"></script>
 		<script src="./js/SimpleWallet.js"></script>
 		<script src="./js/libraryd-js.js"></script>
-		<script src="./js/artifacts.js"></script>
+		<!-- <script src="./js/artifacts.js"></script> -->
 		<script src="./js/qrcode.min.js"></script>
-		<script src="./js/wallet.js"></script>
-		<!-- Other JS -->
-		<script src="./js/localStorage.js"></script>
-		<script src="./js/dropzone.js"></script>
-		<script src="./js/sweet-alert.min.js"></script>
-		<script src="./js/date-format.js"></script>
-		<script src="./js/ipfs.js"></script>
-		<script src="./js/coinbase.js"></script>
-		<script src="./js/tradebot.js"></script>
-		<script src="./js/createPublisher.js"></script>
-		<script src="./js/publishArtifact.js"></script>
+		<!-- <script src="./js/wallet.js"></script> -->
+		<!-- Load Phoenix -->
+		<script src="./js/phoenix-api.js"></script>
+		<script src="./js/phoenix-ui.js"></script>
 
 		<!-- Visual JS -->
 		<script type="text/javascript">
-			// Set the version number in the footer
-			var version = "1.2.7";
-			var env = "production";
-			//document.getElementById("footerText").innerHTML = "Alexandria Web Publisher v" + version + " - Questions? Comments? Want to Help? Join us on our <a href='http://dloaslack.bitspill.net/'>Slack chat</a>!";
+			// // Set the version number in the footer
+			// var version = "1.2.7";
+			// var env = "production";
+			// //document.getElementById("footerText").innerHTML = "Alexandria Web Publisher v" + version + " - Questions? Comments? Want to Help? Join us on our <a href='http://dloaslack.bitspill.net/'>Slack chat</a>!";
 
-			$(document).ready(function () {
+			// $(document).ready(function () {
 
-				// Redirect to login if user is not logged into wallet.
-				checkLogin(0);
+			// 	// Redirect to login if user is not logged into wallet.
+			// 	checkLogin(0);
 
-				//Initialize
-				$('.nav-tabs > li a[title]').tooltip();
-				$('#pricing').hide();
-				$('#mediaFilesTable').hide();
-				$('#extraTable').hide();
+			// 	//Initialize
+			// 	$('.nav-tabs > li a[title]').tooltip();
+			// 	$('#pricing').hide();
+			// 	$('#mediaFilesTable').hide();
+			// 	$('#extraTable').hide();
 				
-				//Wizard
-				$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+			// 	//Wizard
+			// 	$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
 
-					var $target = $(e.target);
+			// 		var $target = $(e.target);
 				
-					if ($target.parent().hasClass('disabled')) {
-						return false;
-					}
-				});
+			// 		if ($target.parent().hasClass('disabled')) {
+			// 			return false;
+			// 		}
+			// 	});
 
-				$(".next-step").click(function (e) {
+			// 	$(".next-step").click(function (e) {
 
-					var $active = $('.wizard .nav-tabs li.active');
-					$active.next().removeClass('disabled');
-					nextTab($active);
+			// 		var $active = $('.wizard .nav-tabs li.active');
+			// 		$active.next().removeClass('disabled');
+			// 		nextTab($active);
 
-				});
-				$(".prev-step").click(function (e) {
+			// 	});
+			// 	$(".prev-step").click(function (e) {
 
-					var $active = $('.wizard .nav-tabs li.active');
-					prevTab($active);
+			// 		var $active = $('.wizard .nav-tabs li.active');
+			// 		prevTab($active);
 
-				});
+			// 	});
 
-			});
+			// });
 
-			function nextTab(elem) {
-				$(elem).next().find('a[data-toggle="tab"]').click();
-			}
-			function prevTab(elem) {
-				$(elem).prev().find('a[data-toggle="tab"]').click();
-			}
+			// function nextTab(elem) {
+			// 	$(elem).next().find('a[data-toggle="tab"]').click();
+			// }
+			// function prevTab(elem) {
+			// 	$(elem).prev().find('a[data-toggle="tab"]').click();
+			// }
 
-			$('#login a').click(function (e) {
-				e.preventDefault()
-				$(this).tab('show');
-			})
-			$('#register a').click(function (e) {
-				e.preventDefault()
-				$(this).tab('show');
-			})
+			// $('#login a').click(function (e) {
+			// 	e.preventDefault()
+			// 	$(this).tab('show');
+			// })
+			// $('#register a').click(function (e) {
+			// 	e.preventDefault()
+			// 	$(this).tab('show');
+			// })
 
-			$("#loginWalletPassword").keyup(function(event){
-				if(event.keyCode == 13){
-					$("#walletLoginButton").click();
-				}
-			});
+			// $("#loginWalletPassword").keyup(function(event){
+			// 	if(event.keyCode == 13){
+			// 		$("#walletLoginButton").click();
+			// 	}
+			// });
 
-			function fade(element) {
-				var op = 1;	// initial opacity
-				var timer = setInterval(function () {
-					if (op <= 0.1){
-						clearInterval(timer);
-						element.style.display = 'none';
-					}
-					element.style.opacity = op;
-					element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-					op -= op * 0.1;
-				}, 20);
-			}
+			// function fade(element) {
+			// 	var op = 1;	// initial opacity
+			// 	var timer = setInterval(function () {
+			// 		if (op <= 0.1){
+			// 			clearInterval(timer);
+			// 			element.style.display = 'none';
+			// 		}
+			// 		element.style.opacity = op;
+			// 		element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+			// 		op -= op * 0.1;
+			// 	}, 20);
+			// }
 
-			function unfade(element) {
-				var op = 0.01;	// initial opacity
-				element.style.display = 'block';
-				var timer = setInterval(function () {
-					if (op >= 1){
-						clearInterval(timer);
-					}
-					element.style.opacity = op;
-					element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-					op += op * 0.1;
-				}, 15);
-			}
+			// function unfade(element) {
+			// 	var op = 0.01;	// initial opacity
+			// 	element.style.display = 'block';
+			// 	var timer = setInterval(function () {
+			// 		if (op >= 1){
+			// 			clearInterval(timer);
+			// 		}
+			// 		element.style.opacity = op;
+			// 		element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+			// 		op += op * 0.1;
+			// 	}, 15);
+			// }
 
-			function changeArtifactType(mediaType){
-				// Remove all media files when artifact type is changed.
-				$('.mediaRow').each(function(){
-					$(this).find('.btn-danger').click();
-				});
-				// Change supported files to be uploaded
-				// Get type in order to validate files
-				if (mediaType == 'video'){
-					mediaType = 'video/*';
-				}
-				else if (mediaType == 'music'){
-					mediaType = 'audio/*';
-				}
-				else if (mediaType == 'podcast'){
-					mediaType = 'audio/*';
-				}
-				else if (mediaType == 'book'){
-					mediaType = 'application/pdf,text/*';
-				}
-				else if (mediaType == 'movie'){
-					mediaType = 'video/*';
-				}
-				else if (mediaType == 'thing'){
-					mediaType = '*/*';
-				}
-				else if (mediaType == 'html'){
-					mediaType = '*/*';
-				}
+			// function changeArtifactType(mediaType){
+			// 	// Remove all media files when artifact type is changed.
+			// 	$('.mediaRow').each(function(){
+			// 		$(this).find('.btn-danger').click();
+			// 	});
+			// 	// Change supported files to be uploaded
+			// 	// Get type in order to validate files
+			// 	if (mediaType == 'video'){
+			// 		mediaType = 'video/*';
+			// 	}
+			// 	else if (mediaType == 'music'){
+			// 		mediaType = 'audio/*';
+			// 	}
+			// 	else if (mediaType == 'podcast'){
+			// 		mediaType = 'audio/*';
+			// 	}
+			// 	else if (mediaType == 'book'){
+			// 		mediaType = 'application/pdf,text/*';
+			// 	}
+			// 	else if (mediaType == 'movie'){
+			// 		mediaType = 'video/*';
+			// 	}
+			// 	else if (mediaType == 'thing'){
+			// 		mediaType = '*/*';
+			// 	}
+			// 	else if (mediaType == 'html'){
+			// 		mediaType = '*/*';
+			// 	}
 
-				$('#mediaFiles').attr('accept', mediaType);
+			// 	$('#mediaFiles').attr('accept', mediaType);
 
-			}
+			// }
 
-			function next(){
-				var $active = $('.wizard .nav-tabs li.active');
-				$active.next().removeClass('disabled');
-				nextTab($active);
-			}
+			// function next(){
+			// 	var $active = $('.wizard .nav-tabs li.active');
+			// 	$active.next().removeClass('disabled');
+			// 	nextTab($active);
+			// }
 
-			// Hide the coinbase buy button if not on alexandria.io as it will not work
-			testDomain();
+			// // Hide the coinbase buy button if not on alexandria.io as it will not work
+			// testDomain();
 
-			$(document).on("change","input[type=radio]",function(){
-			    var free = $('[name="free"]')[0].checked;
-			    var paid = $('[name="free"]')[1].checked;
+			// $(document).on("change","input[type=radio]",function(){
+			//     var free = $('[name="free"]')[0].checked;
+			//     var paid = $('[name="free"]')[1].checked;
 
-			    if (paid) {
-			    	$('#paymentInfo').show();
-			    } else {
-			    	$('#paymentInfo').hide();
-			    }
-			});
+			//     if (paid) {
+			//     	$('#paymentInfo').show();
+			//     } else {
+			//     	$('#paymentInfo').hide();
+			//     }
+			// });
 
-			$('#publisherNav').on('click', function(evt){
-				$('#wizard').show();
-				$('#artifacts').hide();
-				$('#editArtifact').hide();
-				$('#WalletPage').hide();
-			})
+			// $('#publisherNav').on('click', function(evt){
+			// 	$('#wizard').show();
+			// 	$('#artifacts').hide();
+			// 	$('#editArtifact').hide();
+			// 	$('#WalletPage').hide();
+			// })
 
-			$('#artifactsNav').on('click', function(evt){
-				$('#wizard').hide();
-				$('#artifacts').show();
-				$('#editArtifact').hide();
-				$('#WalletPage').hide();
-			})
+			// $('#artifactsNav').on('click', function(evt){
+			// 	$('#wizard').hide();
+			// 	$('#artifacts').show();
+			// 	$('#editArtifact').hide();
+			// 	$('#WalletPage').hide();
+			// })
 
-			$('#walletNav').on('click', function(evt){
-				$('#wizard').hide();
-				$('#artifacts').hide();
-				$('#editArtifact').hide();
-				$('#WalletPage').show();
-			})
+			// $('#walletNav').on('click', function(evt){
+			// 	$('#wizard').hide();
+			// 	$('#artifacts').hide();
+			// 	$('#editArtifact').hide();
+			// 	$('#WalletPage').show();
+			// })
 
-			$('#wizard').show();
-			$('#artifacts').hide();
-			$('#editArtifact').hide();
-			$('#WalletPage').hide();
+			// $('#wizard').show();
+			// $('#artifacts').hide();
+			// $('#editArtifact').hide();
+			// $('#WalletPage').hide();
 
 
-			$('#paymentInfo').hide();
+			// $('#paymentInfo').hide();
 
-				//$('#walletModal').modal('show');
+			// 	//$('#walletModal').modal('show');
 
-			// ##################################################################################################
-			// #					 								Hello There!			 								#
-			// #	 Looking for the latest features and don't mind a little instability?	You can enable the 	#
-			// #	"dev" version by just setting the env variable to "dev". This will show all of the current 	#
-			// #				WIP features. You are likely to see a lot of non-working features & bugs.		#
-			// #							Want to help us develop this new technology? 						#
-			// # Join our Slack at: dloaslack.bitspill.net or Check out our Github at: https://github.com/dloa/ #
-			// ##################################################################################################
-			var checkEnv = function(){
-				if (env == "dev"){
-					$('.dev').each(function(index){
-						$(this).show();
-					});
-				} else {
-					$('.dev').each(function(index){
-						$(this).hide();
-					});
-				}
-			}
-			checkEnv();
+			// // ##################################################################################################
+			// // #					 								Hello There!			 								#
+			// // #	 Looking for the latest features and don't mind a little instability?	You can enable the 	#
+			// // #	"dev" version by just setting the env variable to "dev". This will show all of the current 	#
+			// // #				WIP features. You are likely to see a lot of non-working features & bugs.		#
+			// // #							Want to help us develop this new technology? 						#
+			// // # Join our Slack at: dloaslack.bitspill.net or Check out our Github at: https://github.com/dloa/ #
+			// // ##################################################################################################
+			// var checkEnv = function(){
+			// 	if (env == "dev"){
+			// 		$('.dev').each(function(index){
+			// 			$(this).show();
+			// 		});
+			// 	} else {
+			// 		$('.dev').each(function(index){
+			// 			$(this).hide();
+			// 		});
+			// 	}
+			// }
+			// checkEnv();
 
-			loadTransactions();
+			// loadTransactions();
 
 		</script>
 	</body>
