@@ -208,7 +208,7 @@ var Wallet = (function () {
 		}
 		for (var i in this.addresses) {
 			$.ajax(flovaultBaseURL + '/wallet/getbalances/' + this.addresses[i].addr, {
-				//async: false,
+				async: false,
 				dataType: "json",
 				success: function (data) {
 					if (data) {

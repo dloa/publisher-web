@@ -24,7 +24,7 @@
       <div class="page-container bg-blue-grey-900">
         <div class="container-full">
           <div class="container container-xs"><img src="img/logo.png" class="mv-lg block-center img-responsive thumb64">
-            <form id="user-login" action="" name="loginForm" novalidate="" class="card b0 form-validate">
+            <div class="card b0 form-validate">
               <div class="card-offset pb0">
                 <div style="right: 30px" class="card-offset-item text-right"><a  href="signup.html" class="btn-raised btn btn-info btn-circle btn-lg"><em class="ion-person-add"></em></a><p><a href="signup.html" style="margin-right: -20px; color: #444">Create Account</a></p></div>
                 <div class="card-offset-item text-right hidden">
@@ -57,8 +57,8 @@
 			        <label style="padding-left:5px;">Remember me</label>
 			      </label>
               </div>
-              <button type="submit" class="btn btn-primary btn-flat">Authenticate</button>
-            </form>
+              <button onclick="tryLogin();" class="btn btn-primary btn-flat">Authenticate</button>
+            </div>
           </div>
         </div>
       </div>
@@ -79,26 +79,25 @@
     <script src="vendor/jquery-validation/dist/additional-methods.js"></script>
     <!-- endbuild-->
     <!-- App script-->
-    <script src="js/app.js"></script>
     <script src="js/SimpleDeps.js"></script>
     <script src="js/SimpleWallet.js"></script>
     <script src="js/wallet.js"></script>
     <script type="text/javascript">
-    	var $form = $('#user-login').on('submit', function(){
+    	var tryLogin = function(){
     		// Validate login info
     		wallet = new Wallet($('#username').val(), $('#password').val());
-			wallet.load(function () {
-				console.log("Wallet Post-Load");
-				console.log(wallet);
+  			wallet.load(function () {
+  				console.log("Wallet Post-Load");
+  				console.log(wallet);
 
-				localStorage.setItem("identifier", $('#username').val());
-				localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt($('#password').val(), $('#username').val()));
-				localStorage.setItem("remember-me", document.getElementById('remember-me').checked);
+  				localStorage.setItem("identifier", $('#username').val());
+  				localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt($('#password').val(), $('#username').val()));
+  				localStorage.setItem("remember-me", document.getElementById('remember-me').checked);
 
-				// Redirect to main dashboard page.
-				window.location.href = 'index.html';
-			});
-    	});
+  				// Redirect to main dashboard page.
+  				window.location.href = 'index.html';
+  			});
+    	};
 
     	window.addEventListener('wallet', function (e) { 
     		if (e.detail == "There is no wallet with that identifier"){

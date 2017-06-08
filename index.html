@@ -162,16 +162,12 @@
 			<div class="collapse navbar-collapse" id="navbarsExampleDefault">
 				<ul class="navbar-nav mr-auto">
 					<li>
-						<select id="publisherSelect" class="custom-select navbar-center">
+						<select id="publisherSelect" class="custom-select navbar-center" style="display: none;" onchange="PhoenixUI.onPublisherSelectChange(this);">
 							<option value="a"></option>
-							<option value="b"></option>
-							<option value="c"></option>
-							<option value="d"></option>
-							<option value="e"></option>
 						</select>
 					</li>
 				</ul>
-				<button class="btn btn-outline-danger pull-right" onclick="signout();">Sign Out</button>
+				<button class="btn btn-outline-danger pull-right" onclick="Phoenix.logout();">Sign Out</button>
 			</div>
 		</nav>
 
@@ -179,11 +175,12 @@
 			<div class="row">
 				<nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
 					<div class="text-center">Welcome, <span id="pub-name"></span></div>
-					<div class="text-center" style="margin-bottom: 10px"> <strong>FLO</strong>: <code><span id="walletBalance"></span></code></strong></div>
+					<div class="text-center" style="margin-bottom: 0px"> <strong>FLO</strong>: <code><span id="walletBalance"></span></code></strong></div>
+					<div class="text-center" style="margin-bottom: 10px"> <strong>USD</strong>: <code style="color: green"><span id="walletBalanceUSD"></span></code></strong></div>
 					<ul class="nav nav-pills flex-column">
-						<li class="nav-item"><a href="#" class="nav-link" id="publisherNav" style="color: black"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/publish.svg">Publisher</a></li>
-						<li class="nav-item"><a href="#" class="nav-link" id="artifactsNav" style="color: black"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/menu.svg">My Artifacts</a></li>
-						<li class="nav-item"><a href="#" class="nav-link" id="walletNav" style="color: black"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/wallet.svg">Wallet</a></li>
+						<li class="nav-item"><a href="#" class="nav-link" id="publisherNav" style="color: black" onclick="showWizardPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/publish.svg"">Publisher</a></li>
+						<li class="nav-item"><a href="#" class="nav-link" id="artifactsNav" style="color: black" onclick="showArtifactPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/menu.svg">My Artifacts</a></li>
+						<li class="nav-item"><a href="#" class="nav-link" id="walletNav" style="color: black" onclick="showWalletPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/wallet.svg">Wallet</a></li>
 					</ul>
 				</nav>
 
@@ -880,401 +877,6 @@
 						</div>
 					</section>
 
-					<section id="editArtifact">
-						<div class="content-heading bg-white">
-							<div class="row">
-								<div class="col-sm-12">
-									<h4 class="m0 text-thin">Edit Artifact</h4><small></small>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-12 bg-white">
-							<div class="section publish col-lg-12" style="padding-top: 50px;">
-								<div class="publish-section artifact-type">
-									<h5>Artifact type</h5> 
-									<ul class="nav nav-pills" role="tablist" id='edit-type'>
-										<li class="active" onclick="changeArtifactType('emusic')"><a id="emusicbtn" href="#emusic" data-toggle="tab">Music</a></li>
-										<li onclick="changeArtifactType('evideo')"><a id="evideobtn" href="#evideo" data-toggle="tab">Video</a></li>
-										<li onclick="changeArtifactType('epodcast')"><a id="epodcastbtn" href="#epodcast" data-toggle="tab">Podcast</a></li>
-										<li onclick="changeArtifactType('ebook')"><a id="ebookbtn" href="#ebook" data-toggle="tab">Book</a></li>
-										<li onclick="changeArtifactType('emovie')"><a id="emoviebtn" href="#emovie" data-toggle="tab">Movie</a></li>
-										<li onclick="changeArtifactType('ething')"><a id="ethingbtn" href="#ething" data-toggle="tab">Thing</a></li>
-										<li onclick="changeArtifactType('ehtml')"><a id="ehtmlbtn" href="#ehtml" data-toggle="tab">HTML</a></li>
-									</ul>
-								</div>
-								<div class="publish-section information tab-content" id='metainfo-edit' style="margin-top: -50px;">
-									<div id='emusic' class="tab-pane fade in active">
-										<div class="row">
-											<div class="col-sm-8">
-												<h5>Album Information</h5>
-												<form>
-													<div class="form-group" id="artifactTitleGroup">
-														<input type="text" class="form-control" id="title" placeholder="Album Title">
-													</div>
-													<div class="form-group" id="artifactArtistGroup">
-														<input type="text" class="form-control" id="artistName" placeholder="Artist Name">
-													</div>
-													<div class="row">
-														<div class="col col-sm-6">
-															<div class="form-group" id="artifactgenreGroup">
-																<input type="text" class="form-control" id="genre" placeholder="Genre">
-															</div>
-														</div>
-														<div class="col col-sm-6">
-															<div class="form-group" id="artifactDateGroup">
-																<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
-															</div>
-														</div>
-													</div>
-													<div class="form-group" id="artifactTagsGroup">
-														<input type="text" class="form-control" id="tags" placeholder="Tags">
-													</div>
-													<div class="form-group" id="artifactRecordLabelGroup">
-														<input type="text" class="form-control" id="recordLabel" placeholder="Record Label">
-													</div>
-													<div class="form-group" id="artifactDescriptionGroup">
-														<textarea row="3" class="form-control" id="description" placeholder="Album Description"></textarea>
-													</div>
-												</form>
-											</div>
-											<div class="col-sm-4">
-												<h5>Cover Art</h5>
-												<div class="cover-art-square" id='musicPoster'>
-												</div>
-												<input type="file" name="musicPosterFile" id="musicPosterFile" accept="image/*">
-											</div>
-										</div>
-									</div>
-									<div id='evideo' class="tab-pane fade">
-										<div class="row">
-											<div class="col-sm-8">
-												 <h5>Video Information</h5>
-													<div class="form-group" id="artifactTitleGroup">
-														<input type="text" class="form-control" id="title" placeholder="Video Title">
-													</div>
-													<div class="form-group" id="artifactDirectorGroup">
-														<input type="text" class="form-control" id="directorName" placeholder="Director Name">
-													</div>
-													<div class="form-group" id="artifactDistributorGroup">
-														<input type="text" class="form-control" id="distributor" placeholder="Distributor">
-													</div>
-													<div class="form-group" id="artifactDateGroup">
-														<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
-													</div>
-													<div class="row">
-														<div class="col col-sm-6">
-															<div class="form-group" id="artifactgenreGroup">
-																<input type="text" class="form-control" id="genre" placeholder="Genre">
-															</div>
-														</div>
-														<div class="col col-sm-6">
-															<div class="form-group" id="artifactTagsGroup">
-																<input type="text" class="form-control" id="tags" placeholder="Tags">
-															</div>
-														</div>
-													</div>
-													<div class="form-group" id="artifactDescriptionGroup">
-														<textarea row="3" class="form-control" id="description" placeholder="Video Description"></textarea>
-													</div>
-											</div>
-											<div class="col-sm-4">
-												<h5>Preview Image</h5>
-												<div id="videoPoster" class="cover-art">
-												</div>
-												<input type="file" name="videoPosterFile" id="videoPosterFile" accept="image/*">
-											</div>
-										</div>
-									</div>
-									<div id='epodcast' class="tab-pane fade in">
-										<div class="row">
-											<div class="col-sm-8">
-												<h5>Podcast Information</h5>
-												<form>
-													<div class="form-group" id="artifactTitleGroup">
-														<input type="text" class="form-control" id="title" placeholder="Podcast Title">
-														<p class="help-block">This will be auto formatted with "Podcast Title": "Episode Title"</p>
-													</div>
-													<div class="form-group" id="artifactArtistGroup">
-														<input type="text" class="form-control" id="episodeTitle" placeholder="Episode Title">
-													</div>
-													<div class="row">
-														<div class="col col-sm-3">
-															<div class="form-group" id="artifactDateGroup">
-																<input type="text" class="form-control" id="seasonNum" placeholder="Season Number">
-															</div>
-														</div>
-														<div class="col col-sm-3">
-															<div class="form-group" id="artifactDateGroup">
-																<input type="text" class="form-control" id="episodeNum" placeholder="Episode Number">
-															</div>
-														</div>
-														<div class="col col-sm-3">
-															<div class="form-group" id="artifactDateGroup">
-																<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
-															</div>
-														</div>
-														<div class="col col-sm-3">
-															<div class="form-group" id="artifactgenreGroup">
-																<input type="text" class="form-control" id="genre" placeholder="Genre">
-															</div>
-														</div>
-													</div>
-													<div class="form-group" id="artifactTagsGroup">
-														<input type="text" class="form-control" id="tags" placeholder="Tags">
-													</div>
-													<div class="form-group" id="artifactDescriptionGroup">
-														<textarea row="3" class="form-control" id="description" placeholder="Episode Description"></textarea>
-													</div>
-												</form>
-											</div>
-											<div class="col-sm-4">
-												<h5>Cover Art</h5>
-												<div class="cover-art-square" id='podcastPoster'>
-												</div>
-												<input type="file" name="podcastPosterFile" id="podcastPosterFile" accept="image/*">
-											</div>
-										</div>
-									</div>
-									<div id='ebook' class="tab-pane fade in">
-										<div class="row">
-											<div class="col-sm-8">
-												<h5>Book Information</h5>
-												<form>
-													<div class="form-group" id="artifactTitleGroup">
-														<input type="text" class="form-control" id="title" placeholder="Book Title">
-													</div>
-													<div class="form-group" id="artifactArtistGroup">
-														<input type="text" class="form-control" id="authorName" placeholder="Author Name">
-													</div>
-													<div class="row">
-														<div class="col col-sm-6">
-															<div class="form-group" id="artifactDateGroup">
-																<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
-															</div>
-														</div>
-														<div class="col col-sm-6">
-															<div class="form-group" id="artifactgenreGroup">
-																<input type="text" class="form-control" id="genre" placeholder="Genre">
-															</div>
-														</div>
-													</div>
-													<div class="form-group" id="artifactTagsGroup">
-														<input type="text" class="form-control" id="tags" placeholder="Tags">
-													</div>
-													<div class="form-group" id="artifactDescriptionGroup">
-														<textarea row="3" class="form-control" id="description" placeholder="Book Description"></textarea>
-													</div>
-												</form>
-											</div>
-											<div class="col-sm-4">
-												<h5>PDF Cover</h5>
-												<div class="cover-art-poster" id='bookPoster'>
-												</div>
-												<input type="file" name="bookPosterFile" id="bookPosterFile" accept="image/*">
-											</div>
-										</div>
-									</div>
-									<div id='emovie' class="tab-pane fade in">
-										<div class="row">
-											<div class="col-sm-8">
-												 <h5>Movie Information</h5>
-													<div class="form-group" id="artifactTitleGroup">
-														<input type="text" class="form-control" id="title" placeholder="Movie Title">
-													</div>
-													<div class="form-group" id="artifactDirectorGroup">
-														<input type="text" class="form-control" id="directorName" placeholder="Director Name">
-													</div>
-													<div class="form-group" id="artifactDistributorGroup">
-														<input type="text" class="form-control" id="distributor" placeholder="Distributor">
-													</div>
-													<div class="form-group" id="artifactDateGroup">
-														<input type="text" class="form-control" id="releaseDate" placeholder="Release Year">
-													</div>
-													<div class="form-group" id="artifactDescriptionGroup">
-														<textarea row="3" class="form-control" id="description" placeholder="Movie Description"></textarea>
-													</div>
-											</div>
-											<div class="col-sm-4">
-												<h5>Poster Art</h5>
-												<div id="moviePoster" class="cover-art-poster">
-												</div>
-												<input type="file" name="moviePosterFile" id="moviePosterFile" accept="image/*">
-											</div>
-										</div>
-									</div>
-									<div id='ething' class="tab-pane fade in">
-										<div class="row">
-											<div class="col-sm-8">
-												 <h5>Thing Information</h5>
-													<div class="form-group" id="artifactTitleGroup">
-														<input type="text" class="form-control" id="title" placeholder="Title">
-													</div>
-													<div class="form-group" id="artifactDirectorGroup">
-														<input type="text" class="form-control" id="creatorName" placeholder="Creator">
-													</div>
-													<div class="form-group" id="artifactDateGroup">
-														<input type="text" class="form-control" id="releaseDate" placeholder="Year">
-													</div>
-													<div class="form-group" id="artifactDescriptionGroup">
-														<textarea row="3" class="form-control" id="description" placeholder="Description"></textarea>
-													</div>
-											</div>
-											<div class="col-sm-4">
-												<h5>Preview Image</h5>
-												<div id="thingPoster" class="cover-art">
-												</div>
-												<input type="file" name="thingPosterFile" id="thingPosterFile" accept="image/*">
-											</div>
-										</div>
-									</div>
-									<div id='ehtml' class="tab-pane fade in">
-										<div class="row">
-											<div class="col-sm-8">
-												 <h5>HTML Information</h5>
-													<div class="form-group" id="artifactTitleGroup">
-														<input type="text" class="form-control" id="title" placeholder="Title">
-													</div>
-													<div class="form-group" id="artifactDirectorGroup">
-														<input type="text" class="form-control" id="creatorName" placeholder="Creator">
-													</div>
-													<div class="form-group" id="artifactDateGroup">
-														<input type="text" class="form-control" id="releaseDate" placeholder="Year">
-													</div>
-													<div class="form-group" id="artifactDescriptionGroup">
-														<textarea row="3" class="form-control" id="description" placeholder="Description"></textarea>
-													</div>
-											</div>
-											<div class="col-sm-4">
-												<h5>Preview Image</h5>
-												<div id="htmlPoster" class="cover-art">
-												</div>
-												<input type="file" name="htmlPosterFile" id="htmlPosterFile" accept="image/*">
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="row" id='bitcoinAddressField'>
-									<div class="col-sm-12">
-										<h3>Pricing/Payment Information</h3>
-										<div class="form-group" id="bitcoinAddressGroup">
-											<label for="bitcoinAddress">Bitcoin Address</label>
-											<input class="form-control" style="width: 30%" type="text" id="bitcoinAddress" placeholder="17aGuzA9p1ZmG49V9GmR6UgGzg1dQx9We9">
-											<p class="help-block">This is your Bitcoin address that you will use to receive payments for this artifact.</p>
-										</div>
-									</div>
-								</div>
-								<div class="publish-section publish-pricing" id='pricing'>
-									<div class="row">
-										<div class="col-sm-10">
-											<p class="small">Pick the price for each file. You are allowed to enter up to one tenth of a cent.</p>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col col-lg-12">
-											<table class="table" id='pricingTable'>
-												<thead>
-													<tr>
-														<th>File Name</th>
-														<th>Suggested Play</th>
-														<th>Minimum Play</th>
-														<th>Suggested Buy</th>
-														<th>Minimum Buy</th>
-														<th></th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr></tr>
-												</tbody>
-											</table>
-										</div>
-									</div>
-								</div>
-								 <div class="publish-section">
-									<div class="publish-files audio-tracks">
-										<h5>
-											<img src="./assets/svg/media.svg" />
-											Media Files
-										</h5>
-										<table class="table" id='mediaFilesTable'>
-											<colgroup>
-												<col class="">
-												<col class="">
-												<col style="width: 75px;">
-												<col style="width: 75px;">
-												<col style="">
-												<col class="width: 75px;">
-											</colgroup>
-											<thead>
-												<tr>
-													<th>File</th>
-													<th>File Name</th>
-													<th>File Size</th>
-													<th>Duration</th>
-													<th>Display name</th>
-													<th></th>
-												</tr>
-											</thead>
-											<tbody id="mediaTable">
-												<tr>
-												</tr>
-											</tbody>
-										</table>
-										<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
-										<div class="upload-area" id="mediaDrop">
-											<img src="./assets/svg/arrows.svg" />
-										</div>
-										<input type="file" name="mediaFiles" id="mediaFiles" multiple accept="audio/*"></input>
-									</div>
-								</div>
-								 <div class="publish-section">
-									<div class="publish-files extra-files">
-										<h5>
-											<img src="assets/svg/files.svg" />
-											Extra Files
-										</h5>
-										<table class="table" id='extraTable'>
-											<colgroup>
-												<col class="">
-												<col class="">
-												<col style="width: 125px;">
-												<col class="">
-												<col class="">
-											</colgroup>
-											<thead>
-												<tr>
-													<th>File</th>
-													<th>File Name</th>
-													<th>File Type</th>
-													<th>Display name</th>
-													<th></th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr></tr>
-											</tbody>
-										</table>
-										<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
-										<div class="upload-area" id="extraDrop">
-											<img src="./assets/svg/arrows.svg" />
-										</div>
-										<input type='file' id="extraFiles" name="extraFiles" multiple />
-									</div>
-								</div>
-								 <div class="publish-section publish-submit">
-									<div class="row">
-										<div class="col-sm-9">
-											<p class="small">You will be able to submit your artifact after you preview it. Be sure it looks exactly like what you desire as you will be unable to change this later.</p>
-										</div>
-										<div class="col-sm-3 text-right">
-											<button type="button" id="previewButton" class="btn btn-success">Publish Changes</button>
-										</div>
-									</div>
-								</div>
-								<div style='height:30px'></div>
-							</div>
-						</div>
-					</section>
-
 					<section id="WalletPage" class="container">
 						<div class="content-heading bg-white" style="padding-top: 30px">
 							<div class="row">
@@ -1441,7 +1043,7 @@
 		<script type="text/javascript">
 			// // Set the version number in the footer
 			// var version = "1.2.7";
-			// var env = "production";
+			var env = "production";
 			// //document.getElementById("footerText").innerHTML = "Alexandria Web Publisher v" + version + " - Questions? Comments? Want to Help? Join us on our <a href='http://dloaslack.bitspill.net/'>Slack chat</a>!";
 
 			// $(document).ready(function () {
@@ -1597,10 +1199,10 @@
 			// })
 
 			// $('#walletNav').on('click', function(evt){
-			// 	$('#wizard').hide();
-			// 	$('#artifacts').hide();
-			// 	$('#editArtifact').hide();
-			// 	$('#WalletPage').show();
+				// $('#wizard').hide();
+				// $('#artifacts').hide();
+				// $('#editArtifact').hide();
+				// $('#WalletPage').show();
 			// })
 
 			// $('#wizard').show();
@@ -1608,31 +1210,55 @@
 			// $('#editArtifact').hide();
 			// $('#WalletPage').hide();
 
+			var showWizardPage = function(){
+				$('#wizard').show();
+				$('#artifacts').hide();
+				$('#editArtifact').hide();
+				$('#WalletPage').hide();
+			}
+
+			var showArtifactPage = function(){
+				$('#wizard').hide();
+				$('#artifacts').show();
+				$('#editArtifact').hide();
+				$('#WalletPage').hide();
+			}
+
+			var showWalletPage = function(){
+				$('#wizard').hide();
+				$('#artifacts').hide();
+				$('#editArtifact').hide();
+				$('#WalletPage').show();
+			}
+
+			// By default show
+			showWizardPage();
+
 
 			// $('#paymentInfo').hide();
 
 			// 	//$('#walletModal').modal('show');
 
-			// // ##################################################################################################
-			// // #					 								Hello There!			 								#
-			// // #	 Looking for the latest features and don't mind a little instability?	You can enable the 	#
-			// // #	"dev" version by just setting the env variable to "dev". This will show all of the current 	#
-			// // #				WIP features. You are likely to see a lot of non-working features & bugs.		#
-			// // #							Want to help us develop this new technology? 						#
-			// // # Join our Slack at: dloaslack.bitspill.net or Check out our Github at: https://github.com/dloa/ #
-			// // ##################################################################################################
-			// var checkEnv = function(){
-			// 	if (env == "dev"){
-			// 		$('.dev').each(function(index){
-			// 			$(this).show();
-			// 		});
-			// 	} else {
-			// 		$('.dev').each(function(index){
-			// 			$(this).hide();
-			// 		});
-			// 	}
-			// }
-			// checkEnv();
+			// ##################################################################################################
+			// #					 								Hello There!			 								#
+			// #	 Looking for the latest features and don't mind a little instability?	You can enable the 	#
+			// #	"dev" version by just setting the env variable to "dev". This will show all of the current 	#
+			// #				WIP features. You are likely to see a lot of non-working features & bugs.		#
+			// #							Want to help us develop this new technology? 						#
+			// # Join our Slack at: dloaslack.bitspill.net or Check out our Github at: https://github.com/dloa/ #
+			// ##################################################################################################
+			var checkEnv = function(){
+				if (env == "dev"){
+					$('.dev').each(function(index){
+						$(this).show();
+					});
+				} else {
+					$('.dev').each(function(index){
+						$(this).hide();
+					});
+				}
+			}
+			checkEnv();
 
 			// loadTransactions();
 

@@ -6,17 +6,22 @@
 var PhoenixEvents = {};
 _.extend(PhoenixEvents, Backbone.Events);
 
+var librarianHost = "https://api.alexandria.io";
+
 var PhoenixStatus = {
 	status: 'waiting', 
 	pubQueue: [], // Artifacts that are being published are added to the pubQueue.
-	currentUser: { // This is the currently selected "Publisher"
+	currentPublisher: { // This is the currently selected "Publisher"
 		publisherAddress: 'floAddr',
 		publisherName: 'Sky'
 	}, 
-	users: [{ // This contains all of the available publishers for the wallet. You can use this to select a new user.
+	publishers: [{ // This contains all of the available publishers for the wallet. You can use this to select a new user.
 		publisherAddress: '',
 		publisherName: ''
 	}], 
+	artifacts: {
+		pubAddress: [{},{}]
+	},
 	wallet: {},
 	ipfs: {
 		ipfs: {}, // The actual IPFS object currently being used
@@ -28,6 +33,28 @@ var PhoenixStatus = {
 
 var Phoenix = (function() {	
 	var PhoenixAPI = {};
+	// Load info from LibraryD
+	PhoenixAPI.searchAPI = function(module, searchOn, searchFor) {
+		if ( (searchOn == 'type') && (searchFor.length > 1) ) {
+			searchFor = '['+searchFor+']';
+		} else {
+			searchFor = '"'+searchFor+'"';
+		}
+		queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":'+searchFor+',"search-like": true}';
+		var mediaData;
+		$.ajax({
+			type: "POST",
+			url: librarianHost +'/alexandria/v2/search',
+			data: queryString.toString(),
+			success: function (e) {
+				mediaData = $.parseJSON(e).response;
+			},
+			async:   false
+		});
+
+		return mediaData;
+	}
+
 	// Used to login. Should we call this Sync or Async?
 	PhoenixAPI.login = function(identifier, password){
 		// Trigger the onLogin event
@@ -40,16 +67,18 @@ var Phoenix = (function() {
 					password = CryptoJS.AES.decrypt(localStorage.loginWalletEnc, identifier).toString(CryptoJS.enc.Utf8);
 
 					// If we are on the login page and there is login info, then we should redirect to the dashboard.
-					if (window.location.pathname.includes('login.html') || !window.location.pathname.includes('.html')){
-						window.location.href = 'index.html';
-					}
+					// if (window.location.pathname.includes('login.html') || !window.location.pathname.includes('.html')){
+					// 	window.location.href = 'index.html';
+					// }
 				} else {
-					if (window.location.pathname.includes('index.html')){
-						window.location.href = 'login.html';
-						return;
-					}
+					PhoenixEvents.trigger("onLoginFail", "Missing identifier or password and none found in localStorage!")
+					// if (window.location.pathname.includes('index.html')){
+					// 	window.location.href = 'login.html';
+					// 	return;
+					// }
 				}
 			} else {
+				PhoenixEvents.trigger("onLoginFail", "Missing identifier or password and HTML5 LocalStorage is not supported.")
 			    // console.log('No Support for storing locally.')
 			}
 		}
@@ -64,7 +93,10 @@ var Phoenix = (function() {
 			}
 			PhoenixAPI.wallet = new Wallet(response.identifier, password);
 			PhoenixAPI.wallet.load(function () {
+				PhoenixEvents.trigger("onLoginSuccess", {});
 				PhoenixEvents.trigger("onWalletLoad", PhoenixAPI.wallet);
+
+				PhoenixAPI.getPublishersFromLibraryD();
 			});
 		});
 
@@ -74,6 +106,7 @@ var Phoenix = (function() {
 			localStorage.loginWalletEnc = '';
 		}
 
+		// This should only be filled if the user just signed up and their data cannot be found in LibraryD yet.
 		if (localStorage.justSignedUp == "true"){
 			var data = localStorage.justSignedUpData.split('/');
 
@@ -84,7 +117,7 @@ var Phoenix = (function() {
 			}
 
 			if (inwal){
-				$.getJSON( "https://api.alexandria.io/alexandria/v1/publisher/get/all", function( data ) {
+				$.getJSON(librarianHost + "/alexandria/v1/publisher/get/all", function( data ) {
 					var addrInPubs = false;
 					for (var i = 0; i < data.length; i++) {
 						//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
@@ -110,6 +143,52 @@ var Phoenix = (function() {
 		PhoenixEvents.trigger("onLoginSuccess", "Success");
 	}
 
+	PhoenixAPI.logout = function(){
+		localStorage.identifier = '';
+		localStorage.loginWalletEnc = '';
+		window.location.href = 'login.html';
+	}
+
+	PhoenixAPI.getPublishersFromLibraryD = function(){
+		var wallet = this.wallet;
+
+		$.getJSON(librarianHost + "/alexandria/v2/publisher/get/all", function( data ) {
+			var myPublishers = [];
+
+			for (var i = 0; i < data.length; i++) {
+				//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
+				for (var addr in wallet.addresses) {
+					var walletAddress = wallet.addresses[addr].addr;
+					var publisher = data[i]["publisher-data"]["alexandria-publisher"];
+					if (publisher.address == walletAddress){
+						myPublishers.push(publisher);
+						
+					}
+				}
+			}
+
+			if (myPublishers.length == 0){
+				PhoenixEvents.trigger("onPublisherLoadFailure", { message: 'No publishers found in LibraryD that match any wallet addresses.' });
+			} else {
+				PhoenixAPI.publishers = myPublishers;
+				PhoenixEvents.trigger("onPublisherLoadSuccess", PhoenixAPI.publishers);
+			}
+
+			for (var pub in myPublishers)
+				PhoenixAPI.loadArtifactsForPub(myPublishers[pub].address);
+		});
+	}
+
+	PhoenixAPI.loadArtifactsForPub = function(pubAddress){
+		var results = PhoenixAPI.searchAPI('media', 'publisher', pubAddress);
+
+		if (!PhoenixAPI.artifacts)
+			PhoenixAPI.artifacts = {}
+
+		PhoenixAPI.artifacts[pubAddress] = results;
+		PhoenixEvents.trigger('onArtifactsLoad', {address: pubAddress, results: results})
+	}
+
 	PhoenixAPI.getWallet = function(){
 		return this.wallet;
 	}
@@ -118,6 +197,13 @@ var Phoenix = (function() {
 	// Be sure to fill artifact.files with an array of input selectors.
 	PhoenixAPI.publishArtifact = function(artifact){
 		PhoenixEvents.trigger("testEvent", "test");
+	}
+
+	PhoenixAPI.getMarketData = function(callback){
+		$.getJSON("https://api.alexandria.io/flo-market-data/v1/getAll", function(data){
+			PhoenixAPI.marketData = data;
+			callback(data);
+		})
 	}
 
 	return PhoenixAPI;
