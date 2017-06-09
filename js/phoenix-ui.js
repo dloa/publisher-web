@@ -11,6 +11,15 @@ var walletAccordianElement = document.getElementById('walletAccordian');
 PhoenixEvents.on("onLogin", function(msg){ console.log("Logging in"); })
 PhoenixEvents.on("onLoginFail", function(msg){ console.log("Login Failed"); })
 PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success"); })
+PhoenixEvents.on("onArtifactDeactivateSuccess", function(msg,txid){ 
+	console.log("Artifact Deactivation Success",msg); 
+	$('#' + txid).remove();
+	swal("Success!", "Deactivation Successful!", "success")
+})
+PhoenixEvents.on("onArtifactDeactivateFail", function(msg){ 
+	console.log("Artifact Deactivation Failure",msg); 
+	swal("Error", "Deactivation not Successful!", "error");
+})
 PhoenixEvents.on("onPublisherLoadSuccess", function(publishers){ 
 	console.log("Publishers loaded successfully", publishers); 
 
@@ -52,7 +61,7 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 								<th scope='row'>" + (1+parseInt(i)) + "</th>\
 								<td><code>" + msg.results[i]['media-data']['alexandria-media'].info.title + "</code></td>\
 								<td>TXID: <code>.." + msg.results[i].txid.substr(msg.results[i].txid.length - 8) + "</code></td>\
-								<td><button onClick='ArtifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='EditArtifact(\"" + msg.results[i].txid + "\");' class='dev btn btn-warning'>Edit</button> <button onClick='DeactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
+								<td><button onClick='Phoenix.artifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='EditArtifact(\"" + msg.results[i].txid + "\");' class='dev btn btn-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
 							</tr>";
 				$("#ArtifactsTable > tbody").append(markup);
 			} else if (msg.results[i]['oip-041']){
@@ -60,7 +69,7 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 								<th scope='row'>" + (1+parseInt(i)) + "</th>\
 								<td><code>" + msg.results[i]['oip-041'].artifact.info.title + "</code></td>\
 								<td>TXID: <code>.." + msg.results[i].txid.substr(msg.results[i].txid.length - 8) + "</code></td>\
-								<td><button onClick='ArtifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='EditArtifact(\"" + msg.results[i].txid + "\");' class='dev btn btn-warning'>Edit</button> <button onClick='DeactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
+								<td><button onClick='ArtifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='EditArtifact(\"" + msg.results[i].txid + "\");' class='dev btn btn-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
 							</tr>";
 				$("#ArtifactsTable > tbody").append(markup);
 			}
@@ -123,14 +132,14 @@ PhoenixEvents.on("onWalletLoad", function(wallet){
 												<span class="walletAddress">' + address + '</span>\
 											</div>\
 											<br>\
-											<div class="container" style="text-align:center;">\
-												<center><ul class="nav nav-pills align-center" role="tablist">\
+											<div class="container" style="text-align:center; width: 450px;">\
+												<ul class="nav nav-pills align-center" role="tablist">\
 													<li role="presentation" class="active"><a href="javascript:;" id="walletBalance' + i + '" rel="' + balance + '" style="display: block;">' + balance + ' FLO</a></li>\
 													<li role="presentation"><a href="#walletSpend' + i + '" id="walletShowSpend' + i + '"  aria-controls="walletSpend' + i + '" role="pill" data-toggle="pill">Spend</a></li>\
 													<li role="presentation"><a id="walletHistory" href="http://florincoin.info/address/' + address + '" target="_blank" data-ytta-id="-">History</a></li>\
 													<li role="presentation"><a href="#tradebot" target="" >Buy</a></li>\
 													<li role="presentation"><a href="#walletKeys' + i + '" id="walletShowKeys' + i + '"  aria-controls="walletKeys' + i + '" role="pill" data-toggle="pill">Keys</a></li>\
-												</ul></center>\
+												</ul>\
 												<br>\
 												<div class="tab-content" style="margin-top: -40px;">\
 													<div role="tabpanel" id="walletKeys' + i + '" class="tab-pane">\
@@ -205,7 +214,7 @@ var PhoenixUI = (function(){
 	PhoenixUX.onPublisherSelectChange = function(elem){
 		// Update the publisher name
 		for (var i = 0; i < Phoenix.publishers.length; i++) {
-			if (Phoenix.publishers[i] == elem.value)
+			if (Phoenix.publishers[i].address == elem.value)
 				pubNameElement.innerHTML = Phoenix.publishers[i].name;
 		}
 		
@@ -214,7 +223,11 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.loadArtifactIntoView = function(artifact){
+		
+	}
 
+	PhoenixUX.generateArtifactJSONFromView = function(){
+		
 	}
 
 	return PhoenixUX;

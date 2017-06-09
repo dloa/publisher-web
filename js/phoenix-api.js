@@ -206,6 +206,50 @@ var Phoenix = (function() {
 		})
 	}
 
+	PhoenixAPI.deactivateArtifact = function(artifactTxid){
+		try {
+			swal({   
+				animation: true,
+				title: "Are you sure?",   
+				text: "This will remove it from all OIP Libraries!",   
+				type: "warning",
+				showCancelButton: true,   
+				confirmButtonColor: "#f44336",
+				confirmButtonText: "Yes, deactivate it!",   
+				closeOnConfirm: false 
+			}, function(){   
+				var results = PhoenixAPI.searchAPI('media', 'txid', artifactTxid);
+
+				if (!results){
+					console.error("ERR: No results from API when trying to Deactivate TXID: " + artifactTxid);
+					PhoenixEvents.trigger('onArtifactDeactivateFail', "ERR: No results from API when trying to Deactivate TXID: " + artifactTxid);
+					return;
+				}
+
+				var artPublisher;
+				if (results[0]["media-data"]){
+					artPublisher = results[0]["media-data"]["alexandria-media"].publisher;
+				} else if (results[0]["oip-041"]){
+					artPublisher = results[0].publisher;
+				}
+
+				LibraryDJS.sendDeactivationMessage(PhoenixAPI.wallet, artPublisher, artifactTxid, function(error, response){
+					if (error) {
+						PhoenixEvents.trigger('onArtifactDeactivateFail', error);
+						return;
+					}
+
+					//PhoenixAPI.artifacts[artPublisher]
+
+					PhoenixEvents.trigger('onArtifactDeactivateSuccess', response, artifactTxid);
+				});
+			});
+		} catch (e) {
+			console.log(e);
+			// Most likely an issue with Sweet alert, abort for now.
+		}
+	}	
+
 	return PhoenixAPI;
 })();
 
