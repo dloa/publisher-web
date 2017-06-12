@@ -6,6 +6,13 @@ var walletBalanceUSDElement = document.getElementById('walletBalanceUSD');
 var publisherSelectElement = document.getElementById('publisherSelect');
 var walletIdentifierElement = document.getElementById('identifier');
 var walletAccordianElement = document.getElementById('walletAccordian');
+var metaTitleElement = document.getElementById('metaTitle');
+var metaFormElement = document.getElementById('metaForm');
+var posterElement = document.getElementById('poster');
+var posterTitleElement = document.getElementById('posterTitle');
+var posterFileSelectElement = document.getElementById('posterFile');
+var typeCirclesElement = document.getElementById('typeCircles');
+var subtypePillsElement = document.getElementById('subtypePills');
 
 // Accepts a set of Selectors to load the artifact into view. Generates code for all of the different sections to fill it.
 PhoenixEvents.on("onLogin", function(msg){ console.log("Logging in"); })
@@ -77,6 +84,8 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 
 		checkEnv();
 	}
+
+	doneLoading();
 })
 PhoenixEvents.on("onWalletLoad", function(wallet){ 
 	var totalBalance = wallet.getTotalBalance() || 0;
@@ -211,6 +220,569 @@ PhoenixEvents.on("onWalletUpdate", function(wallet){ console.log("Wallet Updated
 var PhoenixUI = (function(){
 	var PhoenixUX = {};
 
+	PhoenixUX.types = [{
+		"type": "Audio",
+		"icon": "song-icon",
+		"subtypes": [{
+			"subtype": "Generic",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Title"
+				},
+				{
+					"id": "artistName",
+					"width": 12,
+					"placeholder": "Creator Name"
+				},
+				{
+					"id": "genre",
+					"width": 6,
+					"placeholder": "Genre"
+				},
+				{
+					"id": "releaseDate",
+					"width": 6,
+					"placeholder": "Year"
+				},
+				{
+					"id": "tags",
+					"width": 12,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "recordLabel",
+					"width": 12,
+					"placeholder": "Record Label"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Song Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"class": "cover-art-square"
+			}
+		},{
+			"subtype": "Song",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Song Title"
+				},
+				{
+					"id": "artistName",
+					"width": 12,
+					"placeholder": "Song Name"
+				},
+				{
+					"id": "genre",
+					"width": 6,
+					"placeholder": "Genre"
+				},
+				{
+					"id": "releaseDate",
+					"width": 6,
+					"placeholder": "Year"
+				},
+				{
+					"id": "tags",
+					"width": 12,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "recordLabel",
+					"width": 12,
+					"placeholder": "Record Label"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Song Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"class": "cover-art-square"
+			}
+		},{
+			"subtype": "Album",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Album Title"
+				},
+				{
+					"id": "artistName",
+					"width": 12,
+					"placeholder": "Artist Name"
+				},
+				{
+					"id": "genre",
+					"width": 6,
+					"placeholder": "Genre"
+				},
+				{
+					"id": "releaseDate",
+					"width": 6,
+					"placeholder": "Release Year"
+				},
+				{
+					"id": "tags",
+					"width": 12,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "recordLabel",
+					"width": 12,
+					"placeholder": "Record Label"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Album Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"class": "cover-art-square"
+			}
+		},{
+			"subtype": "Podcast",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Podcast Title",
+					"subtext": "This will be auto formatted with \"Podcast Title\": \"Episode Title\""
+				},
+				{
+					"id": "episodeTitle",
+					"width": 12,
+					"placeholder": "Episode Title",
+					"subtext": "This will be auto formatted with \"Podcast Title\": \"Episode Title\""
+				},
+				{
+					"id": "seasonNum",
+					"width": 3,
+					"placeholder": "Season Number"
+				},
+				{
+					"id": "episodeNum",
+					"width": 3,
+					"placeholder": "Episode Number"
+				},
+				{
+					"id": "releaseDate",
+					"width": 3,
+					"placeholder": "Release Year"
+				},
+				{
+					"id": "tags",
+					"width": 3,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Episode Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"class": "cover-art-square"
+			}
+		}]
+	},{
+		"type": "Video",
+		"icon": "video-icon",
+		"subtypes": [{
+			"subtype": "Generic",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Title"
+				},
+				{
+					"id": "creatorName",
+					"width": 12,
+					"placeholder": "Creator"
+				},
+				{
+					"id": "genre",
+					"width": 6,
+					"placeholder": "Genre"
+				},
+				{
+					"id": "releaseDate",
+					"width": 6,
+					"placeholder": "Release Year"
+				},
+				{
+					"id": "tags",
+					"width": 12,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"class": "cover-art"
+			}
+		},{
+			"subtype": "Video",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Video Title"
+				},
+				{
+					"id": "directorName",
+					"width": 12,
+					"placeholder": "Director Name"
+				},
+				{
+					"id": "distributor",
+					"width": 12,
+					"placeholder": "Distributor"
+				},
+				{
+					"id": "releaseDate",
+					"width": 2,
+					"placeholder": "Release Year"
+				},
+				{
+					"id": "genre",
+					"width": 5,
+					"placeholder": "Genre"
+				},
+				{
+					"id": "tags",
+					"width": 5,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Video Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"text": "Preview Image",
+				"class": "cover-art"
+			}
+		},{
+			"subtype": "Movie",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Movie Title"
+				},
+				{
+					"id": "artistName",
+					"width": 12,
+					"placeholder": "Director Name"
+				},
+				{
+					"id": "genre",
+					"width": 6,
+					"placeholder": "Genre"
+				},
+				{
+					"id": "releaseDate",
+					"width": 6,
+					"placeholder": "Release Year"
+				},
+				{
+					"id": "tags",
+					"width": 12,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "distributor",
+					"width": 12,
+					"placeholder": "Distributor"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Movie Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"text": "Poster",
+				"class": "cover-art-poster"
+			}
+		}]
+	},{
+		"type": "Image",
+		"icon": "image-icon",
+		"subtypes": [{
+			"subtype": "Generic",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Title"
+				},
+				{
+					"id": "creatorName",
+					"width": 12,
+					"placeholder": "Creator"
+				},
+				{
+					"id": "genre",
+					"width": 6,
+					"placeholder": "Genre"
+				},
+				{
+					"id": "releaseDate",
+					"width": 6,
+					"placeholder": "Release Year"
+				},
+				{
+					"id": "tags",
+					"width": 12,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"class": "cover-art"
+			}
+		}]
+	},{
+		"type": "Text",
+		"icon": "text-icon",
+		"subtypes": [{
+			"subtype": "Generic",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Title"
+				},
+				{
+					"id": "creatorName",
+					"width": 12,
+					"placeholder": "Creator"
+				},
+				{
+					"id": "genre",
+					"width": 6,
+					"placeholder": "Genre"
+				},
+				{
+					"id": "releaseDate",
+					"width": 6,
+					"placeholder": "Release Year"
+				},
+				{
+					"id": "tags",
+					"width": 12,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"class": "cover-art"
+			}
+		},{
+			"subtype": "Book",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Book Title"
+				},
+				{
+					"id": "authorName",
+					"width": 12,
+					"placeholder": "Author Name"
+				},
+				{
+					"id": "genre",
+					"width": 6,
+					"placeholder": "Genre"
+				},
+				{
+					"id": "releaseDate",
+					"width": 6,
+					"placeholder": "Release Year"
+				},
+				{
+					"id": "tags",
+					"width": 12,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Book Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"class": "cover-art-poster"
+			}
+		}]
+	},{
+		"type": "Software",
+		"icon": "software-icon",
+		"subtypes": [{
+			"subtype": "Generic",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Title"
+				},
+				{
+					"id": "creatorName",
+					"width": 12,
+					"placeholder": "Creator"
+				},
+				{
+					"id": "genre",
+					"width": 6,
+					"placeholder": "Genre"
+				},
+				{
+					"id": "releaseDate",
+					"width": 6,
+					"placeholder": "Release Year"
+				},
+				{
+					"id": "tags",
+					"width": 12,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"class": "cover-art"
+			}
+		},{
+			"subtype": "3D Thing",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Title"
+				},
+				{
+					"id": "creatorName",
+					"width": 12,
+					"placeholder": "Creator"
+				},
+				{
+					"id": "genre",
+					"width": 6,
+					"placeholder": "Genre"
+				},
+				{
+					"id": "releaseDate",
+					"width": 6,
+					"placeholder": "Release Year"
+				},
+				{
+					"id": "tags",
+					"width": 12,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"class": "cover-art"
+			}
+		}]
+	},{
+		"type": "Web",
+		"icon": "web-icon",
+		"subtypes": [{
+			"subtype": "HTML",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Title"
+				},
+				{
+					"id": "creatorName",
+					"width": 12,
+					"placeholder": "Creator"
+				},
+				{
+					"id": "releaseDate",
+					"width": 3,
+					"placeholder": "Release Year"
+				},
+				{
+					"id": "tags",
+					"width": 9,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"text": "Preview Image",
+				"class": "cover-art"
+			}
+		}]
+	}];
+
 	PhoenixUX.onPublisherSelectChange = function(elem){
 		// Update the publisher name
 		for (var i = 0; i < Phoenix.publishers.length; i++) {
@@ -222,16 +794,120 @@ var PhoenixUI = (function(){
 		PhoenixEvents.trigger('onArtifactsLoad', {address: elem.value, results: Phoenix.artifacts[elem.value]});
 	}
 
-	PhoenixUX.loadArtifactIntoView = function(artifact){
+	// This loads the top circles and sub-pills.
+	PhoenixUX.loadTypes = function(){
+		var typesCircleHTML = '';
+		var width = parseInt(12/PhoenixUX.types.length);
+		for (var i = 0; i < PhoenixUX.types.length; i++) {
+			typesCircleHTML += '<div id="' + PhoenixUX.types[i].type + '" onclick="PhoenixUI.changeType(\'' + PhoenixUX.types[i].type + '\')" class="col-' + width + '"><div id="' + PhoenixUX.types[i].type + '" class="type-circle ' + PhoenixUX.types[i].icon + ( i == 0 ? ' type-circle-active' : '') + '"></div>' + PhoenixUX.types[i].type + '</div>';
+		}
+		typeCirclesElement.innerHTML = typesCircleHTML;
+
+
+		if (PhoenixUX.types[0]){
+			PhoenixUX.changeType(PhoenixUX.types[0].type);
+			if (PhoenixUX.types[0].subtypes[0]){
+				PhoenixUX.changeSubtype(PhoenixUX.types[0].type + ',' + PhoenixUX.types[0].subtypes[0].subtype);
+			}
+		}
+			
+		// var typesPillsHTML = '';
+		// for (var i = 0; i < PhoenixUX.types[0].subtypes.length; i++) {
+		// 	typesPillsHTML += '<li id="' + PhoenixUX.types[0].subtypes[i].subtype + '" ' + ( i==0 ? 'class="active"' : '') + ' onclick="PhoenixUI.changeSubtype(\'' + PhoenixUX.types[0].type + ',' + PhoenixUX.types[0].subtypes[i].subtype + '\')"><a href="#' + PhoenixUX.types[0].subtypes[i].subtype + '" data-toggle="tab">' + PhoenixUX.types[0].subtypes[i].subtype + '</a></li>';
+		// }
+		// subtypePillsElement.innerHTML = typesPillsHTML;
+	}
+
+	PhoenixUX.changeType = function(type){
+		PhoenixUX.type = type;
+
+		for (var i = 0; i < typeCirclesElement.children.length; i++) {
+			typeCirclesElement.children[i].children[0].classList.remove('type-circle-active');
+
+			 if (typeCirclesElement.children[i].id == type)
+			 	typeCirclesElement.children[i].children[0].className += ' type-circle-active';
+		}
+
+		for (var i = 0; i < PhoenixUX.types.length; i++) {
+			if (PhoenixUX.types[i].type == type){
+				if (PhoenixUX.types[i].subtypes[0]){
+					PhoenixUX.updateMetadata(PhoenixUX.types[i].subtypes[0]);
+				}
+				var typesPillsHTML = '';
+				for (var j = 0; j < PhoenixUX.types[i].subtypes.length; j++) {
+					typesPillsHTML += '<li id="' + PhoenixUX.types[i].subtypes[j].subtype + '" ' + ( j==0 ? 'class="active"' : '') + ' onclick="PhoenixUI.changeSubtype(\'' + PhoenixUX.types[i].type + ',' + PhoenixUX.types[i].subtypes[j].subtype + '\')"><a href="#' + PhoenixUX.types[i].subtypes[j].subtype + '" data-toggle="tab">' + PhoenixUX.types[i].subtypes[j].subtype + '</a></li>';
+				}
+				subtypePillsElement.innerHTML = typesPillsHTML;
+			}
+		}
+
 		
 	}
 
-	PhoenixUX.generateArtifactJSONFromView = function(){
+	PhoenixUX.changeSubtype = function(str){
+		var type = str.split(',')[0];
+		var subtype = str.split(',')[1];
+
+		PhoenixUX.subtype = subtype;
+
+		for (var i = 0; i < subtypePillsElement.children.length; i++) {
+			subtypePillsElement.children[i].classList.remove('active');
+
+			if (subtypePillsElement.children[i].id == subtype){
+				subtypePillsElement.children[i].className += ' active';
+			}
+		}
+
+		for (var i = 0; i < PhoenixUX.types.length; i++) {
+			if (type == PhoenixUX.types[i].type){
+				for (var j = 0; j < PhoenixUX.types[i].subtypes.length; j++) {
+					if (subtype == PhoenixUX.types[i].subtypes[j].subtype){
+						PhoenixUX.updateMetadata(PhoenixUX.types[i].subtypes[j]);
+					}
+				}
+			}
+				
+		}
+	}
+
+	PhoenixUX.updateMetadata = function(newType){
+		metaTitleElement.innerHTML = newType.subtype + ' Information';
+
+		var formHTML = '';
+		for (var i = 0; i < newType.forms.length; i++) {
+			formHTML += PhoenixUX.generateFormElement(newType.forms[i]);
+		}
+
+		metaFormElement.innerHTML = formHTML;
+
+		posterElement.className = newType.coverArt.class;
+		posterTitleElement.innerHTML = newType.coverArt.text ? newType.coverArt.text : 'Cover Art';
+	}
+
+	PhoenixUX.generateFormElement = function(formJSON){
+		if (formJSON.type == 'textarea'){
+			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
+				<textarea rows="' + formJSON.rows + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '"></textarea>\
+			</div>';
+		} else {
+			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
+				<input type="' + (formJSON.type ? formJSON.type : 'text') + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '">\
+			</div>';
+		}
 		
+	}
+
+	PhoenixUX.loadArtifactIntoView = function(artifact){
+
+	}
+
+	PhoenixUX.generateArtifactJSONFromView = function(){
+
 	}
 
 	return PhoenixUX;
 })();
 
-
-
+// Initialize
+PhoenixUI.loadTypes();
+//PhoenixUI.updateMetadata(PhoenixUI.types[1].subtypes[0]);

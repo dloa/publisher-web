@@ -147,6 +147,24 @@
 			    color: #8e8e90;
 			    transition: 0.1s all;
 			}
+
+			.loader {
+				position: absolute;
+				top: 50%;
+				left: 45%;
+				top: 200px;
+			    border: 16px solid #f3f3f3; /* Light grey */
+			    border-top: 16px solid #3498db; /* Blue */
+			    border-radius: 50%;
+			    width: 120px;
+			    height: 120px;
+			    animation: spin 2s linear infinite;
+			}
+
+			@keyframes spin {
+			    0% { transform: rotate(0deg); }
+			    100% { transform: rotate(360deg); }
+			}
 		</style>
 	</head>
 	<body>
@@ -172,7 +190,8 @@
 		</nav>
 
 		<div class="container-fluid">
-			<div class="row">
+			<div class="loader" id="loader"></div>
+			<div id="main" class="row" style="display: none;">
 				<nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
 					<div class="text-center">Welcome, <span id="pub-name"></span></div>
 					<div class="text-center" style="margin-bottom: 0px"> <strong>FLO</strong>: <code><span id="walletBalance"></span></code></strong></div>
@@ -194,19 +213,19 @@
 								<div class="section publish col-lg-12">
 									<div class="publish-section artifact-type">
 										<h5>Select Artifact type</h5> 
-										<div class="row justify-content-center" style="margin-bottom: 20px;">
-											<div class="col-2"><div class="type-circle song-icon type-circle-active"></div>Audio</div>
+										<div class="row justify-content-center" style="margin-bottom: 20px;" id="typeCircles">
+											<!-- <div class="col-2"><div class="type-circle song-icon type-circle-active"></div>Audio</div>
 											<div class="col-2"><div class="type-circle video-icon"></div>Video</div>
 											<div class="col-2"><div class="type-circle image-icon"></div>Image</div>
 											<div class="col-2"><div class="type-circle text-icon"></div>Text</div>
 											<div class="col-2"><div class="type-circle software-icon"></div>Software</div>
-											<div class="col-2"><div class="type-circle web-icon"></div>Web</div>
+											<div class="col-2"><div class="type-circle web-icon"></div>Web</div> -->
 										</div>
-										<ul class="nav nav-pills" role="tablist">
-											<li class="active" onclick="changeArtifactType('music')"><a href="#music" data-toggle="tab">Basic</a></li>
+										<ul class="nav nav-pills" role="tablist" id="subtypePills">
+											<!-- <li class="active" onclick="changeArtifactType('music')"><a href="#music" data-toggle="tab">Basic</a></li>
 											<li onclick="changeArtifactType('song')"><a href="#video" data-toggle="tab">Song</a></li>
 											<li onclick="changeArtifactType('album')"><a href="#video" data-toggle="tab">Album</a></li>
-											<!-- <li onclick="changeArtifactType('podcast')"><a href="#podcast" data-toggle="tab">Podcast</a></li>
+											<li onclick="changeArtifactType('podcast')"><a href="#podcast" data-toggle="tab">Podcast</a></li>
 											<li onclick="changeArtifactType('book')"><a href="#book" data-toggle="tab">Book</a></li>
 											<li onclick="changeArtifactType('movie')"><a href="#movie" data-toggle="tab">Movie</a></li>
 											<li onclick="changeArtifactType('thing')"><a href="#thing" data-toggle="tab">Thing</a></li>
@@ -219,20 +238,16 @@
 												<div class="col-sm-8">
 													<div class="row">
 														<div class="col-12">
-															<h3>Album Information</h3>
+															<h3 id="metaTitle">title</h3>
 														</div>
 													</div>
-													<div class="row">
-														<div class="col-12 form-group" id="artifactTitleGroup">
+													<div class="row" id="metaForm">
+														<!-- <div class="col-12 form-group" id="artifactTitleGroup">
 															<input type="text" class="form-control" id="title" placeholder="Album Title">
 														</div>
-													</div>
-													<div class="row">
 														<div class="col-12 form-group" id="artifactArtistGroup">
 															<input type="text" class="form-control" id="artistName" placeholder="Artist Name">
 														</div>
-													</div>
-													<div class="row">
 														<div class="col-6">
 															<div class="form-group" id="artifactgenreGroup">
 																<input type="text" class="form-control" id="genre" placeholder="Genre">
@@ -243,30 +258,24 @@
 																<input type="number" class="form-control" id="releaseDate" placeholder="Release Year">
 															</div>
 														</div>
-													</div>
-													<div class="row">
 														<div class="col-12 form-group" id="artifactTagsGroup">
 															<input type="text" class="form-control" id="tags" placeholder="Tags">
 														</div>
-													</div>
-													<div class="row">
 														<div class="col-12 form-group" id="artifactRecordLabelGroup">
 															<input type="text" class="form-control" id="recordLabel" placeholder="Record Label">
 														</div>
-													</div>
-													<div class="row">
 														<div class="col-12 form-group" id="artifactDescriptionGroup">
 															<textarea row="3" class="form-control" id="description" placeholder="Album Description"></textarea>
-														</div>
+														</div> -->
 													</div>
 												</div>
 												<div class="col-4">
 													<center>
-														<h3>Cover Art</h3>
-														<div class="cover-art-square" id='musicPoster'>
+														<h3 id="posterTitle">Cover Art</h3>
+														<div class="cover-art-square" id='poster'>
 														</div>
 														<label class="custom-file text-center" style="margin-top: 10px;">
-															<input type="file" id="file" class="custom-file-input">
+															<input type="file" id="posterFile" class="custom-file-input">
 															<span class="custom-file-control"></span>
 														</label>
 													</center>
@@ -510,7 +519,7 @@
 											<div class="col-4">
 												<p class="small">You will be able to submit your artifact after you preview it. Be sure it looks exactly like what you desire as you will be unable to change this later.</p>
 											</div>
-											<div class="col-4 text-center" style="color: green">Cost To Publish<br /><h1 style="margin-bottom: 0px;">$4.15</h1></div>
+											<div class="col-4 text-center" style="color: green">Cost To Publish<br /><h1 style="margin-bottom: 0px;">Free!</h1></div>
 											<div class="col-4 text-right">
 												<button type="button" id="previewButton" class="btn btn-outline-info">Preview</button>
 											</div>
@@ -558,121 +567,6 @@
 											<button type="button" class="btn btn-danger pull-left" data-dismiss="modal" onclick="$('#previewVideo').get(0).pause();">Cancel</button>
 
 											<button type="button" class="btn btn-success pull-right" data-dismiss="modal" onclick="submitArtifact()">Submit</button>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="modal fade" id="walletModal" tabindex="-1" role="dialog" aria-labelledby="walletLabel">
-							<div class="vertical-alignment-helper">
-								<div class="vertical-align-center modal-dialog" role="document">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h4 class="modal-title" id="walletLabel">Login to Wallet</h4>
-										</div>
-										<div class="modal-body">
-											<div class="container">
-												<div class="row">
-													<div class="col-md-6">
-														<!-- Nav tabs -->
-														<ul class="nav nav-tabs" role="tablist">
-															<li role="presentation" class="active"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
-															<li role="presentation"><a href="#register" aria-controls="register" role="tab" data-toggle="tab">Register</a></li>
-														</ul>
-
-														<!-- Tab panes -->
-														<div class="tab-content">
-															<div role="tabpanel" class="tab-pane active" id="login">
-																<form>
-																	<div class="form-group">
-																		<label for="loginWalletIdentifier">Wallet Identifier</label>
-																		<input type="text" class="form-control" id="loginWalletIdentifier" placeholder="xxxx-xxxx-xxx-xxx">
-																		<p class="help-block">This is your wallet identifier that you recieved after creating a wallet with Flovault.</p>
-																	</div>
-																	<div class="form-group">
-																		<label for="loginWalletPassword">Password</label>
-																		<input type="password" class="form-control" id="loginWalletPassword" placeholder="">
-																		<p class="help-block"></p>
-																	</div>
-																	<div class="form-group">
-																		<input id="login-remember" type="checkbox" name="remember" value="1"> Remember me
-																		<p class="help-block"></p>
-																	</div>
-																</form>
-																<button class="btn btn-success" id="walletLoginButton" onclick="loginToWallet();">Login</button>
-															</div>
-															<div role="tabpanel" class="tab-pane" id="register">
-																<form>
-																	<div class="form-group">
-																		<label for="loginWalletIdentifier">Email Address</label>
-																		<input type="email" class="form-control" id="createWalletEmail" placeholder="example@me.com">
-																		<p class="help-block">Optional email, used for 2FA and if you forget your identifier.</p>
-																	</div>
-																	<div class="form-group">
-																		<label for="loginWalletPassword">Password</label>
-																		<input type="password" class="form-control" id="createWalletPassword" placeholder="">
-																		<p class="help-block">You will use this password along with your generated identifier to login to your account.</p>
-																	</div>
-																</form>
-																<button class="btn btn-success" onclick="registerWallet();">Register</button>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="modal-footer">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="modal fade" id="walletInfoModal" tabindex="-1" role="dialog" aria-labelledby="walletInfoLabel">
-							<div class="vertical-alignment-helper">
-								<div class="vertical-align-center modal-dialog" role="document">
-									<div class="modal-content">
-										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-											<h4 class="modal-title" id="walletInfoLabel">Wallet Info</h4>
-										</div>
-										<div class="modal-body">
-											<div class="container">
-												<div class="row">
-													<div class="col-md-6">
-														<!-- Nav tabs -->
-														<ul class="nav nav-tabs" role="tablist">
-															<li role="presentation" class="active"><a href="#main" aria-controls="main" role="tab" data-toggle="tab">Main</a></li>
-														</ul>
-
-														<!-- Tab panes -->
-														<div class="tab-content">
-															<div role="tabpanel" class="tab-pane active" id="mainx">
-																<h4>Identifier <code id="identifierx"></code></h4>
-																<div class="table-responsive">
-																	<table class="table table-bordered table-condensed" id="addressTablex">
-																		<thead>
-																			<tr>
-																				<th>Address</th>
-																				<th style="width: 30%">Balance</th>
-																				<th>Actions</th>
-																			</tr>
-																		</thead>
-																		<tbody>
-																			<tr></tr>
-																		</tbody>
-																	</table>
-																</div>
-																<button class="btn btn-default" onclick="newAddress();">New Address</button>
-																<button class="btn btn-danger" onclick="location.reload();">Log Out</button>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="modal-footer">
-											<button class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
-											<button class="btn btn-default pull-left" onclick="refreshWalletInfo();" id="refreshButton">Refresh</button>
 										</div>
 									</div>
 								</div>
@@ -771,7 +665,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
+									<!-- <tr>
 										<th scope="row">1</th>
 										<td><code>Apollo 11</code></td>
 										<td>Pinned: <code><span style="color: red">3</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$3.14</span> = <span style="color: orange">Ƀ0.0314</span> | Views: <code>387</code></td>
@@ -817,7 +711,7 @@
 										<td><code>Apollo 17</code></td>
 										<td>Pinned: <code><span style="color: orange">5</span>/<span style="color: green">10</span></code> | Profit: <span style="color: green">$149</span> = <span style="color: orange">Ƀ0.15</span> | Views: <code>3,869</code></td>
 										<td><button class="btn btn-info">Info</button> <button class="btn btn-warning">Edit</button> <button class="btn btn-danger">Deactivate</button></td>
-									</tr>
+									</tr> -->
 								</tbody>
 							</table>
 							<hr />
@@ -1174,16 +1068,16 @@
 			// // Hide the coinbase buy button if not on alexandria.io as it will not work
 			// testDomain();
 
-			// $(document).on("change","input[type=radio]",function(){
-			//     var free = $('[name="free"]')[0].checked;
-			//     var paid = $('[name="free"]')[1].checked;
+			$(document).on("change","input[type=radio]",function(){
+			    var free = $('[name="free"]')[0].checked;
+			    var paid = $('[name="free"]')[1].checked;
 
-			//     if (paid) {
-			//     	$('#paymentInfo').show();
-			//     } else {
-			//     	$('#paymentInfo').hide();
-			//     }
-			// });
+			    if (paid) {
+			    	$('#paymentInfo').show();
+			    } else {
+			    	$('#paymentInfo').hide();
+			    }
+			});
 
 			// $('#publisherNav').on('click', function(evt){
 			// 	$('#wizard').show();
@@ -1260,6 +1154,11 @@
 				}
 			}
 			checkEnv();
+
+			var doneLoading = function(){
+				document.getElementById('main').style = '';
+				document.getElementById('loader').style = 'display:none;';
+			}
 
 			// loadTransactions();
 
