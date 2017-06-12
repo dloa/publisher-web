@@ -46,6 +46,13 @@
 				border-bottom: none;
 			}
 
+			.dual-selector {
+				display: flex; 
+				padding: 0px 0px !important;
+				width: 100%; 
+				padding-top: 1px !important;
+			}
+
 			.custom-file-control::before {
 			    color: #5bc0de;
 			    background-color: #fff;
@@ -443,12 +450,12 @@
 													</tr>
 												</thead>
 												<tbody id="mediaTable">
-													<tr>
+													<!-- <tr>
 														<td><img class="table-icon" src="./assets/svg/song-icon.svg"></td>
 														<td class="text-left"> <input type="text" class="form-control" name="dispName" value="Display Name"></td>
 														<td>3.2MB</td>
 														<td style="width: 100%">
-															<div class="row form-control" style="display: flex; padding: 0px 0px; width: 100%; padding-top: 1px;">
+															<div class="row form-control dual-selector">
 																<select class="form-control col-6" id="exampleSelect1">
 																	<option>Audio</option>
 																	<option>Video</option>
@@ -463,51 +470,7 @@
 															</div>
 														</td>
 														<td><button class="btn btn-sm btn-outline-danger">x</button></td>
-													</tr>
-													<tr>
-														<td><img class="table-icon" src="./assets/svg/album-icon.svg"></td>
-														<td class="text-left"> <input type="text" class="form-control" name="dispName" value="Display Name"></td>
-														<td>3.2MB</td>
-														<td>
-															<div class="row form-control" style="display: flex; padding: 0px 0px; width: 100%; padding-top: 1px;">
-																<select class="form-control col-6" id="exampleSelect1">
-																	<option>Audio</option>
-																	<option>Video</option>
-																	<option>Image</option>
-																	<option>Software</option>
-																	<option>Web</option>
-																	<option>Text</option>
-																</select>
-																<select class="form-control col-6" id="exampleSelect1">
-																	<option>Album</option>
-																</select>
-															</div>
-																
-															</td>
-														<td><button class="btn btn-sm btn-outline-danger">x</button></td>
-													</tr>
-													<tr>
-														<td><img class="table-icon" src="./assets/svg/video-icon.svg"></td>
-														<td class="text-left"> <input type="text" class="form-control" name="dispName" value="Display Name"></td>
-														<td>320.2MB</td>
-														<td>
-															<div class="row form-control" style="display: flex; padding: 0px 0px; width: 100%; padding-top: 1px;">
-																<select class="form-control col-6" id="exampleSelect1">
-																	<option>Video</option>
-																	<option>Audio</option>
-																	<option>Image</option>
-																	<option>Software</option>
-																	<option>Web</option>
-																	<option>Text</option>
-																</select>
-																<select class="form-control col-6" id="exampleSelect1">
-																	<option>Movie</option>
-																</select>
-															</div>
-																
-															</td>
-														<td><button class="btn btn-sm btn-outline-danger">x</button></td>
-													</tr>
+													</tr> -->
 												</tbody>
 											</table>
 											<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->

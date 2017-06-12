@@ -13,6 +13,8 @@ var posterTitleElement = document.getElementById('posterTitle');
 var posterFileSelectElement = document.getElementById('posterFile');
 var typeCirclesElement = document.getElementById('typeCircles');
 var subtypePillsElement = document.getElementById('subtypePills');
+var posterElement = document.getElementById('poster');
+var posterFileElement = document.getElementById('posterFile');
 
 // Accepts a set of Selectors to load the artifact into view. Generates code for all of the different sections to fill it.
 PhoenixEvents.on("onLogin", function(msg){ console.log("Logging in"); })
@@ -905,9 +907,176 @@ var PhoenixUI = (function(){
 
 	}
 
+	PhoenixUX.mediaFileSelectHandler = function(e) {
+		console.log(e);
+
+		// cancel event and hover styling
+		PhoenixUX.posterFileDragHoverHandler(e);
+
+		// fetch FileList object
+		var files = e.target.files || e.dataTransfer.files;
+
+		$('#mediaTable').append('\
+		<tr>\
+			<td><img class="table-icon" src="./assets/svg/song-icon.svg"></td>\
+			<td class="text-left"> <input type="text" class="form-control" name="dispName" value="Display Name"></td>\
+			<td>3.2MB</td>\
+			<td style="width: 100%">\
+				<div class="row form-control dual-selector">\
+					<select class="form-control col-6" id="exampleSelect1">\
+						<option>Audio</option>\
+						<option>Video</option>\
+						<option>Image</option>\
+						<option>Software</option>\
+						<option>Web</option>\
+						<option>Text</option>\
+					</select>\
+					<select class="form-control col-6" id="exampleSelect1">\
+						<option>Song</option>\
+					</select>\
+				</div>\
+			</td>\
+			<td><button class="btn btn-sm btn-outline-danger">x</button></td>\
+		</tr>');
+
+		// ToDo: Validate Filetype
+		// var mimeType = [mediaType];
+
+		// if (mediaType == 'music' || mediaType == 'podcast'){
+		// 	mimeType[0] = 'audio';
+		// }
+		// else if (mediaType == 'book'){
+		// 	mimeType = ['pdf', 'text'];
+		// }
+		// else if (mediaType == 'movie'){
+		// 	mimeType[0] = 'video';
+		// }
+		// else if (mediaType == 'thing' || mediaType == 'html'){
+		// 	mimeType[0] = 'any';
+		// }
+
+		// // process all File objects
+		// for (var i = 0; i < files.length; i++) {
+		// 	var f = files[i];
+		// 	if (e.target.id == "mediaDrop" || e.target.id == "mediaFiles"){
+		// 		// Check if it contains that mime type of files.
+		// 		var validFileType = false;
+		// 		for (var j = 0; j < mimeType.length; j++) {
+		// 			if (mimeType[0] == 'any' || f.type.indexOf(mimeType[j]) > -1)
+		// 				validFileType = true;
+		// 		}
+		// 		if (validFileType){
+		// 			ParseMedia(f);
+		// 		} else if (mediaType === undefined){
+		// 			ParseMedia(f);
+		// 		} else {
+		// 			swal('Error', 'You can only select ' + mediaType + ' files.', 'error');
+		// 		}
+		// 	} else if (e.target.id == "extraDrop" || e.target.id == "extraFiles"){
+		// 		ParseExtra(f);
+		// 	} else if (e.target.id.includes('Poster')){
+		// 		ParsePoster(f);
+		// 	}
+		// }
+	}
+
+	PhoenixUX.posterFileDragStartHandler = function(e) {
+		e.preventDefault();
+		console.log('start',e);
+		PhoenixUX.posterDragStartEvent = e;
+	}
+
+	PhoenixUX.posterFileSelectHandler = function(e) {
+		// cancel event and hover styling
+		PhoenixUX.posterFileDragHoverHandler(e);
+		console.log(PhoenixUX.posterDragStartEvent);
+		console.log(e);
+
+		if (e.stopPropagation) {
+		    e.stopPropagation(); // Stops some browsers from redirecting.
+		}
+
+		// fetch FileList object
+		var files = e.target.files || e.dataTransfer.files;
+
+		if (files[0]){
+			var file = files[0]
+
+			var reader = new FileReader();
+
+			reader.onload = function (e) {
+				$('#Poster').css("background-image", "url('" + e.target.result + "')");
+			}
+
+			reader.readAsDataURL(file);
+		}
+
+		// ToDo: Validate Filetype
+		// var mimeType = [mediaType];
+
+		// if (mediaType == 'music' || mediaType == 'podcast'){
+		// 	mimeType[0] = 'audio';
+		// }
+		// else if (mediaType == 'book'){
+		// 	mimeType = ['pdf', 'text'];
+		// }
+		// else if (mediaType == 'movie'){
+		// 	mimeType[0] = 'video';
+		// }
+		// else if (mediaType == 'thing' || mediaType == 'html'){
+		// 	mimeType[0] = 'any';
+		// }
+
+		// // process all File objects
+		// for (var i = 0; i < files.length; i++) {
+		// 	var f = files[i];
+		// 	if (e.target.id == "mediaDrop" || e.target.id == "mediaFiles"){
+		// 		// Check if it contains that mime type of files.
+		// 		var validFileType = false;
+		// 		for (var j = 0; j < mimeType.length; j++) {
+		// 			if (mimeType[0] == 'any' || f.type.indexOf(mimeType[j]) > -1)
+		// 				validFileType = true;
+		// 		}
+		// 		if (validFileType){
+		// 			ParseMedia(f);
+		// 		} else if (mediaType === undefined){
+		// 			ParseMedia(f);
+		// 		} else {
+		// 			swal('Error', 'You can only select ' + mediaType + ' files.', 'error');
+		// 		}
+		// 	} else if (e.target.id == "extraDrop" || e.target.id == "extraFiles"){
+		// 		ParseExtra(f);
+		// 	} else if (e.target.id.includes('Poster')){
+		// 		ParsePoster(f);
+		// 	}
+		// }
+	}
+
+	PhoenixUX.posterFileDragHoverHandler = function(e){
+		PhoenixUX.dragSrcEl = this;
+
+		e.preventDefault();
+		e.dataTransfer.effectAllowed = 'move';
+		e.dataTransfer.setData('text/html', this.innerHTML);
+
+
+		return false;
+	}
+
 	return PhoenixUX;
 })();
 
 // Initialize
 PhoenixUI.loadTypes();
-//PhoenixUI.updateMetadata(PhoenixUI.types[1].subtypes[0]);
+
+// Handle all of the drag and drop setup
+posterFileElement.addEventListener("change", PhoenixUI.posterFileSelectHandler, false);
+
+posterElement.ondragstart = PhoenixUI.posterFileDragStartHandler
+posterElement.ondragenter = PhoenixUI.posterFileDragStartHandler
+posterElement.ondragover = PhoenixUI.posterFileDragHoverHandler
+posterElement.ondragleave = PhoenixUI.posterFileDragHoverHandler
+posterElement.ondrop = PhoenixUI.posterFileSelectHandler;
+posterElement.style.display = "block";
+
+
