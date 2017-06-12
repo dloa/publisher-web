@@ -47,7 +47,7 @@ PhoenixEvents.on("onPublisherLoadSuccess", function(publishers){
 
 	// If we just have one or less publishers, then there is no reason to show the selector, if there is more then one, then we show it.
 	if (publishers.length > 1){
-		publisherSelectElement.style.display = 'block';
+		publisherSelectElement.style.display = 'inline-block';
 	} else {
 		publisherSelectElement.style.display = 'none';
 	}
