@@ -1003,7 +1003,7 @@ var PhoenixUI = (function(){
 				<td>' + PhoenixUX.humanFileSize(file.size, true) + '</td>\
 				<td style="width: 100%">\
 					<div class="row form-control dual-selector">\
-						<select class="form-control col-6" id="exampleSelect1">\
+						<select class="form-control col-6" id="typeSelect" onchange="PhoenixUI.onMediaSelectChange(this);">\
 							<option>Audio</option>\
 							<option>Video</option>\
 							<option>Image</option>\
@@ -1011,8 +1011,10 @@ var PhoenixUI = (function(){
 							<option>Web</option>\
 							<option>Text</option>\
 						</select>\
-						<select class="form-control col-6" id="exampleSelect1">\
+						<select class="form-control col-6" id="subtypeSelect" onchange="">\
 							<option>Song</option>\
+							<option>Album</option>\
+							<option>Single</option>\
 						</select>\
 					</div>\
 				</td>\
@@ -1153,6 +1155,24 @@ var PhoenixUI = (function(){
 			$('#' + id + 'price #minBuy').val("");
 		else
 			$('#' + id + 'price #disBuy').prop("checked", false);
+	}
+
+	PhoenixUX.onMediaSelectChange = function(elem){
+		PhoenixUX.mediaChangeSelect = elem;
+
+		var type = elem.value;
+		var secondSelector = elem.parentElement.children[1];
+
+		for (var v in PhoenixUX.fileSelectTypes) {
+			if (v == type){
+				secondSelector.innerHTML = '';
+				var tmpString = '';
+				for (var i = 0; i < PhoenixUX.fileSelectTypes[v].length; i++) {
+					tmpString += '<option>' + PhoenixUX.fileSelectTypes[v][i] + '</option>';
+				}
+				secondSelector.innerHTML = tmpString;
+			}
+		}
 	}
 
 	return PhoenixUX;
