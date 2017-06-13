@@ -785,6 +785,52 @@ var PhoenixUI = (function(){
 		}]
 	}];
 
+	PhoenixUX.fileSelectTypes = {
+		'Audio': [
+			"Song",
+			"Album",
+			"Single"
+		],
+		'Video': [
+			"Video",
+			"Trailer",
+			"Movie",
+			"TV Show",
+			"Episode",
+			"Season"
+		],
+		'Image': [
+			"Image",
+			"Cover Art",
+			"Poster",
+			"Preview Image"
+		],
+		'Text': [
+			'Plaintext',
+			'PDF',
+			'RTF',
+			'Document',
+			'Book',
+			'File'
+		],
+		'Software': [
+			'Source Code',
+			'Windows App',
+			'Mac App',
+			'Linux App',
+			'iOS App',
+			'Andriod App',
+			'Windows Phone App'
+		],
+		'Web': [
+			'HTML',
+			'CSS',
+			'Javascript',
+			'PHP',
+			'Python'
+		]
+	}
+
 	PhoenixUX.onPublisherSelectChange = function(elem){
 		// Update the publisher name
 		for (var i = 0; i < Phoenix.publishers.length; i++) {
