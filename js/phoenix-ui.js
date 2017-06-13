@@ -907,77 +907,104 @@ var PhoenixUI = (function(){
 
 	}
 
-	PhoenixUX.mediaFileSelectHandler = function(e) {
-		console.log(e);
+	PhoenixUX.mediaFileSelectHandler = function(files) {
+		if (!PhoenixUX.mediaFiles)
+			PhoenixUX.mediaFiles = [];
 
-		// cancel event and hover styling
-		PhoenixUX.posterFileDragHoverHandler(e);
+		if (Array.isArray(files)){
+			for (var i = 0; i < files.length; i++) {
+				files[i].id = PhoenixUX.sanitizeID(files[i].name);
 
-		// fetch FileList object
-		var files = e.target.files || e.dataTransfer.files;
+				PhoenixUX.appendFileToMediaTable(files[i]);
+				PhoenixUX.appendFileToPricingTable(files[i]);
 
+				PhoenixUX.mediaFiles.push(files[i]);
+			}
+		} else {
+			var file = files;
+
+			file.id = PhoenixUX.sanitizeID(file.name);
+
+			PhoenixUX.appendFileToMediaTable(file);
+			PhoenixUX.appendFileToPricingTable(file);
+
+			PhoenixUX.mediaFiles.push(file);
+		}
+	}
+
+	PhoenixUX.removeMediaFile = function(id){
+		console.log(id);
+
+		if (PhoenixUX.mediaFiles){
+			for (var i = 0; i < PhoenixUX.mediaFiles.length; i++){
+				if (PhoenixUX.mediaFiles[i].id == id){
+					PhoenixUX.mediaFiles.splice(i, 1);
+				}
+			}
+		}
+
+		// Remove from table array
+		document.getElementById(id).remove();
+		// Remove from price array
+		document.getElementById(id + 'price').remove();
+	}
+
+	PhoenixUX.appendFileToMediaTable = function(file) {
 		$('#mediaTable').append('\
-		<tr>\
-			<td><img class="table-icon" src="./assets/svg/song-icon.svg"></td>\
-			<td class="text-left"> <input type="text" class="form-control" name="dispName" value="Display Name"></td>\
-			<td>3.2MB</td>\
-			<td style="width: 100%">\
-				<div class="row form-control dual-selector">\
-					<select class="form-control col-6" id="exampleSelect1">\
-						<option>Audio</option>\
-						<option>Video</option>\
-						<option>Image</option>\
-						<option>Software</option>\
-						<option>Web</option>\
-						<option>Text</option>\
-					</select>\
-					<select class="form-control col-6" id="exampleSelect1">\
-						<option>Song</option>\
-					</select>\
-				</div>\
-			</td>\
-			<td><button class="btn btn-sm btn-outline-danger">x</button></td>\
-		</tr>');
+			<tr id="' + file.id + '">\
+				<td><img class="table-icon" src="./assets/svg/song-icon.svg"></td>\
+				<td class="text-left"> <input type="text" class="form-control" name="dispName" placeholder="' + file.name + '"></td>\
+				<td>' + PhoenixUX.humanFileSize(file.size, true) + '</td>\
+				<td style="width: 100%">\
+					<div class="row form-control dual-selector">\
+						<select class="form-control col-6" id="exampleSelect1">\
+							<option>Audio</option>\
+							<option>Video</option>\
+							<option>Image</option>\
+							<option>Software</option>\
+							<option>Web</option>\
+							<option>Text</option>\
+						</select>\
+						<select class="form-control col-6" id="exampleSelect1">\
+							<option>Song</option>\
+						</select>\
+					</div>\
+				</td>\
+				<td><button class="btn btn-sm btn-outline-danger" onclick="PhoenixUI.removeMediaFile(\'' + file.id + '\');">x</button></td>\
+			</tr>');
+	}
 
-		// ToDo: Validate Filetype
-		// var mimeType = [mediaType];
-
-		// if (mediaType == 'music' || mediaType == 'podcast'){
-		// 	mimeType[0] = 'audio';
-		// }
-		// else if (mediaType == 'book'){
-		// 	mimeType = ['pdf', 'text'];
-		// }
-		// else if (mediaType == 'movie'){
-		// 	mimeType[0] = 'video';
-		// }
-		// else if (mediaType == 'thing' || mediaType == 'html'){
-		// 	mimeType[0] = 'any';
-		// }
-
-		// // process all File objects
-		// for (var i = 0; i < files.length; i++) {
-		// 	var f = files[i];
-		// 	if (e.target.id == "mediaDrop" || e.target.id == "mediaFiles"){
-		// 		// Check if it contains that mime type of files.
-		// 		var validFileType = false;
-		// 		for (var j = 0; j < mimeType.length; j++) {
-		// 			if (mimeType[0] == 'any' || f.type.indexOf(mimeType[j]) > -1)
-		// 				validFileType = true;
-		// 		}
-		// 		if (validFileType){
-		// 			ParseMedia(f);
-		// 		} else if (mediaType === undefined){
-		// 			ParseMedia(f);
-		// 		} else {
-		// 			swal('Error', 'You can only select ' + mediaType + ' files.', 'error');
-		// 		}
-		// 	} else if (e.target.id == "extraDrop" || e.target.id == "extraFiles"){
-		// 		ParseExtra(f);
-		// 	} else if (e.target.id.includes('Poster')){
-		// 		ParsePoster(f);
-		// 	}
-		// }
+	PhoenixUX.appendFileToPricingTable = function(file) {
+		$('#pricingTable tr:last').after(
+			'<tr id="' + file.id + 'price">' +
+				'<td style="width:20%">' + file.name + '</td>' +
+				'<td>' +
+					'<div class="input-group">' +
+						'<div class="input-group-addon">$</div>' +
+						'<input type="text" class="price form-control" id="sugPlay" onblur="validatePricing(\'' + file.id + '\')" placeholder="0.000">' +
+					'</div>' +
+				'</td>' +
+				'<td>' +
+					'<div class="input-group">' +
+						'<div class="input-group-addon">$</div>' +
+						'<input type="text" class="price form-control" id="minPlay" onblur="validatePricing(\'' + file.id + '\')" placeholder="0.000">' +
+					'</div>' +
+			   '</td>' +
+				'<td>' +
+					'<div class="input-group">' +
+						'<div class="input-group-addon">$</div>' +
+						'<input type="text" class="price form-control" id="sugBuy" onblur="validatePricing(\'' + file.id + '\')" placeholder="0.000">' +
+					'</div>' +
+				'</td>' +
+				'<td>' +
+					'<div class="input-group">' +
+						'<div class="input-group-addon">$</div>' +
+						'<input type="text" class="price form-control" id="minBuy" onblur="validatePricing(\'' + file.id + '\')" placeholder="0.000">' +
+					'</div>' +
+				'</td>' +
+				'<td style="width:15%"><input type="checkbox" id="disPlay" onclick="checkboxToggle(\'' + file.id + '\', \'play\')"> Disallow Play' +
+				'<br><input type="checkbox" id="disBuy" onclick="checkboxToggle(\'' + file.id + '\', \'buy\')"> Disallow Buy</td>' +
+			'</tr>');
 	}
 
 	PhoenixUX.posterFileDragStartHandler = function(e) {
@@ -986,70 +1013,18 @@ var PhoenixUI = (function(){
 		PhoenixUX.posterDragStartEvent = e;
 	}
 
-	PhoenixUX.posterFileSelectHandler = function(e) {
-		// cancel event and hover styling
-		PhoenixUX.posterFileDragHoverHandler(e);
-		console.log(PhoenixUX.posterDragStartEvent);
-		console.log(e);
+	PhoenixUX.posterFileSelectHandler = function(file) {
+		PhoenixUX.posterFile = file;
 
-		if (e.stopPropagation) {
-		    e.stopPropagation(); // Stops some browsers from redirecting.
-		}
-
-		// fetch FileList object
-		var files = e.target.files || e.dataTransfer.files;
-
-		if (files[0]){
-			var file = files[0]
-
+		if (file){
 			var reader = new FileReader();
 
 			reader.onload = function (e) {
-				$('#Poster').css("background-image", "url('" + e.target.result + "')");
+				$('#poster').css("background-image", "url('" + e.target.result + "')");
 			}
 
 			reader.readAsDataURL(file);
 		}
-
-		// ToDo: Validate Filetype
-		// var mimeType = [mediaType];
-
-		// if (mediaType == 'music' || mediaType == 'podcast'){
-		// 	mimeType[0] = 'audio';
-		// }
-		// else if (mediaType == 'book'){
-		// 	mimeType = ['pdf', 'text'];
-		// }
-		// else if (mediaType == 'movie'){
-		// 	mimeType[0] = 'video';
-		// }
-		// else if (mediaType == 'thing' || mediaType == 'html'){
-		// 	mimeType[0] = 'any';
-		// }
-
-		// // process all File objects
-		// for (var i = 0; i < files.length; i++) {
-		// 	var f = files[i];
-		// 	if (e.target.id == "mediaDrop" || e.target.id == "mediaFiles"){
-		// 		// Check if it contains that mime type of files.
-		// 		var validFileType = false;
-		// 		for (var j = 0; j < mimeType.length; j++) {
-		// 			if (mimeType[0] == 'any' || f.type.indexOf(mimeType[j]) > -1)
-		// 				validFileType = true;
-		// 		}
-		// 		if (validFileType){
-		// 			ParseMedia(f);
-		// 		} else if (mediaType === undefined){
-		// 			ParseMedia(f);
-		// 		} else {
-		// 			swal('Error', 'You can only select ' + mediaType + ' files.', 'error');
-		// 		}
-		// 	} else if (e.target.id == "extraDrop" || e.target.id == "extraFiles"){
-		// 		ParseExtra(f);
-		// 	} else if (e.target.id.includes('Poster')){
-		// 		ParsePoster(f);
-		// 	}
-		// }
 	}
 
 	PhoenixUX.posterFileDragHoverHandler = function(e){
@@ -1063,6 +1038,77 @@ var PhoenixUI = (function(){
 		return false;
 	}
 
+	PhoenixUX.humanFileSize = function(bytes, si) {
+		var thresh = si ? 1000 : 1024;
+		if(Math.abs(bytes) < thresh) {
+			return bytes + ' B';
+		}
+		var units = si
+			? ['kB','MB','GB','TB','PB','EB','ZB','YB']
+			: ['KiB','MiB','GiB','TiB','PiB','EiB','ZiB','YiB'];
+		var u = -1;
+		do {
+			bytes /= thresh;
+			++u;
+		} while(Math.abs(bytes) >= thresh && u < units.length - 1);
+		return bytes.toFixed(1)+' '+units[u];
+	}
+
+	PhoenixUX.sanitizeID = function (name){
+		return name.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/\s]/gi, '');
+	}
+
+	PhoenixUX.checkboxToggle = function(id, checkbox){
+		// Check if the play button was just toggled, if it was check to make sure that it was toggled on.
+		if (checkbox == 'play' && $('#' + id + 'price #disPlay').is(':checked')){
+			// Clear the play pricing, this shortens the publisher JSON
+			$('#' + id + 'price #sugPlay').val("");
+			$('#' + id + 'price #minPlay').val("");
+			// Uncheck the buy if it is checked, one of them must be unchecked
+			if ($('#' + id + 'price #disBuy').is(':checked'))
+				$('#' + id + 'price #disBuy').prop("checked", false);
+		}
+
+		// Check if the buy button was just toggled, check to make sure that it was toggled on.
+		if (checkbox == 'buy' && $('#' + id + 'price #disBuy').is(':checked')){
+			// Clear the play pricing, this shortens the publisher JSON
+			$('#' + id + 'price #sugBuy').val("");
+			$('#' + id + 'price #minBuy').val("");
+			// Uncheck the buy if it is checked, one of them must be unchecked
+			if ($('#' + id + 'price #disPlay').is(':checked'))
+				$('#' + id + 'price #disPlay').prop("checked", false);
+		}
+	}
+
+	PhoenixUX.validatePricing = function(id){
+		// Round to 3 digits
+		$('#' + id + 'price #sugPlay').val(parseFloat($('#' + id + 'price #sugPlay').val()).toFixed(3));
+		// If it was empty, just replace it to be empty again
+		if($('#' + id + 'price #sugPlay').val() == "NaN" || $('#' + id + 'price #sugPlay').val() == 0)
+			$('#' + id + 'price #sugPlay').val("");
+		// If it was just filled, uncheck the checkbox
+		else
+			$('#' + id + 'price #disPlay').prop("checked", false);
+
+		$('#' + id + 'price #minPlay').val(parseFloat($('#' + id + 'price #minPlay').val()).toFixed(3));
+		if($('#' + id + 'price #minPlay').val() == "NaN" || $('#' + id + 'price #minPlay').val() == 0)
+			$('#' + id + 'price #minPlay').val("");
+		else
+			$('#' + id + 'price #disPlay').prop("checked", false);
+
+		$('#' + id + 'price #sugBuy').val(parseFloat($('#' + id + 'price #sugBuy').val()).toFixed(3));
+		if($('#' + id + 'price #sugBuy').val() == "NaN" || $('#' + id + 'price #sugBuy').val() == 0)
+			$('#' + id + 'price #sugBuy').val("");
+		else
+			$('#' + id + 'price #disBuy').prop("checked", false);
+
+		$('#' + id + 'price #minBuy').val(parseFloat($('#' + id + 'price #minBuy').val()).toFixed(3));
+		if($('#' + id + 'price #minBuy').val() == "NaN" || $('#' + id + 'price #minBuy').val() == 0)
+			$('#' + id + 'price #minBuy').val("");
+		else
+			$('#' + id + 'price #disBuy').prop("checked", false);
+	}
+
 	return PhoenixUX;
 })();
 
@@ -1070,13 +1116,18 @@ var PhoenixUI = (function(){
 PhoenixUI.loadTypes();
 
 // Handle all of the drag and drop setup
-posterFileElement.addEventListener("change", PhoenixUI.posterFileSelectHandler, false);
+var posterDropzone = new Dropzone("div#poster", { 
+	url: '/url',
+	createImageThumbnails: false,
+	previewTemplate: '<div></div>'
+});
 
-posterElement.ondragstart = PhoenixUI.posterFileDragStartHandler
-posterElement.ondragenter = PhoenixUI.posterFileDragStartHandler
-posterElement.ondragover = PhoenixUI.posterFileDragHoverHandler
-posterElement.ondragleave = PhoenixUI.posterFileDragHoverHandler
-posterElement.ondrop = PhoenixUI.posterFileSelectHandler;
-posterElement.style.display = "block";
+posterDropzone.on("addedfile", PhoenixUI.posterFileSelectHandler);
 
+var mediaDropzone = new Dropzone("div#mediaDrop", { 
+	url: '/url',
+	createImageThumbnails: false,
+	previewTemplate: '<div></div>'
+});
 
+mediaDropzone.on("addedfile", PhoenixUI.mediaFileSelectHandler);
