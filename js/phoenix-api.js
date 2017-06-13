@@ -250,6 +250,48 @@ var Phoenix = (function() {
 		}
 	}	
 
+	PhoenixAPI.calculatePublishFee = function(){
+		
+	}
+
+	PhoenixAPI.updateMarketData = function(callback){
+		if (!callback)
+			callback = function(){};
+
+		var timeNow = Date.now();
+		var yesterday = timeNow - (24*60*60*1000);
+		if (PhoenixAPI.marketData && PhoenixAPI.marketData.timestamp > yesterday){
+			callback(PhoenixAPI.marketData.data);
+		} else {
+			if (!PhoenixAPI.marketData)
+				PhoenixAPI.marketData = {};
+
+			$.getJSON(librarianHost + "/flo-market-data/v1/getAll	", function( data ) {
+				PhoenixAPI.marketData.timestamp = Date.now();
+				PhoenixAPI.marketData.data = data;
+
+				callback(data);
+			});
+		}		
+	}
+
+	PhoenixAPI.updateLibrarydInfoData = function(callback){
+		// ToDo: this
+
+		if (!callback)
+			callback = function(){};
+
+		if (!PhoenixAPI.marketData)
+			PhoenixAPI.marketData = {};
+	
+		$.getJSON(librarianHost + "/flo-market-data/v1/getAll	", function( data ) {
+			PhoenixAPI.librarydInfo.timestamp = Date.now();
+			PhoenixAPI.librarydInfo.data = data;
+
+			callback(data);
+		});
+	}
+
 	return PhoenixAPI;
 })();
 
