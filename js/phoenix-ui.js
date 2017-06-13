@@ -1029,25 +1029,25 @@ var PhoenixUI = (function(){
 				'<td>' +
 					'<div class="input-group">' +
 						'<div class="input-group-addon">$</div>' +
-						'<input type="text" class="price form-control" id="sugPlay" onblur="validatePricing(\'' + file.id + '\')" placeholder="0.000">' +
+						'<input type="text" class="price form-control" id="sugPlay" onblur="PhoenixUI.validatePricing(this)" placeholder="0.000">' +
 					'</div>' +
 				'</td>' +
 				'<td>' +
 					'<div class="input-group">' +
 						'<div class="input-group-addon">$</div>' +
-						'<input type="text" class="price form-control" id="minPlay" onblur="validatePricing(\'' + file.id + '\')" placeholder="0.000">' +
+						'<input type="text" class="price form-control" id="minPlay" onblur="PhoenixUI.validatePricing(this)" placeholder="0.000">' +
 					'</div>' +
 			   '</td>' +
 				'<td>' +
 					'<div class="input-group">' +
 						'<div class="input-group-addon">$</div>' +
-						'<input type="text" class="price form-control" id="sugBuy" onblur="validatePricing(\'' + file.id + '\')" placeholder="0.000">' +
+						'<input type="text" class="price form-control" id="sugBuy" onblur="PhoenixUI.validatePricing(this)" placeholder="0.000">' +
 					'</div>' +
 				'</td>' +
 				'<td>' +
 					'<div class="input-group">' +
 						'<div class="input-group-addon">$</div>' +
-						'<input type="text" class="price form-control" id="minBuy" onblur="validatePricing(\'' + file.id + '\')" placeholder="0.000">' +
+						'<input type="text" class="price form-control" id="minBuy" onblur="PhoenixUI.validatePricing(this)" placeholder="0.000">' +
 					'</div>' +
 				'</td>' +
 				'<td style="width:15%"><input type="checkbox" id="disPlay" onclick="checkboxToggle(\'' + file.id + '\', \'play\')"> Disallow Play' +
@@ -1128,33 +1128,22 @@ var PhoenixUI = (function(){
 		}
 	}
 
-	PhoenixUX.validatePricing = function(id){
-		// Round to 3 digits
-		$('#' + id + 'price #sugPlay').val(parseFloat($('#' + id + 'price #sugPlay').val()).toFixed(3));
-		// If it was empty, just replace it to be empty again
-		if($('#' + id + 'price #sugPlay').val() == "NaN" || $('#' + id + 'price #sugPlay').val() == 0)
-			$('#' + id + 'price #sugPlay').val("");
-		// If it was just filled, uncheck the checkbox
-		else
-			$('#' + id + 'price #disPlay').prop("checked", false);
+	PhoenixUX.validatePricing = function(elem){
+		elem.value = parseFloat(elem.value).toFixed(3);
 
-		$('#' + id + 'price #minPlay').val(parseFloat($('#' + id + 'price #minPlay').val()).toFixed(3));
-		if($('#' + id + 'price #minPlay').val() == "NaN" || $('#' + id + 'price #minPlay').val() == 0)
-			$('#' + id + 'price #minPlay').val("");
-		else
-			$('#' + id + 'price #disPlay').prop("checked", false);
+		PhoenixUX.pricingElem = elem;
 
-		$('#' + id + 'price #sugBuy').val(parseFloat($('#' + id + 'price #sugBuy').val()).toFixed(3));
-		if($('#' + id + 'price #sugBuy').val() == "NaN" || $('#' + id + 'price #sugBuy').val() == 0)
-			$('#' + id + 'price #sugBuy').val("");
-		else
-			$('#' + id + 'price #disBuy').prop("checked", false);
+		var checkboxDiv = elem.parentElement.parentElement.parentElement.children[5];
 
-		$('#' + id + 'price #minBuy').val(parseFloat($('#' + id + 'price #minBuy').val()).toFixed(3));
-		if($('#' + id + 'price #minBuy').val() == "NaN" || $('#' + id + 'price #minBuy').val() == 0)
-			$('#' + id + 'price #minBuy').val("");
-		else
-			$('#' + id + 'price #disBuy').prop("checked", false);
+		if (elem.value == 0 || elem.value == 'NaN'){
+			elem.value = '';
+		} else {
+			if (elem.id == 'sugPlay' || elem.id == 'minPlay'){
+				checkboxDiv.children[0].checked = false;
+			} else if (elem.id == 'sugBuy' || elem.id == 'minBuy'){
+				checkboxDiv.children[1].checked = false;
+			}
+		}
 	}
 
 	PhoenixUX.onMediaSelectChange = function(elem){
