@@ -835,6 +835,62 @@ var PhoenixUI = (function(){
 		]
 	}
 
+	PhoenixUX.fileExtensions = {
+		'Audio': [
+			"aac",
+			"aaif",
+			"flac",
+			"m4a",
+			"m4b",
+			"mp3",
+			"oog",
+			"wav",
+			"wma"
+		],
+		'Video': [
+			"webm",
+			"mkv",
+			"flv",
+			"vob",
+			"avi",
+			"mov",
+			"mp4",
+			"mpg",
+			"mp2",
+			"mpeg",
+			"m2v",
+			"m4v",
+			"3gp",
+			"flv"
+		],
+		'Image': [
+			"jpeg",
+			"jpg",
+			"exif",
+			"tif",
+			"png",
+			"gif",
+			"bmp"
+		],
+		'Text': [
+			'txt',
+			'rtf',
+			'pdf'
+		],
+		'Software': [
+			'app',
+			'exe',
+			'jar'
+		],
+		'Web': [
+			'css',
+			'html',
+			'js',
+			'php',
+			'py'
+		]
+	};
+
 	PhoenixUX.onPublisherSelectChange = function(elem){
 		// Update the publisher name
 		for (var i = 0; i < Phoenix.publishers.length; i++) {
@@ -965,7 +1021,36 @@ var PhoenixUI = (function(){
 			for (var i = 0; i < files.length; i++) {
 				files[i].id = PhoenixUX.sanitizeID(files[i].name);
 
-				PhoenixUX.appendFileToMediaTable(files[i]);
+				var ext = files[i].name.split('.').pop();
+
+				var iconURL = '';
+
+				var type = '';
+				for (var x in PhoenixUX.fileExtensions){
+					for (var i = 0; i < PhoenixUX.fileExtensions[x].length; i++) {
+						if (ext == PhoenixUX.fileExtensions[x][i]){
+							type = x;
+						}
+					}
+				}
+
+				if (type == 'Audio'){
+					iconURL = './assets/svg/beamed-note.svg';
+				} else if (type == 'Video'){
+					iconURL = './assets/svg/video-camera.svg';
+				} else if (type == 'Image'){
+					iconURL = './assets/svg/image.svg';
+				} else if (type == 'Text'){
+					iconURL = './assets/svg/text-document.svg';
+				} else if (type == 'Software'){
+					iconURL = './assets/svg/code.svg';
+				} else if (type == 'Web'){
+					iconURL = './assets/svg/browser.svg';
+				}
+
+				console.log(ext,type,iconURL);
+
+				PhoenixUX.appendFileToMediaTable(files[i],iconURL);
 				PhoenixUX.appendFileToPricingTable(files[i]);
 
 				PhoenixUX.mediaFiles.push(files[i]);
@@ -975,7 +1060,36 @@ var PhoenixUI = (function(){
 
 			file.id = PhoenixUX.sanitizeID(file.name);
 
-			PhoenixUX.appendFileToMediaTable(file);
+			var ext = file.name.split('.').pop();
+
+			var iconURL = '';
+
+			var type = '';
+			for (var x in PhoenixUX.fileExtensions){
+				for (var i = 0; i < PhoenixUX.fileExtensions[x].length; i++) {
+					if (ext == PhoenixUX.fileExtensions[x][i]){
+						type = x;
+					}
+				}
+			}
+
+			if (type == 'Audio'){
+				iconURL = './assets/svg/beamed-note.svg';
+			} else if (type == 'Video'){
+				iconURL = './assets/svg/video-camera.svg';
+			} else if (type == 'Image'){
+				iconURL = './assets/svg/image.svg';
+			} else if (type == 'Text'){
+				iconURL = './assets/svg/text-document.svg';
+			} else if (type == 'Software'){
+				iconURL = './assets/svg/code.svg';
+			} else if (type == 'Web'){
+				iconURL = './assets/svg/browser.svg';
+			}
+
+			console.log(ext,type,iconURL);
+
+			PhoenixUX.appendFileToMediaTable(file,iconURL);
 			PhoenixUX.appendFileToPricingTable(file);
 
 			PhoenixUX.mediaFiles.push(file);
@@ -983,8 +1097,6 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.removeMediaFile = function(id){
-		console.log(id);
-
 		if (PhoenixUX.mediaFiles){
 			for (var i = 0; i < PhoenixUX.mediaFiles.length; i++){
 				if (PhoenixUX.mediaFiles[i].id == id){
@@ -999,11 +1111,11 @@ var PhoenixUI = (function(){
 		document.getElementById(id + 'price').remove();
 	}
 
-	PhoenixUX.appendFileToMediaTable = function(file) {
+	PhoenixUX.appendFileToMediaTable = function(file,iconURL) {
 		$('#mediaTable').append('\
 			<tr id="' + file.id + '">\
-				<td><img class="table-icon" src="./assets/svg/song-icon.svg"></td>\
-				<td class="text-left"> <input type="text" class="form-control" name="dispName" placeholder="' + file.name + '"></td>\
+				<td><img class="table-icon" src="' + (iconURL ? iconURL : 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=') + '"></td>\
+				<td class="text-left"> <input type="text" class="form-control" name="dispName" placeholder="' + file.name + '" oninput="PhoenixUI.onFileNameInput(this);"></td>\
 				<td>' + PhoenixUX.humanFileSize(file.size, true) + '</td>\
 				<td style="width: 100%">\
 					<div class="row form-control dual-selector">\
@@ -1059,12 +1171,6 @@ var PhoenixUI = (function(){
 			'</tr>');
 
 		pleaseAddFileElement.style.display = 'none';
-	}
-
-	PhoenixUX.posterFileDragStartHandler = function(e) {
-		e.preventDefault();
-		console.log('start',e);
-		PhoenixUX.posterDragStartEvent = e;
 	}
 
 	PhoenixUX.posterFileSelectHandler = function(file) {
@@ -1154,8 +1260,6 @@ var PhoenixUI = (function(){
 		// Save the pricing that was updated to the mediaPricing element of PhoenixUX
 		var mainDivID = elem.parentElement.parentElement.parentElement.id;
 
-		console.log(mainDivID);
-
 		if (!PhoenixUX.mediaPricing){
 			PhoenixUX.mediaPricing = {};
 		}
@@ -1213,6 +1317,25 @@ var PhoenixUI = (function(){
 				secondSelector.innerHTML = tmpString;
 			}
 		}
+
+		var parent = elem.parentElement.parentElement.parentElement;
+
+		var newIconURL = '';
+		if (type == 'Audio'){
+			newIconURL = './assets/svg/beamed-note.svg';
+		} else if (type == 'Video'){
+			newIconURL = './assets/svg/video-camera.svg';
+		} else if (type == 'Image'){
+			newIconURL = './assets/svg/image.svg';
+		} else if (type == 'Text'){
+			newIconURL = './assets/svg/text-document.svg';
+		} else if (type == 'Software'){
+			newIconURL = './assets/svg/code.svg';
+		} else if (type == 'Web'){
+			newIconURL = './assets/svg/browser.svg';
+		}
+
+		var icon = parent.children[0].children[0].src = newIconURL;
 	}
 
 	PhoenixUX.addPaymentAddress = function(elem){
@@ -1337,6 +1460,20 @@ var PhoenixUI = (function(){
 			delete PhoenixUX.advancedPricing[id];
 		else
 			PhoenixUX.advancedPricing[id] = elem.value;
+	}
+
+	PhoenixUX.onFileNameInput = function(elem){
+		var id = elem.parentElement.parentElement.id;
+
+		if (!PhoenixUX.mediaPricing){
+			PhoenixUX.mediaPricing = {};
+		}
+
+		if (!PhoenixUX.mediaPricing[id]){
+			PhoenixUX.mediaPricing[id] = {};
+		}
+
+		PhoenixUX.mediaPricing[id].displayName = elem.value;
 	}
 
 	return PhoenixUX;
