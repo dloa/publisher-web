@@ -316,13 +316,19 @@ var Phoenix = (function() {
 
 		if (!PhoenixAPI.librarydInfo)
 			PhoenixAPI.librarydInfo = {};
-	
-		$.getJSON(librarianHost + "/alexandria/v2/info", function( data ) {
-			PhoenixAPI.librarydInfo.timestamp = Date.now();
-			PhoenixAPI.librarydInfo.data = data;
 
-			callback(data);
-		});
+		var timeNow = Date.now();
+		var yesterday = timeNow - (24*60*60*1000);
+		if (PhoenixAPI.librarydInfo && PhoenixAPI.librarydInfo.timestamp > yesterday){
+			callback(PhoenixAPI.librarydInfo.data);
+		} else {
+			$.getJSON(librarianHost + "/alexandria/v2/info", function( data ) {
+				PhoenixAPI.librarydInfo.timestamp = Date.now();
+				PhoenixAPI.librarydInfo.data = data;
+
+				callback(data);
+			});
+		}
 	}
 
 	return PhoenixAPI;
