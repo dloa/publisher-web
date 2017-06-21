@@ -15,8 +15,12 @@ var typeCirclesElement = document.getElementById('typeCircles');
 var subtypePillsElement = document.getElementById('subtypePills');
 var posterElement = document.getElementById('poster');
 var posterFileElement = document.getElementById('posterFile');
+var publishFeeElement = document.getElementById('publishFee');
+var paymentAddressesElement = document.getElementById('paymentAddresses');
+var pleaseAddFileElement = document.getElementById('pleaseAddFile');
 
 // Accepts a set of Selectors to load the artifact into view. Generates code for all of the different sections to fill it.
+PhoenixEvents.on("onError", function(msg){ console.log(msg.message) });
 PhoenixEvents.on("onLogin", function(msg){ console.log("Logging in"); })
 PhoenixEvents.on("onLoginFail", function(msg){ console.log("Login Failed"); })
 PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success"); })
@@ -1053,6 +1057,8 @@ var PhoenixUI = (function(){
 				'<td style="width:15%"><input type="checkbox" id="disPlay" onclick="checkboxToggle(\'' + file.id + '\', \'play\')"> Disallow Play' +
 				'<br><input type="checkbox" id="disBuy" onclick="checkboxToggle(\'' + file.id + '\', \'buy\')"> Disallow Buy</td>' +
 			'</tr>');
+
+		pleaseAddFileElement.style.display = 'none';
 	}
 
 	PhoenixUX.posterFileDragStartHandler = function(e) {
@@ -1144,6 +1150,51 @@ var PhoenixUI = (function(){
 				checkboxDiv.children[1].checked = false;
 			}
 		}
+
+		// Save the pricing that was updated to the mediaPricing element of PhoenixUX
+		var mainDivID = elem.parentElement.parentElement.parentElement.id;
+
+		console.log(mainDivID);
+
+		if (!PhoenixUX.mediaPricing){
+			PhoenixUX.mediaPricing = {};
+		}
+
+		if (!PhoenixUX.mediaPricing[mainDivID]){
+			PhoenixUX.mediaPricing[mainDivID] = {};
+		}
+
+		PhoenixUX.mediaPricing[mainDivID][elem.id] = elem.value ? elem.value : 0;
+
+		// Update the publish fee
+		PhoenixUX.updatePubFee();
+	}
+
+	PhoenixUX.updatePubFee = function(){
+		var artSize = 528;
+		var minPlayArray = [];
+		var sugBuyArray = [];
+
+		if (PhoenixUX.mediaPricing){
+			for (var media in PhoenixUX.mediaPricing){
+				if (PhoenixUX.mediaPricing[media].minPlay){
+					minPlayArray.push(parseFloat(PhoenixUX.mediaPricing[media].minPlay));
+				}
+				if (PhoenixUX.mediaPricing[media].sugBuy){
+					sugBuyArray.push(parseFloat(PhoenixUX.mediaPricing[media].sugBuy));
+				}
+			}
+		}
+
+		Phoenix.calculatePublishFee(artSize, minPlayArray, sugBuyArray, function(usd, flo){
+			console.log(usd.toFixed(2),flo.toFixed(8));
+
+			publishFeeElement.innerHTML = usd ? '$' + usd.toFixed(2) : "Free!";
+
+			if (usd == 'Infinity'){
+				publishFeeElement.innerHTML = "Free!";
+			}
+		})
 	}
 
 	PhoenixUX.onMediaSelectChange = function(elem){
@@ -1162,6 +1213,130 @@ var PhoenixUI = (function(){
 				secondSelector.innerHTML = tmpString;
 			}
 		}
+	}
+
+	PhoenixUX.addPaymentAddress = function(elem){
+		elem.remove();
+
+		var numOfPaymentAddresses = paymentAddressesElement.children.length;
+
+		var content = document.createElement("div");
+		content.innerHTML = '\
+		<div class="row" id="' + (numOfPaymentAddresses + 1) + '">\
+			<div class="input-group col-11" style="margin-bottom: 5px;">\
+				<div class="input-group-btn">\
+					<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+						<img style="height: 30px" src="./img/Bitcoin.svg">\
+					</button>\
+					<div class="dropdown-menu">\
+						<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>\
+						<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>\
+						<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>\
+					</div>\
+				</div>\
+				<input type="text" class="form-control" oninput="PhoenixUI.onPaymentAddressChange(this);">\
+				<span class="input-group-addon">\
+					<input type="radio" name="mainAddressRadio">\
+				</span>\
+			</div>\
+			<div class="col-1">\
+				<button class="btn btn-outline-success" style="height: 80%; margin-left: -20px; margin-top: 3px;" onclick="PhoenixUI.addPaymentAddress(this);">+</button>\
+			</div>\
+		</div>';
+
+		paymentAddressesElement.appendChild(content);
+	}
+
+	PhoenixUX.changePaymentAddressType = function(elem){
+		// Save the changed type into the payment array
+		var dropdownImgSrc = elem.children[0].src;
+
+		if (dropdownImgSrc.includes('Bitcoin'))
+			dropdownImgSrc = "./img/Bitcoin.svg";
+		else if (dropdownImgSrc.includes('FLO'))
+			dropdownImgSrc = "./img/FLOflat2.png";
+		else if (dropdownImgSrc.includes('Litecoin'))
+			dropdownImgSrc = "./img/Litecoin.svg";
+
+		elem.parentElement.parentElement.children[0].children[0].src = dropdownImgSrc;
+
+		// Update the validation state of the input for this element
+		PhoenixUX.onPaymentAddressChange(elem.parentElement.parentElement.parentElement.children[1]);
+
+		// Return false to prevent page reload
+		return false;
+	}
+
+	PhoenixUX.onPaymentAddressChange = function(elem){
+		try {
+			// Validate the address based on the type of cryptocurrency currently selected
+			var typeSelected = elem.parentElement.children[0].children[0].children[0].src;
+
+			if (typeSelected.includes('Bitcoin'))
+				typeSelected = 'BTC';
+			else if (typeSelected.includes('FLO'))
+				typeSelected = 'FLO';
+			else if (typeSelected.includes('Litecoin'))
+				typeSelected = 'LTC';
+
+			var id = elem.parentElement.parentElement.id;
+
+			var valid = WAValidator.validate(elem.value, typeSelected);
+			if(valid){
+			    elem.style['border-color'] = '#5cb85c'; // Green outline
+
+			    if (!PhoenixUX.paymentAddresses)
+			    	PhoenixUX.paymentAddresses = {};
+
+			    PhoenixUX.paymentAddresses[id] = {currency: typeSelected, address: elem.value};
+			} else {
+			    elem.style['border-color'] = '#d9534f'; // Red outline
+
+			    if (!PhoenixUX.paymentAddresses)
+			    	PhoenixUX.paymentAddresses = {};
+
+			    PhoenixUX.paymentAddresses[id] = {};
+			}
+		} catch (e) {
+			elem.style['border-color'] = '#d9534f';
+			return false;
+		}
+	}
+
+	PhoenixUX.onTipsInput = function(elem){
+		var id = elem.id.replace('tip','');
+
+		if (!PhoenixUX.tips)
+			PhoenixUX.tips = {};
+
+		if (elem.value == "")
+			delete PhoenixUX.tips[id];
+		else
+			PhoenixUX.tips[id] = elem.value;
+	}
+
+	PhoenixUX.onAdvancedInput = function(elem){
+		var id = elem.id;
+
+		if (isNaN(elem.value)){
+			elem.value = '';
+		}
+
+		if (elem.value < 0){
+			elem.value = 0;
+		}
+
+		if (elem.value > 100){
+			elem.value = 100;
+		}
+
+		if (!PhoenixUX.advancedPricing)
+			PhoenixUX.advancedPricing = {};
+
+		if (elem.value == "")
+			delete PhoenixUX.advancedPricing[id];
+		else
+			PhoenixUX.advancedPricing[id] = elem.value;
 	}
 
 	return PhoenixUX;

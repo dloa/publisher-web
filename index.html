@@ -203,7 +203,11 @@
 		</nav>
 
 		<div class="container-fluid">
-			<div class="loader" id="loader"></div>
+			<div class="loader" id="loader" style=""></div>
+			<div class="errorScreen" id="errorScreen" style="display: none;text-align: center; padding-top: 300px;">
+				
+				<h1 class="danger">Oops! Looks like there was an error loading the publisher, please try again later!</h1>
+			</div>
 			<div id="main" class="row" style="display: none;">
 				<nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
 					<div class="text-center">Welcome, <span id="pub-name"></span></div>
@@ -314,24 +318,24 @@
 												<div class="col-6">
 													<h5 class="text-center">Suggested Tips</h5>
 													<div class="row">
-														<div class="col"><input type="text" class="form-control col" id="tip1" placeholder="$0.01"></div>
-														<div class="col"><input type="text" class="form-control col" id="tip2" placeholder="$0.10"></div>
-														<div class="col"><input type="text" class="form-control col" id="tip3" placeholder="$1"></div>
+														<div class="col"><input type="text" class="form-control col" id="tip1" placeholder="$0.01" oninput="PhoenixUI.onTipsInput(this);"></div>
+														<div class="col"><input type="text" class="form-control col" id="tip2" placeholder="$0.10" oninput="PhoenixUI.onTipsInput(this);"></div>
+														<div class="col"><input type="text" class="form-control col" id="tip3" placeholder="$1" oninput="PhoenixUI.onTipsInput(this);"></div>
 													</div>
 													<h5 class="text-center" style="margin-top: 20px;">Advanced</h5>
 													<div class="form-group row text-right">
 														<label for="example-text-input" class="col-3 col-form-label">Promoter</label>
 														<div class="col-3">
 															<div class="input-group">
-																<input type="number" class="form-control">
-																<span class="input-group-addon">%</span>
+																<input id="promoter" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);">
+																<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
 															</div>
 														</div>
 														<label for="example-text-input" class="col-3 col-form-label">Retailer</label>
 														<div class="col-3">
 															<div class="input-group">
-																<input type="number" class="form-control">
-																<span class="input-group-addon">%</span>
+																<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);">
+																<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
 															</div>
 														</div>
 													</div>
@@ -342,61 +346,63 @@
 													<p class="help-block">This is your Bitcoin address that you will use to receive payments for this artifact.</p> -->
 													<div class="form-group col-lg-12">
 														<h5 class="text-center">Payment Addresses</h5>
-														<div class="row">
-															<div class="input-group col-11" style="margin-bottom: 5px;">
-																<div class="input-group-btn">
-																	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-																		<img style="height: 30px" src="./img/bitcoin.svg">
-																	</button>
-																	<div class="dropdown-menu">
-																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
-																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
-																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
+															<div id="paymentAddresses">
+															<!-- <div class="row">
+																<div class="input-group col-11" style="margin-bottom: 5px;">
+																	<div class="input-group-btn">
+																		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																			<img style="height: 30px" src="./img/bitcoin.svg">
+																		</button>
+																		<div class="dropdown-menu">
+																			<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
+																			<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
+																			<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
+																		</div>
 																	</div>
+																	<input type="text" class="form-control" aria-label="Text input with dropdown button">
+																	<span class="input-group-addon">
+																		<input type="radio" name="mainAddressRadio" checked>
+																	</span>
 																</div>
-																<input type="text" class="form-control" aria-label="Text input with dropdown button">
-																<span class="input-group-addon">
-																	<input type="radio" name="mainAddressRadio" checked>
-																</span>
 															</div>
-														</div>
-														<div class="row">
-															<div class="input-group col-11" style="margin-bottom: 5px;">
-																<div class="input-group-btn">
-																	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-																		<img style="height: 30px" src="./img/FLOflat2.png">
-																	</button>
-																	<div class="dropdown-menu">
-																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
-																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
-																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
+															<div class="row">
+																<div class="input-group col-11" style="margin-bottom: 5px;">
+																	<div class="input-group-btn">
+																		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																			<img style="height: 30px" src="./img/FLOflat2.png">
+																		</button>
+																		<div class="dropdown-menu">
+																			<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
+																			<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
+																			<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
+																		</div>
 																	</div>
+																	<input type="text" class="form-control" aria-label="Text input with dropdown button">
+																	<span class="input-group-addon">
+																		<input type="radio" name="mainAddressRadio">
+																	</span>
 																</div>
-																<input type="text" class="form-control" aria-label="Text input with dropdown button">
-																<span class="input-group-addon">
-																	<input type="radio" name="mainAddressRadio">
-																</span>
-															</div>
-														</div>
-														<div class="row">
-															<div class="input-group col-11" style="margin-bottom: 5px;">
-																<div class="input-group-btn">
-																	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-																		<img style="height: 30px" src="./img/bitcoin.svg">
-																	</button>
-																	<div class="dropdown-menu">
-																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
-																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
-																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
+															</div> -->
+															<div class="row" id="1">
+																<div class="input-group col-11" style="margin-bottom: 5px;">
+																	<div class="input-group-btn has-danger">
+																		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																			<img style="height: 30px" src="./img/Bitcoin.svg">
+																		</button>
+																		<div class="dropdown-menu">
+																			<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
+																			<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
+																			<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
+																		</div>
 																	</div>
+																	<input type="text" class="form-control" oninput="PhoenixUI.onPaymentAddressChange(this);">
+																	<span class="input-group-addon">
+																		<input type="radio" name="mainAddressRadio" checked>
+																	</span>
 																</div>
-																<input type="text" class="form-control" aria-label="Text input with dropdown button">
-																<span class="input-group-addon">
-																	<input type="radio" name="mainAddressRadio">
-																</span>
-															</div>
-															<div class="col-1">
-																<button class="btn btn-outline-success" style="height: 80%">+</button>
+																<div class="col-1">
+																	<button class="btn btn-outline-success" style="height: 80%; margin-left: -20px; margin-top: 3px;" onclick="PhoenixUI.addPaymentAddress(this);">+</button>
+																</div>
 															</div>
 														</div>
 															
@@ -429,7 +435,7 @@
 																		</tr>
 																	</tbody>
 																</table>
-																<center><h3>Please add a file below...</h3></center>
+																<center><h3 id="pleaseAddFile">Please add a file below...</h3></center>
 															</div>
 														</div>
 													</div>
@@ -490,7 +496,11 @@
 											<div class="col-4">
 												<p class="small">You will be able to submit your artifact after you preview it. Be sure it looks exactly like what you desire as you will be unable to change this later.</p>
 											</div>
-											<div class="col-4 text-center" style="color: green">Cost To Publish<br /><h1 style="margin-bottom: 0px;">Free!</h1></div>
+											<div class="col-4 text-center" style="color: green">
+												Cost To Publish
+												<br />
+												<h1 style="margin-bottom: 0px;" id="publishFee">Free!</h1>
+											</div>
 											<div class="col-4 text-right">
 												<button type="button" id="previewButton" class="btn btn-outline-info">Preview</button>
 											</div>
@@ -893,6 +903,7 @@
 		<script src="./js/backbone-min.js"></script>
 		<script src="./js/sweet-alert.min.js"></script>
 		<script src="./js/dropzonejs.js"></script>
+		<script src="./js/wallet-address-validator.min.js"></script>
 		<!-- Bootstrap Tour JS -->
 		<script src="./js/bootstrap-tour.js"></script>
 		<!-- Load Dependencies JS -->

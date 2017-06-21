@@ -152,31 +152,35 @@ var Phoenix = (function() {
 	PhoenixAPI.getPublishersFromLibraryD = function(){
 		var wallet = this.wallet;
 
-		$.getJSON(librarianHost + "/alexandria/v2/publisher/get/all", function( data ) {
-			var myPublishers = [];
+		try {
+			$.getJSON(librarianHost + "/alexandria/v2/publisher/get/all", function( data ) {
+				var myPublishers = [];
 
-			for (var i = 0; i < data.length; i++) {
-				//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
-				for (var addr in wallet.addresses) {
-					var walletAddress = wallet.addresses[addr].addr;
-					var publisher = data[i]["publisher-data"]["alexandria-publisher"];
-					if (publisher.address == walletAddress){
-						myPublishers.push(publisher);
-						
+				for (var i = 0; i < data.length; i++) {
+					//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
+					for (var addr in wallet.addresses) {
+						var walletAddress = wallet.addresses[addr].addr;
+						var publisher = data[i]["publisher-data"]["alexandria-publisher"];
+						if (publisher.address == walletAddress){
+							myPublishers.push(publisher);
+							
+						}
 					}
 				}
-			}
 
-			if (myPublishers.length == 0){
-				PhoenixEvents.trigger("onPublisherLoadFailure", { message: 'No publishers found in LibraryD that match any wallet addresses.' });
-			} else {
-				PhoenixAPI.publishers = myPublishers;
-				PhoenixEvents.trigger("onPublisherLoadSuccess", PhoenixAPI.publishers);
-			}
+				if (myPublishers.length == 0){
+					PhoenixEvents.trigger("onPublisherLoadFailure", { message: 'No publishers found in LibraryD that match any wallet addresses.' });
+				} else {
+					PhoenixAPI.publishers = myPublishers;
+					PhoenixEvents.trigger("onPublisherLoadSuccess", PhoenixAPI.publishers);
+				}
 
-			for (var pub in myPublishers)
-				PhoenixAPI.loadArtifactsForPub(myPublishers[pub].address);
-		});
+				for (var pub in myPublishers)
+					PhoenixAPI.loadArtifactsForPub(myPublishers[pub].address);
+			});
+		} catch (e) {
+			PhoenixEvents.trigger('onError', {message: e});
+		}
 	}
 
 	PhoenixAPI.loadArtifactsForPub = function(pubAddress){
@@ -250,8 +254,37 @@ var Phoenix = (function() {
 		}
 	}	
 
-	PhoenixAPI.calculatePublishFee = function(){
-		
+	PhoenixAPI.calculatePublishFee = function(artSize, minPlayArray, sugBuyArray, callback){
+		PhoenixAPI.updateMarketData(function(marketData){
+			PhoenixAPI.updateLibrarydInfoData(function(libraryDData){
+				var USDperFLO = marketData.USD;
+				var floPerKb = 0.1; // new endpoint, using 0.1 as default for now, ToDo: Update this when changes are made!
+				var pubFeeFreeFlo = (artSize / 1024) * floPerKb;
+				var pubFeeFreeUSD = pubFeeFreeFlo * USDperFLO;
+
+				var totMinPlay = 0;
+				for (var i = 0; i < minPlayArray.length; i++) {
+					totMinPlay += minPlayArray[i];
+				}
+
+				var totSugBuy = 0;
+				for (var i = 0; i < sugBuyArray.length; i++) {
+					totSugBuy += sugBuyArray[i];
+				}
+
+				var artCost = (totMinPlay + totSugBuy) / 2; // divide by 2 because there are two inputs
+
+				var avgArtCost = libraryDData.avgArtCost;
+
+				var pubFeeComUSD = (( Math.log(artCost) - Math.log(avgArtCost) ) * (avgArtCost / artCost) * (artCost - avgArtCost)) + avgArtCost;
+				var pubFeeComFlo = pubFeeComUSD / USDperFLO;
+				var pubFeeUSD = Math.max(pubFeeFreeUSD, pubFeeComUSD);
+				var pubFeeFlo = pubFeeUSD / USDperFLO;
+
+				callback(pubFeeUSD, pubFeeFlo);
+			})
+		})
+				
 	}
 
 	PhoenixAPI.updateMarketData = function(callback){
@@ -266,7 +299,7 @@ var Phoenix = (function() {
 			if (!PhoenixAPI.marketData)
 				PhoenixAPI.marketData = {};
 
-			$.getJSON(librarianHost + "/flo-market-data/v1/getAll	", function( data ) {
+			$.getJSON(librarianHost + "/flo-market-data/v1/getAll", function( data ) {
 				PhoenixAPI.marketData.timestamp = Date.now();
 				PhoenixAPI.marketData.data = data;
 
@@ -281,10 +314,10 @@ var Phoenix = (function() {
 		if (!callback)
 			callback = function(){};
 
-		if (!PhoenixAPI.marketData)
-			PhoenixAPI.marketData = {};
+		if (!PhoenixAPI.librarydInfo)
+			PhoenixAPI.librarydInfo = {};
 	
-		$.getJSON(librarianHost + "/flo-market-data/v1/getAll	", function( data ) {
+		$.getJSON(librarianHost + "/alexandria/v2/info", function( data ) {
 			PhoenixAPI.librarydInfo.timestamp = Date.now();
 			PhoenixAPI.librarydInfo.data = data;
 
