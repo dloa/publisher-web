@@ -891,6 +891,119 @@ var PhoenixUI = (function(){
 		]
 	};
 
+	// IMDB genres
+	PhoenixUX.movieGenres = {
+		"Action": ["Comedy", "Crime", "Thriller"],
+		"Adventure": ["Biography", "Thriller", "War"],
+		"Animation": ["Adventure", "Comedy", "Family", "Fantasy"],
+		"Biography": ["Crime", "Mystery", "Sport"],
+		"Comedy": ["Action", "Horror", "Romance"],
+		"Crime": ["Drama", "Mystery", "Romance"],
+		"Documentary": ["Biography", "Comedy", "Crime", "History"],
+		"Drama": ["Romance", "Film-Noir", "Musical", "War"],
+		"Family": ["Adventure", "Comedy", "Fantasy", "Romance"],
+		"Fantasy": ["Adventure", "Comedy", "Drama", "Romance"],
+		"Film-Noir": ["Crime", "Mystery", "Romance", "Thriller"],
+		"History": ["Adventure", "Biography", "Drama", "War"],
+		"Horror": ["Comedy", "Drama", "Sci-Fi"],
+		"Music": ["Biography", "Documentary", "Drama"],
+		"Musical": ["Comedy", "History", "Romance"],
+		"Mystery": ["Adventure", "Comedy", "Thriller"],
+		"Romance": ["Comedy", "Crime", "History", "Thriller"],
+		"Sci-Fi": ["Animation", "Comedy", "Family", "Horror"],
+		"Sport": ["Biography", "Comedy", "Documentary"],
+		"Thriller": ["Comedy", "Crime", "Horror", "Mystery"],
+		"War": ["Action", "Biography", "Comedy", "Documentary"],
+		"Western": ["Action", "Adventure", "Comedy"]
+	}
+
+	// https://support.google.com/youtube/answer/4594615?hl=en
+	PhoenixUX.musicGenres = [
+		"Acoustic",
+		"Alternative & Punk",
+		"Blues",
+		"Classical",
+		"Country & Folk",
+		"Dance & Electronic",
+		"Easy Listening",
+		"Gospel & Religious",
+		"Hip Hop & Rap",
+		"Holiday",
+		"Instrumental",
+		"Jazz",
+		"Latin",
+		"Metal",
+		"Moods",
+		"Other",
+		"Pop",
+		"R&B",
+		"Rock",
+		"Soundtrack",
+		"World"
+	];
+
+	// https://support.google.com/youtube/answer/4594615?hl=en
+	PhoenixUX.tvGenres = [
+		"Action & Adventure",
+		"Animation",
+		"Beauty & Fashion",
+		"Classic TV",
+		"Comedy",
+		"Documentary",
+		"Drama",
+		"Entertainment",
+		"Family",
+		"Food",
+		"Gaming",
+		"Health & Fitness",
+		"Home & Garden",
+		"Learning & Education",
+		"Nature",
+		"News",
+		"Reality & Game Shows",
+		"Science & Tech",
+		"Science Fiction",
+		"Soaps",
+		"Sports",
+		"Travel"
+	]
+
+	// Youtube category list
+	PhoenixUX.webGenres = [
+		"Autos & Vehicles",
+		"Film & Animation",
+		"Music",
+		"Pets & Animals",
+		"Sports",
+		"Short Movies",
+		"Travel & Events",
+		"Gaming",
+		"Videoblogging",
+		"People & Blogs",
+		"Comedy",
+		"Entertainment",
+		"News & Politics",
+		"Howto & Style",
+		"Education",
+		"Science & Technology",
+		"Nonprofits & Activism",
+		"Movies",
+		"Anime/Animation",
+		"Action/Adventure",
+		"Classics",
+		"Comedy",
+		"Documentary",
+		"Drama",
+		"Family",
+		"Foreign",
+		"Horror",
+		"Sci-Fi/Fantasy",
+		"Thriller",
+		"Shorts",
+		"Shows",
+		"Trailers"
+	]
+
 	PhoenixUX.loadIntoMeta = function(oip041){
 		for (var i = 0; i < PhoenixUX.types.length; i++) {
 			if (PhoenixUX.types[i].type == type){
