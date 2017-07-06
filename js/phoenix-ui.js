@@ -237,29 +237,29 @@ var PhoenixUI = (function(){
 					"placeholder": "Title"
 				},
 				{
-					"id": "artistName",
+					"id": "extraInfo.artist",
 					"width": 12,
 					"placeholder": "Creator Name"
 				},
 				{
-					"id": "genre",
+					"id": "extraInfo.genre",
 					"width": 6,
 					"placeholder": "Genre"
 				},
 				{
-					"id": "releaseDate",
+					"id": "year",
 					"width": 6,
 					"placeholder": "Year"
 				},
 				{
-					"id": "tags",
+					"id": "extraInfo.tags",
 					"width": 12,
 					"placeholder": "Tags"
 				},
 				{
-					"id": "recordLabel",
+					"id": "extraInfo.company",
 					"width": 12,
-					"placeholder": "Record Label"
+					"placeholder": "Company"
 				},
 				{
 					"id": "description",
@@ -281,27 +281,27 @@ var PhoenixUI = (function(){
 					"placeholder": "Song Title"
 				},
 				{
-					"id": "artistName",
+					"id": "extraInfo.artist",
 					"width": 12,
 					"placeholder": "Song Name"
 				},
 				{
-					"id": "genre",
+					"id": "extraInfo.genre",
 					"width": 6,
 					"placeholder": "Genre"
 				},
 				{
-					"id": "releaseDate",
+					"id": "year",
 					"width": 6,
 					"placeholder": "Year"
 				},
 				{
-					"id": "tags",
+					"id": "extraInfo.tags",
 					"width": 12,
 					"placeholder": "Tags"
 				},
 				{
-					"id": "recordLabel",
+					"id": "extraInfo.company",
 					"width": 12,
 					"placeholder": "Record Label"
 				},
@@ -325,27 +325,27 @@ var PhoenixUI = (function(){
 					"placeholder": "Album Title"
 				},
 				{
-					"id": "artistName",
+					"id": "extraInfo.artist",
 					"width": 12,
 					"placeholder": "Artist Name"
 				},
 				{
-					"id": "genre",
+					"id": "extraInfo.genre",
 					"width": 6,
 					"placeholder": "Genre"
 				},
 				{
-					"id": "releaseDate",
+					"id": "year",
 					"width": 6,
 					"placeholder": "Release Year"
 				},
 				{
-					"id": "tags",
+					"id": "extraInfo.tags",
 					"width": 12,
 					"placeholder": "Tags"
 				},
 				{
-					"id": "recordLabel",
+					"id": "extraInfo.company",
 					"width": 12,
 					"placeholder": "Record Label"
 				},
@@ -891,6 +891,21 @@ var PhoenixUI = (function(){
 		]
 	};
 
+	PhoenixUX.loadIntoMeta = function(oip041){
+		for (var i = 0; i < PhoenixUX.types.length; i++) {
+			if (PhoenixUX.types[i].type == type){
+				if (PhoenixUX.types[i].subtypes[0]){
+					PhoenixUX.updateMetadata(PhoenixUX.types[i].subtypes[0]);
+				}
+				var typesPillsHTML = '';
+				for (var j = 0; j < PhoenixUX.types[i].subtypes.length; j++) {
+					typesPillsHTML += '<li id="' + PhoenixUX.types[i].subtypes[j].subtype + '" ' + ( j==0 ? 'class="active"' : '') + ' onclick="PhoenixUI.changeSubtype(\'' + PhoenixUX.types[i].type + ',' + PhoenixUX.types[i].subtypes[j].subtype + '\')"><a href="#' + PhoenixUX.types[i].subtypes[j].subtype + '" data-toggle="tab">' + PhoenixUX.types[i].subtypes[j].subtype + '</a></li>';
+				}
+				subtypePillsElement.innerHTML = typesPillsHTML;
+			}
+		}
+	}
+
 	PhoenixUX.onPublisherSelectChange = function(elem){
 		// Update the publisher name
 		for (var i = 0; i < Phoenix.publishers.length; i++) {
@@ -996,6 +1011,10 @@ var PhoenixUI = (function(){
 		if (formJSON.type == 'textarea'){
 			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
 				<textarea rows="' + formJSON.rows + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '"></textarea>\
+			</div>';
+		} else if (formJSON.id.includes('tags')){
+			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
+				<input style="float:left" type="' + (formJSON.type ? formJSON.type : 'text') + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '" data-role="tagsinput">\
 			</div>';
 		} else {
 			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
