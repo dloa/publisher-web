@@ -1131,6 +1131,50 @@ var PhoenixUI = (function(){
 		posterTitleElement.innerHTML = newType.coverArt.text ? newType.coverArt.text : 'Cover Art';
 	}
 
+	PhoenixUX.loadIntoMetadata = function(oip041){
+		var mainType, subType;
+
+		if (Array.isArray(oip041.artifact.type)){
+			mainType = oip041.artifact.type[0];
+			subType = oip041.artifact.type[1];
+		} else {
+			if (oip041.artifact.type == 'thing') {
+				mainType = ('Software');
+				subType = ('3D Thing');
+			}
+		}
+
+		console.log(mainType,subType);
+
+		PhoenixUX.changeType(mainType);
+		PhoenixUX.changeSubtype(mainType + ',' + subType);
+
+		for (var i = 0; i < PhoenixUX.types.length; i++) {
+			if (PhoenixUX.types[i].type == mainType){
+				for (var j = 0; j < PhoenixUX.types[i].subtypes.length; j++) {
+					if (PhoenixUX.types[i].subtypes[j].subtype == subType){
+						var forms = PhoenixUX.types[i].subtypes[j].forms;
+
+						for (var k = 0; k < forms.length; k++) {
+							var location = forms[k].id;
+
+							if (location.includes('extraInfo.')){
+								location.replace('extraInfo.', '');
+								var value = oip041.artifact.info.extraInfo[location];
+								if (value)
+									document.getElementById(forms[k].id).value = value;
+							} else {
+								var value = oip041.artifact.info[location];
+								if (value)
+									document.getElementById(forms[k].id).value = value;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	PhoenixUX.generateFormElement = function(formJSON){
 		if (formJSON.type == 'textarea'){
 			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
@@ -1139,11 +1183,6 @@ var PhoenixUI = (function(){
 		} else if (formJSON.id.includes('genre')){
 			if (formJSON.genres){
 				var selectInner = '';
-
-				console.log(formJSON.genres);
-
-				// If we are dealing with 2 level genres
-
 				var first = true;
 				var firstSubArray;
 				for (var x in formJSON.genres){
@@ -1153,6 +1192,7 @@ var PhoenixUI = (function(){
 					} 
 				}
 
+				// If we are dealing with 2 level genres
 				if (Array.isArray(firstSubArray)){
 					for (var genre in formJSON.genres){
 						selectInner += '<option>' + genre + '</option>';
