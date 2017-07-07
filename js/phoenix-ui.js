@@ -370,28 +370,28 @@ var PhoenixUI = (function(){
 					"subtext": "This will be auto formatted with \"Podcast Title\": \"Episode Title\""
 				},
 				{
-					"id": "episodeTitle",
+					"id": "extraInfo.episodeTitle",
 					"width": 12,
 					"placeholder": "Episode Title",
 					"subtext": "This will be auto formatted with \"Podcast Title\": \"Episode Title\""
 				},
 				{
-					"id": "seasonNum",
+					"id": "extraInfo.seasonNum",
 					"width": 3,
 					"placeholder": "Season Number"
 				},
 				{
-					"id": "episodeNum",
+					"id": "extraInfo.episodeNum",
 					"width": 3,
 					"placeholder": "Episode Number"
 				},
 				{
-					"id": "releaseDate",
+					"id": "year",
 					"width": 3,
 					"placeholder": "Release Year"
 				},
 				{
-					"id": "tags",
+					"id": "extraInfo.tags",
 					"width": 3,
 					"placeholder": "Tags"
 				},
@@ -419,22 +419,22 @@ var PhoenixUI = (function(){
 					"placeholder": "Title"
 				},
 				{
-					"id": "creatorName",
+					"id": "extraInfo.artist",
 					"width": 12,
 					"placeholder": "Creator"
 				},
 				{
-					"id": "genre",
+					"id": "extraInfo.genre",
 					"width": 6,
 					"placeholder": "Genre"
 				},
 				{
-					"id": "releaseDate",
+					"id": "year",
 					"width": 6,
 					"placeholder": "Release Year"
 				},
 				{
-					"id": "tags",
+					"id": "extraInfo.tags",
 					"width": 12,
 					"placeholder": "Tags"
 				},
@@ -458,27 +458,27 @@ var PhoenixUI = (function(){
 					"placeholder": "Video Title"
 				},
 				{
-					"id": "directorName",
+					"id": "extraInfo.artist",
 					"width": 12,
 					"placeholder": "Director Name"
 				},
 				{
-					"id": "distributor",
+					"id": "extraInfo.company",
 					"width": 12,
 					"placeholder": "Distributor"
 				},
 				{
-					"id": "releaseDate",
+					"id": "year",
 					"width": 2,
 					"placeholder": "Release Year"
 				},
 				{
-					"id": "genre",
+					"id": "extraInfo.genre",
 					"width": 5,
 					"placeholder": "Genre"
 				},
 				{
-					"id": "tags",
+					"id": "extraInfo.tags",
 					"width": 5,
 					"placeholder": "Tags"
 				},
@@ -503,27 +503,27 @@ var PhoenixUI = (function(){
 					"placeholder": "Movie Title"
 				},
 				{
-					"id": "artistName",
+					"id": "extraInfo.artist",
 					"width": 12,
 					"placeholder": "Director Name"
 				},
 				{
-					"id": "genre",
+					"id": "extraInfo.genre",
 					"width": 6,
 					"placeholder": "Genre"
 				},
 				{
-					"id": "releaseDate",
+					"id": "year",
 					"width": 6,
 					"placeholder": "Release Year"
 				},
 				{
-					"id": "tags",
+					"id": "extraInfo.tags",
 					"width": 12,
 					"placeholder": "Tags"
 				},
 				{
-					"id": "distributor",
+					"id": "extraInfo.company",
 					"width": 12,
 					"placeholder": "Distributor"
 				},
@@ -552,22 +552,22 @@ var PhoenixUI = (function(){
 					"placeholder": "Title"
 				},
 				{
-					"id": "creatorName",
+					"id": "extraInfo.artist",
 					"width": 12,
 					"placeholder": "Creator"
 				},
 				{
-					"id": "genre",
+					"id": "extraInfo.genre",
 					"width": 6,
 					"placeholder": "Genre"
 				},
 				{
-					"id": "releaseDate",
+					"id": "year",
 					"width": 6,
 					"placeholder": "Release Year"
 				},
 				{
-					"id": "tags",
+					"id": "extraInfo.tags",
 					"width": 12,
 					"placeholder": "Tags"
 				},
@@ -595,22 +595,22 @@ var PhoenixUI = (function(){
 					"placeholder": "Title"
 				},
 				{
-					"id": "creatorName",
+					"id": "extraInfo.artist",
 					"width": 12,
 					"placeholder": "Creator"
 				},
 				{
-					"id": "genre",
+					"id": "extraInfo.genre",
 					"width": 6,
 					"placeholder": "Genre"
 				},
 				{
-					"id": "releaseDate",
+					"id": "year",
 					"width": 6,
 					"placeholder": "Release Year"
 				},
 				{
-					"id": "tags",
+					"id": "extraInfo.tags",
 					"width": 12,
 					"placeholder": "Tags"
 				},
@@ -634,22 +634,22 @@ var PhoenixUI = (function(){
 					"placeholder": "Book Title"
 				},
 				{
-					"id": "authorName",
+					"id": "extraInfo.artist",
 					"width": 12,
 					"placeholder": "Author Name"
 				},
 				{
-					"id": "genre",
+					"id": "extraInfo.genre",
 					"width": 6,
 					"placeholder": "Genre"
 				},
 				{
-					"id": "releaseDate",
+					"id": "year",
 					"width": 6,
 					"placeholder": "Release Year"
 				},
 				{
-					"id": "tags",
+					"id": "extraInfo.tags",
 					"width": 12,
 					"placeholder": "Tags"
 				},
@@ -677,22 +677,22 @@ var PhoenixUI = (function(){
 					"placeholder": "Title"
 				},
 				{
-					"id": "creatorName",
+					"id": "extraInfo.artist",
 					"width": 12,
 					"placeholder": "Creator"
 				},
 				{
-					"id": "genre",
+					"id": "extraInfo.genre",
 					"width": 6,
 					"placeholder": "Genre"
 				},
 				{
-					"id": "releaseDate",
+					"id": "extraInfo.year",
 					"width": 6,
 					"placeholder": "Release Year"
 				},
 				{
-					"id": "tags",
+					"id": "extraInfo.tags",
 					"width": 12,
 					"placeholder": "Tags"
 				},
@@ -716,22 +716,22 @@ var PhoenixUI = (function(){
 					"placeholder": "Title"
 				},
 				{
-					"id": "creatorName",
+					"id": "extraInfo.artist",
 					"width": 12,
 					"placeholder": "Creator"
 				},
 				{
-					"id": "genre",
+					"id": "extraInfo.genre",
 					"width": 6,
 					"placeholder": "Genre"
 				},
 				{
-					"id": "releaseDate",
+					"id": "year",
 					"width": 6,
 					"placeholder": "Release Year"
 				},
 				{
-					"id": "tags",
+					"id": "extraInfo.tags",
 					"width": 12,
 					"placeholder": "Tags"
 				},
@@ -759,17 +759,17 @@ var PhoenixUI = (function(){
 					"placeholder": "Title"
 				},
 				{
-					"id": "creatorName",
+					"id": "extraInfo.artist",
 					"width": 12,
 					"placeholder": "Creator"
 				},
 				{
-					"id": "releaseDate",
+					"id": "year",
 					"width": 3,
 					"placeholder": "Release Year"
 				},
 				{
-					"id": "tags",
+					"id": "extraInfo.tags",
 					"width": 9,
 					"placeholder": "Tags"
 				},
@@ -1115,6 +1115,10 @@ var PhoenixUI = (function(){
 		}
 
 		metaFormElement.innerHTML = formHTML;
+
+		// This next line is for `bootstrap-tagsinput.js`
+		// Search for and implement any taginputs since we just purged the old stuff.
+		$("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();
 
 		posterElement.className = newType.coverArt.class;
 		posterTitleElement.innerHTML = newType.coverArt.text ? newType.coverArt.text : 'Cover Art';
