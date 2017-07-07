@@ -1157,16 +1157,21 @@ var PhoenixUI = (function(){
 
 						for (var k = 0; k < forms.length; k++) {
 							var location = forms[k].id;
+							var value;
 
 							if (location.includes('extraInfo.')){
 								location.replace('extraInfo.', '');
-								var value = oip041.artifact.info.extraInfo[location];
-								if (value)
-									document.getElementById(forms[k].id).value = value;
+								value = oip041.artifact.info.extraInfo[location];
 							} else {
-								var value = oip041.artifact.info[location];
-								if (value)
+								value = oip041.artifact.info[location];
+							}
+
+							if (value){
+								if (forms[k].id.includes('tags')){
+									// ToDo: Load tags
+								} else {
 									document.getElementById(forms[k].id).value = value;
+								}
 							}
 						}
 					}
