@@ -1131,7 +1131,7 @@ var PhoenixUI = (function(){
 		posterTitleElement.innerHTML = newType.coverArt.text ? newType.coverArt.text : 'Cover Art';
 	}
 
-	PhoenixUX.loadIntoMetadata = function(oip041){
+	PhoenixUX.loadIntoPublisher = function(oip041){
 		var mainType, subType;
 
 		if (Array.isArray(oip041.artifact.type)){
@@ -1149,6 +1149,7 @@ var PhoenixUI = (function(){
 		PhoenixUX.changeType(mainType);
 		PhoenixUX.changeSubtype(mainType + ',' + subType);
 
+		// Fill in the metadata fields
 		for (var i = 0; i < PhoenixUX.types.length; i++) {
 			if (PhoenixUX.types[i].type == mainType){
 				for (var j = 0; j < PhoenixUX.types[i].subtypes.length; j++) {
@@ -1177,6 +1178,47 @@ var PhoenixUI = (function(){
 					}
 				}
 			}
+		}
+
+		// Load the payment & file info
+		var togglePaid = false;
+		if (oip041.artifact.payment){
+			if (oip041.artifact.payment.addresses){
+				togglePaid = true;
+
+				while (paymentAddressesElement.children.length < oip041.artifact.payment.addresses.length){
+					PhoenixUX.addPaymentAddress();
+				}
+				for (var i = 0; i < oip041.artifact.payment.addresses.length; i++) {
+					for (var j = 0; j < paymentAddressesElement.children.length; j++) {
+						paymentAddressesElement.children[j].children[0].children[1].value = oip041.artifact.payment.addresses[i].address;
+					}
+				}
+			}
+
+			if (oip041.artifact.payment.sugTip){
+				togglePaid = true;
+
+				if (Array.isArray(oip041.artifact.payment.sugTip)){
+					for (var i = 0; i < oip041.artifact.payment.sugTip.length; i++) {
+						document.getElementById('tip' + (i + 1)).value = oip041.artifact.payment.sugTip[i];
+					}
+				} else {
+					// ToDo: Catch else
+				}
+			}
+		}
+
+		if (togglePaid){
+			document.getElementById('freeRadioLabel').classList.remove('active');
+			document.getElementById('paidRadioLabel').classList.add('active');
+
+			$('#paymentInfo').show();
+		} else {
+			document.getElementById('freeRadioLabel').classList.add('active');
+			document.getElementById('paidRadioLabel').classList.remove('active');
+
+			$('#paymentInfo').hide();
 		}
 	}
 
