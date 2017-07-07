@@ -18,6 +18,7 @@ var posterFileElement = document.getElementById('posterFile');
 var publishFeeElement = document.getElementById('publishFee');
 var paymentAddressesElement = document.getElementById('paymentAddresses');
 var pleaseAddFileElement = document.getElementById('pleaseAddFile');
+var subGenreSelectorElement = document.getElementById('subGenreSelector');
 
 // Accepts a set of Selectors to load the artifact into view. Generates code for all of the different sections to fill it.
 PhoenixEvents.on("onError", function(msg){ console.log(msg.message) });
@@ -226,6 +227,119 @@ PhoenixEvents.on("onWalletUpdate", function(wallet){ console.log("Wallet Updated
 var PhoenixUI = (function(){
 	var PhoenixUX = {};
 
+	// IMDB genres
+	PhoenixUX.movieGenres = {
+		"Action": ["Comedy", "Crime", "Thriller"],
+		"Adventure": ["Biography", "Thriller", "War"],
+		"Animation": ["Adventure", "Comedy", "Family", "Fantasy"],
+		"Biography": ["Crime", "Mystery", "Sport"],
+		"Comedy": ["Action", "Horror", "Romance"],
+		"Crime": ["Drama", "Mystery", "Romance"],
+		"Documentary": ["Biography", "Comedy", "Crime", "History"],
+		"Drama": ["Romance", "Film-Noir", "Musical", "War"],
+		"Family": ["Adventure", "Comedy", "Fantasy", "Romance"],
+		"Fantasy": ["Adventure", "Comedy", "Drama", "Romance"],
+		"Film-Noir": ["Crime", "Mystery", "Romance", "Thriller"],
+		"History": ["Adventure", "Biography", "Drama", "War"],
+		"Horror": ["Comedy", "Drama", "Sci-Fi"],
+		"Music": ["Biography", "Documentary", "Drama"],
+		"Musical": ["Comedy", "History", "Romance"],
+		"Mystery": ["Adventure", "Comedy", "Thriller"],
+		"Romance": ["Comedy", "Crime", "History", "Thriller"],
+		"Sci-Fi": ["Animation", "Comedy", "Family", "Horror"],
+		"Sport": ["Biography", "Comedy", "Documentary"],
+		"Thriller": ["Comedy", "Crime", "Horror", "Mystery"],
+		"War": ["Action", "Biography", "Comedy", "Documentary"],
+		"Western": ["Action", "Adventure", "Comedy"]
+	}
+
+	// https://support.google.com/youtube/answer/4594615?hl=en
+	PhoenixUX.musicGenres = [
+		"Acoustic",
+		"Alternative & Punk",
+		"Blues",
+		"Classical",
+		"Country & Folk",
+		"Dance & Electronic",
+		"Easy Listening",
+		"Gospel & Religious",
+		"Hip Hop & Rap",
+		"Holiday",
+		"Instrumental",
+		"Jazz",
+		"Latin",
+		"Metal",
+		"Moods",
+		"Other",
+		"Pop",
+		"R&B",
+		"Rock",
+		"Soundtrack",
+		"World"
+	];
+
+	// https://support.google.com/youtube/answer/4594615?hl=en
+	PhoenixUX.tvGenres = [
+		"Action & Adventure",
+		"Animation",
+		"Beauty & Fashion",
+		"Classic TV",
+		"Comedy",
+		"Documentary",
+		"Drama",
+		"Entertainment",
+		"Family",
+		"Food",
+		"Gaming",
+		"Health & Fitness",
+		"Home & Garden",
+		"Learning & Education",
+		"Nature",
+		"News",
+		"Reality & Game Shows",
+		"Science & Tech",
+		"Science Fiction",
+		"Soaps",
+		"Sports",
+		"Travel"
+	]
+
+	// Youtube category list
+	PhoenixUX.webGenres = [
+		"Autos & Vehicles",
+		"Film & Animation",
+		"Music",
+		"Pets & Animals",
+		"Sports",
+		"Short Movies",
+		"Travel & Events",
+		"Gaming",
+		"Videoblogging",
+		"People & Blogs",
+		"Comedy",
+		"Entertainment",
+		"News & Politics",
+		"Howto & Style",
+		"Education",
+		"Science & Technology",
+		"Nonprofits & Activism",
+		"Movies",
+		"Anime/Animation",
+		"Action/Adventure",
+		"Classics",
+		"Comedy",
+		"Documentary",
+		"Drama",
+		"Family",
+		"Foreign",
+		"Horror",
+		"Sci-Fi/Fantasy",
+		"Thriller",
+		"Shorts",
+		"Shows",
+		"Trailers"
+	]
+
 	PhoenixUX.types = [{
 		"type": "Audio",
 		"icon": "song-icon",
@@ -244,7 +358,8 @@ var PhoenixUI = (function(){
 				{
 					"id": "extraInfo.genre",
 					"width": 6,
-					"placeholder": "Genre"
+					"placeholder": "Genre",
+					"genres": PhoenixUX.musicGenres
 				},
 				{
 					"id": "year",
@@ -288,7 +403,8 @@ var PhoenixUI = (function(){
 				{
 					"id": "extraInfo.genre",
 					"width": 6,
-					"placeholder": "Genre"
+					"placeholder": "Genre",
+					"genres": PhoenixUX.musicGenres
 				},
 				{
 					"id": "year",
@@ -332,7 +448,8 @@ var PhoenixUI = (function(){
 				{
 					"id": "extraInfo.genre",
 					"width": 6,
-					"placeholder": "Genre"
+					"placeholder": "Genre",
+					"genres": PhoenixUX.musicGenres
 				},
 				{
 					"id": "year",
@@ -426,7 +543,8 @@ var PhoenixUI = (function(){
 				{
 					"id": "extraInfo.genre",
 					"width": 6,
-					"placeholder": "Genre"
+					"placeholder": "Genre",
+					"genres": PhoenixUX.webGenres
 				},
 				{
 					"id": "year",
@@ -475,7 +593,8 @@ var PhoenixUI = (function(){
 				{
 					"id": "extraInfo.genre",
 					"width": 5,
-					"placeholder": "Genre"
+					"placeholder": "Genre",
+					"genres": PhoenixUX.webGenres
 				},
 				{
 					"id": "extraInfo.tags",
@@ -510,7 +629,8 @@ var PhoenixUI = (function(){
 				{
 					"id": "extraInfo.genre",
 					"width": 6,
-					"placeholder": "Genre"
+					"placeholder": "Genre",
+					"genres": PhoenixUX.movieGenres
 				},
 				{
 					"id": "year",
@@ -891,119 +1011,6 @@ var PhoenixUI = (function(){
 		]
 	};
 
-	// IMDB genres
-	PhoenixUX.movieGenres = {
-		"Action": ["Comedy", "Crime", "Thriller"],
-		"Adventure": ["Biography", "Thriller", "War"],
-		"Animation": ["Adventure", "Comedy", "Family", "Fantasy"],
-		"Biography": ["Crime", "Mystery", "Sport"],
-		"Comedy": ["Action", "Horror", "Romance"],
-		"Crime": ["Drama", "Mystery", "Romance"],
-		"Documentary": ["Biography", "Comedy", "Crime", "History"],
-		"Drama": ["Romance", "Film-Noir", "Musical", "War"],
-		"Family": ["Adventure", "Comedy", "Fantasy", "Romance"],
-		"Fantasy": ["Adventure", "Comedy", "Drama", "Romance"],
-		"Film-Noir": ["Crime", "Mystery", "Romance", "Thriller"],
-		"History": ["Adventure", "Biography", "Drama", "War"],
-		"Horror": ["Comedy", "Drama", "Sci-Fi"],
-		"Music": ["Biography", "Documentary", "Drama"],
-		"Musical": ["Comedy", "History", "Romance"],
-		"Mystery": ["Adventure", "Comedy", "Thriller"],
-		"Romance": ["Comedy", "Crime", "History", "Thriller"],
-		"Sci-Fi": ["Animation", "Comedy", "Family", "Horror"],
-		"Sport": ["Biography", "Comedy", "Documentary"],
-		"Thriller": ["Comedy", "Crime", "Horror", "Mystery"],
-		"War": ["Action", "Biography", "Comedy", "Documentary"],
-		"Western": ["Action", "Adventure", "Comedy"]
-	}
-
-	// https://support.google.com/youtube/answer/4594615?hl=en
-	PhoenixUX.musicGenres = [
-		"Acoustic",
-		"Alternative & Punk",
-		"Blues",
-		"Classical",
-		"Country & Folk",
-		"Dance & Electronic",
-		"Easy Listening",
-		"Gospel & Religious",
-		"Hip Hop & Rap",
-		"Holiday",
-		"Instrumental",
-		"Jazz",
-		"Latin",
-		"Metal",
-		"Moods",
-		"Other",
-		"Pop",
-		"R&B",
-		"Rock",
-		"Soundtrack",
-		"World"
-	];
-
-	// https://support.google.com/youtube/answer/4594615?hl=en
-	PhoenixUX.tvGenres = [
-		"Action & Adventure",
-		"Animation",
-		"Beauty & Fashion",
-		"Classic TV",
-		"Comedy",
-		"Documentary",
-		"Drama",
-		"Entertainment",
-		"Family",
-		"Food",
-		"Gaming",
-		"Health & Fitness",
-		"Home & Garden",
-		"Learning & Education",
-		"Nature",
-		"News",
-		"Reality & Game Shows",
-		"Science & Tech",
-		"Science Fiction",
-		"Soaps",
-		"Sports",
-		"Travel"
-	]
-
-	// Youtube category list
-	PhoenixUX.webGenres = [
-		"Autos & Vehicles",
-		"Film & Animation",
-		"Music",
-		"Pets & Animals",
-		"Sports",
-		"Short Movies",
-		"Travel & Events",
-		"Gaming",
-		"Videoblogging",
-		"People & Blogs",
-		"Comedy",
-		"Entertainment",
-		"News & Politics",
-		"Howto & Style",
-		"Education",
-		"Science & Technology",
-		"Nonprofits & Activism",
-		"Movies",
-		"Anime/Animation",
-		"Action/Adventure",
-		"Classics",
-		"Comedy",
-		"Documentary",
-		"Drama",
-		"Family",
-		"Foreign",
-		"Horror",
-		"Sci-Fi/Fantasy",
-		"Thriller",
-		"Shorts",
-		"Shows",
-		"Trailers"
-	]
-
 	PhoenixUX.loadIntoMeta = function(oip041){
 		for (var i = 0; i < PhoenixUX.types.length; i++) {
 			if (PhoenixUX.types[i].type == type){
@@ -1129,6 +1136,58 @@ var PhoenixUI = (function(){
 			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
 				<textarea rows="' + formJSON.rows + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '"></textarea>\
 			</div>';
+		} else if (formJSON.id.includes('genre')){
+			if (formJSON.genres){
+				var selectInner = '';
+
+				console.log(formJSON.genres);
+
+				// If we are dealing with 2 level genres
+
+				var first = true;
+				var firstSubArray;
+				for (var x in formJSON.genres){
+					if (first){
+						firstSubArray = formJSON.genres[x];
+						first = false;
+					} 
+				}
+
+				if (Array.isArray(firstSubArray)){
+					for (var genre in formJSON.genres){
+						selectInner += '<option>' + genre + '</option>';
+					}
+
+					var selectInner2 = '';
+					for (var genre in firstSubArray){
+						selectInner2 += '<option>' + firstSubArray[genre] + '</option>';
+					}
+					return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
+						<div class="dual-selector">\
+							<select class="form-control" style="width: 50%" id="mainGenereSelector" onchange="PhoenixUI.updateSubGenre(this);">\
+								' + selectInner + '\
+							</select>\
+							<select class="form-control" style="width: 50%" id="subGenreSelector">\
+								' + selectInner2 + '\
+							</select>\
+						</div>\
+					</div>'
+				} else {
+					// else we are dealing with single level.
+					for (var genre in formJSON.genres){
+						selectInner += '<option>' + formJSON.genres[genre] + '</option>';
+					}
+
+					return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
+						<select class="form-control" id="' + formJSON.id + '">' + selectInner + '</select>\
+					</div>';
+				}
+			} else {
+				return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
+					<input type="' + (formJSON.type ? formJSON.type : 'text') + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '">\
+				</div>';
+			}
+			
 		} else if (formJSON.id.includes('tags')){
 			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
 				<input style="float:left" type="' + (formJSON.type ? formJSON.type : 'text') + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '" data-role="tagsinput">\
@@ -1137,8 +1196,34 @@ var PhoenixUI = (function(){
 			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
 				<input type="' + (formJSON.type ? formJSON.type : 'text') + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '">\
 			</div>';
+		}	
+	}
+
+	PhoenixUX.updateSubGenre = function(elem){
+		var mainGenre = elem.value;
+
+		for (var i = 0; i < PhoenixUX.types.length; i++) {
+			if (PhoenixUX.type == PhoenixUX.types[i].type){
+				for (var j = 0; j < PhoenixUX.types[i].subtypes.length; j++) {
+					if (PhoenixUX.subtype == PhoenixUX.types[i].subtypes[j].subtype){
+						for (var k = 0; k < PhoenixUX.types[i].subtypes[j].forms.length; k++) {
+							if (PhoenixUX.types[i].subtypes[j].forms[k].id.includes('genre')){
+								if (PhoenixUX.types[i].subtypes[j].forms[k].genres){
+									if (PhoenixUX.types[i].subtypes[j].forms[k].genres[mainGenre]){
+										var innerHTMLVal = '';
+										for (var l = 0; l < PhoenixUX.types[i].subtypes[j].forms[k].genres[mainGenre].length; l++) {
+											innerHTMLVal += '<option>' + PhoenixUX.types[i].subtypes[j].forms[k].genres[mainGenre][l] + '</option>';
+										}
+										var subGenreSelectorElement = document.getElementById('subGenreSelector');
+										subGenreSelectorElement.innerHTML = innerHTMLVal;
+									}
+								}	
+							}
+						}
+					}
+				}
+			}
 		}
-		
 	}
 
 	PhoenixUX.loadArtifactIntoView = function(artifact){
