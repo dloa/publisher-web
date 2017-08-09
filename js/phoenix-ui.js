@@ -75,7 +75,7 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 								<th scope='row'>" + (1+parseInt(i)) + "</th>\
 								<td><code>" + msg.results[i]['media-data']['alexandria-media'].info.title + "</code></td>\
 								<td>TXID: <code>.." + msg.results[i].txid.substr(msg.results[i].txid.length - 8) + "</code></td>\
-								<td><button onClick='Phoenix.artifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='EditArtifact(\"" + msg.results[i].txid + "\");' class='dev btn btn-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
+								<td><button onClick='Phoenix.artifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='dev btn btn-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
 							</tr>";
 				$("#ArtifactsTable > tbody").append(markup);
 			} else if (msg.results[i]['oip-041']){
@@ -83,7 +83,7 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 								<th scope='row'>" + (1+parseInt(i)) + "</th>\
 								<td><code>" + msg.results[i]['oip-041'].artifact.info.title + "</code></td>\
 								<td>TXID: <code>.." + msg.results[i].txid.substr(msg.results[i].txid.length - 8) + "</code></td>\
-								<td><button onClick='ArtifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='EditArtifact(\"" + msg.results[i].txid + "\");' class='dev btn btn-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
+								<td><button onClick='ArtifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
 							</tr>";
 				$("#ArtifactsTable > tbody").append(markup);
 			}
@@ -1131,18 +1131,32 @@ var PhoenixUI = (function(){
 		posterTitleElement.innerHTML = newType.coverArt.text ? newType.coverArt.text : 'Cover Art';
 	}
 
+	PhoenixUX.EditArtifact = function(txid){
+		for (var art in Phoenix.artifacts[publisherSelectElement.value]){
+			if (Phoenix.artifacts[publisherSelectElement.value][art].txid == txid){
+				PhoenixUX.loadIntoPublisher(Phoenix.artifacts[publisherSelectElement.value][art]['oip-041']);
+				showWizardPage();
+			}
+		}
+	}
+
 	PhoenixUX.loadIntoPublisher = function(oip041){
 		var mainType, subType;
 
-		if (Array.isArray(oip041.artifact.type)){
-			mainType = oip041.artifact.type[0];
-			subType = oip041.artifact.type[1];
-		} else {
-			if (oip041.artifact.type == 'thing') {
-				mainType = ('Software');
-				subType = ('3D Thing');
+		console.log(oip041);
+
+		if (oip041.artifact.type){
+			if (Array.isArray(oip041.artifact.type)){
+				mainType = oip041.artifact.type[0];
+				subType = oip041.artifact.type[1];
+			} else {
+				if (oip041.artifact.type == 'thing') {
+					mainType = ('Image');
+					subType = ('Generic');
+				}
 			}
 		}
+		
 
 		console.log(mainType,subType);
 
@@ -1180,7 +1194,7 @@ var PhoenixUI = (function(){
 			}
 		}
 
-		// Load the payment & file info
+		// Load the payment info
 		var togglePaid = false;
 		if (oip041.artifact.payment){
 			if (oip041.artifact.payment.addresses){
@@ -1220,6 +1234,9 @@ var PhoenixUI = (function(){
 
 			$('#paymentInfo').hide();
 		}
+
+		// Load the file info
+		// Disable the file inputs/show warning when editting
 	}
 
 	PhoenixUX.generateFormElement = function(formJSON){
