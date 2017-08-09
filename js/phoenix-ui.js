@@ -344,7 +344,7 @@ var PhoenixUI = (function(){
 		"type": "Audio",
 		"icon": "song-icon",
 		"subtypes": [{
-			"subtype": "Generic",
+			"subtype": "Basic",
 			"forms": [{
 					"id": "title",
 					"width": 12,
@@ -483,14 +483,14 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Podcast Title",
-					"subtext": "This will be auto formatted with \"Podcast Title\": \"Episode Title\""
+					"placeholder": "Podcast Name",
+					"subtext": "This will be auto formatted with \"Podcast Name\": \"Episode Title\""
 				},
 				{
 					"id": "extraInfo.episodeTitle",
 					"width": 12,
 					"placeholder": "Episode Title",
-					"subtext": "This will be auto formatted with \"Podcast Title\": \"Episode Title\""
+					"subtext": "This will be auto formatted with \"Podcast Name\": \"Episode Title\""
 				},
 				{
 					"id": "extraInfo.seasonNum",
@@ -529,7 +529,7 @@ var PhoenixUI = (function(){
 		"type": "Video",
 		"icon": "video-icon",
 		"subtypes": [{
-			"subtype": "Generic",
+			"subtype": "Basic",
 			"forms": [{
 					"id": "title",
 					"width": 12,
@@ -569,50 +569,50 @@ var PhoenixUI = (function(){
 				"class": "cover-art"
 			}
 		},{
-			"subtype": "Video",
+			"subtype": "Series",
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Video Title"
+					"placeholder": "Series Name",
+					"subtext": "This will be auto formatted with \"Series Name\": \"Episode Title\""
 				},
 				{
-					"id": "extraInfo.artist",
+					"id": "extraInfo.episodeTitle",
 					"width": 12,
-					"placeholder": "Director Name"
+					"placeholder": "Episode Title",
+					"subtext": "This will be auto formatted with \"Series Name\": \"Episode Title\""
 				},
 				{
-					"id": "extraInfo.company",
-					"width": 12,
-					"placeholder": "Distributor"
+					"id": "extraInfo.seasonNum",
+					"width": 3,
+					"placeholder": "Season Number"
+				},
+				{
+					"id": "extraInfo.episodeNum",
+					"width": 3,
+					"placeholder": "Episode Number"
 				},
 				{
 					"id": "year",
-					"width": 2,
+					"width": 3,
 					"placeholder": "Release Year"
 				},
 				{
-					"id": "extraInfo.genre",
-					"width": 5,
-					"placeholder": "Genre",
-					"genres": PhoenixUX.webGenres
-				},
-				{
 					"id": "extraInfo.tags",
-					"width": 5,
+					"width": 3,
 					"placeholder": "Tags"
 				},
 				{
 					"id": "description",
 					"width": 12,
-					"placeholder": "Video Description",
+					"placeholder": "Episode Description",
 					"type": "textarea",
 					"row": 3
 				}
 			],
 			"coverArt": {
 				"id": "cover-art",
-				"text": "Preview Image",
-				"class": "cover-art"
+				"class": "cover-art-square"
 			}
 		},{
 			"subtype": "Movie",
@@ -1289,6 +1289,7 @@ var PhoenixUI = (function(){
 			} else {
 				return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
 					<input type="' + (formJSON.type ? formJSON.type : 'text') + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '">\
+						' + (formJSON.subtext ? '<small class="form-text text-muted text-left">' + formJSON.subtext + '</small>' : '') + '\
 				</div>';
 			}
 			
@@ -1299,6 +1300,7 @@ var PhoenixUI = (function(){
 		} else {
 			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
 				<input type="' + (formJSON.type ? formJSON.type : 'text') + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '">\
+						' + (formJSON.subtext ? '<small class="form-text text-muted text-left">' + formJSON.subtext + '</small>' : '') + '\
 			</div>';
 		}	
 	}
@@ -1335,6 +1337,38 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.generateArtifactJSONFromView = function(){
+		//var timestamp = ((new Date).getTime() / 1000).toFixed(0);
+		var type = PhoenixUX.type;
+		var subtype = PhoenixUX.subtype;
+
+		var artifactJSON = { 
+			"oip-041":{  
+        		"artifact":{  
+		            "type": type + "-" + subtype,
+		            "info": { 
+		            },
+		            "storage": {
+		            	"network": "IPFS",
+		            	"files": []
+		            },
+		            "payment": {
+		            	"fiat": "",
+		            	"scale": "1000:1",
+		            	"sugTip": [ ]
+		            },
+		            "tokens":{  
+	                }
+        		}
+        	}
+        };
+
+        for (var i = 0; i < PhoenixUX.types.length; i++) {
+        	if (PhoenixUX.types[i].type == type){
+        		for (var i = 0; i < PhoenixUX.types[i].subtypes.length; i++) {
+        			PhoenixUX.types[i].subtypes[j]
+        		}
+        	}
+        }
 
 	}
 
@@ -1433,6 +1467,8 @@ var PhoenixUI = (function(){
 				pricingTableElement.style.display = 'none';
 			}
 		}
+
+		
 
 		// Remove from table array
 		document.getElementById(id).remove();
