@@ -61,7 +61,7 @@ LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, p
 	data["oip-041"]["artifact"].timestamp = parseInt(time);
 	data["oip-041"]["artifact"].publisher = address;
 
-	LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.001, publishFee, function (err, txIDs) {
+	LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.00000001, publishFee, function (err, txIDs) {
 		if (err != null)
 			callback(err,
 				JSON.stringify({
@@ -100,7 +100,7 @@ LibraryDJS.announcePublisher = function (wallet, name, address, bitMessage, emai
 		"signature": signature
 	};
 
-	LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.001, function (err, txIDs) {
+	LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.00000001, function (err, txIDs) {
 		if (err != null)
 			callback(err,
 				JSON.stringify({
@@ -132,7 +132,7 @@ LibraryDJS.sendDeactivationMessage = function (wallet, address, txid, callback) 
 	    }
 	};
 
-	LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.001, function (err, txIDs) {
+	LibraryDJS.Send(wallet, JSON.stringify(data), address, 0.00000001, function (err, txIDs) {
 		if (err != null)
 			callback(err,
 				JSON.stringify({
@@ -158,7 +158,9 @@ LibraryDJS.Send = function (wallet, jsonData, address, amount, publishFee, callb
 	console.log(publishFee);
 	if (typeof publishFee == 'function'){
 		callback = publishFee;
-		publishFee = 0.001;
+		//0.01251564 FLO/kB for "fast" (1 block) 8/8/2017
+		// 528 bytes per tx max, 0.00645337
+		publishFee = 0.01251564;
 	}
 	LibraryDJS.sendToBlockChain(wallet, jsonData, address, amount, publishFee, function (err, txIDs) {
 		callback(err, txIDs);
@@ -192,7 +194,7 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee,
 	console.log(publishFee);
     var txIDs = [];
 
-    var multiPartPrefix = "alexandria-media-multipart(";
+    var multiPartPrefix = "oip-mp(";
 
     var chop = LibraryDJS.chopString(txComment);
 
@@ -234,7 +236,8 @@ function publishPart(chopPieces, numberOfPieces, lastPiecesCompleted, reference,
     var multiPart = multiPartPrefix + part.toString() + "," + numberOfPieces.toString() +
         "," + address + "," + reference + "," + signature + "," + "):" + data;
 
-    wallet.sendCoins(address, address, amount, multiPart, 1000000, function (err, data) {
+    // 645337 satoshi = 0.00645337
+    wallet.sendCoins(address, address, amount, multiPart, 645337, function (err, data) {
     	txIDs[txIDs.length] = data.txid;
 
     	if (part < numberOfPieces){
