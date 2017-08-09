@@ -327,6 +327,7 @@
 														<div class="col"><input type="text" class="form-control col" id="tip2" placeholder="$0.10" oninput="PhoenixUI.onTipsInput(this);"></div>
 														<div class="col"><input type="text" class="form-control col" id="tip3" placeholder="$1" oninput="PhoenixUI.onTipsInput(this);"></div>
 													</div>
+													<small class="form-text text-muted">The suggested tip amounts will be displayed to the user if they click to "Tip" your video.</small>
 													<h5 class="text-center" style="margin-top: 20px;">Advanced</h5>
 													<div class="form-group row text-right">
 														<label for="example-text-input" class="col-3 col-form-label">Promoter</label>
@@ -344,6 +345,7 @@
 															</div>
 														</div>
 													</div>
+													<small class="form-text text-muted">Select amounts you would like to pay to Promoters and Retailers. A Promoter is someone who drives traffic to your content, and a retailer is someone who sells your content.</small>
 												</div>
 												<div class="col-6" id="bitcoinAddressGroup">
 													<!-- <span>Payment Addresses</span>
@@ -416,33 +418,23 @@
 												</div>
 												<div class="col-12">
 													<div class="publish-section publish-pricing" id='pricing'>
-														<div class="row">
-															<div class="col-sm-12">
-																<p class="small">Pick the price for each file. You are allowed to enter up to one tenth of a cent.</p>
-															</div>
-														</div>
-														<div class="row">
-															<div class="col col-lg-12">
-																<table class="table" id='pricingTable'>
-																	<thead>
-																		<tr>
-																			<th>File Name</th>
-																			<th>Suggested Play</th>
-																			<th>Minimum Play</th>
-																			<th>Suggested Buy</th>
-																			<th>Minimum Buy</th>
-																			<th></th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr class="text-center">
-																			
-																		</tr>
-																	</tbody>
-																</table>
-																<center><h3 id="pleaseAddFile">Please add a file below...</h3></center>
-															</div>
-														</div>
+														<table class="table" id='pricingTable' style="display: none;">
+															<thead>
+																<tr>
+																	<th>File Name</th>
+																	<th>Suggested Play</th>
+																	<th>Minimum Play</th>
+																	<th>Suggested Buy</th>
+																	<th>Minimum Buy</th>
+																	<th></th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr class="text-center">
+																	
+																</tr>
+															</tbody>
+														</table>
 													</div>
 												</div>
 											</div>			

@@ -17,7 +17,7 @@ var posterElement = document.getElementById('poster');
 var posterFileElement = document.getElementById('posterFile');
 var publishFeeElement = document.getElementById('publishFee');
 var paymentAddressesElement = document.getElementById('paymentAddresses');
-var pleaseAddFileElement = document.getElementById('pleaseAddFile');
+var pricingTableElement = document.getElementById('pricingTable');
 var subGenreSelectorElement = document.getElementById('subGenreSelector');
 
 // Accepts a set of Selectors to load the artifact into view. Generates code for all of the different sections to fill it.
@@ -1495,7 +1495,7 @@ var PhoenixUI = (function(){
 				'<br><input type="checkbox" id="disBuy" onclick="checkboxToggle(\'' + file.id + '\', \'buy\')"> Disallow Buy</td>' +
 			'</tr>');
 
-		pleaseAddFileElement.style.display = 'none';
+		pricingTableElement.style.display = 'inherit';
 	}
 
 	PhoenixUX.posterFileSelectHandler = function(file) {
