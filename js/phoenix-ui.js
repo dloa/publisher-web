@@ -1428,6 +1428,10 @@ var PhoenixUI = (function(){
 					PhoenixUX.mediaFiles.splice(i, 1);
 				}
 			}
+
+			if (PhoenixUX.mediaFiles.length === 0){
+				pricingTableElement.style.display = 'none';
+			}
 		}
 
 		// Remove from table array
