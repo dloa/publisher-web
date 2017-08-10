@@ -304,6 +304,19 @@
 												</div>
 											</div>
 										</div>
+										<center style="margin-top: 15px; margin-bottom: 20px">
+											<span style="font-size: 1.5em; font-weight: 100;">My Artifact is for:</span>
+											<div class="btn-group" data-toggle="buttons">
+												<label class="btn btn-outline-primary active" id='freeRadioLabel'>
+													<input id='allRadio' type="radio" name="allAges" id="artifactFreeBtn" autocomplete="off" onclick="" checked> All Ages
+												</label>
+												<label class="btn btn-outline-danger" id='paidRadioLabel'>
+													<input id='nsfwRadio' type="radio" name="nsfw" id="artifactPaidBtn" autocomplete="off" onclick="$('#paymentInfo').show();" unchecked> 18+ (NSFW) 
+												</label>
+											</div>
+											<br />
+											<small class="text-muted">Please select if your content is suitible for all ages or if it has NSFW/sensitive content.</small>
+										</center>
 									</div>
 									<div class="row" id='bitcoinAddressField'>
 										<div class="col-sm-12">
@@ -488,18 +501,19 @@
 											</label>
 										</div>
 									</div>
-									<div class="publish-section publish-submit">
+									<div class="publish-section publish-submit" id="publishSubmitSection">
 										<div class="row align-items-center">
-											<div class="col-4">
+											<div class="col-3">
 												<!-- <p class="small" id="artJSON">You will be able to submit your artifact after you preview it. Be sure it looks exactly like what you desire as you will be unable to change this later. </p>-->
 											</div>
-											<div class="col-4 text-center" style="color: green">
+											<div class="col-6 text-center" style="color: green">
 												Cost To Publish
 												<br />
-												<h1 style="margin-bottom: 0px;" id="publishFee">Free!</h1>
+												<h1 style="margin-bottom: 0px;"><span id="publishFee">Free!</span><span id="publishSlash" style="color: #333; display:none"> / </span><span id="publishFeeFLO" style="color: cornflowerblue; display:none">0 FLO</span></h1>
+												<span style="color: #d9534f; display:none" id="pubBalanceTooLow">You do not have enough balance in your wallet!</span>
 											</div>
-											<div class="col-4 text-right">
-												<button type="button" id="previewButton" class="btn btn-outline-success" onClick="PhoenixUI.publish()">Publish</button>
+											<div class="col-3 text-right">
+												<button type="button" id="previewButton" class="btn btn-outline-success btn-background-white" onClick="PhoenixUI.publish()">Publish</button>
 											</div>
 										</div>
 									</div>

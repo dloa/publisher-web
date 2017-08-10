@@ -16,6 +16,10 @@ var subtypePillsElement = document.getElementById('subtypePills');
 var posterElement = document.getElementById('poster');
 var posterFileElement = document.getElementById('posterFile');
 var publishFeeElement = document.getElementById('publishFee');
+var publishSlashElement = document.getElementById('publishSlash');
+var publishFeeFLOElement = document.getElementById('publishFeeFLO');
+var pubBalanceTooLowElement = document.getElementById('pubBalanceTooLow');
+var publishSubmitSectionElement = document.getElementById('publishSubmitSection');
 var paymentAddressesElement = document.getElementById('paymentAddresses');
 var pricingElement = document.getElementById('pricing');
 var subGenreSelectorElement = document.getElementById('subGenreSelector');
@@ -250,12 +254,14 @@ var PhoenixUI = (function(){
 		"Sport": ["Biography", "Comedy", "Documentary"],
 		"Thriller": ["Comedy", "Crime", "Horror", "Mystery"],
 		"War": ["Action", "Biography", "Comedy", "Documentary"],
-		"Western": ["Action", "Adventure", "Comedy"]
+		"Western": ["Action", "Adventure", "Comedy"],
+		 "Other": ["Other"]
 	}
 
 	// https://support.google.com/youtube/answer/4594615?hl=en
 	PhoenixUX.musicGenres = [
 		"Acoustic",
+		"Adult",
 		"Alternative & Punk",
 		"Blues",
 		"Classical",
@@ -275,12 +281,14 @@ var PhoenixUI = (function(){
 		"R&B",
 		"Rock",
 		"Soundtrack",
-		"World"
+		"World",
+		 "Other"
 	];
 
 	// https://support.google.com/youtube/answer/4594615?hl=en
 	PhoenixUX.tvGenres = [
 		"Action & Adventure",
+		"Adult",
 		"Animation",
 		"Beauty & Fashion",
 		"Classic TV",
@@ -301,7 +309,8 @@ var PhoenixUI = (function(){
 		"Science Fiction",
 		"Soaps",
 		"Sports",
-		"Travel"
+		"Travel",
+		 "Other"
 	]
 
 	// Youtube category list
@@ -324,6 +333,7 @@ var PhoenixUI = (function(){
 		"Science & Technology",
 		"Nonprofits & Activism",
 		"Movies",
+		"Adult",
 		"Anime/Animation",
 		"Action/Adventure",
 		"Classics",
@@ -337,8 +347,107 @@ var PhoenixUI = (function(){
 		"Thriller",
 		"Shorts",
 		"Shows",
-		"Trailers"
+		"Trailers",
+		 "Other"
 	]
+
+	// Image Genres similar to http://shutha.org/photo-genres
+	PhoenixUX.imageGenres = [
+		"Abstract", 
+		"Animals/Wildlife", 
+		 "The Arts", 
+		 "Backgrounds/Textures", 
+		 "Beauty/Fashion", 
+		 "Buildings/Landmarks", 
+		 "Business/Finance", 
+		 "Celebrities", 
+		 "Editorial", 
+		 "Education", 
+		 "Food and Drink", 
+		 "Healthcare/Medical", 
+		 "Holidays", 
+		 "Illustrations/Clip-Art", 
+		 "Industrial", 
+		 "Interiors", 
+		 "Miscellaneous", 
+		 "Model Released Only", 
+		 "Nature", 
+		 "Objects", 
+		 "Parks/Outdoor", 
+		 "People", 
+		 "Religion", 
+		 "Science", 
+		 "Signs/Symbols", 
+		 "Sports/Recreation", 
+		 "Technology", 
+		 "Transportation", 
+		 "Vectors", 
+		 "Vintage",
+		 "Other"
+	];
+	/*[
+		"Creative (Fiction)": [
+			"Fashion Studio",
+			"Fashion Catalogue",
+			"Celebrity and Band",
+			"Commercial",
+			"Food and Decor",
+			"Fine Art",
+			"Erotic",
+			"Propaganda",,
+			"Other"
+		],
+		"Archival",
+		"Architectural",
+		"Nature": [
+			"Aerial",
+			"Landscape",
+			"Wildlife",
+			"Underwater",
+			"Macro",
+			"Flora",
+			"Other"
+		],
+		"Life": [
+			"Photojournalism",
+			"War",
+			"Political",
+			"News",
+			"Documentary",
+			"Candid",
+			"Travel",
+			"Other"
+		],
+		"Sports": ["Action", "Portraiture", "Adventure", "Other"]
+		"Scientific": [
+			"Forensic",
+			"Microscopic",
+			"Telescopic",
+			"Medical",
+			"Fibreoptic",
+			"Satellite",
+			"Aerial",
+			"Astrophotography",
+			"Other"
+		],
+		"Military": [
+			"Documentary",
+			"Spy",
+			"Satellite",
+			"Other"
+		],
+		"Corporate": [
+			"Industrial",
+			"Portraiture",
+			"Other"
+		],
+		"Stage and Set": ["Live Music", "Performance", "Other"],
+		"Celebrity": ["Red Carpet", "Paparazzi", "Other"],
+		"Fashion": ["Ramp", "Other"],
+		"Commercial": ["Public Relations", "Other"],
+		"Event": ["Wedding", "Graduation", "Funeral", "Cultural", "Right of Passage", "Civil", "Other"],
+		"Other": ["Other"]
+	]*/
 
 	PhoenixUX.types = [{
 		"type": "Audio",
@@ -680,7 +789,9 @@ var PhoenixUI = (function(){
 				{
 					"id": "extraInfo.genre",
 					"width": 6,
-					"placeholder": "Genre"
+					"placeholder": "Genre",
+					"genres": PhoenixUX.imageGenres,
+					"dualGenreSelector": true
 				},
 				{
 					"id": "year",
@@ -1279,7 +1390,7 @@ var PhoenixUI = (function(){
 	PhoenixUX.generateFormElement = function(formJSON){
 		if (formJSON.type == 'textarea'){
 			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
-				<textarea rows="' + formJSON.rows + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '"></textarea>\
+				<textarea oninput="PhoenixUI.onMetadataChange(this)" rows="' + formJSON.rows + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '"></textarea>\
 			</div>';
 		} else if (formJSON.id.includes('genre')){
 			if (formJSON.genres){
@@ -1325,18 +1436,18 @@ var PhoenixUI = (function(){
 				}
 			} else {
 				return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
-					<input type="' + (formJSON.type ? formJSON.type : 'text') + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '">\
+					<input oninput="PhoenixUI.onMetadataChange(this)" type="' + (formJSON.type ? formJSON.type : 'text') + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '">\
 						' + (formJSON.subtext ? '<small class="form-text text-muted text-left">' + formJSON.subtext + '</small>' : '') + '\
 				</div>';
 			}
 			
 		} else if (formJSON.id.includes('tags')){
 			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
-				<input style="float:left" type="' + (formJSON.type ? formJSON.type : 'text') + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '" data-role="tagsinput">\
+				<input oninput="PhoenixUI.onMetadataChange(this)" style="float:left" type="' + (formJSON.type ? formJSON.type : 'text') + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '" data-role="tagsinput">\
 			</div>';
 		} else {
 			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
-				<input type="' + (formJSON.type ? formJSON.type : 'text') + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '">\
+				<input oninput="PhoenixUI.onMetadataChange(this)" type="' + (formJSON.type ? formJSON.type : 'text') + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '">\
 						' + (formJSON.subtext ? '<small class="form-text text-muted text-left">' + formJSON.subtext + '</small>' : '') + '\
 			</div>';
 		}	
@@ -1881,6 +1992,10 @@ var PhoenixUI = (function(){
 		}
 	}
 
+	PhoenixUX.onMetadataChange = function(elem) {
+		PhoenixUX.updatePubFee();
+	}
+
 	PhoenixUX.validatePricing = function(elem, ignoreTypingHelpers){
 		PhoenixUX.pricingElem = elem;
 
@@ -1967,10 +2082,36 @@ var PhoenixUI = (function(){
 			console.log(usd, flo);
 			console.log(usd.toFixed(4),flo.toFixed(8));
 
-			publishFeeElement.innerHTML = usd ? '$' + usd.toFixed(2) : "Free!";
+			var usdDisplay = "";
 
-			if (usd == 0 || usd == 'Infinity'){
+			if (usd < 0.01){
+				usdDisplay = "~" + parseFloat((usd * 100).toFixed(2)) + "¢"; 
+			} else {
+				usdDisplay = '~$' + usd.toFixed(2);
+			}
+
+			// round to 4 decimal places
+			var floDisplay = parseFloat((Math.round(flo * 1000)/1000).toFixed(4)) + " FLO"
+
+			if (!usd || usd == 0 || usd == 'Infinity'){
+				publishSlashElement.style.display = "none";
+				publishFeeFLOElement.style.display = "none";
 				publishFeeElement.innerHTML = "Free!";
+			} else {
+				publishFeeElement.innerHTML = usdDisplay;
+				publishSlashElement.style.display = "inline";
+				publishFeeFLOElement.style.display = "inline";
+				publishFeeFLOElement.innerHTML = floDisplay;
+
+				if (flo > Phoenix.wallet.getTotalBalance()){
+					publishSubmitSectionElement.style['background-color'] = "rgba(217,83,79,0.3)";
+					publishSubmitSectionElement.style.border = "1px solid rgba(217,83,79,1)";
+					pubBalanceTooLowElement.style.display = "inline";
+				} else {
+					publishSubmitSectionElement.style['background-color'] = "#ffffff";
+					publishSubmitSectionElement.style.border = "1px solid #000";
+					pubBalanceTooLowElement.style.display = "none";
+				}
 			}
 		})
 	}
