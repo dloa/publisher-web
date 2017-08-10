@@ -1938,6 +1938,8 @@ var PhoenixUI = (function(){
 	PhoenixUX.updatePubFee = function(){
 		var artSize = 528;
 		var minPlayArray = [];
+		var minBuyArray = [];
+		var sugPlayArray = [];
 		var sugBuyArray = [];
 
 		if (PhoenixUX.mediaPricing){
@@ -1945,18 +1947,29 @@ var PhoenixUI = (function(){
 				if (PhoenixUX.mediaPricing[media].minPlay){
 					minPlayArray.push(parseFloat(PhoenixUX.mediaPricing[media].minPlay));
 				}
+				if (PhoenixUX.mediaPricing[media].minBuy){
+					minBuyArray.push(parseFloat(PhoenixUX.mediaPricing[media].minBuy));
+				}
+				if (PhoenixUX.mediaPricing[media].sugPlay){
+					sugPlayArray.push(parseFloat(PhoenixUX.mediaPricing[media].sugPlay));
+				}
 				if (PhoenixUX.mediaPricing[media].sugBuy){
 					sugBuyArray.push(parseFloat(PhoenixUX.mediaPricing[media].sugBuy));
 				}
 			}
 		}
 
-		Phoenix.calculatePublishFee(artSize, minPlayArray, sugBuyArray, function(usd, flo){
-			console.log(usd.toFixed(2),flo.toFixed(8));
+		var pubJSON = PhoenixUX.generateArtifactJSONFromView();
+
+		console.log(pubJSON.length);
+
+		Phoenix.calculatePublishFee(pubJSON.length, minPlayArray, minBuyArray, sugPlayArray, sugBuyArray, function(usd, flo){
+			console.log(usd, flo);
+			console.log(usd.toFixed(4),flo.toFixed(8));
 
 			publishFeeElement.innerHTML = usd ? '$' + usd.toFixed(2) : "Free!";
 
-			if (usd == 'Infinity'){
+			if (usd == 0 || usd == 'Infinity'){
 				publishFeeElement.innerHTML = "Free!";
 			}
 		})
@@ -1996,7 +2009,6 @@ var PhoenixUI = (function(){
 		}
 
 		if (elem.id === "typeSelect"){
-			console.log("fucku");
 			PhoenixUX.mediaPricing[id + 'price'].type = elem.value;
 
 			for (var v in PhoenixUX.fileSelectTypes) {

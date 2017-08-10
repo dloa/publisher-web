@@ -110,8 +110,16 @@ var Phoenix = (function() {
 		if (localStorage.justSignedUp == "true"){
 			var data = localStorage.justSignedUpData.split('/');
 
+			PhoenixAPI.wallet = new Wallet(data[0], data[1]);
+			PhoenixAPI.wallet.load(function () {
+				PhoenixEvents.trigger("onLoginSuccess", {});
+				PhoenixEvents.trigger("onWalletLoad", PhoenixAPI.wallet);
+
+				PhoenixAPI.getPublishersFromLibraryD();
+			});
+
 			var inwal = false;
-			for (var addr in wallet.addresses){
+			for (var addr in PhoenixAPI.wallet.addresses){
 				if (addr == data[0])
 					inwal = true;
 			}
@@ -121,8 +129,8 @@ var Phoenix = (function() {
 					var addrInPubs = false;
 					for (var i = 0; i < data.length; i++) {
 						//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
-						for (var addr in wallet.addresses) {
-							var address = wallet.addresses[addr].addr;
+						for (var addr in PhoenixAPI.wallet.addresses) {
+							var address = PhoenixAPI.wallet.addresses[addr].addr;
 							if (data[i]["publisher-data"]["alexandria-publisher"].address == address){
 								addrInPubs = true;
 							}
@@ -254,11 +262,11 @@ var Phoenix = (function() {
 		}
 	}	
 
-	PhoenixAPI.calculatePublishFee = function(artSize, minPlayArray, sugBuyArray, callback){
+	PhoenixAPI.calculatePublishFee = function(artSize, minPlayArray, minBuyArray, sugPlayArray, sugBuyArray, callback){
 		PhoenixAPI.updateMarketData(function(marketData){
 			PhoenixAPI.updateLibrarydInfoData(function(libraryDData){
 				var USDperFLO = marketData.USD;
-				var floPerKb = 0.1; // new endpoint, using 0.1 as default for now, ToDo: Update this when changes are made!
+				var floPerKb = 0.01; // new endpoint, using 0.1 as default for now, ToDo: Update this when changes are made!
 				var pubFeeFreeFlo = (artSize / 1024) * floPerKb;
 				var pubFeeFreeUSD = pubFeeFreeFlo * USDperFLO;
 
@@ -267,16 +275,32 @@ var Phoenix = (function() {
 					totMinPlay += minPlayArray[i];
 				}
 
+				var totMinBuy = 0;
+				for (var i = 0; i < minBuyArray.length; i++) {
+					totMinBuy += minBuyArray[i];
+				}
+
+				var totSugPlay = 0;
+				for (var i = 0; i < sugPlayArray.length; i++) {
+					totSugPlay += sugPlayArray[i];
+				}
+
 				var totSugBuy = 0;
 				for (var i = 0; i < sugBuyArray.length; i++) {
 					totSugBuy += sugBuyArray[i];
 				}
 
-				var artCost = (totMinPlay + totSugBuy) / 2; // divide by 2 because there are two inputs
+				var artCost = (totMinPlay + sugPlayArray + totMinBuy + totSugBuy) / 4; // divide by 4 because there are four inputs
 
 				var avgArtCost = libraryDData.avgArtCost;
 
-				var pubFeeComUSD = (( Math.log(artCost) - Math.log(avgArtCost) ) * (avgArtCost / artCost) * (artCost - avgArtCost)) + avgArtCost;
+				var pubFeeComUSD = 0;
+				if (artCost <= avgArtCost){
+					pubFeeComUSD = artCost;
+				} else {
+					pubFeeComUSD = (( Math.log(artCost) - Math.log(avgArtCost) ) * (avgArtCost / artCost) * (artCost - avgArtCost)) + avgArtCost;
+				}
+
 				var pubFeeComFlo = pubFeeComUSD / USDperFLO;
 				var pubFeeUSD = Math.max(pubFeeFreeUSD, pubFeeComUSD);
 				var pubFeeFlo = pubFeeUSD / USDperFLO;
