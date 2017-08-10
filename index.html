@@ -323,9 +323,9 @@
 												<div class="col-6">
 													<h5 class="text-center">Suggested Tips</h5>
 													<div class="row">
-														<div class="col"><input type="text" class="form-control col" id="tip1" placeholder="$0.01" oninput="PhoenixUI.onTipsInput(this);"></div>
-														<div class="col"><input type="text" class="form-control col" id="tip2" placeholder="$0.10" oninput="PhoenixUI.onTipsInput(this);"></div>
-														<div class="col"><input type="text" class="form-control col" id="tip3" placeholder="$1" oninput="PhoenixUI.onTipsInput(this);"></div>
+														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip1" placeholder="0.01" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
+														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip2" placeholder="0.10" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
+														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip3" placeholder="1" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
 													</div>
 													<small class="form-text text-muted">The suggested tip amounts will be displayed to the user if they click to "Tip" your video.</small>
 													<h5 class="text-center" style="margin-top: 20px;">Advanced</h5>
@@ -333,14 +333,14 @@
 														<label for="example-text-input" class="col-3 col-form-label">Promoter</label>
 														<div class="col-3">
 															<div class="input-group">
-																<input id="promoter" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);">
+																<input id="promoter" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="10">
 																<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
 															</div>
 														</div>
 														<label for="example-text-input" class="col-3 col-form-label">Retailer</label>
 														<div class="col-3">
 															<div class="input-group">
-																<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);">
+																<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="25">
 																<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
 															</div>
 														</div>
@@ -417,8 +417,8 @@
 													</div>
 												</div>
 												<div class="col-12">
-													<div class="publish-section publish-pricing" id='pricing'>
-														<table class="table" id='pricingTable' style="display: none;">
+													<div class="publish-section publish-pricing" id='pricing' style="display: none;">
+														<table class="table" id='pricingTable'>
 															<thead>
 																<tr>
 																	<th>File Name</th>
