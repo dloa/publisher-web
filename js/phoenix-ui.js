@@ -1096,12 +1096,6 @@ var PhoenixUI = (function(){
 				PhoenixUX.changeSubtype(PhoenixUX.types[0].type + ',' + PhoenixUX.types[0].subtypes[0].subtype);
 			}
 		}
-			
-		// var typesPillsHTML = '';
-		// for (var i = 0; i < PhoenixUX.types[0].subtypes.length; i++) {
-		// 	typesPillsHTML += '<li id="' + PhoenixUX.types[0].subtypes[i].subtype + '" ' + ( i==0 ? 'class="active"' : '') + ' onclick="PhoenixUI.changeSubtype(\'' + PhoenixUX.types[0].type + ',' + PhoenixUX.types[0].subtypes[i].subtype + '\')"><a href="#' + PhoenixUX.types[0].subtypes[i].subtype + '" data-toggle="tab">' + PhoenixUX.types[0].subtypes[i].subtype + '</a></li>';
-		// }
-		// subtypePillsElement.innerHTML = typesPillsHTML;
 	}
 
 	PhoenixUX.changeType = function(type){
@@ -1383,6 +1377,7 @@ var PhoenixUI = (function(){
 		//var timestamp = ((new Date).getTime() / 1000).toFixed(0);
 		var type = PhoenixUX.type;
 		var subtype = PhoenixUX.subtype;
+		var paid = $('[name="free"]')[1].checked;
 
 		var scale = 1000;
 
@@ -1455,17 +1450,20 @@ var PhoenixUI = (function(){
 							if (PhoenixUX.mediaPricing[pricing].displayName)
 								artifactJSON.artifact.storage.files[i].dname = PhoenixUX.mediaPricing[pricing].displayName;
 
-							if (PhoenixUX.mediaPricing[pricing].minPlay)
-								artifactJSON.artifact.storage.files[i].minPlay = PhoenixUX.mediaPricing[pricing].minPlay;
-							
-							if (PhoenixUX.mediaPricing[pricing].sugPlay)
-								artifactJSON.artifact.storage.files[i].sugPlay = PhoenixUX.mediaPricing[pricing].sugPlay;
-							
-							if (PhoenixUX.mediaPricing[pricing].minBuy)
-								artifactJSON.artifact.storage.files[i].minBuy = PhoenixUX.mediaPricing[pricing].minBuy;
-							
-							if (PhoenixUX.mediaPricing[pricing].sugBuy)
-								artifactJSON.artifact.storage.files[i].sugBuy = PhoenixUX.mediaPricing[pricing].sugBuy;
+							if (paid){
+								if (PhoenixUX.mediaPricing[pricing].minPlay)
+									artifactJSON.artifact.storage.files[i].minPlay = PhoenixUX.mediaPricing[pricing].minPlay;
+								
+								if (PhoenixUX.mediaPricing[pricing].sugPlay)
+									artifactJSON.artifact.storage.files[i].sugPlay = PhoenixUX.mediaPricing[pricing].sugPlay;
+								
+								if (PhoenixUX.mediaPricing[pricing].minBuy)
+									artifactJSON.artifact.storage.files[i].minBuy = PhoenixUX.mediaPricing[pricing].minBuy;
+								
+								if (PhoenixUX.mediaPricing[pricing].sugBuy)
+									artifactJSON.artifact.storage.files[i].sugBuy = PhoenixUX.mediaPricing[pricing].sugBuy;
+							}
+								
 
 							if (PhoenixUX.mediaPricing[pricing].disBuy)
 								artifactJSON.artifact.storage.files[i].disBuy = PhoenixUX.mediaPricing[pricing].disBuy;
@@ -1531,9 +1529,10 @@ var PhoenixUI = (function(){
 
 	}
 
-	PhoenixUX.mediaFileSelectHandler = function(files, subtype) {
-		if (!subtype)
-			subtype = "";
+	PhoenixUX.mediaFileSelectHandler = function(files, subtypefor) {
+		if (!subtypefor){
+			subtypefor = "";
+		}
 
 		if (!PhoenixUX.mediaFiles)
 			PhoenixUX.mediaFiles = [];
@@ -1558,6 +1557,9 @@ var PhoenixUI = (function(){
 				if (type == '')
 					type = "Other"
 
+				if (subtypefor == "cover")
+					type = "Image";
+
 				if (type == 'Audio'){
 					iconURL = './assets/svg/beamed-note.svg';
 				} else if (type == 'Video'){
@@ -1574,13 +1576,15 @@ var PhoenixUI = (function(){
 					iconURL = './assets/svg/bucket.svg';
 				}
 
-				PhoenixUX.appendFileToMediaTable(files[i],iconURL, subtype == "cover");
-				PhoenixUX.changeMediaSelect(files[i].id, type, subtype);
+				var coverArt = (subtypefor == "cover");
+				PhoenixUX.appendFileToMediaTable(files[i],iconURL, coverArt);
 
-				if (subtype != "cover")
+				PhoenixUX.changeMediaSelect(files[i].id, type, subtypefor);
+
+				if (subtypefor != "cover")
 					PhoenixUX.appendFileToPricingTable(files[i]);
 
-				if (subtype != "cover")
+				if (subtypefor != "cover")
 					PhoenixUX.mediaFiles.push(files[i]);
 			}
 		} else {
@@ -1604,6 +1608,9 @@ var PhoenixUI = (function(){
 			if (type === '')
 				type = "Other"
 
+			if (subtypefor == "cover")
+					type = "Image";
+
 			if (type == 'Audio'){
 				iconURL = './assets/svg/beamed-note.svg';
 			} else if (type == 'Video'){
@@ -1620,13 +1627,15 @@ var PhoenixUI = (function(){
 				iconURL = './assets/svg/bucket.svg';
 			}
 
-			PhoenixUX.appendFileToMediaTable(file, iconURL, subtype == "cover");
-			PhoenixUX.changeMediaSelect(file.id, type, subtype);
+			var coverArt = (subtypefor == "cover");
 
-			if (subtype != "cover")
+			PhoenixUX.appendFileToMediaTable(file, iconURL, coverArt);
+			PhoenixUX.changeMediaSelect(file.id, type, subtypefor);
+
+			if (subtypefor != "cover")
 				PhoenixUX.appendFileToPricingTable(file);
 
-			if (subtype != "cover")
+			if (subtypefor != "cover")
 				PhoenixUX.mediaFiles.push(file);
 		}
 	}
@@ -1656,7 +1665,7 @@ var PhoenixUI = (function(){
 		}
 	}
 
-	PhoenixUX.appendFileToMediaTable = function(file,iconURL, coverart) {
+	PhoenixUX.appendFileToMediaTable = function(file, iconURL, coverart) {
 		if (coverart){
 			var coverArtFile = document.getElementById("coverArtFile");
 
@@ -1677,8 +1686,11 @@ var PhoenixUI = (function(){
 
 		var subtypes = "";
 		for (var i in PhoenixUX.fileSelectTypes) {
-			if (subtypes === "")
+			if (coverart && i === "Image"){
 				subtypes = PhoenixUX.fileSelectTypes[i];
+			} else if (subtypes == ""){
+				subtypes = PhoenixUX.fileSelectTypes[i];
+			}
 
 		 	htmlStr += "<option>" + i + "</option>";
 		} 
@@ -1687,28 +1699,36 @@ var PhoenixUI = (function(){
 					<select class="form-control col-6" id="subtypeSelect" onchange="PhoenixUI.onMediaSelectChange(this);">';
 
 		for (var i = 0; i < subtypes.length; i++) {
+			var value;
+			var display;
+
 			if (subtypes[i] !== null && typeof subtypes[i] === 'object'){
-				subtypes[i] = subtypes[i].display;
+				value = subtypes[i].publish;
+				display = subtypes[i].display;
+			} else {
+				value = subtypes[i];
+				display = subtypes[i];
 			}
 
-		 	htmlStr += "<option>" + subtypes[i] + "</option>";
+		 	htmlStr += "<option value='" + value + "'>" + display + "</option>";
 		} 
 
 		htmlStr +=	'</select>\
 					</div>\
 				</td>\
-				<td>';
+				<td><button class="btn btn-sm btn-outline-danger" onclick="PhoenixUI.removeMediaFile(\'' + file.id + '\');"';
 
-		if (!coverart){
-			htmlStr +=	'<button class="btn btn-sm btn-outline-danger" onclick="PhoenixUI.removeMediaFile(\'' + file.id + '\');">x</button>';
-		} else {
-			htmlStr +=	'<button class="btn btn-sm btn-outline-danger" disabled>x</button>';
+		if (coverart){
+			htmlStr +=	' disabled';
 		}
 
-		htmlStr +=	'</td>\
+		htmlStr +=	'>x</button></td>\
 		 </tr>';
 
 		$('#mediaTable').append(htmlStr);
+
+		if (coverart)
+			$("#coverArtFile").find("input,button,textarea,select").attr("disabled", "disabled");
 	}
 
 	PhoenixUX.appendFileToPricingTable = function(file) {
@@ -1972,29 +1992,26 @@ var PhoenixUI = (function(){
 		}
 
 		if (elem.id === "typeSelect"){
+			console.log("fucku");
 			PhoenixUX.mediaPricing[id + 'price'].type = elem.value;
 
 			for (var v in PhoenixUX.fileSelectTypes) {
-				if (v !== null && typeof v === 'object')
-					v = v.display;
-
 				if (v == type){
 					secondSelector.innerHTML = '';
 					var tmpString = '';
 					for (var i = 0; i < PhoenixUX.fileSelectTypes[v].length; i++) {
 						var value = "";
+						var display = "";
 
 						if (PhoenixUX.fileSelectTypes[v][i] !== null && typeof PhoenixUX.fileSelectTypes[v][i] === 'object'){
 							value = PhoenixUX.fileSelectTypes[v][i].publish;
-							PhoenixUX.fileSelectTypes[v][i] = PhoenixUX.fileSelectTypes[v][i].display;
+							display = PhoenixUX.fileSelectTypes[v][i].display;
 						} else {
 							value = PhoenixUX.fileSelectTypes[v][i];
+							display = PhoenixUX.fileSelectTypes[v][i];
 						}
 
-						if (i === 0)
-							PhoenixUX.mediaPricing[id + 'price'].subtype = value;
-
-						tmpString += '<option value="' + value + '">' + PhoenixUX.fileSelectTypes[v][i] + '</option>';
+						tmpString += '<option value="' + value + '">' + display + '</option>';
 					}
 					secondSelector.innerHTML = tmpString;
 				}
@@ -2197,7 +2214,8 @@ var posterDropzone = new Dropzone("div#poster", {
 	url: '/url',
 	createImageThumbnails: false,
 	previewTemplate: '<div></div>',
-	acceptedFiles: "png,jpg"
+	acceptedFiles: "png,jpg",
+	maxFiles: 1
 });
 
 posterDropzone.on("addedfile", PhoenixUI.posterFileSelectHandler);

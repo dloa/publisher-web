@@ -1051,9 +1051,11 @@
 
 			$('#paymentInfo').hide();
 
+			var free, paid;
+
 			$(document).on("change","input[type=radio]",function(){
-			    var free = $('[name="free"]')[0].checked;
-			    var paid = $('[name="free"]')[1].checked;
+			    free = $('[name="free"]')[0].checked;
+			    paid = $('[name="free"]')[1].checked;
 
 			    if (paid) {
 			    	$('#paymentInfo').show();
