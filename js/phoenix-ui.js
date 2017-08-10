@@ -1373,6 +1373,11 @@ var PhoenixUI = (function(){
 
 	}
 
+	PhoenixUX.publish = function(){
+		var json = PhoenixUX.generateArtifactJSONFromView();
+		document.getElementById('artJSON').innerHTML = JSON.stringify(json, null, 4);
+	}
+
 	PhoenixUX.generateArtifactJSONFromView = function(){
 		//var timestamp = ((new Date).getTime() / 1000).toFixed(0);
 		var type = PhoenixUX.type;
@@ -1525,8 +1530,7 @@ var PhoenixUI = (function(){
 		}
 
 
-		console.log(artifactJSON);
-
+		return artifactJSON;
 	}
 
 	PhoenixUX.mediaFileSelectHandler = function(files, subtypefor) {
