@@ -315,7 +315,7 @@
 												</label>
 											</div>
 											<br />
-											<small class="text-muted">Please select if your content is suitible for all ages or if it has NSFW/sensitive content.</small>
+											<a data-toggle="popover" data-trigger="hover" data-placement="bottom" title="What is NSFW content?" data-content="NSFW content would be things you wouldn't want your boss or children to know you were watching. This includes all content which contain nudity, intense sexuality, profanity, violence/gore or other disturbing content."><small class="text-muted">Please select if your content is suitible for all ages or if it has NSFW/sensitive content.</small></a>
 										</center>
 									</div>
 									<div class="row" id='bitcoinAddressField'>
@@ -1078,6 +1078,10 @@
 			    	$('#paymentInfo').hide();
 			    }
 			});
+
+			$(function () {
+			  $('[data-toggle="popover"]').popover()
+			})
 
 			// $('#publisherNav').on('click', function(evt){
 			// 	$('#wizard').show();

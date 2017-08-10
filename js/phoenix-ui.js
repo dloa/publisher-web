@@ -2365,6 +2365,7 @@ var PhoenixUI = (function(){
 
 // Initialize
 PhoenixUI.loadTypes();
+PhoenixUI.updatePubFee();
 
 // Handle all of the drag and drop setup
 var posterDropzone = new Dropzone("div#poster", { 
