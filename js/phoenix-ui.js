@@ -1,6 +1,7 @@
 // At the top we define all of our variables used below that link to our UI. This uses regular html selectors currently, not jQuery selectors.
 var x = document.getElementById('id');
 var pubNameElement = document.getElementById('pub-name');
+var nsfwToggle = document.getElementById('nsfwToggle');
 var walletBalanceElement = document.getElementById('walletBalance');
 var walletBalanceUSDElement = document.getElementById('walletBalanceUSD');
 var publisherSelectElement = document.getElementById('publisherSelect');
@@ -354,36 +355,37 @@ var PhoenixUI = (function(){
 	// Image Genres similar to http://shutha.org/photo-genres
 	PhoenixUX.imageGenres = [
 		"Abstract", 
+		"Adult", 
 		"Animals/Wildlife", 
-		 "The Arts", 
-		 "Backgrounds/Textures", 
-		 "Beauty/Fashion", 
-		 "Buildings/Landmarks", 
-		 "Business/Finance", 
-		 "Celebrities", 
-		 "Editorial", 
-		 "Education", 
-		 "Food and Drink", 
-		 "Healthcare/Medical", 
-		 "Holidays", 
-		 "Illustrations/Clip-Art", 
-		 "Industrial", 
-		 "Interiors", 
-		 "Miscellaneous", 
-		 "Model Released Only", 
-		 "Nature", 
-		 "Objects", 
-		 "Parks/Outdoor", 
-		 "People", 
-		 "Religion", 
-		 "Science", 
-		 "Signs/Symbols", 
-		 "Sports/Recreation", 
-		 "Technology", 
-		 "Transportation", 
-		 "Vectors", 
-		 "Vintage",
-		 "Other"
+		"The Arts", 
+		"Backgrounds/Textures", 
+		"Beauty/Fashion", 
+		"Buildings/Landmarks", 
+		"Business/Finance", 
+		"Celebrities", 
+		"Editorial", 
+		"Education", 
+		"Food and Drink", 
+		"Healthcare/Medical", 
+		"Holidays", 
+		"Illustrations/Clip-Art", 
+		"Industrial", 
+		"Interiors", 
+		"Miscellaneous", 
+		"Model Released Only", 
+		"Nature", 
+		"Objects", 
+		"Parks/Outdoor", 
+		"People", 
+		"Religion", 
+		"Science", 
+		"Signs/Symbols", 
+		"Sports/Recreation", 
+		"Technology", 
+		"Transportation", 
+		"Vectors", 
+		"Vintage",
+		"Other"
 	];
 	/*[
 		"Creative (Fiction)": [
@@ -1516,6 +1518,10 @@ var PhoenixUI = (function(){
 			}
 		};
 
+		if (nsfwToggle.checked){
+			artifactJSON.artifact.info.nsfw = true;
+		}
+
 		for (var i = 0; i < PhoenixUX.types.length; i++) {
 			if (PhoenixUX.types[i].type == PhoenixUX.type){
 				for (var j = 0; j < PhoenixUX.types[i].subtypes.length; j++) {
@@ -2076,12 +2082,7 @@ var PhoenixUI = (function(){
 
 		var pubJSON = JSON.stringify(PhoenixUX.generateArtifactJSONFromView());
 
-		console.log(pubJSON.length);
-
 		Phoenix.calculatePublishFee(pubJSON.length, minPlayArray, minBuyArray, sugPlayArray, sugBuyArray, function(usd, flo){
-			console.log(usd, flo);
-			console.log(usd.toFixed(4),flo.toFixed(8));
-
 			var usdDisplay = "";
 
 			if (usd < 0.01){
