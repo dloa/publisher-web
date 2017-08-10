@@ -451,6 +451,76 @@ var PhoenixUI = (function(){
 		"Other": ["Other"]
 	]*/
 
+	PhoenixUX.textGenres = {
+		"Fiction": [
+			"Classic",
+			"Crime/Detective",
+			"Fable",
+			"Fairy Tale",
+			"Fan Fiction",
+			"Fantasy",
+			"Folklore",
+			"Historical Fiction",
+			"Horror",
+			"Humor",
+			"Legend",
+			"Magical Realism",
+			"Meta Fiction",
+			"Mystery",
+			"Mythology",
+			"Mythopoeia",
+			"Picture Book",
+			"Realistic Fiction",
+			"Science Fiction",
+			"Short Story",
+			"Suspense/Thriller",
+			"Tall Tale",
+			"Western",
+			"Adult",
+			"Other"
+		],
+		"Non Fiction": [
+			"Biography",
+			"Essay",
+			"Owners Manual",
+			"Journalism",
+			"Lab Report",
+			"Memoir",
+			"Personal Narrative",
+			"Reference",
+			"Self-help",
+			"Speech",
+			"Textbook",
+			"Other"
+		],
+		"Other": ["Other"]
+	};
+
+	PhoenixUX.softwareGenres = [
+		"Business",
+		"Developer Tools",
+		"Education",
+		"Entertainment",
+		"Finance",
+		"Games",
+		"Graphics & Design",
+		"Health & Fitness",
+		"Lifestyle",
+		"Medical",
+		"Music",
+		"News",
+		"Photography",
+		"Productivity",
+		"Reference",
+		"Social Networking",
+		"Sports",
+		"Travel",
+		"Utilities",
+		"Video",
+		"Weather",
+		"Other"
+	]
+
 	PhoenixUX.types = [{
 		"type": "Audio",
 		"icon": "song-icon",
@@ -605,22 +675,28 @@ var PhoenixUI = (function(){
 				},
 				{
 					"id": "extraInfo.seasonNum",
-					"width": 3,
+					"width": 4,
 					"placeholder": "Season Number"
 				},
 				{
 					"id": "extraInfo.episodeNum",
-					"width": 3,
+					"width": 4,
 					"placeholder": "Episode Number"
 				},
 				{
 					"id": "year",
-					"width": 3,
+					"width": 4,
 					"placeholder": "Release Year"
 				},
 				{
+					"id": "extraInfo.genre",
+					"width": 6,
+					"placeholder": "Genre",
+					"genres": PhoenixUX.musicGenres
+				},
+				{
 					"id": "extraInfo.tags",
-					"width": 3,
+					"width": 6,
 					"placeholder": "Tags"
 				},
 				{
@@ -695,22 +771,29 @@ var PhoenixUI = (function(){
 				},
 				{
 					"id": "extraInfo.seasonNum",
-					"width": 3,
+					"width": 4,
 					"placeholder": "Season Number"
 				},
 				{
 					"id": "extraInfo.episodeNum",
-					"width": 3,
+					"width": 4,
 					"placeholder": "Episode Number"
 				},
 				{
 					"id": "year",
-					"width": 3,
+					"width": 4,
 					"placeholder": "Release Year"
 				},
 				{
+					"id": "extraInfo.genre",
+					"width": 6,
+					"placeholder": "Genre",
+					"genres": PhoenixUX.movieGenres,
+					"dualGenreSelector": true
+				},
+				{
 					"id": "extraInfo.tags",
-					"width": 3,
+					"width": 6,
 					"placeholder": "Tags"
 				},
 				{
@@ -792,8 +875,7 @@ var PhoenixUI = (function(){
 					"id": "extraInfo.genre",
 					"width": 6,
 					"placeholder": "Genre",
-					"genres": PhoenixUX.imageGenres,
-					"dualGenreSelector": true
+					"genres": PhoenixUX.imageGenres
 				},
 				{
 					"id": "year",
@@ -836,7 +918,9 @@ var PhoenixUI = (function(){
 				{
 					"id": "extraInfo.genre",
 					"width": 6,
-					"placeholder": "Genre"
+					"placeholder": "Genre",
+					"genres": PhoenixUX.textGenres,
+					"dualGenreSelector": true
 				},
 				{
 					"id": "year",
@@ -861,6 +945,47 @@ var PhoenixUI = (function(){
 				"class": "cover-art"
 			}
 		},{
+			"subtype": "PDF",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "PDF Title"
+				},
+				{
+					"id": "extraInfo.artist",
+					"width": 12,
+					"placeholder": "Author Name"
+				},
+				{
+					"id": "extraInfo.genre",
+					"width": 6,
+					"placeholder": "Genre",
+					"genres": PhoenixUX.textGenres,
+					"dualGenreSelector": true
+				},
+				{
+					"id": "year",
+					"width": 6,
+					"placeholder": "Release Year"
+				},
+				{
+					"id": "extraInfo.tags",
+					"width": 12,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "PDF Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "cover-art",
+				"class": "cover-art-poster"
+			}
+		},{
 			"subtype": "Book",
 			"forms": [{
 					"id": "title",
@@ -875,7 +1000,9 @@ var PhoenixUI = (function(){
 				{
 					"id": "extraInfo.genre",
 					"width": 6,
-					"placeholder": "Genre"
+					"placeholder": "Genre",
+					"genres": PhoenixUX.textGenres,
+					"dualGenreSelector": true
 				},
 				{
 					"id": "year",
@@ -918,7 +1045,8 @@ var PhoenixUI = (function(){
 				{
 					"id": "extraInfo.genre",
 					"width": 6,
-					"placeholder": "Genre"
+					"placeholder": "Genre",
+					"genres": PhoenixUX.softwareGenres
 				},
 				{
 					"id": "extraInfo.year",
@@ -1265,6 +1393,8 @@ var PhoenixUI = (function(){
 
 	PhoenixUX.updateMetadata = function(newType){
 		metaTitleElement.innerHTML = newType.subtype + ' Information';
+
+		PhoenixUX.subtype = newType.subtype;
 
 		var formHTML = '';
 		for (var i = 0; i < newType.forms.length; i++) {
