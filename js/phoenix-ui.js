@@ -1959,7 +1959,7 @@ var PhoenixUI = (function(){
 			}
 		}
 
-		var pubJSON = PhoenixUX.generateArtifactJSONFromView();
+		var pubJSON = JSON.stringify(PhoenixUX.generateArtifactJSONFromView());
 
 		console.log(pubJSON.length);
 

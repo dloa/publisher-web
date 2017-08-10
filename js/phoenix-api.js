@@ -290,7 +290,7 @@ var Phoenix = (function() {
 					totSugBuy += sugBuyArray[i];
 				}
 
-				var artCost = (totMinPlay + sugPlayArray + totMinBuy + totSugBuy) / 4; // divide by 4 because there are four inputs
+				var artCost = (totMinPlay + totSugPlay + totMinBuy + totSugBuy) / 4; // divide by 4 because there are four inputs
 
 				var avgArtCost = libraryDData.avgArtCost;
 
