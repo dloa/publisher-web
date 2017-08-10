@@ -1,6 +1,6 @@
 
 *.codekit
-*-min.js
+js/min/*-min.js
 wallets.js
 
 .DS_Store
