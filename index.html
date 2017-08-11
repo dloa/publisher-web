@@ -409,25 +409,25 @@
 														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip2" placeholder="0.10" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
 														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip3" placeholder="1" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
 													</div>
-													<small class="form-text text-muted">The suggested tip amounts will be displayed to the user if they click to "Tip" your video.</small>
+													<small class="form-text text-muted" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Do I need to enter tips?" data-content="No. You do not need to enter suggested tip amounts. If you do not enter any information, the Retailer will show their default tip amounts.">The suggested tip amounts will be displayed to the user if they click to "Tip" your video.</small>
 													<h5 class="text-center" style="margin-top: 20px;">Advanced</h5>
 													<div class="form-group row text-right">
-														<label for="example-text-input" class="col-3 col-form-label">Promoter</label>
+														<label for="example-text-input" class="col-3 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="What is a Promoter?" data-content="A Promoter is someone who drives traffic to your content. This can be anybody that shares your content, or leads people to your content.">Promoter</label>
 														<div class="col-3">
 															<div class="input-group">
-																<input id="promoter" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="10">
+																<input id="promoter" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
 																<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
 															</div>
 														</div>
-														<label for="example-text-input" class="col-3 col-form-label">Retailer</label>
+														<label for="example-text-input" class="col-3 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="What is a Retailer?" data-content="A Retailer is someone who sells your content. This includes people like Alexandria currently.">Retailer</label>
 														<div class="col-3">
 															<div class="input-group">
-																<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="25">
+																<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
 																<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
 															</div>
 														</div>
 													</div>
-													<small class="form-text text-muted">Select amounts you would like to pay to Promoters and Retailers. A Promoter is someone who drives traffic to your content, and a retailer is someone who sells your content.</small>
+													<small class="form-text text-muted text-center" style="margin-bottom: 10px">Hover over the Promoter and Retailer text for more information.</small>
 												</div>
 												<div class="col-6" id="bitcoinAddressGroup">
 													<!-- <span>Payment Addresses</span>
@@ -472,6 +472,25 @@
 																	</span>
 																</div>
 															</div> -->
+															<div class="row" id="0">
+																<div class="input-group col-11" style="margin-bottom: 5px;" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Why can't I change this?" data-content="This Payment Address is your Publisher Address that your account is linked to. By default, if you have no other payment methods your funds will be sent to this address.">
+																	<div class="input-group-btn has-danger">
+																		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+																			<img style="height: 30px" src="./img/FLOflat2.png">
+																		</button>
+																		<div class="dropdown-menu">
+																			
+																		</div>
+																	</div>
+																	<input id="currentPublisherAddress" type="text" class="form-control" oninput="PhoenixUI.onPaymentAddressChange(this);" disabled value="">
+																	<span class="input-group-addon">
+																		<input type="radio" name="mainAddressRadio" checked>
+																	</span>
+																</div>
+																<div class="col-1">
+																	
+																</div>
+															</div>
 															<div class="row" id="1">
 																<div class="input-group col-11" style="margin-bottom: 5px;">
 																	<div class="input-group-btn has-danger">
@@ -486,7 +505,7 @@
 																	</div>
 																	<input type="text" class="form-control" oninput="PhoenixUI.onPaymentAddressChange(this);">
 																	<span class="input-group-addon">
-																		<input type="radio" name="mainAddressRadio" checked>
+																		<input type="radio" name="mainAddressRadio">
 																	</span>
 																</div>
 																<div class="col-1">
@@ -495,7 +514,7 @@
 															</div>
 														</div>
 															
-														<small id="emailHelp" class="form-text text-muted">Select the default payment address using the selector on the Right side. If you do not input a payment address, you will recieve payments to your default Publisher account.</small>
+														<small id="emailHelp" class="form-text text-muted">Select the default payment address using the selector on the Right side.</small>
 													</div>
 												</div>
 											</div>			

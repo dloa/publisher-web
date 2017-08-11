@@ -5,6 +5,7 @@ var nsfwToggle = document.getElementById('nsfwToggle');
 var walletBalanceElement = document.getElementById('walletBalance');
 var walletBalanceUSDElement = document.getElementById('walletBalanceUSD');
 var publisherSelectElement = document.getElementById('publisherSelect');
+var currentPublisherAddressElement = document.getElementById('currentPublisherAddress');
 var walletIdentifierElement = document.getElementById('identifier');
 var walletAccordianElement = document.getElementById('walletAccordian');
 var metaTitleElement = document.getElementById('metaTitle');
@@ -47,8 +48,10 @@ PhoenixEvents.on("onPublisherLoadSuccess", function(publishers){
 	publisherSelectElement.innerHTML = '';
 
 	// Set the publisher name
-	if (publishers[0])
+	if (publishers[0]){
 		pubNameElement.innerHTML = publishers[0].name;
+		currentPublisherAddressElement.value = publishers[0].address;
+	}
 
 	// Loop through publishers to add each one to the select list
 	for (var pub in publishers) {
@@ -1391,8 +1394,10 @@ var PhoenixUI = (function(){
 	PhoenixUX.onPublisherSelectChange = function(elem){
 		// Update the publisher name
 		for (var i = 0; i < Phoenix.publishers.length; i++) {
-			if (Phoenix.publishers[i].address == elem.value)
+			if (Phoenix.publishers[i].address == elem.value){
 				pubNameElement.innerHTML = Phoenix.publishers[i].name;
+				currentPublisherAddressElement.value = Phoenix.publishers[i].address;
+			}
 		}
 		
 		// Redraw the artifacts when the publisher selection changes
@@ -2423,7 +2428,7 @@ var PhoenixUI = (function(){
 
 		var content = document.createElement("div");
 		content.innerHTML = '\
-		<div class="row" id="' + (numOfPaymentAddresses + 1) + '">\
+		<div class="row" id="' + (numOfPaymentAddresses) + '">\
 			<div class="input-group col-11" style="margin-bottom: 5px;">\
 				<div class="input-group-btn">\
 					<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
