@@ -9,6 +9,7 @@
 		
 		<!-- Application styles-->
 		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/entypo.css">
 		<link rel="stylesheet" href="css/bootstrap-dashboard.css">
 
 		<link href="./css/bootstrap-tagsinput.css" rel="stylesheet">
@@ -361,7 +362,7 @@
 												</label>
 											</div>
 											<br />
-											<a data-toggle="popover" data-trigger="hover" data-placement="bottom" title="What is NSFW content?" data-content="NSFW content would be things you wouldn't want your boss or children to know you were watching. This includes all content which contains nudity, intense sexuality, intense profanity, violence/gore or other disturbing content."><small class="text-muted">Please select if your content is suitible for all ages or if it has NSFW/sensitive content.</small></a>
+											<a data-toggle="popover" data-trigger="hover" data-placement="bottom" title="What is NSFW content?" data-content="NSFW content would be things you wouldn't want your boss or children to know you were watching. This includes all content which contains nudity, intense sexuality, intense profanity, violence/gore or other disturbing content."><small class="text-muted">Please select if your content is suitible for all ages or if it has NSFW/sensitive content. <span class="icon icon-help-with-circle"></span></small></a>
 										</center>
 									</div>
 									<div class="row" id='bitcoinAddressField'>
@@ -388,9 +389,9 @@
 																<tr>
 																	<th>File Name</th>
 																	<th>Price per Play</th>
-																	<th><span data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Disallow Play?" data-content="If you check this, then nobody will be able to play/view this file. They will need to purchase the file to view/play it.">Disallow Play</span></th>
+																	<th><span data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Disallow Play?" data-content="If you check this, then nobody will be able to play/view this file. They will need to purchase the file to view/play it.">Disallow Play <span class="icon icon-help-with-circle"></span></span></th>
 																	<th>Price to Buy</th>
-																	<th><span data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Disallow Buy?" data-content="If you check this, then nobody will be able to buy this file. They will always need to pay for each play.">Disallow Buy</span></th>
+																	<th><span data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Disallow Buy?" data-content="If you check this, then nobody will be able to buy this file. They will always need to pay for each play.">Disallow Buy <span class="icon icon-help-with-circle"></span></span></th>
 																</tr>
 															</thead>
 															<tbody>
@@ -408,7 +409,7 @@
 														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip2" placeholder="0.10" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
 														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip3" placeholder="1" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
 													</div>
-													<small class="form-text text-muted" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="10 0" title="Do I need to enter tips?" data-content="No. You do not need to enter suggested tip amounts. If you do not enter any information, the Retailer will show their default tip amounts.">The suggested tip amounts will be displayed to the user if they click to "Tip" your video.</small>
+													<small class="form-text text-center text-muted" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Do I need to enter tips?" data-content="No. You do not need to enter suggested tip amounts. If you do not enter any information, the Retailer will show their default tip amounts.">The suggested tip amounts will be displayed to the user if they click to "Tip" your video. <span class="icon icon-help-with-circle"></span></small>
 												</div>
 												<div class="col-6" id="bitcoinAddressGroup">
 													<!-- <span>Payment Addresses</span>
@@ -503,7 +504,7 @@
 													<div class="form-group row text-right">
 														<div class="col-4">
 															<div class="row">
-																<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -45" title="What is a Promoter?" data-content="A Promoter is someone who drives traffic to your content. This can be anybody that shares your content, or leads people to your content.">Promoter</label>
+																<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -45" title="What is a Promoter?" data-content="A Promoter is someone who drives traffic to your content. This can be anybody that shares your content, or leads people to your content.">Promoter <span class="icon icon-help-with-circle"></span></label>
 																<div class="col-6">
 																	<div class="input-group">
 																		<input id="promoter" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
@@ -514,7 +515,7 @@
 														</div>
 														<div class="col-4">
 															<div class="row">
-																<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -45" title="What is a Retailer?" data-content="A Retailer is someone who sells your content. This includes people like Alexandria currently.">Retailer</label>
+																<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -45" title="What is a Retailer?" data-content="A Retailer is someone who sells your content. This includes people like Alexandria currently.">Retailer <span class="icon icon-help-with-circle"></span></label>
 																<div class="col-6">
 																	<div class="input-group">
 																		<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
@@ -525,7 +526,7 @@
 														</div>
 														<div class="col-4">
 															<div class="row">
-																<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -25" title="What is the Max Discount?" data-content="The Max Discount percentage is the maximum amount you would ever like your content to be discounted. This includes for example sales and promotions.">Max Discount</label>
+																<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -25" title="What is the Max Discount?" data-content="The Max Discount percentage is the maximum amount you would ever like your content to be discounted. This includes for example sales and promotions.">Max Discount <span class="icon icon-help-with-circle"></span></label>
 																<div class="col-6">
 																	<div class="input-group">
 																		<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="30">
