@@ -409,24 +409,6 @@
 														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip3" placeholder="1" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
 													</div>
 													<small class="form-text text-muted" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="10 0" title="Do I need to enter tips?" data-content="No. You do not need to enter suggested tip amounts. If you do not enter any information, the Retailer will show their default tip amounts.">The suggested tip amounts will be displayed to the user if they click to "Tip" your video.</small>
-													<h5 class="text-center" style="margin-top: 20px;">Advanced</h5>
-													<div class="form-group row text-right">
-														<label for="example-text-input" class="col-3 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -25" title="What is a Promoter?" data-content="A Promoter is someone who drives traffic to your content. This can be anybody that shares your content, or leads people to your content.">Promoter</label>
-														<div class="col-3">
-															<div class="input-group">
-																<input id="promoter" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
-																<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
-															</div>
-														</div>
-														<label for="example-text-input" class="col-3 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -25" title="What is a Retailer?" data-content="A Retailer is someone who sells your content. This includes people like Alexandria currently.">Retailer</label>
-														<div class="col-3">
-															<div class="input-group">
-																<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
-																<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
-															</div>
-														</div>
-													</div>
-													<small class="form-text text-muted text-center" style="margin-bottom: 10px">Hover over the Promoter and Retailer text for more information.</small>
 												</div>
 												<div class="col-6" id="bitcoinAddressGroup">
 													<!-- <span>Payment Addresses</span>
@@ -515,6 +497,47 @@
 															
 														<small id="emailHelp" class="form-text text-muted">Select the default payment address using the selector on the Right side.</small>
 													</div>
+												</div>
+												<div class="col-12">
+													<h5 class="text-center" style="margin-top: 20px;">Advanced</h5>
+													<div class="form-group row text-right">
+														<div class="col-4">
+															<div class="row">
+																<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -45" title="What is a Promoter?" data-content="A Promoter is someone who drives traffic to your content. This can be anybody that shares your content, or leads people to your content.">Promoter</label>
+																<div class="col-6">
+																	<div class="input-group">
+																		<input id="promoter" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
+																		<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-4">
+															<div class="row">
+																<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -45" title="What is a Retailer?" data-content="A Retailer is someone who sells your content. This includes people like Alexandria currently.">Retailer</label>
+																<div class="col-6">
+																	<div class="input-group">
+																		<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
+																		<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-4">
+															<div class="row">
+																<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -25" title="What is the Max Discount?" data-content="The Max Discount percentage is the maximum amount you would ever like your content to be discounted. This includes for example sales and promotions.">Max Discount</label>
+																<div class="col-6">
+																	<div class="input-group">
+																		<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="30">
+																		<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
+																	</div>
+																</div>
+															</div>
+														</div>
+															
+															
+													</div>
+													<small class="form-text text-muted text-center" style="margin-bottom: 10px">Hover over the Promoter, Retailer, and Max Discount text for more information.</small>
 												</div>
 											</div>			
 										</div>
