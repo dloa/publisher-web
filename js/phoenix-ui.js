@@ -1993,6 +1993,10 @@ var PhoenixUI = (function(){
 			}
 		}
 
+		if (PhoenixUX.mediaPricing && PhoenixUX.mediaPricing[id + 'price']){
+			delete PhoenixUX.mediaPricing[id + 'price'];
+		}
+
 		
 
 		// Remove from table array
