@@ -15,6 +15,7 @@ var posterFileSelectElement = document.getElementById('posterFile');
 var typeCirclesElement = document.getElementById('typeCircles');
 var subtypePillsElement = document.getElementById('subtypePills');
 var posterElement = document.getElementById('poster');
+var mediaFilesTableElement = document.getElementById('mediaFilesTable');
 var posterFileElement = document.getElementById('posterFile');
 var publishFeeElement = document.getElementById('publishFee');
 var publishSlashElement = document.getElementById('publishSlash');
@@ -637,8 +638,8 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"class": "cover-art-square"
+				"id": "thumbnail",
+				"class": "thumbnail"
 			}
 		},{
 			"subtype": "Song",
@@ -682,8 +683,8 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"class": "cover-art-square"
+				"id": "thumbnail",
+				"class": "thumbnail"
 			}
 		},{
 			"subtype": "Album",
@@ -727,8 +728,8 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"class": "cover-art-square"
+				"id": "thumbnail",
+				"class": "thumbnail"
 			}
 		},{
 			"subtype": "Podcast",
@@ -779,8 +780,8 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"class": "cover-art-square"
+				"id": "thumbnail",
+				"class": "thumbnail"
 			}
 		}]
 	},{
@@ -823,8 +824,8 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"class": "cover-art"
+				"id": "thumbnail",
+				"class": "thumbnail"
 			}
 		},{
 			"subtype": "Series",
@@ -876,8 +877,8 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"class": "cover-art-square"
+				"id": "thumbnail",
+				"class": "thumbnail"
 			}
 		},{
 			"subtype": "Movie",
@@ -922,16 +923,16 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"text": "Poster",
-				"class": "cover-art-poster"
+				"id": "thumbnail",
+				"text": "Thumbnail",
+				"class": "thumbnail"
 			}
 		}]
 	},{
 		"type": "Image",
 		"icon": "image-icon",
 		"subtypes": [{
-			"subtype": "Generic",
+			"subtype": "Basic",
 			"forms": [{
 					"id": "title",
 					"width": 12,
@@ -967,15 +968,15 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"class": "cover-art"
+				"id": "thumbnail",
+				"class": "thumbnail"
 			}
 		}]
 	},{
 		"type": "Text",
 		"icon": "text-icon",
 		"subtypes": [{
-			"subtype": "Generic",
+			"subtype": "Basic",
 			"forms": [{
 					"id": "title",
 					"width": 12,
@@ -1012,8 +1013,8 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"class": "cover-art"
+				"id": "thumbnail",
+				"class": "thumbnail"
 			}
 		},{
 			"subtype": "PDF",
@@ -1053,8 +1054,8 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"class": "cover-art-poster"
+				"id": "thumbnail",
+				"class": "thumbnail"
 			}
 		},{
 			"subtype": "Book",
@@ -1094,15 +1095,15 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"class": "cover-art-poster"
+				"id": "thumbnail",
+				"class": "thumbnail"
 			}
 		}]
 	},{
 		"type": "Software",
 		"icon": "software-icon",
 		"subtypes": [{
-			"subtype": "Generic",
+			"subtype": "Basic",
 			"forms": [{
 					"id": "title",
 					"width": 12,
@@ -1138,8 +1139,8 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"class": "cover-art"
+				"id": "thumbnail",
+				"class": "thumbnail"
 			}
 		},{
 			"subtype": "3D Thing",
@@ -1177,8 +1178,8 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"class": "cover-art"
+				"id": "thumbnail",
+				"class": "thumbnail"
 			}
 		}]
 	},{
@@ -1221,9 +1222,9 @@ var PhoenixUI = (function(){
 				}
 			],
 			"coverArt": {
-				"id": "cover-art",
-				"text": "Preview Image",
-				"class": "cover-art"
+				"id": "thumbnail",
+				"text": "Thumbnail",
+				"class": "thumbnail"
 			}
 		}]
 	}];
@@ -1272,12 +1273,12 @@ var PhoenixUI = (function(){
 		],
 		'Image': [
 			"Basic",
-			{display: "Cover Art", publish: "cover"},
+			{display: "Thumbnail", publish: "cover"},
 			{display: "Album Artwork", publish: "album-art"},
 			{display: "Artwork Thumbnail", publish: "art-thumb"},
-			{display: "Theatrical Poster", publish: "theatrical-poster"},
-			"Poster",
-			"Preview Image"
+			{display: "Theatrical Thumbnail", publish: "theatrical-poster"},
+			"Thumbnail",
+			"Thumbnail"
 		],
 		'Text': [
 			'Plaintext',
@@ -1376,7 +1377,7 @@ var PhoenixUI = (function(){
 		for (var i = 0; i < PhoenixUX.types.length; i++) {
 			if (PhoenixUX.types[i].type == type){
 				if (PhoenixUX.types[i].subtypes[0]){
-					PhoenixUX.updateMetadata(PhoenixUX.types[i].subtypes[0]);
+					PhoenixUX.updateMetadata(type, PhoenixUX.types[i].subtypes[0]);
 				}
 				var typesPillsHTML = '';
 				for (var j = 0; j < PhoenixUX.types[i].subtypes.length; j++) {
@@ -1429,7 +1430,7 @@ var PhoenixUI = (function(){
 		for (var i = 0; i < PhoenixUX.types.length; i++) {
 			if (PhoenixUX.types[i].type == type){
 				if (PhoenixUX.types[i].subtypes[0]){
-					PhoenixUX.updateMetadata(PhoenixUX.types[i].subtypes[0]);
+					PhoenixUX.updateMetadata(type, PhoenixUX.types[i].subtypes[0]);
 				}
 				var typesPillsHTML = '';
 				for (var j = 0; j < PhoenixUX.types[i].subtypes.length; j++) {
@@ -1460,7 +1461,7 @@ var PhoenixUI = (function(){
 			if (type == PhoenixUX.types[i].type){
 				for (var j = 0; j < PhoenixUX.types[i].subtypes.length; j++) {
 					if (subtype == PhoenixUX.types[i].subtypes[j].subtype){
-						PhoenixUX.updateMetadata(PhoenixUX.types[i].subtypes[j]);
+						PhoenixUX.updateMetadata(type, PhoenixUX.types[i].subtypes[j]);
 					}
 				}
 			}
@@ -1468,8 +1469,13 @@ var PhoenixUI = (function(){
 		}
 	}
 
-	PhoenixUX.updateMetadata = function(newType){
-		metaTitleElement.innerHTML = newType.subtype + ' Information';
+	PhoenixUX.updateMetadata = function(type, newType){
+		if (newType.subtype == "Basic"){
+			metaTitleElement.innerHTML = newType.subtype + " " + type + ' Information';
+		} else {
+			metaTitleElement.innerHTML = newType.subtype + ' Information';
+		}
+		
 
 		PhoenixUX.subtype = newType.subtype;
 
@@ -1485,7 +1491,7 @@ var PhoenixUI = (function(){
 		$("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput();
 
 		posterElement.className = newType.coverArt.class;
-		posterTitleElement.innerHTML = newType.coverArt.text ? newType.coverArt.text : 'Cover Art';
+		posterTitleElement.innerHTML = newType.coverArt.text ? newType.coverArt.text : 'Thumbnail';
 	}
 
 	PhoenixUX.EditArtifact = function(txid){
@@ -1509,7 +1515,7 @@ var PhoenixUI = (function(){
 			} else {
 				if (oip041.artifact.type == 'thing') {
 					mainType = ('Image');
-					subType = ('Generic');
+					subType = ('Basic');
 				}
 			}
 		}
@@ -1978,6 +1984,7 @@ var PhoenixUI = (function(){
 
 			if (PhoenixUX.mediaFiles.length === 0){
 				pricingElement.style.display = 'none';
+				mediaFilesTableElement.style.display = 'none';
 			}
 		}
 
@@ -2057,6 +2064,8 @@ var PhoenixUI = (function(){
 
 		if (coverart)
 			$("#coverArtFile").find("input,button,textarea,select").attr("disabled", "disabled");
+
+		mediaFilesTableElement.style.display = "block";
 	}
 
 	PhoenixUX.appendFileToPricingTable = function(file) {
@@ -2594,6 +2603,6 @@ var mediaDropzone = new Dropzone("div#mediaDrop", {
 
 mediaDropzone.on("addedfile", PhoenixUI.mediaFileSelectHandler);
 
-window.onbeforeunload = function() {
-  return "Are you sure you want to navigate away?";
-}
+// window.onbeforeunload = function() {
+//   return "Are you sure you want to navigate away?";
+// }

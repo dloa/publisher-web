@@ -320,9 +320,11 @@ td.unpin {
   max-width: 100%;
   min-height: 75px; }
 
-.publish .cover-art {
-  width: 250px;
-  height: 150px;
+.publish .thumbnail {
+  width: 38vh;
+  height: 21vh;
+  box-sizing: border-box;
+  padding-top: 56.25%;
   display: table;
   border: 1px dashed rgba(0,0,0, .5);
   border-radius: 6px;
@@ -330,21 +332,20 @@ td.unpin {
   cursor: pointer;
   padding: 5px;
   transition: all 0.1s;
-  background-size: 250px 150px;
+  background-size: cover;
   background-repeat: no-repeat;
-  display: block;
 }
 
-.publish .cover-art:hover {
+.publish .thumbnail:hover {
   padding: 10px;
-  margin: 5px;
+  margin: 5px 5px -2px 0px;
   border: 1px dashed rgba(0, 0, 0, 1);
   background-color: rgba(0, 0, 0, 0.05);
   transition: all 0.1s; 
   display: block;
 }
 
-.publish .cover-art.hover {
+.publish .thumbnail.hover {
   padding: 10px;
   margin: 5px;
   border: 1px dashed rgba(0, 0, 0, 0.1);
@@ -353,85 +354,7 @@ td.unpin {
   display: block;
 }
 
-.publish .cover-art p {
-  text-align: center;
-  vertical-align: middle;
-  display: table-cell; 
-}
-
-.publish .cover-art-square {
-  width: 250px;
-  height: 250px;
-  display: table;
-  border: 1px dashed rgba(0,0,0, .5);
-  border-radius: 6px;
-  text-align: center;
-  cursor: pointer;
-  padding: 5px;
-  transition: all 0.1s;
-  background-size: 250px 250px;
-  background-repeat: no-repeat;
-  display: block;
-}
-
-.publish .cover-art-square:hover {
-  padding: 10px;
-  margin: 5px;
-  border: 1px dashed rgba(0, 0, 0, 1);
-  background-color: rgba(0, 0, 0, 0.05);
-  transition: all 0.1s; 
-  display: block;
-}
-
-.publish .cover-art-square.hover {
-  padding: 10px;
-  margin: 5px;
-  border: 1px dashed rgba(0, 0, 0, 0.1);
-  background-color: rgba(0, 0, 0, 0.025);
-  transition: all 0.1s; 
-  display: block;
-}
-
-.publish .cover-art-square p {
-  text-align: center;
-  vertical-align: middle;
-  display: table-cell; 
-}
-
-.publish .cover-art-poster {
-  width: 175px;
-  height: 250px;
-  display: table;
-  border: 1px dashed rgba(0,0,0, .5);
-  border-radius: 6px;
-  text-align: center;
-  cursor: pointer;
-  padding: 5px;
-  transition: all 0.1s;
-  background-size: 250px 250px;
-  background-repeat: no-repeat;
-  display: block;
-}
-
-.publish .cover-art-poster:hover {
-  padding: 10px;
-  margin: 5px;
-  border: 1px dashed rgba(0, 0, 0, 1);
-  background-color: rgba(0, 0, 0, 0.05);
-  transition: all 0.1s; 
-  display: block;
-}
-
-.publish .cover-art-poster.hover {
-  padding: 10px;
-  margin: 5px;
-  border: 1px dashed rgba(0, 0, 0, 0.1);
-  background-color: rgba(0, 0, 0, 0.025);
-  transition: all 0.1s; 
-  display: block;
-}
-
-.publish .cover-art-poster p {
+.publish .thumbnail p {
   text-align: center;
   vertical-align: middle;
   display: table-cell; 
