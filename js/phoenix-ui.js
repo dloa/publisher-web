@@ -767,7 +767,7 @@ var PhoenixUI = (function(){
 					"id": "extraInfo.genre",
 					"width": 6,
 					"placeholder": "Genre",
-					"genres": PhoenixUX.musicGenres
+					"genres": PhoenixUX.webGenres
 				},
 				{
 					"id": "extraInfo.tags",
@@ -1202,7 +1202,7 @@ var PhoenixUI = (function(){
 				},
 				{
 					"id": "extraInfo.genre",
-					"width": 6,
+					"width": 9,
 					"placeholder": "Genre",
 					"genres": PhoenixUX.websiteGenres
 				},
@@ -1213,7 +1213,7 @@ var PhoenixUI = (function(){
 				},
 				{
 					"id": "extraInfo.tags",
-					"width": 9,
+					"width": 12,
 					"placeholder": "Tags"
 				},
 				{
