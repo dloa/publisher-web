@@ -379,6 +379,21 @@ td.unpin {
 	text-align: center;
 }
 
+.publish .publish-pricing .btn-group {
+	display: table;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.publish .publish-pricing .btn-group  {
+	background-color: #fff;
+}
+
+.publish .publish-pricing .btn-group label {
+	margin-bottom: 0px;
+}
+
+
 .publish .publish-pricing .input-group-addon {
 	display: inline-block;
     margin-left: auto;

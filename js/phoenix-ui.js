@@ -2077,20 +2077,37 @@ var PhoenixUI = (function(){
 		$('#pricingTable tr:last').after(
 			'<tr id="' + file.id + 'price">' +
 				'<td style="width:40%"><span style="word-break: break-all;">' + file.name + '</span></td>' +
+				'<td style="width:15%">\
+					<div class="btn-group" data-toggle="buttons">\
+						<label class="btn btn-outline-success active">\
+							<input id="disPlay-check" type="radio" autocomplete="off" onchange="PhoenixUI.checkboxToggle(this)"> <span class="icon icon-check"> \
+						</label>\
+						<label class="btn btn-outline-danger">\
+							<input id="disPlay-block" type="radio" autocomplete="off" onchange="PhoenixUI.checkboxToggle(this)"> <span class="icon icon-block"> \
+						</label>\
+					</div>' +
 				'<td style="width:15%">' +
 					'<div class="input-group">' +
 						'<div class="input-group-addon">$</div>' +
 						'<input type="text" class="price form-control" id="sugPlay" oninput="PhoenixUI.validatePricing(this)" onblur="PhoenixUI.validatePricing(this, true)" placeholder="0.000">' +
 					'</div>' +
-				'</td>' +
-				'<td style="width:15%"><div class="input-group"><span class="input-group-addon" style="background-color: #eceeef; border: 1px solid #ccc;margin-right: auto;"><input type="checkbox" id="disPlay" onclick="PhoenixUI.checkboxToggle(\'' + file.id + '\', \'play\')"></span></div></td>' +
-				'<td style="width:15%">' +
+				'</td>\
+				<td style="width:15%">\
+					<div class="btn-group" data-toggle="buttons">\
+						<label class="btn btn-outline-success active">\
+							<input id="disBuy-check" type="radio" autocomplete="off" onchange="PhoenixUI.checkboxToggle(this)"> <span class="icon icon-check"> \
+						</label>\
+						<label class="btn btn-outline-danger">\
+							<input id="disBuy-block" type="radio" autocomplete="off" onchange="PhoenixUI.checkboxToggle(this)"> <span class="icon icon-block"> \
+						</label>\
+					</div>\
+				</td>\
+				<td style="width:15%">' +
 					'<div class="input-group">' +
 						'<div class="input-group-addon">$</div>' +
 						'<input type="text" class="price form-control" id="sugBuy" oninput="PhoenixUI.validatePricing(this)" onblur="PhoenixUI.validatePricing(this, true)" placeholder="0.000">' +
 					'</div>' +
 				'</td>' +
-				'<td style="width:15%"><div class="input-group"><span class="input-group-addon" style="background-color: #eceeef; border: 1px solid #ccc;margin-right: auto;"><input type="checkbox" id="disBuy" onclick="PhoenixUI.checkboxToggle(\'' + file.id + '\', \'buy\')"></span></div></td>' +
 			'</tr>');
 
 		// Activate the popovers
@@ -2150,63 +2167,75 @@ var PhoenixUI = (function(){
 		return name.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/\s]/gi, '');
 	}
 
-	PhoenixUX.checkboxToggle = function(id, checkbox){
+	PhoenixUX.checkboxToggle = function(elem){
+		console.log(elem.id);
+
+		var parent = elem.parentNode.parentNode.parentNode.parentNode;
+		console.log(parent);
+
+		var id = parent.id;
+		console.log(id);
+
+		var disPlayCheck = parent.children[1].children[0].children[0].children[0];
+		var disPlayBlock = parent.children[1].children[0].children[1].children[0];
+
+		var sugPlay = parent.children[2].children[0].children[1];
+
+		var disBuyCheck = parent.children[3].children[0].children[0].children[0];
+		var disBuyBlock = parent.children[3].children[0].children[1].children[0];
+
+		var sugBuy = parent.children[4].children[0].children[1];
+
 		if (!PhoenixUX.mediaPricing){
 			PhoenixUX.mediaPricing = {};
 		}
 
-		if (!PhoenixUX.mediaPricing[id + 'price']){
-			PhoenixUX.mediaPricing[id + 'price'] = {};
+		if (!PhoenixUX.mediaPricing[id]){
+			PhoenixUX.mediaPricing[id] = {};
 		}
 
 		// Check if the play button was just toggled, if it was check to make sure that it was toggled on.
-		if (checkbox == 'play' && $('#' + id + 'price #disPlay').is(':checked')){
-			PhoenixUX.mediaPricing[id + 'price'].disPlay = true
+		if (elem.id === 'disPlay-block' && elem.checked){
+			PhoenixUX.mediaPricing[id].disPlay = true;
 			
-			if (PhoenixUX.mediaPricing[id + 'price'].disBuy){
-				delete PhoenixUX.mediaPricing[id + 'price'].disBuy;
+			if (PhoenixUX.mediaPricing[id].disBuy){
+				delete PhoenixUX.mediaPricing[id].disBuy;
 			}
 
 			// Clear the play pricing, this shortens the publisher JSON
-			$('#' + id + 'price #sugPlay').val("");
-			$('#' + id + 'price #minPlay').val("");
+			sugPlay.value = "";
 
-			if (PhoenixUX.mediaPricing[id + 'price'].sugPlay){
-				delete PhoenixUX.mediaPricing[id + 'price'].sugPlay;
-			}
-
-			if (PhoenixUX.mediaPricing[id + 'price'].minPlay){
-				delete PhoenixUX.mediaPricing[id + 'price'].minPlay;
+			if (PhoenixUX.mediaPricing[id].sugPlay){
+				delete PhoenixUX.mediaPricing[id].sugPlay;
 			}
 
 			// Uncheck the buy if it is checked, one of them must be unchecked
-			if ($('#' + id + 'price #disBuy').is(':checked'))
-				$('#' + id + 'price #disBuy').prop("checked", false);
+			disBuyCheck.checked = true;
+			disBuyCheck.parentNode.classList.add("active");
+			disBuyBlock.checked = false;
+			disBuyBlock.parentNode.classList.remove("active");
 		}
 
 		// Check if the buy button was just toggled, check to make sure that it was toggled on.
-		if (checkbox == 'buy' && $('#' + id + 'price #disBuy').is(':checked')){
-			PhoenixUX.mediaPricing[id + 'price'].disBuy = true
-
-			if (PhoenixUX.mediaPricing[id + 'price'].disPlay){
-				delete PhoenixUX.mediaPricing[id + 'price'].disPlay;
+		if (elem.id === 'disBuy-block' && elem.checked){
+			PhoenixUX.mediaPricing[id].disBuy = true;
+			
+			if (PhoenixUX.mediaPricing[id].disPlay){
+				delete PhoenixUX.mediaPricing[id].disPlay;
 			}
 
-			// Clear the buy pricing, this shortens the publisher JSON
-			$('#' + id + 'price #sugBuy').val("");
-			$('#' + id + 'price #minBuy').val("");
+			// Clear the play pricing, this shortens the publisher JSON
+			sugBuy.value = "";
 
-			if (PhoenixUX.mediaPricing[id + 'price'].sugBuy){
-				delete PhoenixUX.mediaPricing[id + 'price'].sugBuy;
-			}
-
-			if (PhoenixUX.mediaPricing[id + 'price'].minBuy){
-				delete PhoenixUX.mediaPricing[id + 'price'].minBuy;
+			if (PhoenixUX.mediaPricing[id].sugBuy){
+				delete PhoenixUX.mediaPricing[id].sugBuy;
 			}
 
 			// Uncheck the buy if it is checked, one of them must be unchecked
-			if ($('#' + id + 'price #disPlay').is(':checked'))
-				$('#' + id + 'price #disPlay').prop("checked", false);
+			disPlayCheck.checked = true;
+			disPlayCheck.parentNode.classList.add("active");
+			disPlayBlock.checked = false;
+			disPlayBlock.parentNode.classList.remove("active");
 		}
 	}
 
@@ -2218,6 +2247,22 @@ var PhoenixUI = (function(){
 		PhoenixUX.pricingElem = elem;
 
 		var checkboxDiv = elem.parentElement.parentElement.parentElement.children[5];
+
+		var parent = elem.parentNode.parentNode.parentNode;
+		console.log(parent);
+
+		var id = parent.id;
+		console.log(id);
+
+		var disPlayCheck = parent.children[1].children[0].children[0].children[0];
+		var disPlayBlock = parent.children[1].children[0].children[1].children[0];
+
+		var sugPlay = parent.children[2].children[0].children[1];
+
+		var disBuyCheck = parent.children[3].children[0].children[0].children[0];
+		var disBuyBlock = parent.children[3].children[0].children[1].children[0];
+
+		var sugBuy = parent.children[4].children[0].children[1];
 
 		if (!ignoreTypingHelpers){
 			if (elem.value.substr(-1) == '.')
@@ -2232,16 +2277,20 @@ var PhoenixUI = (function(){
 		if (elem.value == 0 || elem.value == 'NaN'){
 			elem.value = '';
 		} else {
-			var id = elem.parentNode.parentNode.parentNode.id;
-
-			if (elem.id == 'sugPlay' || elem.id == 'minPlay'){
-				checkboxDiv.children[0].checked = false;
+			if (elem.id == 'sugPlay'){
+				disPlayCheck.checked = true;
+				disPlayCheck.parentNode.classList.add("active");
+				disPlayBlock.checked = false;
+				disPlayBlock.parentNode.classList.remove("active");
 
 				if (PhoenixUX.mediaPricing && PhoenixUX.mediaPricing[id] && PhoenixUX.mediaPricing[id].disPlay){
 					delete PhoenixUX.mediaPricing[id].disPlay;
 				}
-			} else if (elem.id == 'sugBuy' || elem.id == 'minBuy'){
-				checkboxDiv.children[1].checked = false;
+			} else if (elem.id == 'sugBuy'){
+				disBuyCheck.checked = true;
+				disBuyCheck.parentNode.classList.add("active");
+				disBuyBlock.checked = false;
+				disBuyBlock.parentNode.classList.remove("active");
 
 				if (PhoenixUX.mediaPricing && PhoenixUX.mediaPricing[id] && PhoenixUX.mediaPricing[id].disBuy){
 					delete PhoenixUX.mediaPricing[id].disBuy;
@@ -2249,20 +2298,15 @@ var PhoenixUI = (function(){
 			}
 		}
 
-		// Save the pricing that was updated to the mediaPricing element of PhoenixUX
-		var mainDivID = elem.parentElement.parentElement.parentElement.id;
-
-
-
 		if (!PhoenixUX.mediaPricing){
 			PhoenixUX.mediaPricing = {};
 		}
 
-		if (!PhoenixUX.mediaPricing[mainDivID]){
-			PhoenixUX.mediaPricing[mainDivID] = {};
+		if (!PhoenixUX.mediaPricing[id]){
+			PhoenixUX.mediaPricing[id] = {};
 		}
 
-		PhoenixUX.mediaPricing[mainDivID][elem.id] = elem.value ? elem.value : 0;
+		PhoenixUX.mediaPricing[id][elem.id] = elem.value ? elem.value : 0;
 
 		// Update the publish fee
 		PhoenixUX.updatePubFee();
