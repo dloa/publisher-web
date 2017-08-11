@@ -13,6 +13,10 @@
 .form-inline p.margin {
   margin-left: 15px; }
 
+  .popover {
+  	text-align: center;
+  }
+
 @media screen and (min-width: 900px) {
   .form-inline .form-control.ipfs {
 	min-width: 350px; } }
@@ -211,7 +215,8 @@ td.unpin {
 /* Table */
 .table > thead > tr > th {
   vertical-align: bottom;
-  border-bottom: 1px solid #DDD; }
+  border-bottom: 1px solid #DDD;
+  border-top: none; }
 
 .table > tbody > tr > td {
   border-top: 1px solid #efefef; }
@@ -377,7 +382,7 @@ td.unpin {
   color: #36b256; }
 
 .publish .publish-pricing .form-control {
-  border-color: rgba(101, 208, 128, 0);
+  border-color: rgba(101, 208, 128, 0.5);
   background-color: rgba(101, 208, 128, 0.25);
   color: #36b256;
   max-width: 65px; }

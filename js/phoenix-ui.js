@@ -2076,34 +2076,25 @@ var PhoenixUI = (function(){
 	PhoenixUX.appendFileToPricingTable = function(file) {
 		$('#pricingTable tr:last').after(
 			'<tr id="' + file.id + 'price">' +
-				'<td style="width:20%">' + file.name + '</td>' +
-				'<td>' +
+				'<td style="width:40%"><span style="word-break: break-all;">' + file.name + '</span></td>' +
+				'<td style="width:15%">' +
 					'<div class="input-group">' +
 						'<div class="input-group-addon">$</div>' +
 						'<input type="text" class="price form-control" id="sugPlay" oninput="PhoenixUI.validatePricing(this)" onblur="PhoenixUI.validatePricing(this, true)" placeholder="0.000">' +
 					'</div>' +
 				'</td>' +
-				'<td>' +
-					'<div class="input-group">' +
-						'<div class="input-group-addon">$</div>' +
-						'<input type="text" class="price form-control" id="minPlay" oninput="PhoenixUI.validatePricing(this)" onblur="PhoenixUI.validatePricing(this, true)" placeholder="0.000">' +
-					'</div>' +
-			   '</td>' +
-				'<td>' +
+				'<td style="width:15%"><input type="checkbox" id="disPlay" onclick="PhoenixUI.checkboxToggle(\'' + file.id + '\', \'play\')"> <span data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Disallow Play?" data-content="If you check this, then nobody will be able to play/view this file. They will need to purchase the file to view/play it.">Disallow Play</span></td>' +
+				'<td style="width:15%">' +
 					'<div class="input-group">' +
 						'<div class="input-group-addon">$</div>' +
 						'<input type="text" class="price form-control" id="sugBuy" oninput="PhoenixUI.validatePricing(this)" onblur="PhoenixUI.validatePricing(this, true)" placeholder="0.000">' +
 					'</div>' +
 				'</td>' +
-				'<td>' +
-					'<div class="input-group">' +
-						'<div class="input-group-addon">$</div>' +
-						'<input type="text" class="price form-control" id="minBuy" oninput="PhoenixUI.validatePricing(this)" onblur="PhoenixUI.validatePricing(this, true)" placeholder="0.000">' +
-					'</div>' +
-				'</td>' +
-				'<td style="width:15%"><input type="checkbox" id="disPlay" onclick="PhoenixUI.checkboxToggle(\'' + file.id + '\', \'play\')"> Disallow Play' +
-				'<br><input type="checkbox" id="disBuy" onclick="PhoenixUI.checkboxToggle(\'' + file.id + '\', \'buy\')"> Disallow Buy</td>' +
+				'<td style="width:15%"><input type="checkbox" id="disBuy" onclick="PhoenixUI.checkboxToggle(\'' + file.id + '\', \'buy\')"> <span data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Disallow Buy?" data-content="If you check this, then nobody will be able to buy this file. They will always need to pay for each play.">Disallow Buy</span> </td>' +
 			'</tr>');
+
+		// Activate the popovers
+		$('[data-toggle="popover"]').popover()
 
 		pricingElement.style.display = 'block';
 	}

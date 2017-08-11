@@ -387,10 +387,9 @@
 															<thead>
 																<tr>
 																	<th>File Name</th>
-																	<th>Suggested Play</th>
-																	<th>Minimum Play</th>
-																	<th>Suggested Buy</th>
-																	<th>Minimum Buy</th>
+																	<th>Price per Play</th>
+																	<th></th>
+																	<th>Price to Buy</th>
 																	<th></th>
 																</tr>
 															</thead>
@@ -409,17 +408,17 @@
 														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip2" placeholder="0.10" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
 														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip3" placeholder="1" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
 													</div>
-													<small class="form-text text-muted" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Do I need to enter tips?" data-content="No. You do not need to enter suggested tip amounts. If you do not enter any information, the Retailer will show their default tip amounts.">The suggested tip amounts will be displayed to the user if they click to "Tip" your video.</small>
+													<small class="form-text text-muted" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="10 0" title="Do I need to enter tips?" data-content="No. You do not need to enter suggested tip amounts. If you do not enter any information, the Retailer will show their default tip amounts.">The suggested tip amounts will be displayed to the user if they click to "Tip" your video.</small>
 													<h5 class="text-center" style="margin-top: 20px;">Advanced</h5>
 													<div class="form-group row text-right">
-														<label for="example-text-input" class="col-3 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="What is a Promoter?" data-content="A Promoter is someone who drives traffic to your content. This can be anybody that shares your content, or leads people to your content.">Promoter</label>
+														<label for="example-text-input" class="col-3 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -25" title="What is a Promoter?" data-content="A Promoter is someone who drives traffic to your content. This can be anybody that shares your content, or leads people to your content.">Promoter</label>
 														<div class="col-3">
 															<div class="input-group">
 																<input id="promoter" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
 																<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
 															</div>
 														</div>
-														<label for="example-text-input" class="col-3 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="What is a Retailer?" data-content="A Retailer is someone who sells your content. This includes people like Alexandria currently.">Retailer</label>
+														<label for="example-text-input" class="col-3 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -25" title="What is a Retailer?" data-content="A Retailer is someone who sells your content. This includes people like Alexandria currently.">Retailer</label>
 														<div class="col-3">
 															<div class="input-group">
 																<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
