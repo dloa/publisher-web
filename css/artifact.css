@@ -369,19 +369,26 @@ td.unpin {
   font-weight: 300; }
 
 .publish .publish-pricing {
-  background-color: rgba(101, 208, 128, 0.05);
-  padding: 15px;
-  padding-bottom: 0;
+  background-color: rgba(101, 208, 128, 0.2);
+  padding: 0px 5px;
   margin: 0 -15px;
   margin-bottom: 35px;
   border-radius: 6px; }
 
+.publish .publish-pricing thead > tr > th {
+	text-align: center;
+}
+
 .publish .publish-pricing .input-group-addon {
+	display: inline-block;
+    margin-left: auto;
   background: rgba(101, 208, 128, 0.5);
   border-color: rgba(101, 208, 128, 0);
   color: #36b256; }
 
 .publish .publish-pricing .form-control {
+	display: inline-block;
+    margin-right: auto;
   border-color: rgba(101, 208, 128, 0.5);
   background-color: rgba(101, 208, 128, 0.25);
   color: #36b256;
