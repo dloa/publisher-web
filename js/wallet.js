@@ -214,7 +214,7 @@ function refreshWalletInfo(){
 										<div class="card-header" role="tab" id="heading' + i + '">\
 											<h4 class="card-title">\
 												<div style="padding: 0px 30px; color: #000">\
-													<span>' + address + '</span><span style="float: right"><span style="color: green">$' + (parseFloat(balance)*parseFloat(FLOUSD)).toFixed(2) + '</span> - ' + balance + ' FLO</span>\
+													<span>' + address + '</span><span style="float: right"><span style="color: #406eb7">$' + (parseFloat(balance)*parseFloat(FLOUSD)).toFixed(2) + '</span> - ' + balance + ' FLO</span>\
 												</div>\
 											</h4>\
 										</div>\

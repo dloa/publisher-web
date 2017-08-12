@@ -2022,7 +2022,7 @@ var PhoenixUI = (function(){
 				<td>' + PhoenixUX.humanFileSize(file.size, true) + '</td>\
 				<td style="width: 100%">\
 					<div class="row form-control dual-selector">\
-						<select class="form-control col-6" id="typeSelect" onchange="PhoenixUI.onMediaSelectChange(this);">';
+						<select class="form-control col-5" id="typeSelect" onchange="PhoenixUI.onMediaSelectChange(this);">';
 
 		var subtypes = "";
 		for (var i in PhoenixUX.fileSelectTypes) {
@@ -2036,7 +2036,7 @@ var PhoenixUI = (function(){
 		} 
 
 		htmlStr +=	'</select>\
-					<select class="form-control col-6" id="subtypeSelect" onchange="PhoenixUI.onMediaSelectChange(this);">';
+					<select class="form-control col-7" id="subtypeSelect" onchange="PhoenixUI.onMediaSelectChange(this);">';
 
 		for (var i = 0; i < subtypes.length; i++) {
 			var value;

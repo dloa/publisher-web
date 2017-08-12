@@ -218,7 +218,7 @@
 				<nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
 					<div class="text-center">Welcome, <span id="pub-name"></span></div>
 					<div class="text-center" style="margin-bottom: 0px"> <strong>FLO</strong>: <code><span id="walletBalance"></span></code></strong></div>
-					<div class="text-center" style="margin-bottom: 10px"> <strong>USD</strong>: <code style="color: green"><span id="walletBalanceUSD"></span></code></strong></div>
+					<div class="text-center" style="margin-bottom: 10px"> <strong>USD</strong>: <code style="color: #406eb7"><span id="walletBalanceUSD"></span></code></strong></div>
 					<ul class="nav nav-pills flex-column">
 						<li class="nav-item"><a href="#" class="nav-link" id="publisherNav" style="color: black" onclick="showWizardPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/publish.svg"">Publisher</a></li>
 						<li class="nav-item"><a href="#" class="nav-link" id="artifactsNav" style="color: black" onclick="showArtifactPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/menu.svg">My Artifacts</a></li>
@@ -228,14 +228,14 @@
 
 				<main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
 					<section class="row text-center" id="wizard">
-						<div class="col-sm-12" style="margin-top: 20px">
+						<!--<div class="col-sm-12" style="margin-top: 20px">
 							<h4 class="m0 text-thin">Welcome to Alexandria Publisher</h4><small>Please fill in the fields below</small>
-						</div>
+						</div>-->
 						<div class="container">
 							<div style="margin-top:60px;">
 								<div class="section publish col-lg-12">
 									<div class="publish-section artifact-type">
-										<h5>Select Artifact type</h5> 
+										<!--<h5>Select Artifact type</h5> -->
 										<div class="row justify-content-center" style="margin-bottom: 20px;" id="typeCircles">
 											<!-- <div class="col-2"><div class="type-circle song-icon type-circle-active"></div>Audio</div>
 											<div class="col-2"><div class="type-circle video-icon"></div>Video</div>
@@ -258,7 +258,7 @@
 									<div class="publish-section">
 										<div class="publish-files audio-tracks">
 											<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
-											<div class="upload-area" id="mediaDrop" style="padding-bottom: 15px; height: 250px;display: flex; justify-content: center; align-items: center;">
+											<div class="upload-area" id="mediaDrop" style="padding-bottom: 15px; height: 100px;display: flex; justify-content: center; align-items: center;">
 												<h3 style="color: #ccc">Please Click or Drag &amp; Drop to Upload...</h3>
 											</div>
 											<table class="table" id='mediaFilesTable' style="margin-bottom: -5px; display: none">
@@ -343,15 +343,27 @@
 														<h3 id="posterTitle">Thumbnail</h3>
 														<div class="cover-art-square" id='poster'>
 														</div>
-														<label class="custom-file text-left" style="margin-top: 10px;">
+														<!-- <label class="custom-file text-left" style="margin-top: 10px;">
 															<input type="file" id="posterFile" class="custom-file-input">
 															<span class="custom-file-control"></span>
-														</label>
+														</label>-->
+														<br>
+													<span style="font-size: 1.5em; margin-left: 10px; font-weight: 200;">My Artifact is for: </span>
+									<div class="btn-group-sm" data-toggle="buttons">
+										<label class="btn btn-outline-primary active" id='freeRadioLabel'>
+											<input id='allRadio' type="radio" name="nsfw" id="artifactFreeBtn" autocomplete="off" onclick="" checked> All Ages
+										</label>
+										<label class="btn btn-outline-danger" id='paidRadioLabel'>
+											<input id='nsfwToggle' type="radio" name="nsfw" id="artifactPaidBtn" autocomplete="off" onclick="" unchecked> 18+ (NSFW) 
+										</label>
+										<a data-toggle="popover" data-trigger="hover" data-placement="top" title="What is NSFW content?" data-content="NSFW content would be things you wouldn't want your boss or children to know you were watching. This includes all content which contains nudity, intense sexuality, intense profanity, violence/gore or other disturbing content.">
+										<small class="text-muted"><span class="icon icon-help-with-circle"></span></small>
+										</a>
 													</center>
 												</div>
 											</div>
 										</div>
-										<center style="margin-top: 15px; margin-bottom: 20px">
+										<!--<center style="margin-top: 15px; margin-bottom: 20px">
 											<span style="font-size: 1.5em; font-weight: 100;">My Artifact is for:</span>
 											<div class="btn-group" data-toggle="buttons">
 												<label class="btn btn-outline-primary active" id='freeRadioLabel'>
@@ -364,12 +376,16 @@
 											<br />
 											<a data-toggle="popover" data-trigger="hover" data-placement="bottom" title="What is NSFW content?" data-content="NSFW content would be things you wouldn't want your boss or children to know you were watching. This includes all content which contains nudity, intense sexuality, intense profanity, violence/gore or other disturbing content."><small class="text-muted">Please select if your content is suitible for all ages or if it has NSFW/sensitive content. <span class="icon icon-help-with-circle"></span></small></a>
 										</center>
-									</div>
+									</div>-->
+									
+
+<hr>
+<br>
 									<div class="row" id='bitcoinAddressField'>
 										<div class="col-sm-12">
 											<h3>Pricing Information</h3>
 											<center style="margin-top: 15px; margin-bottom: 20px">
-												<span style="font-size: 1.5em; font-weight: 100;">I want my Artifact to be:</span>
+												<span style="font-size: 1.5em; font-weight: 200;">I want my Artifact to be:</span>
 												<div class="btn-group" data-toggle="buttons">
 													<label class="btn btn-outline-primary active" id='freeRadioLabel'>
 														<input id='freeRadio' type="radio" name="free" id="artifactFreeBtn" autocomplete="off" onclick="" checked> Free
@@ -378,8 +394,11 @@
 														<input id='paidRadio' type="radio" name="free" id="artifactPaidBtn" autocomplete="off" onclick="$('#paymentInfo').show();" unchecked> Paid 
 													</label>
 												</div>
-												<br/>
-												<small class="text-muted">If you would like to enter suggested tip amounts, custom payment addresses, or set advanced payment information, <br /> please set your artifact to Paid.</small>
+												<a data-toggle="popover" data-trigger="hover" data-placement="top" title="What is this?" data-content="If you would like to enter suggested tip amounts, custom payment addresses, or set advanced payment information, <br /> please set your artifact to Paid.">
+										<small class="text-muted"><span class="icon icon-help-with-circle"></span></small>
+										</a>
+												<br>
+												<!--<small class="text-muted">If you would like to enter suggested tip amounts, custom payment addresses, or set advanced payment information, <br /> please set your artifact to Paid.</small>-->
 											</center>
 											<div class="row text-left" id="paymentInfo">
 												<div class="col-12">
@@ -402,21 +421,16 @@
 														</table>
 													</div>
 												</div>
-												<div class="col-6">
-													<h5 class="text-center">Suggested Tips</h5>
-													<div class="row">
-														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip1" placeholder="0.01" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
-														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip2" placeholder="0.10" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
-														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip3" placeholder="1" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
-													</div>
-													<small class="form-text text-center text-muted" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Do I need to enter tips?" data-content="No. You do not need to enter suggested tip amounts. If you do not enter any information, the Retailer will show their default tip amounts.">The suggested tip amounts will be displayed to the user if they click to "Tip" your video. <span class="icon icon-help-with-circle"></span></small>
-												</div>
-												<div class="col-6" id="bitcoinAddressGroup">
+												
+
+
+												<div class="col-12" id="bitcoinAddressGroup">
 													<!-- <span>Payment Addresses</span>
 													<input class="form-control" style="width: 30%" type="text" id="bitcoinAddress" placeholder="17aGuzA9p1ZmG49V9GmR6UgGzg1dQx9We9">
 													<p class="help-block">This is your Bitcoin address that you will use to receive payments for this artifact.</p> -->
-													<div class="form-group col-lg-12">
+													<div class="form-group col-12">
 														<h5 class="text-center">Payment Addresses</h5>
+														<!--<div class="text-right col-11">Primary</div>-->
 															<div id="paymentAddresses">
 															<!-- <div class="row">
 																<div class="input-group col-11" style="margin-bottom: 5px;">
@@ -499,8 +513,21 @@
 														<small id="emailHelp" class="form-text text-muted">Select the default payment address using the selector on the Right side.</small>
 													</div>
 												</div>
+
+
 												<div class="col-12">
-													<h5 class="text-center" style="margin-top: 20px;">Advanced</h5>
+													<h5 class="text-center" style="margin-top: 25px">Suggested Tips</h5>
+													<div class="row">
+														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip1" placeholder="0.01" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
+														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip2" placeholder="0.10" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
+														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip3" placeholder="1" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
+													</div>
+													<small class="form-text text-center text-muted" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Do I need to enter tips?" data-content="No. You do not need to enter suggested tip amounts. If you do not enter any information, the Retailer will show their default tip amounts.">The suggested tip amounts will be displayed to the user if they click to "Tip" your video. <span class="icon icon-help-with-circle"></span></small>
+												</div>
+
+
+												<div class="col-12">
+													<h5 class="text-center" style="margin-top: 35px;">Advanced</h5>
 													<div class="form-group row text-right">
 														<div class="col-4">
 															<div class="row">
@@ -543,23 +570,44 @@
 											</div>			
 										</div>
 									</div>
+									<!--
 									<div class="publish-section publish-submit" id="publishSubmitSection">
 										<div class="row align-items-center">
-											<div class="col-3">
+											<div class="col-4 text-center">
 												<!-- <p class="small" id="artJSON">You will be able to submit your artifact after you preview it. Be sure it looks exactly like what you desire as you will be unable to change this later. </p>-->
+											
+											<!--<div class="col-2">-->
+											<!--<center style="margin-top: 5px; margin-bottom: 10px">
+											
+											</div>	
 											</div>
-											<div class="col-6 text-center" style="color: green">
-												Cost To Publish
-												<br />
-												<h1 style="margin-bottom: 0px;"><span id="publishFee">Free!</span><span id="publishSlash" style="color: #333; display:none"> / </span><span id="publishFeeFLO" style="color: cornflowerblue; display:none">0 FLO</span></h1>
+									-->		
+											</div>
+
+											</div>
+											<!--<div class="col-20 text-center" style="color: #406eb7">-->
+												
+											<!--<span style="font-size: 1.5em; margin-left: 10px; font-weight: 100-->
+
+
+												<div style="margin-bottom: 0px; font-size:1.5em; font-weight:300 ">
+
+												Publish Fee:
+												
+												<span id="publishFee">Free!</span><span id="publishSlash"> / </span><span id="publishFeeFLO">0 FLO</span>
+												</div>
+												
 												<span style="color: #d9534f; display:none" id="pubBalanceTooLow">You do not have enough balance in your wallet!</span>
+												
+											<span>
+											<div class="col-20 text-center">
+												<button type="button" id="previewButton" class="btn-lg btn-primary btn-block" onClick="PhoenixUI.publish()">Publish</button>
 											</div>
-											<div class="col-3 text-right">
-												<button type="button" id="previewButton" class="btn btn-outline-success btn-background-white" onClick="PhoenixUI.publish()">Publish</button>
-											</div>
-										</div>
+											</span>
+
+										</center>
 									</div>
-									<div style='height:30px'></div>
+									<!--<div style='height:30px'></div>-->
 									<pre class="small text-left" id="artJSON"></pre>
 								</div>
 							</div>
@@ -840,7 +888,7 @@
 										<div class="card-header" role="tab" id="headingOne">
 											<h4 class="card-title">
 												<div style="padding: 0px 30px; color: #000">
-													FLuiVU5iDQ4a6ztcpBLwBNjBisyY2DvUTV<span style="float: right"><span class="color: green">$22.15</span> - 443.11323606 FLO</span>
+													FLuiVU5iDQ4a6ztcpBLwBNjBisyY2DvUTV<span style="float: right"><span class="color: #406eb7">$22.15</span> - 443.11323606 FLO</span>
 												</div>
 
 											</h4>
