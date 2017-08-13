@@ -1925,6 +1925,8 @@ var PhoenixUI = (function(){
 
 				if (subtypefor != "cover")
 					PhoenixUX.mediaFiles.push(files[i]);
+
+				Phoenix.uploadFileToTus(files[i]);
 			}
 		} else {
 			var file = files;
@@ -1976,6 +1978,11 @@ var PhoenixUI = (function(){
 
 			if (subtypefor != "cover")
 				PhoenixUX.mediaFiles.push(file);
+
+			Phoenix.uploadFileToTus(file, function(id){ console.log(id) }, function(err){console.log(err)}, function(percent){
+				console.log(percent);
+				document.getElementById(file.id + '-progress').style.width = percent + "%";
+			});
 		}
 	}
 
@@ -2067,7 +2074,7 @@ var PhoenixUI = (function(){
 		}
 
 		htmlStr +=	'>x</button></td>\
-		 </tr>';
+		 </tr><tr><td colspan="5"><div class="progress" style="width: 100%;height: 5px;margin-top: -5px;"><div id="' + file.id + '-progress" class="progress-bar bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div></td></tr>';
 
 		$('#mediaTable').append(htmlStr);
 

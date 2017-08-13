@@ -355,6 +355,42 @@ var Phoenix = (function() {
 		}
 	}
 
+	PhoenixAPI.uploadFileToTus = function(file, onSuccess, onError, onProgress){
+		if (!onSuccess)
+			onSuccess = function(){};
+		if (!onError)
+			onError = function(){};
+		if (!onProgress)
+			onProgress = function(){};
+		
+		// Create a new tus upload
+	    var upload = new tus.Upload(file, {
+	    	metadata: {
+	    		"name": file.name
+	    	},
+	        endpoint: "http://localhost:11945/files/",
+	        retryDelays: [0, 1000, 3000, 5000],
+	        onError: function(error) {
+	            console.log("Failed because: " + error)
+	            onError(error);
+	        },
+	        onProgress: function(bytesUploaded, bytesTotal) {
+	            var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
+	            console.log(bytesUploaded, bytesTotal, percentage + "%")
+	            onProgress(percentage, bytesUploaded, bytesTotal);
+	        },
+	        onSuccess: function() {
+	        	var id = upload.url.replace('http://localhost:11945/files/', '');
+	        	console.log(id);
+	        	onSuccess(id);
+	            //console.log("Download %s from %s", upload.file.name, upload.url)
+	        }
+	    })
+
+	    // Start the upload
+	    upload.start()
+	}
+
 	return PhoenixAPI;
 })();
 
