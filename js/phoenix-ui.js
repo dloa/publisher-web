@@ -1980,10 +1980,37 @@ var PhoenixUI = (function(){
 				PhoenixUX.mediaFiles.push(file);
 
 			Phoenix.uploadFileToTus(file, function(id){ console.log(id) }, function(err){console.log(err)}, function(percent){
-				console.log(percent);
-				document.getElementById(file.id + '-progress').style.width = percent + "%";
+
+				PhoenixUX.setProgress(percent, file.id)
+				PhoenixUX.updateProgress(file.id)
 			});
 		}
+	}
+
+	PhoenixUX.updateProgress = function (id) {
+	    var tr = document.getElementById(id);
+        var pr = tr.querySelector('.progress-so');
+        pr.style.left = (parseFloat(tr.dataset.progress) - 100)+'%';
+        pr.style.height = tr.clientHeight + 'px';
+	}
+
+	PhoenixUX.setProgress = function(percent, id, err) {
+	    var tr = document.getElementById(id);
+
+	    var pr = tr.querySelector('.progress-so');
+
+	    if (err){
+	    	pr.classList.remove('uploading');
+	    	pr.classList.add('upload-error');
+	    	return;
+	    }
+
+	    if (parseFloat(percent) == 100){
+	    	pr.classList.remove('uploading');
+	    	pr.classList.add('upload-done');
+	    }
+
+	    tr.dataset.progress = Math.round(parseFloat(percent));
 	}
 
 	PhoenixUX.removeMediaFile = function(id){
@@ -2028,7 +2055,7 @@ var PhoenixUI = (function(){
 
 		var htmlStr = '\
 			<tr id="' + file.id + '">\
-				<td><img class="table-icon" src="' + (iconURL ? iconURL : 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=') + '"></td>\
+				<td><div class="progress-so uploading"></div><img class="table-icon" src="' + (iconURL ? iconURL : 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=') + '"></td>\
 				<td class="text-left"> <input type="text" class="form-control" name="dispName" placeholder="' + file.name + '" oninput="PhoenixUI.onFileNameInput(this);"></td>\
 				<td>' + PhoenixUX.humanFileSize(file.size, true) + '</td>\
 				<td style="width: 100%">\
@@ -2074,7 +2101,7 @@ var PhoenixUI = (function(){
 		}
 
 		htmlStr +=	'>x</button></td>\
-		 </tr><tr><td colspan="5"><div class="progress" style="width: 100%;height: 5px;margin-top: -5px;"><div id="' + file.id + '-progress" class="progress-bar bg-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div></div></td></tr>';
+		 </tr>';
 
 		$('#mediaTable').append(htmlStr);
 
