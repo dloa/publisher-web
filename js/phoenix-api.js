@@ -36,6 +36,8 @@ var Phoenix = (function() {
 
 	PhoenixAPI.tusIPFSEndpoint = "http://localhost:11945";
 	PhoenixAPI.tusFiles = [];
+	PhoenixAPI.publishQueue = [];
+	PhoenixAPI.publishState = "Loading";
 
 	// Load info from LibraryD
 	PhoenixAPI.searchAPI = function(module, searchOn, searchFor) {
@@ -99,6 +101,8 @@ var Phoenix = (function() {
 			PhoenixAPI.wallet.load(function () {
 				PhoenixEvents.trigger("onLoginSuccess", {});
 				PhoenixEvents.trigger("onWalletLoad", PhoenixAPI.wallet);
+
+				PhoenixAPI.publishState = "Ready";
 
 				PhoenixAPI.getPublishersFromLibraryD();
 			});
@@ -243,7 +247,7 @@ var Phoenix = (function() {
 
 	PhoenixAPI.publishArtifact = function(artifactJSON, callback){
 		PhoenixAPI.calculatePublishFee(artifactJSON, function(usd, pubFee){
-			try {
+			/*try {
 				swal({   
 					animation: true,
 					title: "Are you sure?",   
@@ -252,7 +256,7 @@ var Phoenix = (function() {
 					showCancelButton: true,   
 					confirmButtonColor: "#f44336",
 					confirmButtonText: "Yes, publish it!",   
-					closeOnConfirm: false 
+					closeOnConfirm: true 
 				}, function(){   
 					LibraryDJS.publishArtifact(PhoenixAPI.wallet, artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, artifactJSON, pubFee, function(err, data){
 						if (err){
@@ -266,12 +270,44 @@ var Phoenix = (function() {
 			} catch (e) {
 				console.log(e);
 				// Most likely an issue with Sweet alert, abort for now.
-			}
+			}*/
+			PhoenixEvents.trigger("onPublishStart", "Starting publish attempt");
+			LibraryDJS.publishArtifact(PhoenixAPI.wallet, artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, artifactJSON, pubFee, function(err, data){
+				if (err){
+					console.log("Error: " + data);
+					return;
+				}
 
-			
-			PhoenixEvents.trigger("testEvent", "test");
+				PhoenixEvents.trigger("onPublishEnd", data);
+				callback(data);
+
+				console.log(data);
+			});
 		})
 			
+	}
+
+	PhoenixAPI.addToPublishQueue = function(artifactJSON){
+		PhoenixAPI.publishQueue.push(artifactJSON);
+	}
+
+	PhoenixAPI.processPublishQueue = function(){
+		if (PhoenixAPI.publishQueue.length > 0){
+			console.log(PhoenixAPI.publishQueue.length + " to Publish!");
+			if (PhoenixAPI.publishState === "Ready"){
+				PhoenixAPI.publishState = "Publishing";
+
+				// Get the first element and remove it from the array
+				var pubJSON = PhoenixAPI.publishQueue.shift();
+
+				PhoenixAPI.publishArtifact(pubJSON, function(data){
+					PhoenixAPI.publishState = "Ready";
+					console.log("Publish Success!");
+				})
+			}
+		} else {
+			console.log("Nothing to Publish!");
+		}
 	}
 
 	PhoenixAPI.getMarketData = function(callback){
@@ -339,13 +375,19 @@ var Phoenix = (function() {
 					var files = artJSON.artifact.storage.files;
 
 					for (var i = 0; i < files.length; i++) {
+						if (!artJSON.artifact.payment)
+							artJSON.artifact.payment = {}
+
+						if (artJSON.artifact && artJSON.artifact.payment && !artJSON.artifact.payment.disPer)
+							artJSON.artifact.payment.disPer == 0.30;
+
 						if (files[i].sugBuy){
 							// disPer stands for discount percentage
-							minBuyArray.push(files[i].sugBuy * artJSON.artifact.payment.disPer)
+							minBuyArray.push(files[i].sugBuy * (1-artJSON.artifact.payment.disPer))
 							sugBuyArray.push(files[i].sugBuy)
 						}
 						if (files[i].sugPlay){
-							minPlayArray.push(files[i].sugPlay * artJSON.artifact.payment.disPer)
+							minPlayArray.push(files[i].sugPlay * (1-artJSON.artifact.payment.disPer))
 							sugPlayArray.push(files[i].sugPlay)
 						}
 					}
@@ -478,5 +520,8 @@ var Phoenix = (function() {
 
 	return PhoenixAPI;
 })();
+
+// Attempt a new publish every 1 second
+setInterval(Phoenix.processPublishQueue, 1 * 1000);
 
 Phoenix.login();

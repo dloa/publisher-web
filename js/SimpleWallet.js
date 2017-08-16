@@ -89,7 +89,10 @@ var Wallet = (function () {
 	};
 	Wallet.prototype.addAddress = function (address, data) {
 		if (address in this.addresses) {
-			swal("Warning", "Warning: address " + address + " already exists, skipping.", "warning");
+			var event = new CustomEvent('wallet', {'detail': "Address " + address + " already exists, skipping."});
+			
+			window.dispatchEvent(event);
+			//swal("Warning", "Warning: address " + address + " already exists, skipping.", "warning");
 		}
 		else {
 			this.addresses[address] = data;
@@ -435,8 +438,9 @@ var Wallet = (function () {
 					// console.log(tx);
 					var estimatedFee = _this.coin_network.estimateFee(tx);
 
-					// console.log(estimatedFee);
-					estimatedFee = parseInt(pubFee);
+					if (parseInt(pubFee) > estimatedFee)
+						estimatedFee = parseInt(pubFee);
+					
 					// console.log(pubFee);
 					// console.log(estimatedFee);
 
@@ -447,7 +451,10 @@ var Wallet = (function () {
 					}
 
 					if ((amount + estimatedFee) > (totalUnspent) && (amount + estimatedFee) > (_this.balances[fromAddress])) {
-						swal("Error", "Can't fit fee of " + estimatedFee / Math.pow(10, 8) + " - lower your sending amount", "error");
+						var event = new CustomEvent('wallet', {'detail': "Can't fit fee of " + estimatedFee / Math.pow(10, 8) + " - lower your sending amount"});
+			
+						window.dispatchEvent(event);
+						//swal("Error", "Can't fit fee of " + estimatedFee / Math.pow(10, 8) + " - lower your sending amount", "error");
 						// console.log('WARNING: Total is greater than total unspent: %s - Actual Fee: %s', totalUnspent, estimatedFee);
 						return;
 					}
@@ -521,11 +528,17 @@ var Wallet = (function () {
 				this.refreshBalances();
 			}
 			else {
-				swal("Error", "You don't own that address!", "error");
+				var event = new CustomEvent('wallet', {'detail': "You don't own " + fromAddress + "; Cannot send transaciton."});
+			
+				window.dispatchEvent(event);
+				//swal("Error", "You don't own that address!", "error");
 			}
 		}
 		else {
-			swal("Error", 'Your sending or recipient address is invalid. Please check for any typos', "error");
+			var event = new CustomEvent('wallet', {'detail': 'Your sending or recipient address is invalid. Please check for any typos'});
+			
+			window.dispatchEvent(event);
+			//swal("Error", 'Your sending or recipient address is invalid. Please check for any typos', "error");
 		}
 	};
 	Wallet.prototype.pushTX = function (tx, callback) {

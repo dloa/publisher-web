@@ -54,7 +54,7 @@ LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, p
 	var signature = LibraryDJS.signArtifact(wallet, ipfs, address, time);
 
 	var data = {
-			"oip-041": {"artifact": alexandriaMedia, //test,
+			"oip-041": {"artifact": alexandriaMedia.artifact, //test,
 			signature: signature}
 	};
 

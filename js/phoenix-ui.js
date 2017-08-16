@@ -40,6 +40,8 @@ PhoenixEvents.on("onError", function(msg){ console.log(msg.message) });
 PhoenixEvents.on("onLogin", function(msg){ console.log("Logging in"); })
 PhoenixEvents.on("onLoginFail", function(msg){ console.log("Login Failed"); })
 PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success"); })
+PhoenixEvents.on("onPublishStart", function(msg){ console.log(msg); })
+PhoenixEvents.on("onPublishEnd", function(msg){ console.log(msg); })
 PhoenixEvents.on("onArtifactDeactivateSuccess", function(msg,txid){ 
 	console.log("Artifact Deactivation Success",msg); 
 	$('#' + txid).remove();
@@ -2886,6 +2888,8 @@ var PhoenixUI = (function(){
 					artifactJSONs[artifactNum].artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
 
 					artifactJSONs[artifactNum].artifact.storage.files = filesJSON;
+
+					Phoenix.addToPublishQueue(artifactJSONs[artifactNum]);
 
 					console.log(artifactJSONs);
 				})
