@@ -61,7 +61,9 @@ var Wallet = (function () {
 		this.known_unspent = this.known_unspent.filter(function(x) { return x !== null && x !== undefined });
 		// now actually store it
 		var spdata = {spent: this.known_spent, unspent: this.known_unspent};
-		localStorage.spentdata = JSON.stringify(spdata);
+
+		var spentkey = 'spentdata-'+this.identifier;
+		localStorage[spentkey] = JSON.stringify(spdata);
 	}
 	/**
 	 * setSharedKey()
