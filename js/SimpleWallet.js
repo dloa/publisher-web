@@ -423,7 +423,13 @@ var Wallet = (function () {
 							_this.putSpent(unspents[v]);
 						}
 					}
-					tx.addOutput(toAddress, amount);
+					if (amount === 1 && toAddress === fromAddress){
+						// If we are just sending 1 satoshi and its to ourselves, don't add the tx, else do.
+						//tx.addOutput(toAddress, amount);
+					} else {
+						tx.addOutput(toAddress, amount);
+					}
+					
 					// console.log(tx);
 					var estimatedFee = _this.coin_network.estimateFee(tx);
 
@@ -447,6 +453,10 @@ var Wallet = (function () {
 					console.log(totalUnspent, amount, estimatedFee);
 
 					var changeValue = parseInt((totalUnspent - amount - estimatedFee).toString());
+
+					if (amount === 1)
+						changeValue--;
+
 					// only give change if it's bigger than the minimum fee
 					if (changeValue > 0) {
 						tx.addOutput(fromAddress, changeValue);
@@ -478,8 +488,8 @@ var Wallet = (function () {
 					_this.pushTX(rawHex, function (data) {
 						console.log(data);
 						_this.putUnspent.bind(_this);
-						// If I'm paying myself it's known_unspent
-						if (toAddress == fromAddress) {
+						// If I'm paying myself it's known_unspent, don't add if amount is one because we removed it up above.
+						if (toAddress == fromAddress && amount != 1) {
 							_this.putUnspent({
 								address: toAddress,
 								txid: data.txid,
@@ -488,12 +498,17 @@ var Wallet = (function () {
 								amount: amount / Math.pow(10, 8)
 							});
 						}
+						var voutTmp = 1;
+						if (amount == 1){
+							// Since we did not add the first output, we just have the single vout, thus it should be zero
+							voutTmp = 0;
+						}
 						// Add the change as a known_unspent
 						if (changeValue >= minFeePerKb)
 							_this.putUnspent({
 								address: fromAddress,
 								txid: data.txid,
-								vout: 1,
+								vout: voutTmp,
 								confirmations: -1,
 								amount: changeValue / Math.pow(10, 8)
 							});
@@ -518,7 +533,7 @@ var Wallet = (function () {
 		}
 		var _this = this;
 		$.post(florinsightBaseURL + '/api/tx/send', {rawtx: tx}, function (data) {
-			console.log(data);
+			//console.log(data);
 			if (!data.txid) {
 				var event = new CustomEvent('wallet', {'detail': 'txpush-post'});
 				

@@ -11541,12 +11541,12 @@ CryptoJS.pad.Iso10126 = {
 			var bs58check = require("bs58check");
 
 			function decode() {
-				console.warn('bs58check will be removed in 2.0.0. require("bs58check") instead.');
+				//console.warn('bs58check will be removed in 2.0.0. require("bs58check") instead.');
 				return bs58check.decode.apply(undefined, arguments)
 			}
 
 			function encode() {
-				console.warn('bs58check will be removed in 2.0.0. require("bs58check") instead.');
+				//console.warn('bs58check will be removed in 2.0.0. require("bs58check") instead.');
 				return bs58check.encode.apply(undefined, arguments)
 			}
 
@@ -13212,21 +13212,21 @@ CryptoJS.pad.Iso10126 = {
 					this.fee = fee
 				};
 				Transaction.prototype.sign = function (index, privKey, hashType) {
-					console.warn("Transaction.prototype.sign is deprecated.  Use TransactionBuilder instead.");
+					//console.warn("Transaction.prototype.sign is deprecated.  Use TransactionBuilder instead.");
 					var prevOutScript = privKey.pub.getAddress().toOutputScript();
 					var signature = this.signInput(index, prevOutScript, privKey, hashType);
 					var scriptSig = scripts.pubKeyHashInput(signature, privKey.pub);
 					this.setInputScript(index, scriptSig)
 				};
 				Transaction.prototype.signInput = function (index, prevOutScript, privKey, hashType) {
-					console.warn("Transaction.prototype.signInput is deprecated.  Use TransactionBuilder instead.");
+					//console.warn("Transaction.prototype.signInput is deprecated.  Use TransactionBuilder instead.");
 					hashType = hashType || Transaction.SIGHASH_ALL;
 					var hash = this.hashForSignature(index, prevOutScript, hashType);
 					var signature = privKey.sign(hash);
 					return signature.toScriptSignature(hashType)
 				};
 				Transaction.prototype.validateInput = function (index, prevOutScript, pubKey, buffer) {
-					console.warn("Transaction.prototype.validateInput is deprecated.  Use TransactionBuilder instead.");
+					//console.warn("Transaction.prototype.validateInput is deprecated.  Use TransactionBuilder instead.");
 					var parsed = ECSignature.parseScriptSignature(buffer);
 					var hash = this.hashForSignature(index, prevOutScript, parsed.hashType);
 					return pubKey.verify(hash, parsed.signature)
