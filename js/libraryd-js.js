@@ -160,7 +160,7 @@ LibraryDJS.Send = function (wallet, jsonData, address, amount, publishFee, callb
 		callback = publishFee;
 		//0.01251564 FLO/kB for "fast" (1 block) 8/8/2017
 		// 528 bytes per tx max, 0.00645337
-		publishFee = 0.01251564;
+		publishFee = 0.00645337;
 	}
 	LibraryDJS.sendToBlockChain(wallet, jsonData, address, amount, publishFee, function (err, txIDs) {
 		callback(err, txIDs);
@@ -169,8 +169,8 @@ LibraryDJS.Send = function (wallet, jsonData, address, amount, publishFee, callb
 
 // callback is (errorString, txIDs Array)
 LibraryDJS.sendToBlockChain = function (wallet, txComment, address, amount, publishFee, callback) {
-	console.log(publishFee);
 	// set tx fee
+	publishFee = publishFee * Math.pow(10,8);
 	// feature non existent in js currently
 
 	// get new address
@@ -191,7 +191,6 @@ LibraryDJS.sendToBlockChain = function (wallet, txComment, address, amount, publ
 
 // callback is (errorString, txIDs Array)
 LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee, callback) {
-	console.log(publishFee);
     var txIDs = [];
 
     var multiPartPrefix = "oip-mp(";
@@ -200,6 +199,8 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee,
 
     var part = 0;
     var max = chop.length - 1;
+
+    var perPubFee = publishFee / chop.length;
 
     // the first reference tx id is always 64 zeros
     var reference = new Array(65).join("0");
@@ -212,11 +213,11 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee,
     var multiPart = multiPartPrefix + part.toString() + "," + max.toString() +
         "," + address + "," + reference + "," + signature + "):" + data;
 
-    wallet.sendCoins(address, address, amount, multiPart, publishFee, function (err, data) {
+    wallet.sendCoins(address, address, amount, multiPart, perPubFee, function (err, data) {
         txIDs[txIDs.length] = data.txid;
         reference = data.txid;
 
-        publishPart(chop, max, 0, reference, address, amount, multiPartPrefix, function(txids){
+        publishPart(wallet, perPubFee, chop, max, 0, reference, address, amount, multiPartPrefix, function(txids){
         	console.log("Completed publishing parts! Here ya go.")
         	callback(null, txids);
         })
@@ -225,7 +226,7 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee,
 
 var txIDs = [];
 // Callback contains txIDs
-function publishPart(chopPieces, numberOfPieces, lastPiecesCompleted, reference, address, amount, multiPartPrefix, callback){
+function publishPart(wallet, perPubFee, chopPieces, numberOfPieces, lastPiecesCompleted, reference, address, amount, multiPartPrefix, callback){
     var part = lastPiecesCompleted + 1;
 
     var data = chopPieces[part];
@@ -236,12 +237,11 @@ function publishPart(chopPieces, numberOfPieces, lastPiecesCompleted, reference,
     var multiPart = multiPartPrefix + part.toString() + "," + numberOfPieces.toString() +
         "," + address + "," + reference + "," + signature + "," + "):" + data;
 
-    // 645337 satoshi = 0.00645337
-    wallet.sendCoins(address, address, amount, multiPart, 645337, function (err, data) {
+    wallet.sendCoins(address, address, amount, multiPart, perPubFee, function (err, data) {
     	txIDs[txIDs.length] = data.txid;
 
     	if (part < numberOfPieces){
-        	publishPart(chopPieces, numberOfPieces, part, reference, address, amount, multiPartPrefix, callback);
+        	publishPart(wallet, perPubFee, chopPieces, numberOfPieces, part, reference, address, amount, multiPartPrefix, callback);
     	} else {
     		callback(txIDs);
     	}

@@ -26,7 +26,9 @@ table {
 }
 tr, td {
     background: none;
-    
+}
+th {
+	padding-bottom:5px !important;
 }
 
 .progress-so {

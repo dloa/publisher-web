@@ -33,6 +33,10 @@ var PhoenixStatus = {
 
 var Phoenix = (function() {	
 	var PhoenixAPI = {};
+
+	PhoenixAPI.tusIPFSEndpoint = "http://localhost:11945";
+	PhoenixAPI.tusFiles = [];
+
 	// Load info from LibraryD
 	PhoenixAPI.searchAPI = function(module, searchOn, searchFor) {
 		if ( (searchOn == 'type') && (searchFor.length > 1) ) {
@@ -157,6 +161,38 @@ var Phoenix = (function() {
 		window.location.href = 'login.html';
 	}
 
+	PhoenixAPI.addAndPublish = function(artifactJSON, callback){
+		var idsToAdd = [];
+
+		var files = artifactJSON.artifact.storage.files;
+
+		for (var i = 0; i < files.length; i++) {
+			for (var j = 0; j < PhoenixAPI.tusFiles.length; j++) {
+				if (PhoenixAPI.tusFiles[j].name == files[i].fname){
+					idsToAdd.push(PhoenixAPI.tusFiles[j].id);
+				}
+			}
+		}
+
+		PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
+			artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
+
+			// Publish the artifact JSON into the blockchain.
+			PhoenixAPI.publishArtifact(artifactJSON);
+		});
+	}
+
+	PhoenixAPI.addFilesToIPFS = function(idsToAdd, callback){
+		$.ajax(PhoenixAPI.tusIPFSEndpoint + "/addToIPFS", {
+		    "contentType" : 'application/json',
+		    "type" : 'POST',
+			"data": JSON.stringify({"fileids": idsToAdd}), 
+			"success": function( data ) {
+				callback(data);
+			}
+		});
+	}
+
 	PhoenixAPI.getPublishersFromLibraryD = function(){
 		var wallet = this.wallet;
 
@@ -205,10 +241,37 @@ var Phoenix = (function() {
 		return this.wallet;
 	}
 
+	PhoenixAPI.publishArtifact = function(artifactJSON, callback){
+		PhoenixAPI.calculatePublishFee(artifactJSON, function(usd, pubFee){
+			try {
+				swal({   
+					animation: true,
+					title: "Are you sure?",   
+					text: "This will publish this artifact into the OIP index! The publish fee is " + parseFloat(pubFee.toFixed(8)) + " FLO",   
+					type: "warning",
+					showCancelButton: true,   
+					confirmButtonColor: "#f44336",
+					confirmButtonText: "Yes, publish it!",   
+					closeOnConfirm: false 
+				}, function(){   
+					LibraryDJS.publishArtifact(PhoenixAPI.wallet, artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, artifactJSON, pubFee, function(err, data){
+						if (err){
+							console.log("Error: " + data);
+							return;
+						}
 
-	// Be sure to fill artifact.files with an array of input selectors.
-	PhoenixAPI.publishArtifact = function(artifact){
-		PhoenixEvents.trigger("testEvent", "test");
+						console.log(data);
+					});
+				});
+			} catch (e) {
+				console.log(e);
+				// Most likely an issue with Sweet alert, abort for now.
+			}
+
+			
+			PhoenixEvents.trigger("testEvent", "test");
+		})
+			
 	}
 
 	PhoenixAPI.getMarketData = function(callback){
@@ -262,13 +325,31 @@ var Phoenix = (function() {
 		}
 	}	
 
-	PhoenixAPI.calculatePublishFee = function(artSize, minPlayArray, minBuyArray, sugPlayArray, sugBuyArray, callback){
+	PhoenixAPI.calculatePublishFee = function(artJSON, callback){
 		PhoenixAPI.updateMarketData(function(marketData){
 			PhoenixAPI.updateLibrarydInfoData(function(libraryDData){
 				var USDperFLO = marketData.USD;
 				var floPerKb = 0.01; // new endpoint, using 0.1 as default for now, ToDo: Update this when changes are made!
-				var pubFeeFreeFlo = (artSize / 1024) * floPerKb;
+				var pubFeeFreeFlo = (JSON.stringify(artJSON).length / 1024) * floPerKb;
 				var pubFeeFreeUSD = pubFeeFreeFlo * USDperFLO;
+
+				var minPlayArray = [], minBuyArray = [], sugPlayArray = [], sugBuyArray = [];
+
+				if (artJSON.artifact && artJSON.artifact.storage && artJSON.artifact.storage.files){
+					var files = artJSON.artifact.storage.files;
+
+					for (var i = 0; i < files.length; i++) {
+						if (files[i].sugBuy){
+							// disPer stands for discount percentage
+							minBuyArray.push(files[i].sugBuy * artJSON.artifact.payment.disPer)
+							sugBuyArray.push(files[i].sugBuy)
+						}
+						if (files[i].sugPlay){
+							minPlayArray.push(files[i].sugPlay * artJSON.artifact.payment.disPer)
+							sugPlayArray.push(files[i].sugPlay)
+						}
+					}
+				}				
 
 				var totMinPlay = 0;
 				for (var i = 0; i < minPlayArray.length; i++) {
@@ -355,35 +436,39 @@ var Phoenix = (function() {
 		}
 	}
 
-	PhoenixAPI.uploadFileToTus = function(file, onSuccess, onError, onProgress){
+	PhoenixAPI.uploadFileToTus = function(file, onSuccess, onError, onProgress, newName){
 		if (!onSuccess)
 			onSuccess = function(){};
 		if (!onError)
 			onError = function(){};
 		if (!onProgress)
 			onProgress = function(){};
-		
+
+		PhoenixAPI.tusFiles.push({"name": newName ? newName : file.name});
+
 		// Create a new tus upload
 	    var upload = new tus.Upload(file, {
 	    	metadata: {
-	    		"name": file.name
+	    		"name": newName ? newName : file.name
 	    	},
 	        endpoint: "http://localhost:11945/files/",
 	        retryDelays: [0, 1000, 3000, 5000],
 	        onError: function(error) {
-	            console.log("Failed because: " + error)
 	            onError(error);
 	        },
 	        onProgress: function(bytesUploaded, bytesTotal) {
 	            var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
-	            console.log(bytesUploaded, bytesTotal, percentage + "%")
 	            onProgress(percentage, bytesUploaded, bytesTotal);
 	        },
 	        onSuccess: function() {
-	        	var id = upload.url.replace('http://localhost:11945/files/', '');
-	        	console.log(id);
+	        	var id = upload.url.replace(PhoenixAPI.tusIPFSEndpoint + '/files/', '');
 	        	onSuccess(id);
-	            //console.log("Download %s from %s", upload.file.name, upload.url)
+
+	        	for (var i = 0; i < PhoenixAPI.tusFiles.length; i++) {
+	        		if (PhoenixAPI.tusFiles[i].name == file.name){
+	        			PhoenixAPI.tusFiles[i].id = id;
+	        		}
+	        	}
 	        }
 	    })
 

@@ -223,6 +223,7 @@
 						<li class="nav-item"><a href="#" class="nav-link" id="publisherNav" style="color: black" onclick="showWizardPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/publish.svg"">Publisher</a></li>
 						<li class="nav-item"><a href="#" class="nav-link" id="artifactsNav" style="color: black" onclick="showArtifactPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/menu.svg">My Artifacts</a></li>
 						<li class="nav-item"><a href="#" class="nav-link" id="walletNav" style="color: black" onclick="showWalletPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/wallet.svg">Wallet</a></li>
+						<li class="nav-item"><a href="#" class="nav-link" id="toolsNav" style="color: black" onclick="showToolsPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/scissors.svg">Tools</a></li>
 					</ul>
 				</nav>
 
@@ -529,7 +530,7 @@
 																<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -25" title="What is the Max Discount?" data-content="The Max Discount percentage is the maximum amount you would ever like your content to be discounted. This includes for example sales and promotions.">Max Discount <span class="icon icon-help-with-circle"></span></label>
 																<div class="col-6">
 																	<div class="input-group">
-																		<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="30">
+																		<input id="discountPercentage" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="30">
 																		<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
 																	</div>
 																</div>
@@ -946,6 +947,84 @@
 							</div>
 						</div>
 					</section>
+
+					<section id="tools" class="container">
+						<div class="row" style="padding: 20px 0px;">
+							<div class="col-12">
+								<h3 class="pull-left" style="">Publisher Tools</h3>
+								<hr />
+							</div>
+						</div>
+						
+						<div class="col-sm-12 bg-white">
+							<h4>Bulk Uploader</h4>
+							<p>Instructions:</p>
+							<ol>
+								<li>Prepare a csv document with a column for each variable kind you would like stored (i.e, Artist, Title, Description, filename). Please include an artifact id column or the row numbers will be used as the id</li>
+								<li>Inside your csv document, for the "files" column (where you set your file names and such) should use the following format if individual pricing info is desired. To see how to format each file in the array, take a look <a href="https://github.com/oipwg/media-protocol">here</a> at <code>artifact.storage.files</code> it contains all the currently allowed variables for the file information including pricing. If you do not care about per file payment info, please just include an array containing strings with the filenames, you also may define columns for the price. Please note that this price will be applied to all files, i.e. if you have a 1¢ play fee, it would apply to all files without requiring you to set that for each individual file.</li>
+								<li>Place all files into the same folder and name all of your files according to the following format: <code>{artifact-id}.{filename}.{extension}</code> aka <code>9c7Ajc.album_artwork.jpg</code></li>
+								<li>Click or Drag and drop the folder containing all of your files to bulk upload onto the dropzone below.</li>
+								<li>Select your <code>.csv</code> file</li>
+								<li>Assign JSON locations for each column. After you select your <code>.csv</code> file, you should see input boxes show up below the uploader. Each of these input values are linked to one of your Columns in your csv. Input where in the artifact you would like that data variable to be stored. For example, if I had a column named "Artist Name" I would want to link that to <code>artifact.info.extraInfo.artist</code> as that is how you would reference that variable in the JSON object. Curious what variables are commonly supported? You can check out the official OIP Media Protocol standard <a href="https://github.com/oipwg/media-protocol">here.</a></li>
+							</ol>
+							<h5 class="text-center">Bulk File Publish Uploader</h5>
+							<div class="publish publish-section">
+								<div class="publish-files audio-tracks">
+									<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
+									<div id="bulk" class="upload-area" style="padding-bottom: 15px; height: 250px;display: flex; justify-content: center; align-items: center;">
+										<h3 style="color: #ccc">Please Click or Drag &amp; Drop to Upload...</h3>
+									</div>
+									<center>
+										<code id="bulkProgressBarInfo"></code>
+									</center>
+									<div class="progress">
+										<div id="bulkProgressBar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuemin="0" aria-valuemax="100"></div>
+									</div>
+								</div>
+							</div>
+							<br />
+							<h5 class="text-center">CSV info</h5>
+							<div class="row">
+								<div class="col-6">
+									<div class="form-group row">
+										<label class="col-sm-4 col-form-label">Select CSV File</label>
+										<div class="col-sm-8">
+											<input class="form-control" type="file" onchange="PhoenixUI.bulkUploadCSVSelect(this)">
+										</div>
+									</div>
+									<div class="form-group row" id="selIdCol" style="display: none;">
+										<label for="staticEmail" class="col-sm-4 col-form-label">Select ID Col</label>
+										<div class="col-sm-8">
+											<select style="width: 100%" id="colIdSelector" onchange="PhoenixUI.updateBulkSelects()">
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+									<div class="form-group row" id="selFilesCol" style="display: none;">
+										<label for="staticEmail" class="col-sm-4 col-form-label">Select Files Col</label>
+										<div class="col-sm-8">
+											<select style="width: 100%" id="colFilesSelector" onchange="PhoenixUI.updateBulkSelects()">
+												<option value=""></option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-6" id="bulkColDetails" style="display: none;">
+									<div class="form-group row">
+										<label for="staticEmail" class="col-sm-2 col-form-label">Title</label>
+										<div class="col-sm-10">
+											<input type="text" class="form-control" placeholder="artifact.info.title">
+										</div>
+									</div>
+								</div>
+							</div>
+							<br />
+							<center><button class="btn btn-outline-success" onclick="PhoenixUI.bulkPublish()">Bulk Publish</button></center>
+							<br />
+							<br />
+							<br />
+						</div>
+					</section>
 				</main>
 			</div>
 		</div>
@@ -960,6 +1039,7 @@
 		<script src="./js/wallet-address-validator.min.js"></script>
 		<script src="./js/bootstrap-tagsinput.js"></script>
 		<script src="./js/tus.min.js"></script>
+		<script src="./js/papaparse.min.js"></script>
 		<!-- Bootstrap Tour JS -->
 		<script src="./js/bootstrap-tour.js"></script>
 		<!-- Load Dependencies JS -->
@@ -1153,28 +1233,36 @@
 			// $('#WalletPage').hide();
 
 			var showWizardPage = function(){
+				hideAll();
 				$('#wizard').show();
-				$('#artifacts').hide();
-				$('#editArtifact').hide();
-				$('#WalletPage').hide();
 			}
 
 			var showArtifactPage = function(){
-				$('#wizard').hide();
+				hideAll();
 				$('#artifacts').show();
-				$('#editArtifact').hide();
-				$('#WalletPage').hide();
 			}
 
 			var showWalletPage = function(){
-				$('#wizard').hide();
-				$('#artifacts').hide();
-				$('#editArtifact').hide();
+				hideAll();
 				$('#WalletPage').show();
 			}
 
+			var showToolsPage = function(){
+				hideAll();
+				$('#tools').show();
+			}
+
+			var hideAll = function(){
+				$('#wizard').hide();
+				$('#artifacts').hide();
+				$('#editArtifact').hide();
+				$('#WalletPage').hide();
+				$('#tools').hide();
+			}
+
 			// By default show
-			showWizardPage();
+			//showWizardPage();
+			showToolsPage();
 
 
 			// $('#paymentInfo').hide();

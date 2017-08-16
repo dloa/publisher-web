@@ -26,6 +26,14 @@ var publishSubmitSectionElement = document.getElementById('publishSubmitSection'
 var paymentAddressesElement = document.getElementById('paymentAddresses');
 var pricingElement = document.getElementById('pricing');
 var subGenreSelectorElement = document.getElementById('subGenreSelector');
+var discountPercentageElement = document.getElementById('discountPercentage');
+var colIdSelectorElement = document.getElementById('colIdSelector');
+var colFilesSelectorElement = document.getElementById('colFilesSelector');
+var bulkColDetailsElement = document.getElementById('bulkColDetails');
+var selIdColElement = document.getElementById('selIdCol');
+var selFilesColElement = document.getElementById('selFilesCol');
+var bulkProgressBarElement = document.getElementById('bulkProgressBar');
+var bulkProgressBarInfoElement = document.getElementById('bulkProgressBarInfo');
 
 // Accepts a set of Selectors to load the artifact into view. Generates code for all of the different sections to fill it.
 PhoenixEvents.on("onError", function(msg){ console.log(msg.message) });
@@ -51,6 +59,7 @@ PhoenixEvents.on("onPublisherLoadSuccess", function(publishers){
 	if (publishers[0]){
 		pubNameElement.innerHTML = publishers[0].name;
 		currentPublisherAddressElement.value = publishers[0].address;
+		Phoenix.currentPublisher = publishers[0];
 	}
 
 	// Loop through publishers to add each one to the select list
@@ -1397,6 +1406,7 @@ var PhoenixUI = (function(){
 			if (Phoenix.publishers[i].address == elem.value){
 				pubNameElement.innerHTML = Phoenix.publishers[i].name;
 				currentPublisherAddressElement.value = Phoenix.publishers[i].address;
+				Phoenix.currentPublisher = Phoenix.publishers[i];
 			}
 		}
 		
@@ -1707,6 +1717,10 @@ var PhoenixUI = (function(){
 	PhoenixUX.publish = function(){
 		var json = PhoenixUX.generateArtifactJSONFromView();
 		document.getElementById('artJSON').innerHTML = JSON.stringify(json, null, 4);
+
+		Phoenix.addAndPublish(json, function(data){
+			document.getElementById('artJSON').innerHTML = JSON.stringify(data, null, 4);
+		});
 	}
 
 	PhoenixUX.generateArtifactJSONFromView = function(){
@@ -1714,6 +1728,8 @@ var PhoenixUI = (function(){
 		var type = PhoenixUX.type;
 		var subtype = PhoenixUX.subtype;
 		var paid = $('[name="free"]')[1].checked;
+
+		var discountPercentage = discountPercentageElement.value;
 
 		var scale = 1000;
 
@@ -1730,6 +1746,7 @@ var PhoenixUI = (function(){
 				"payment": {
 					"fiat": "USD",
 					"scale": scale + ":1",
+					"disPer": discountPercentage,
 					"sugTip": [ ],
 					"tokens": { }
 				}
@@ -2351,32 +2368,9 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.updatePubFee = function(){
-		var artSize = 528;
-		var minPlayArray = [];
-		var minBuyArray = [];
-		var sugPlayArray = [];
-		var sugBuyArray = [];
+		var pubJSON = PhoenixUX.generateArtifactJSONFromView();
 
-		if (PhoenixUX.mediaPricing){
-			for (var media in PhoenixUX.mediaPricing){
-				if (PhoenixUX.mediaPricing[media].minPlay){
-					minPlayArray.push(parseFloat(PhoenixUX.mediaPricing[media].minPlay));
-				}
-				if (PhoenixUX.mediaPricing[media].minBuy){
-					minBuyArray.push(parseFloat(PhoenixUX.mediaPricing[media].minBuy));
-				}
-				if (PhoenixUX.mediaPricing[media].sugPlay){
-					sugPlayArray.push(parseFloat(PhoenixUX.mediaPricing[media].sugPlay));
-				}
-				if (PhoenixUX.mediaPricing[media].sugBuy){
-					sugBuyArray.push(parseFloat(PhoenixUX.mediaPricing[media].sugBuy));
-				}
-			}
-		}
-
-		var pubJSON = JSON.stringify(PhoenixUX.generateArtifactJSONFromView());
-
-		Phoenix.calculatePublishFee(pubJSON.length, minPlayArray, minBuyArray, sugPlayArray, sugBuyArray, function(usd, flo){
+		Phoenix.calculatePublishFee(pubJSON, function(usd, flo){
 			var usdDisplay = "";
 
 			if (usd < 0.01){
@@ -2655,6 +2649,253 @@ var PhoenixUI = (function(){
 		PhoenixUX.mediaPricing[id].displayName = elem.value;
 	}
 
+	PhoenixUX.bulkUploadCSVSelect = function(elem){
+		// Check for the various File API support.
+		if (window.File && window.FileReader && window.FileList && window.Blob) {
+			//do your stuff!
+			var reader = new FileReader();
+
+			reader.onload = function(event){
+				PhoenixUX.bulkCSVJSON = csv2JSON(event.target.result);
+
+				colIdSelectorElement.innerHTML = "";
+				colFilesSelectorElement.innerHTML = "";
+
+				for (var col in PhoenixUX.bulkCSVJSON[0]){
+					var x = document.createElement('option');
+					var y = document.createElement('option');
+					x.value = PhoenixUX.bulkCSVJSON[0][col];
+					y.value = PhoenixUX.bulkCSVJSON[0][col];
+					x.innerHTML = PhoenixUX.bulkCSVJSON[0][col];
+					y.innerHTML = PhoenixUX.bulkCSVJSON[0][col];
+					colIdSelectorElement.appendChild(x);
+					colFilesSelectorElement.appendChild(y);
+				}
+
+				PhoenixUX.updateBulkSelects();
+			}
+
+		  reader.readAsText(elem.files[0]);
+		} else {
+		  alert('The File APIs are not fully supported by your browser.');
+		}
+	}
+
+	PhoenixUX.updateBulkSelects = function(){
+		var idSel = colIdSelectorElement.value;
+		var filesSel = colFilesSelectorElement.value;
+
+		bulkColDetails.innerHTML = '';
+		bulkColDetails.style.display = 'block';
+
+		selIdColElement.style.display = "flex";
+		selFilesColElement.style.display = "flex";
+
+		for (var col in PhoenixUX.bulkCSVJSON[0]){
+			if (idSel == PhoenixUX.bulkCSVJSON[0][col] || filesSel == PhoenixUX.bulkCSVJSON[0][col])
+				continue;
+
+			bulkColDetails.innerHTML += '<div class="form-group row">\
+										<label for="staticEmail" class="col-sm-4 col-form-label">' + PhoenixUX.bulkCSVJSON[0][col] + '</label>\
+										<div class="col-sm-8">\
+											<input type="text" class="form-control" placeholder="artifact." id="BulkCol' + PhoenixUX.bulkCSVJSON[0][col] + '">\
+										</div>\
+									</div>';
+		}
+	}
+
+	PhoenixUX.handleBulkUpload = function (file){
+		if (!PhoenixUX.bulkFiles)
+			PhoenixUX.bulkFiles = [];
+
+		if (!PhoenixUX.bulkFilesComplete)
+			PhoenixUX.bulkFilesComplete = [];
+
+		PhoenixUX.bulkFiles.push(file);
+
+		var updateProg = function(){
+			var amountOfFilesComplete = PhoenixUX.bulkFilesComplete.length;
+			var bulkfilesLength = PhoenixUX.bulkFiles.length;
+			var amountOfFiles = bulkfilesLength + amountOfFilesComplete;
+
+			var percentDoneOverall = (amountOfFilesComplete/amountOfFiles * 100);
+
+			bulkProgressBarElement.innerHTML = "Uploading... (" + amountOfFilesComplete + "/" + amountOfFiles + " done!)";
+			bulkProgressBarElement.style.width = percentDoneOverall + "%";
+
+			if (percentDoneOverall == 100){
+				bulkProgressBarElement.innerHTML = "Upload Complete! (Uploaded " + amountOfFilesComplete + " Files)";
+			}
+		}
+
+		var prepend = file.name.split('.')[0];
+		var newName = file.name.replace(prepend + '.', '');
+
+		Phoenix.uploadFileToTus(file, function(success){ 
+			var id = success;
+
+			var bulk = PhoenixUX.bulkFiles;
+
+			bulkProgressBarInfoElement.innerHTML = "Upload of \"" + file.name + "\" Complete";
+
+			for (var i = 0; i < bulk.length; i++) {
+				if (bulk[i] == file)
+					PhoenixUX.bulkFiles.splice(i, 1);
+			}
+
+			PhoenixUX.bulkFilesComplete.push({file: file, id: id});
+
+			updateProg();
+		}, function(error){ console.log(error) }, function(percent){
+			updateProg();
+		}, newName);
+	}
+
+	PhoenixUX.bulkPublish = function(){
+		var inputs = [];
+		var artifactJSONs = [];
+
+		var idSel = colIdSelectorElement.value;
+		var filesSel = colFilesSelectorElement.value;
+
+		for (var artifact = 1; artifact < PhoenixUX.bulkCSVJSON.length; artifact++){
+			var artCSVRow = PhoenixUX.bulkCSVJSON[artifact];
+			var artifactJSON = {};
+
+			var idColVal, fileColVal;
+
+			for (var col = 0; col < artCSVRow.length; col++){
+				if (idSel == PhoenixUX.bulkCSVJSON[0][col]){
+					console.log("OMFG")
+					idColVal = artCSVRow[col];
+					continue;
+				}
+
+				if (filesSel == PhoenixUX.bulkCSVJSON[0][col]){
+					fileColVal = artCSVRow[col];
+					continue;
+				}
+
+				//console.log(col);
+				try {
+					var columnInput = document.getElementById('BulkCol' + PhoenixUX.bulkCSVJSON[0][col]).value;
+				} catch (e){
+					// error for some reason, just skip this node.
+					continue;
+				}
+
+				var path = columnInput.split('.');
+
+				if (path.length == 1){
+					artifactJSON[path[0]] = artCSVRow[col];
+				} else if (path.length == 2) {
+					if (!artifactJSON[path[0]]){
+						artifactJSON[path[0]] = {}
+					}
+
+					artifactJSON[path[0]][path[1]] = artCSVRow[col];
+				} else if (path.length == 3) {
+					if (!artifactJSON[path[0]]){
+						artifactJSON[path[0]] = {}
+					}
+					if (!artifactJSON[path[0]][path[1]]){
+						artifactJSON[path[0]][path[1]] = {}
+					}
+
+					artifactJSON[path[0]][path[1]][path[2]] = artCSVRow[col];
+				} else if (path.length == 4) {
+					if (!artifactJSON[path[0]]){
+						artifactJSON[path[0]] = {}
+					}
+					if (!artifactJSON[path[0]][path[1]]){
+						artifactJSON[path[0]][path[1]] = {}
+					}
+					if (!artifactJSON[path[0]][path[1]][path[2]]){
+						artifactJSON[path[0]][path[1]][path[2]] = {}
+					}
+
+					artifactJSON[path[0]][path[1]][path[2]][path[3]] = artCSVRow[col];
+				} else if (path.length > 4) {
+					// Don't allow more than 4.
+				}
+			}
+
+			var fileSearch = [];
+			var filesJSON = [];
+
+			var splitFiles = fileColVal.split(';');
+
+			if (splitFiles.length > 0){
+				fileColVal = splitFiles;
+			}
+
+
+			if (typeof fileColVal == "string"){
+				fileSearch.push(fileColVal)
+				filesJSON.push({fname: fileColVal});
+			}
+
+			if (Array.isArray(fileColVal)){
+				for (var i in fileColVal){
+					try {
+						fileColVal[i] = JSON.parse("["+fileColVal[i].replace(/^\n+|\n+$/g, "").replace(/\n+/g, ",")+"]")[0];
+					} catch (e) { }
+
+					if (typeof fileColVal[i] == "string"){
+						fileSearch.push(fileColVal[i]);
+						filesJSON.push({fname: fileColVal[i]});
+					} else if (typeof fileColVal[i] == "object"){
+						fileSearch.push(fileColVal[i].fname);
+						filesJSON.push(fileColVal[i]);
+					}
+				}
+			} else if (typeof fileColVal == "object"){
+				fileSearch.push(fileColVal.fname);
+				filesJSON.push(fileColVal);
+			}
+
+			if (fileSearch.length == 0)
+				continue;
+
+			var ids = [];
+
+			console.log(idColVal);
+			for (var i in fileSearch){
+				// console.log(fileSearch[i])
+				for (var x in PhoenixUX.bulkFilesComplete){
+					// console.log(PhoenixUX.bulkFilesComplete[x])
+					if (fileSearch[i] == PhoenixUX.bulkFilesComplete[x].file.name.replace(idColVal + '.', '')){
+						ids.push(PhoenixUX.bulkFilesComplete[x].id);
+					}
+				}
+			}
+
+
+			artifactJSONs[artifact - 1] = artifactJSON;
+
+			var addWrapper = function(ids, artifactNum, filesJSON){
+				Phoenix.addFilesToIPFS(ids, function(ipfsData){
+					console.log(ipfsData);
+
+					if (!artifactJSONs[artifactNum].artifact)
+						artifactJSONs[artifactNum].artifact = {};
+					if (!artifactJSONs[artifactNum].artifact.storage)
+						artifactJSONs[artifactNum].artifact.storage = {};
+					if (!artifactJSONs[artifactNum].artifact.storage.files)
+						artifactJSONs[artifactNum].artifact.storage.files = [];
+
+					artifactJSONs[artifactNum].artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
+
+					artifactJSONs[artifactNum].artifact.storage.files = filesJSON;
+
+					console.log(artifactJSONs);
+				})
+			}
+
+			addWrapper(ids, artifact - 1, filesJSON);
+		}
+	}
+
 	return PhoenixUX;
 })();
 
@@ -2681,6 +2922,20 @@ var mediaDropzone = new Dropzone("div#mediaDrop", {
 
 mediaDropzone.on("addedfile", PhoenixUI.mediaFileSelectHandler);
 
+var bulkDropzone = new Dropzone("div#bulk", { 
+	url: '/url',
+	createImageThumbnails: false,
+	previewTemplate: '<div></div>'
+});
+
+bulkDropzone.on("addedfile", PhoenixUI.handleBulkUpload);
+
 // window.onbeforeunload = function() {
 //   return "Are you sure you want to navigate away?";
 // }
+
+function csv2JSON(csv){
+	var data = Papa.parse(csv);
+
+	return data.data;
+}

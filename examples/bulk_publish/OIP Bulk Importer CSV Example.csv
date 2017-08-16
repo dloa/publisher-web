@@ -1,0 +1,6 @@
+ID,Type,Title,Description,Artist,Year,Files
+a123,Video-Basic,Superhero Dog,Cute Superhero Dog is cute!,Skylar Ostler,2017,dog.mp4
+b234,Audio-Basic,Beach Ambiance Audio,Awesome Sounds!,Skylar Ostler,2017,SoundHelix-Song-1.mp3
+c345,Audio-Album,Sample Audio Album,Just a basic album with some files!,Skylar Ostler,2017,"SoundHelix-Song-1.mp3;{ ""fname"": ""SoundHelix-Song-2.mp3"", ""sugPlay"": ""0.001""}"
+d456,Image-Basic,My Great Image!,Super cool image thingy,Skylar Ostler,2017,image.png
+e567,Video-Basic,My Basic Video,A video that is not Basic,Skylar Ostler,2017,basic.mp4

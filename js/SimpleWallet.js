@@ -412,15 +412,12 @@ var Wallet = (function () {
 					// IMPORTANT! We're dealing with Satoshis now
 					var totalUnspent = parseInt((data.total * Math.pow(10, 8)).toString());
 					amount = parseInt((amount * Math.pow(10, 8)).toString());
-					if (amount < minFeePerKb) {
-						swal("Warning", "You must send at least 0.001 FLO (otherwise your transaction may get rejected)", "warning");
-						return;
-					}
 
 					// console.log('Sending ' + amount + ' satoshis from ' + fromAddress + ' to ' + toAddress + ' unspent amt: ' + totalUnspent);
 					var unspents = data.unspent;
 					_this.putSpent.bind(_this);
 					for (var v in unspents) {
+						console.log(unspents[v]);
 						if (unspents[v].confirmations || unspents[v].confirmations >= 0 || unspents[v].confirmations <= -1) {
 							tx.addInput(unspents[v].txid, unspents[v].vout);
 							_this.putSpent(unspents[v]);
@@ -429,10 +426,9 @@ var Wallet = (function () {
 					tx.addOutput(toAddress, amount);
 					// console.log(tx);
 					var estimatedFee = _this.coin_network.estimateFee(tx);
+
 					// console.log(estimatedFee);
-					if (pubFee > estimatedFee){
-						estimatedFee = pubFee;
-					}
+					estimatedFee = parseInt(pubFee);
 					// console.log(pubFee);
 					// console.log(estimatedFee);
 
@@ -448,9 +444,11 @@ var Wallet = (function () {
 						return;
 					}
 
+					console.log(totalUnspent, amount, estimatedFee);
+
 					var changeValue = parseInt((totalUnspent - amount - estimatedFee).toString());
 					// only give change if it's bigger than the minimum fee
-					if (changeValue >= minFeePerKb) {
+					if (changeValue > 0) {
 						tx.addOutput(fromAddress, changeValue);
 					}
 					tx.ins.forEach(function (input, index) {
@@ -478,7 +476,7 @@ var Wallet = (function () {
 					// console.log(rawHex);
 
 					_this.pushTX(rawHex, function (data) {
-						// console.log(data);
+						console.log(data);
 						_this.putUnspent.bind(_this);
 						// If I'm paying myself it's known_unspent
 						if (toAddress == fromAddress) {
@@ -519,8 +517,8 @@ var Wallet = (function () {
 			};
 		}
 		var _this = this;
-		$.post(flovaultBaseURL + '/wallet/pushtx', {hex: tx}, function (data) {
-			// console.log(data);
+		$.post(florinsightBaseURL + '/api/tx/send', {rawtx: tx}, function (data) {
+			console.log(data);
 			if (!data.txid) {
 				var event = new CustomEvent('wallet', {'detail': 'txpush-post'});
 				
