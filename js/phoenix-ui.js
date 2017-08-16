@@ -2766,7 +2766,6 @@ var PhoenixUI = (function(){
 
 			for (var col = 0; col < artCSVRow.length; col++){
 				if (idSel == PhoenixUX.bulkCSVJSON[0][col]){
-					console.log("OMFG")
 					idColVal = artCSVRow[col];
 					continue;
 				}
@@ -2859,7 +2858,7 @@ var PhoenixUI = (function(){
 
 			var ids = [];
 
-			console.log(idColVal);
+			//console.log(idColVal);
 			for (var i in fileSearch){
 				// console.log(fileSearch[i])
 				for (var x in PhoenixUX.bulkFilesComplete){
@@ -2875,7 +2874,7 @@ var PhoenixUI = (function(){
 
 			var addWrapper = function(ids, artifactNum, filesJSON){
 				Phoenix.addFilesToIPFS(ids, function(ipfsData){
-					console.log(ipfsData);
+					//console.log(ipfsData);
 
 					if (!artifactJSONs[artifactNum].artifact)
 						artifactJSONs[artifactNum].artifact = {};
