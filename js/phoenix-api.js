@@ -182,7 +182,7 @@ var Phoenix = (function() {
 			artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
 
 			// Publish the artifact JSON into the blockchain.
-			PhoenixAPI.publishArtifact(artifactJSON);
+			PhoenixAPI.addToPublishQueue(artifactJSON);
 		});
 	}
 
@@ -246,31 +246,13 @@ var Phoenix = (function() {
 	}
 
 	PhoenixAPI.publishArtifact = function(artifactJSON, callback){
-		PhoenixAPI.calculatePublishFee(artifactJSON, function(usd, pubFee){
-			/*try {
-				swal({   
-					animation: true,
-					title: "Are you sure?",   
-					text: "This will publish this artifact into the OIP index! The publish fee is " + parseFloat(pubFee.toFixed(8)) + " FLO",   
-					type: "warning",
-					showCancelButton: true,   
-					confirmButtonColor: "#f44336",
-					confirmButtonText: "Yes, publish it!",   
-					closeOnConfirm: true 
-				}, function(){   
-					LibraryDJS.publishArtifact(PhoenixAPI.wallet, artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, artifactJSON, pubFee, function(err, data){
-						if (err){
-							console.log("Error: " + data);
-							return;
-						}
+		if (!artifactJSON.artifact.info.year)
+			artifactJSON.artifact.info.year = parseInt(new Date().getYear());
 
-						console.log(data);
-					});
-				});
-			} catch (e) {
-				console.log(e);
-				// Most likely an issue with Sweet alert, abort for now.
-			}*/
+		if (typeof artifactJSON.artifact.info.year == "string")
+			artifactJSON.artifact.info.year = parseInt(artifactJSON.artifact.info.year);
+
+		PhoenixAPI.calculatePublishFee(artifactJSON, function(usd, pubFee){
 			PhoenixEvents.trigger("onPublishStart", "Starting publish attempt");
 			LibraryDJS.publishArtifact(PhoenixAPI.wallet, artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, artifactJSON, pubFee, function(err, data){
 				if (err){
@@ -280,8 +262,6 @@ var Phoenix = (function() {
 
 				PhoenixEvents.trigger("onPublishEnd", data);
 				callback(data);
-
-				console.log(data);
 			});
 		})
 			
@@ -293,20 +273,19 @@ var Phoenix = (function() {
 
 	PhoenixAPI.processPublishQueue = function(){
 		if (PhoenixAPI.publishQueue.length > 0){
-			console.log(PhoenixAPI.publishQueue.length + " to Publish!");
 			if (PhoenixAPI.publishState === "Ready"){
 				PhoenixAPI.publishState = "Publishing";
 
 				// Get the first element and remove it from the array
 				var pubJSON = PhoenixAPI.publishQueue.shift();
+				PhoenixAPI.currentArtifactPublish = pubJSON;
 
 				PhoenixAPI.publishArtifact(pubJSON, function(data){
 					PhoenixAPI.publishState = "Ready";
-					console.log("Publish Success!");
 				})
 			}
 		} else {
-			console.log("Nothing to Publish!");
+
 		}
 	}
 

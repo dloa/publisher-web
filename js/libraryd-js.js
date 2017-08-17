@@ -155,7 +155,7 @@ function unixTime() {
 
 // callback is (errorString, txIDs Array)
 LibraryDJS.Send = function (wallet, jsonData, address, amount, publishFee, callback) {
-	console.log(publishFee);
+	//console.log(publishFee);
 	if (typeof publishFee == 'function'){
 		callback = publishFee;
 		//0.01251564 FLO/kB for "fast" (1 block) 8/8/2017
@@ -218,7 +218,7 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee,
         reference = data.txid;
 
         publishPart(wallet, perPubFee, chop, max, 0, reference, address, amount, multiPartPrefix, function(txids){
-        	console.log("Completed publishing parts! Here ya go.")
+        	//console.log("Completed publishing parts! Here ya go.")
         	callback(null, txids);
         })
     });

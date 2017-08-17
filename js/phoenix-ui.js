@@ -34,14 +34,23 @@ var selIdColElement = document.getElementById('selIdCol');
 var selFilesColElement = document.getElementById('selFilesCol');
 var bulkProgressBarElement = document.getElementById('bulkProgressBar');
 var bulkProgressBarInfoElement = document.getElementById('bulkProgressBarInfo');
+var pubStatusTableElement = document.getElementById('pubStatusTable');
 
 // Accepts a set of Selectors to load the artifact into view. Generates code for all of the different sections to fill it.
 PhoenixEvents.on("onError", function(msg){ console.log(msg.message) });
 PhoenixEvents.on("onLogin", function(msg){ console.log("Logging in"); })
 PhoenixEvents.on("onLoginFail", function(msg){ console.log("Login Failed"); })
 PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success"); })
-PhoenixEvents.on("onPublishStart", function(msg){ console.log(msg); })
-PhoenixEvents.on("onPublishEnd", function(msg){ console.log(msg); })
+PhoenixEvents.on("onPublishStart", function(msg){ 
+	PhoenixUI.drawPublishStatus();
+	PhoenixUI.notify("Publishing Artifact", 'warning');
+	console.log(msg);
+})
+PhoenixEvents.on("onPublishEnd", function(msg){ 
+	PhoenixUI.drawPublishStatus();
+	PhoenixUI.notify("Artifact Publish Successful!", 'success'); 
+	console.log(msg); 
+})
 PhoenixEvents.on("onArtifactDeactivateSuccess", function(msg,txid){ 
 	console.log("Artifact Deactivation Success",msg); 
 	$('#' + txid).remove();
@@ -1387,6 +1396,13 @@ var PhoenixUI = (function(){
 		]
 	};
 
+	PhoenixUX.resetPublisher = function(){
+		PhoenixUX.loadTypes();
+
+		mediaFilesTableElement.innerHTML = "";
+		pricingTable.innerHTML = "";
+	}
+
 	PhoenixUX.loadIntoMeta = function(oip041){
 		for (var i = 0; i < PhoenixUX.types.length; i++) {
 			if (PhoenixUX.types[i].type == type){
@@ -1718,10 +1734,12 @@ var PhoenixUI = (function(){
 
 	PhoenixUX.publish = function(){
 		var json = PhoenixUX.generateArtifactJSONFromView();
-		document.getElementById('artJSON').innerHTML = JSON.stringify(json, null, 4);
+		PhoenixUX.resetPublisher();
+
+		showArtifactPage();
 
 		Phoenix.addAndPublish(json, function(data){
-			document.getElementById('artJSON').innerHTML = JSON.stringify(data, null, 4);
+
 		});
 	}
 
@@ -2889,6 +2907,7 @@ var PhoenixUI = (function(){
 
 					artifactJSONs[artifactNum].artifact.storage.files = filesJSON;
 
+					showArtifactPage();
 					Phoenix.addToPublishQueue(artifactJSONs[artifactNum]);
 
 					console.log(artifactJSONs);
@@ -2896,6 +2915,91 @@ var PhoenixUI = (function(){
 			}
 
 			addWrapper(ids, artifact - 1, filesJSON);
+		}
+	}
+
+	PhoenixUX.notify = function(message, type){
+		$.notify({
+			// options
+			icon: 'glyphicon glyphicon-warning-sign',
+			message: message
+		},{
+			// settings
+			element: 'body',
+			position: null,
+			type: type,
+			allow_dismiss: true,
+			newest_on_top: true,
+			showProgressbar: false,
+			placement: {
+				from: "top",
+				align: "right"
+			},
+			offset: {x: 20, y: 70},
+			spacing: 10,
+			z_index: 1031,
+			delay: 5000,
+			timer: 1000,
+			url_target: '_blank',
+			mouse_over: null,
+			animate: {
+				enter: 'animated fadeInDown',
+				exit: 'animated fadeOutUp'
+			},
+			onShow: null,
+			onShown: null,
+			onClose: null,
+			onClosed: null,
+			icon_type: 'class',
+			template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+				'<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>' +
+				'<span data-notify="icon"></span> ' +
+				'<span data-notify="title">{1}</span> ' +
+				'<span data-notify="message">{2}</span>' +
+				'<div class="progress" data-notify="progressbar">' +
+					'<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+				'</div>' +
+				'<a href="{3}" target="{4}" data-notify="url"></a>' +
+			'</div>' 
+		});
+	}
+
+	PhoenixUX.drawPublishStatus = function(){
+		var current = Phoenix.currentArtifactPublish;
+		var waiting = Phoenix.publishQueue;
+
+		pubStatusTableElement.innerHTML = "";
+
+		if (current){
+			pubStatusTableElement.innerHTML += '<tr>\
+				<th scope="row">1</th>\
+				<td><code>' + current.artifact.info.title + '</code></td>\
+				<td>\
+					<div class="progress">\
+						<div class="progress-bar progress-bar-animated progress-bar-striped bg-warning" role="progressbar" style="width: 100%"></div>\
+					</div>\
+				</td>\
+				<td>\
+					Publishing...\
+				</td>\
+			</tr>';
+		}		
+
+		if (waiting.length > 0) {
+			for (var i = 0; i < waiting.length; i++) {
+				pubStatusTableElement.innerHTML += '<tr>\
+					<th scope="row">1</th>\
+					<td><code>' + waiting[i].artifact.info.title + '</code></td>\
+					<td>\
+						<div class="progress">\
+							<div class="progress-bar" role="progressbar" style="width: 0%"></div>\
+						</div>\
+					</td>\
+					<td>\
+						Waiting...\
+					</td>\
+				</tr>';
+			}
 		}
 	}
 
