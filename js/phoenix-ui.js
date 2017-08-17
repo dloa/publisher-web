@@ -104,7 +104,7 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 								<th scope='row'>" + (1+parseInt(i)) + "</th>\
 								<td><code>" + msg.results[i]['media-data']['alexandria-media'].info.title + "</code></td>\
 								<td>TXID: <code>.." + msg.results[i].txid.substr(msg.results[i].txid.length - 8) + "</code></td>\
-								<td><button onClick='Phoenix.artifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='dev btn btn-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
+								<td><button onClick='Phoenix.artifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='dev btn btn-outline-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-danger'>Deactivate</button></td>\
 							</tr>";
 				$("#ArtifactsTable > tbody").append(markup);
 			} else if (msg.results[i]['oip-041']){
@@ -112,7 +112,7 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 								<th scope='row'>" + (1+parseInt(i)) + "</th>\
 								<td><code>" + msg.results[i]['oip-041'].artifact.info.title + "</code></td>\
 								<td>TXID: <code>.." + msg.results[i].txid.substr(msg.results[i].txid.length - 8) + "</code></td>\
-								<td><button onClick='ArtifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-danger'>Deactivate</button></td>\
+								<td><button onClick='ArtifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-danger'>Deactivate</button></td>\
 							</tr>";
 				$("#ArtifactsTable > tbody").append(markup);
 			}
@@ -1750,6 +1750,13 @@ var PhoenixUI = (function(){
 		var paid = $('[name="free"]')[1].checked;
 
 		var discountPercentage = discountPercentageElement.value;
+
+		if (discountPercentage === ""){
+			discountPercentage = 0.3; // Default of 30%
+		} else {
+			// parse to percent
+			discountPercentage = discountPercentageElement.value / 100;
+		}
 
 		var scale = 1000;
 

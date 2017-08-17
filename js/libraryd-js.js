@@ -200,7 +200,8 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee,
     var part = 0;
     var max = chop.length - 1;
 
-    var perPubFee = publishFee / chop.length;
+    // var perPubFee = publishFee / chop.length; just publish all in the first tx fee
+    var perPubFee = 1 / Math.pow(10,8); //one satoshi so that it defaults to the normal amount
 
     // the first reference tx id is always 64 zeros
     var reference = new Array(65).join("0");
@@ -213,7 +214,8 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee,
     var multiPart = multiPartPrefix + part.toString() + "," + max.toString() +
         "," + address + "," + reference + "," + signature + "):" + data;
 
-    wallet.sendCoins(address, address, amount, multiPart, perPubFee, function (err, data) {
+    // in the first transaction send the whole publish fee then only the network min from there on out
+    wallet.sendCoins(address, address, amount, multiPart, publishFee, function (err, data) {
         txIDs[txIDs.length] = data.txid;
         reference = data.txid;
 

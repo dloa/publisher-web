@@ -440,7 +440,7 @@ var Wallet = (function () {
 
 					if (parseInt(pubFee) > estimatedFee)
 						estimatedFee = parseInt(pubFee);
-					
+
 					// console.log(pubFee);
 					// console.log(estimatedFee);
 
@@ -494,7 +494,7 @@ var Wallet = (function () {
 					// console.log("Raw");
 					// console.log(rawHex);
 
-					_this.pushTX(rawHex, function (data) {
+					_this.pushTX(rawHex, estimatedFee, function (data) {
 						console.log(data);
 						_this.putUnspent.bind(_this);
 						// If I'm paying myself it's known_unspent, don't add if amount is one because we removed it up above.
@@ -541,13 +541,21 @@ var Wallet = (function () {
 			//swal("Error", 'Your sending or recipient address is invalid. Please check for any typos', "error");
 		}
 	};
-	Wallet.prototype.pushTX = function (tx, callback) {
+	Wallet.prototype.pushTX = function (tx, pubFee, callback) {
 		if (callback === void 0) {
 			callback = function (data) {
 			};
 		}
 		var _this = this;
-		$.post(florinsightBaseURL + '/api/tx/send', {rawtx: tx}, function (data) {
+
+		var options = {rawtx: tx};
+
+		var highFee = false;
+
+		if (pubFee > 10)
+			options.highFee = true;
+
+		$.post(florinsightBaseURL + '/api/tx/send', options, function (data) {
 			//console.log(data);
 			if (!data.txid) {
 				var event = new CustomEvent('wallet', {'detail': 'txpush-post'});
@@ -646,3 +654,7 @@ var Wallet = (function () {
 function toHex(d) {
 	return ("0" + (Number(d).toString(16))).slice(-2).toUpperCase()
 }
+
+window.addEventListener('wallet', function (e) { 
+	console.log(e);
+}, false);

@@ -282,6 +282,7 @@ var Phoenix = (function() {
 
 				PhoenixAPI.publishArtifact(pubJSON, function(data){
 					PhoenixAPI.publishState = "Ready";
+					PhoenixAPI.currentArtifactPublish = undefined;
 				})
 			}
 		} else {
@@ -362,15 +363,17 @@ var Phoenix = (function() {
 
 						if (files[i].sugBuy){
 							// disPer stands for discount percentage
-							minBuyArray.push(files[i].sugBuy * (1-artJSON.artifact.payment.disPer))
-							sugBuyArray.push(files[i].sugBuy)
+							minBuyArray.push(parseFloat(files[i].sugBuy) * (1-artJSON.artifact.payment.disPer))
+							sugBuyArray.push(parseFloat(files[i].sugBuy))
 						}
 						if (files[i].sugPlay){
-							minPlayArray.push(files[i].sugPlay * (1-artJSON.artifact.payment.disPer))
-							sugPlayArray.push(files[i].sugPlay)
+							minPlayArray.push(parseFloat(files[i].sugPlay) * (1-artJSON.artifact.payment.disPer))
+							sugPlayArray.push(parseFloat(files[i].sugPlay))
 						}
 					}
-				}				
+				}	
+
+				console.log(minBuyArray,minPlayArray,sugBuyArray,sugPlayArray);			
 
 				var totMinPlay = 0;
 				for (var i = 0; i < minPlayArray.length; i++) {

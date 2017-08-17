@@ -10,7 +10,7 @@
 		<!-- Application styles-->
 		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/entypo.css">
-		<link rel="stylesheet" href="css/bootstrap-dashboard.css">
+		<!-- <link rel="stylesheet" href="css/bootstrap-dashboard.css"> -->
 
 		<link href="./css/bootstrap-tagsinput.css" rel="stylesheet">
 
@@ -187,36 +187,32 @@
 		</style>
 	</head>
 	<body>
-		<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-			<button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+		<nav class="navbar navbar-dark bg-dark fixed-top">
 			<a class="navbar-brand" href="#">
-				<img src="./img/alexandria-logo.png" width="30px" height="30px" class="d-inline-block align-top" alt="">
-				ΛLΞXΛNDRIΛ Publisher
+				<img src="./img/logo.png" width="30px" height="30px" class="d-inline-block align-top" alt="">
+				<span style="margin-left: 5px;">ΛLΞXΛNDRIΛ Publisher</span>
 			</a>
-
-			<div class="collapse navbar-collapse" id="navbarsExampleDefault" style="">
-				<ul class="navbar-nav mr-auto" style="list-style: none;width: 100%; padding-right: 20px; padding-left: 25px;  margin: 0 auto; text-align: center;">
+			<form class="form-inline mr-auto" style="margin: 0px auto">
+				<ul class="navbar-nav" style="list-style: none;width: 100%; padding-right: 20px; padding-left: 25px;  margin: 0 auto; text-align: center;">
 					<li style="display:inline-block;">
 						<select id="publisherSelect" class="custom-select" style="display: none;" onchange="PhoenixUI.onPublisherSelectChange(this);">
 							<option value="a"></option>
 						</select>
 					</li>
 				</ul>
-				<button class="btn btn-outline-danger pull-right" onclick="Phoenix.logout();">Sign Out</button>
-			</div>
+			</form>
+			<button class="btn btn-outline-danger" style="right: 20px;" onclick="Phoenix.logout();">Sign Out</button>
 		</nav>
 
-		<div class="container-fluid">
+		<div class="container-fluid" style="margin-top: 60px">
 			<div class="loader" id="loader" style=""></div>
 			<div class="errorScreen" id="errorScreen" style="display: none;text-align: center; padding-top: 300px;">
 				
 				<h1 class="danger">Oops! Looks like there was an error loading the publisher, please try again later!</h1>
 			</div>
 			<div id="main" class="row" style="display: none;">
-				<nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
-					<div class="text-center">Welcome, <span id="pub-name"></span></div>
+				<nav class="col-sm-3 col-md-2 hidden-xs-down bg-light sidebar">
+					<div class="text-center" style="margin-top: 30px">Welcome, <span id="pub-name"></span></div>
 					<div class="text-center" style="margin-bottom: 0px"> <strong>FLO</strong>: <code><span id="walletBalance"></span></code></strong></div>
 					<div class="text-center" style="margin-bottom: 10px"> <strong>USD</strong>: <code style="color: green"><span id="walletBalanceUSD"></span></code></strong></div>
 					<ul class="nav nav-pills flex-column">
@@ -403,146 +399,154 @@
 														</table>
 													</div>
 												</div>
-												<div class="col-6">
-													<h5 class="text-center">Suggested Tips</h5>
-													<div class="row">
-														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip1" placeholder="0.01" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
-														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip2" placeholder="0.10" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
-														<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip3" placeholder="1" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
-													</div>
-													<small class="form-text text-center text-muted" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Do I need to enter tips?" data-content="No. You do not need to enter suggested tip amounts. If you do not enter any information, the Retailer will show their default tip amounts.">The suggested tip amounts will be displayed to the user if they click to "Tip" your video. <span class="icon icon-help-with-circle"></span></small>
-												</div>
-												<div class="col-6" id="bitcoinAddressGroup">
-													<!-- <span>Payment Addresses</span>
-													<input class="form-control" style="width: 30%" type="text" id="bitcoinAddress" placeholder="17aGuzA9p1ZmG49V9GmR6UgGzg1dQx9We9">
-													<p class="help-block">This is your Bitcoin address that you will use to receive payments for this artifact.</p> -->
-													<div class="form-group col-lg-12">
-														<h5 class="text-center">Payment Addresses</h5>
-															<div id="paymentAddresses">
-															<!-- <div class="row">
-																<div class="input-group col-11" style="margin-bottom: 5px;">
-																	<div class="input-group-btn">
-																		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-																			<img style="height: 30px" src="./img/bitcoin.svg">
-																		</button>
-																		<div class="dropdown-menu">
-																			<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
-																			<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
-																			<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
-																		</div>
-																	</div>
-																	<input type="text" class="form-control" aria-label="Text input with dropdown button">
-																	<span class="input-group-addon">
-																		<input type="radio" name="mainAddressRadio" checked>
-																	</span>
-																</div>
-															</div>
-															<div class="row">
-																<div class="input-group col-11" style="margin-bottom: 5px;">
-																	<div class="input-group-btn">
-																		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-																			<img style="height: 30px" src="./img/FLOflat2.png">
-																		</button>
-																		<div class="dropdown-menu">
-																			<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
-																			<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
-																			<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
-																		</div>
-																	</div>
-																	<input type="text" class="form-control" aria-label="Text input with dropdown button">
-																	<span class="input-group-addon">
-																		<input type="radio" name="mainAddressRadio">
-																	</span>
-																</div>
-															</div> -->
-															<div class="row" id="0">
-																<div class="input-group col-11" style="margin-bottom: 5px;" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Why can't I change this?" data-content="This Payment Address is your Publisher Address that your account is linked to. By default, if you have no other payment methods your funds will be sent to this address.">
-																	<div class="input-group-btn has-danger">
-																		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
-																			<img style="height: 30px" src="./img/FLOflat2.png">
-																		</button>
-																		<div class="dropdown-menu">
-																			
-																		</div>
-																	</div>
-																	<input id="currentPublisherAddress" type="text" class="form-control" oninput="PhoenixUI.onPaymentAddressChange(this);" disabled value="">
-																	<span class="input-group-addon">
-																		<input type="radio" name="mainAddressRadio" checked>
-																	</span>
-																</div>
-																<div class="col-1">
-																	
-																</div>
-															</div>
-															<div class="row" id="1">
-																<div class="input-group col-11" style="margin-bottom: 5px;">
-																	<div class="input-group-btn has-danger">
-																		<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-																			<img style="height: 30px" src="./img/Bitcoin.svg">
-																		</button>
-																		<div class="dropdown-menu">
-																			<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
-																			<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
-																			<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
-																		</div>
-																	</div>
-																	<input type="text" class="form-control" oninput="PhoenixUI.onPaymentAddressChange(this);">
-																	<span class="input-group-addon">
-																		<input type="radio" name="mainAddressRadio">
-																	</span>
-																</div>
-																<div class="col-1">
-																	<button class="btn btn-outline-success" style="height: 80%; margin-left: -20px; margin-top: 3px;" onclick="PhoenixUI.addPaymentAddress(this);">+</button>
-																</div>
-															</div>
-														</div>
-															
-														<small id="emailHelp" class="form-text text-muted">Select the default payment address using the selector on the Right side.</small>
-													</div>
-												</div>
-												<div class="col-12">
-													<h5 class="text-center" style="margin-top: 20px;">Advanced</h5>
-													<div class="form-group row text-right">
-														<div class="col-4">
-															<div class="row">
-																<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -45" title="What is a Promoter?" data-content="A Promoter is someone who drives traffic to your content. This can be anybody that shares your content, or leads people to your content.">Promoter <span class="icon icon-help-with-circle"></span></label>
-																<div class="col-6">
-																	<div class="input-group">
-																		<input id="promoter" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
-																		<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-4">
-															<div class="row">
-																<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -45" title="What is a Retailer?" data-content="A Retailer is someone who sells your content. This includes people like Alexandria currently.">Retailer <span class="icon icon-help-with-circle"></span></label>
-																<div class="col-6">
-																	<div class="input-group">
-																		<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
-																		<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-4">
-															<div class="row">
-																<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -25" title="What is the Max Discount?" data-content="The Max Discount percentage is the maximum amount you would ever like your content to be discounted. This includes for example sales and promotions.">Max Discount <span class="icon icon-help-with-circle"></span></label>
-																<div class="col-6">
-																	<div class="input-group">
-																		<input id="discountPercentage" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="30">
-																		<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
-																	</div>
-																</div>
-															</div>
-														</div>
-															
-															
-													</div>
-													<small class="form-text text-muted text-center" style="margin-bottom: 10px">Hover over the Promoter, Retailer, and Max Discount text for more information.</small>
-												</div>
 											</div>			
 										</div>
+									</div>
+									<div class="row">
+										<div style="margin: 10px auto;">
+											<button class="btn btn-outline-dark">Show Advanced Settings</button>
+										</div>
+										<div class="row">
+											<div class="col-6">
+												<h5 class="text-center">Suggested Tips</h5>
+												<div class="row">
+													<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip1" placeholder="0.01" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
+													<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip2" placeholder="0.10" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
+													<div class="col input-group"><span class="input-group-addon" style="padding-left:5px;padding-right:5px;">$</span><input type="text" class="form-control col" id="tip3" placeholder="1" oninput="PhoenixUI.onTipsInput(this);" onblur="PhoenixUI.onTipsInput(this, true);"></div>
+												</div>
+												<small class="form-text text-center text-muted" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Do I need to enter tips?" data-content="No. You do not need to enter suggested tip amounts. If you do not enter any information, the Retailer will show their default tip amounts.">The suggested tip amounts will be displayed to the user if they click to "Tip" your video. <span class="icon icon-help-with-circle"></span></small>
+											</div>
+											<div class="col-6" id="bitcoinAddressGroup">
+												<!-- <span>Payment Addresses</span>
+												<input class="form-control" style="width: 30%" type="text" id="bitcoinAddress" placeholder="17aGuzA9p1ZmG49V9GmR6UgGzg1dQx9We9">
+												<p class="help-block">This is your Bitcoin address that you will use to receive payments for this artifact.</p> -->
+												<div class="form-group col-lg-12">
+													<h5 class="text-center">Payment Addresses</h5>
+														<div id="paymentAddresses">
+														<!-- <div class="row">
+															<div class="input-group col-11" style="margin-bottom: 5px;">
+																<div class="input-group-btn">
+																	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																		<img style="height: 30px" src="./img/bitcoin.svg">
+																	</button>
+																	<div class="dropdown-menu">
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
+																	</div>
+																</div>
+																<input type="text" class="form-control" aria-label="Text input with dropdown button">
+																<span class="input-group-addon">
+																	<input type="radio" name="mainAddressRadio" checked>
+																</span>
+															</div>
+														</div>
+														<div class="row">
+															<div class="input-group col-11" style="margin-bottom: 5px;">
+																<div class="input-group-btn">
+																	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																		<img style="height: 30px" src="./img/FLOflat2.png">
+																	</button>
+																	<div class="dropdown-menu">
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
+																		<a style="padding-left:-10px" class="dropdown-item" href="#"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
+																	</div>
+																</div>
+																<input type="text" class="form-control" aria-label="Text input with dropdown button">
+																<span class="input-group-addon">
+																	<input type="radio" name="mainAddressRadio">
+																</span>
+															</div>
+														</div> -->
+														<div class="row" id="0">
+															<div class="input-group col-11" style="margin-bottom: 5px;" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Why can't I change this?" data-content="This Payment Address is your Publisher Address that your account is linked to. By default, if you have no other payment methods your funds will be sent to this address.">
+																<div class="input-group-btn has-danger">
+																	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+																		<img style="height: 30px" src="./img/FLOflat2.png">
+																	</button>
+																	<div class="dropdown-menu">
+																		
+																	</div>
+																</div>
+																<input id="currentPublisherAddress" type="text" class="form-control" oninput="PhoenixUI.onPaymentAddressChange(this);" disabled value="">
+																<span class="input-group-addon">
+																	<input type="radio" name="mainAddressRadio" checked>
+																</span>
+															</div>
+															<div class="col-1">
+																
+															</div>
+														</div>
+														<div class="row" id="1">
+															<div class="input-group col-11" style="margin-bottom: 5px;">
+																<div class="input-group-btn">
+																	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																		<img style="height: 30px" src="./img/Bitcoin.svg">
+																	</button>
+																	<div class="dropdown-menu">
+																		<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>
+																		<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>
+																		<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>
+																	</div>
+																</div>
+																<input type="text" class="form-control" oninput="PhoenixUI.onPaymentAddressChange(this);">
+																<span class="input-group-addon">
+																	<input type="radio" name="mainAddressRadio">
+																</span>
+															</div>
+															<div class="col-1">
+																<button class="btn btn-outline-success" style="height: 80%; margin-left: -20px; margin-top: 3px;" onclick="PhoenixUI.addPaymentAddress(this);">+</button>
+															</div>
+														</div>
+													</div>
+														
+													<small id="emailHelp" class="form-text text-muted">Select the default payment address using the selector on the Right side.</small>
+												</div>
+											</div>
+											<div class="col-12">
+												<h5 class="text-center" style="margin-top: 20px;">Advanced</h5>
+												<div class="form-group row text-right">
+													<div class="col-4">
+														<div class="row">
+															<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -45" title="What is a Promoter?" data-content="A Promoter is someone who drives traffic to your content. This can be anybody that shares your content, or leads people to your content.">Promoter <span class="icon icon-help-with-circle"></span></label>
+															<div class="col-6">
+																<div class="input-group">
+																	<input id="promoter" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
+																	<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-4">
+														<div class="row">
+															<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -45" title="What is a Retailer?" data-content="A Retailer is someone who sells your content. This includes people like Alexandria currently.">Retailer <span class="icon icon-help-with-circle"></span></label>
+															<div class="col-6">
+																<div class="input-group">
+																	<input id="retailer" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="15">
+																	<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-4">
+														<div class="row">
+															<label for="example-text-input" class="col-6 col-form-label" data-toggle="popover" data-trigger="hover" data-placement="bottom" data-offset="0 -25" title="What is the Max Discount?" data-content="The Max Discount percentage is the maximum amount you would ever like your content to be discounted. This includes for example sales and promotions.">Max Discount <span class="icon icon-help-with-circle"></span></label>
+															<div class="col-6">
+																<div class="input-group">
+																	<input id="discountPercentage" type="text" class="form-control" oninput="PhoenixUI.onAdvancedInput(this);" placeholder="30">
+																	<span class="input-group-addon" style="padding-left:5px;padding-right:5px;">%</span>
+																</div>
+															</div>
+														</div>
+													</div>
+														
+														
+												</div>
+												<small class="form-text text-muted text-center" style="margin-bottom: 10px">Hover over the Promoter, Retailer, and Max Discount text for more information.</small>
+											</div>
+										</div>
+											
 									</div>
 									<div class="publish-section publish-submit" id="publishSubmitSection">
 										<div class="row align-items-center">
@@ -693,7 +697,7 @@
 									</tr>
 								</thead>
 								<tbody id="pubStatusTable">
-									<tr>
+									<!-- <tr>
 										<th scope="row">1</th>
 										<td><code>Apollo 11</code></td>
 										<td>
@@ -728,10 +732,11 @@
 										<td>
 											Waiting...
 										</td>
-									</tr>
+									</tr> -->
 								</tbody>
 							</table>
 						</div>
+						<hr />
 						<div class="row" style="padding: 20px 0px;">
 							<div class="col-8">
 								<h4 class="pull-left" style="">Published Artifacts</h4>
@@ -1029,6 +1034,7 @@
 		<script src="./js/jquery-3.2.1.min.js"></script>
 		<script src="./js/tether.min.js"></script>
 		<script src="./js/underscore.js"></script>
+		<script src="./js/popper.min.js"></script>
 		<script src="./js/bootstrap.min.js"></script>
 		<script src="./js/backbone-min.js"></script>
 		<script src="./js/sweet-alert.min.js"></script>
@@ -1259,8 +1265,8 @@
 			}
 
 			// By default show
-			//showWizardPage();
-			showArtifactPage();
+			showWizardPage();
+			// showArtifactPage();
 
 
 			// $('#paymentInfo').hide();
