@@ -35,6 +35,7 @@ var selFilesColElement = document.getElementById('selFilesCol');
 var bulkProgressBarElement = document.getElementById('bulkProgressBar');
 var bulkProgressBarInfoElement = document.getElementById('bulkProgressBarInfo');
 var pubStatusTableElement = document.getElementById('pubStatusTable');
+var advancedSettingsElement = document.getElementById('advancedSettings');
 
 // Accepts a set of Selectors to load the artifact into view. Generates code for all of the different sections to fill it.
 PhoenixEvents.on("onError", function(msg){ console.log(msg.message) });
@@ -3008,6 +3009,15 @@ var PhoenixUI = (function(){
 				</tr>';
 			}
 		}
+	}
+
+	PhoenixUX.toggleAdvanced = function(elem){
+		advancedSettingsElement.style.display = (advancedSettingsElement.style.display == "none" ? "flex" : "none");
+		elem.innerHTML = (advancedSettingsElement.style.display == "none" ? "Show Advanced Settings <span class=\"icon icon-chevron-down\"></span>" : "Hide Advanced Settings <span class=\"icon icon-chevron-up\"></span>");
+	}
+
+	PhoenixUX.hideAdvanced = function(elem){
+		advancedSettingsElement.style.display = "none";
 	}
 
 	return PhoenixUX;
