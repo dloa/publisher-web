@@ -256,7 +256,7 @@
 										<div class="publish-files audio-tracks">
 											<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
 											<div class="upload-area" id="mediaDrop" style="padding-bottom: 15px; height: 250px;display: flex; justify-content: center; align-items: center;">
-												<h3 style="color: #ccc">Please Click or Drag &amp; Drop to Upload...</h3>
+												<h3 style="color: #ccc; margin-bottom: -10px;">Please Click or Drag &amp; Drop to Upload...</h3>
 											</div>
 											<table class="table" id='mediaFilesTable' style="margin-bottom: -5px; display: none">
 												<thead>
@@ -338,12 +338,10 @@
 												<div class="col-4">
 													<center>
 														<h3 id="posterTitle">Thumbnail</h3>
-														<div class="cover-art-square" id='poster'>
+														<div class="cover-art-square" id='poster' style="display: flex; justify-content: center; align-items: center;">
+															<h4 style="color: #ccc; margin-bottom: -10px;">Please Click or Drag &amp; Drop to Upload...</h4>
 														</div>
-														<label class="custom-file text-left" style="margin-top: 10px;">
-															<input type="file" id="posterFile" class="custom-file-input">
-															<span class="custom-file-control"></span>
-														</label>
+														<input type="file" id="posterFile" class="custom-file-input" style="display: none;">
 													</center>
 												</div>
 											</div>
@@ -479,7 +477,7 @@
 															</div>
 														</div>
 														<div class="row" id="1">
-															<div class="input-group col-11" style="margin-bottom: 5px;">
+															<div class="input-group col-10" style="margin-bottom: 5px;">
 																<div class="input-group-btn">
 																	<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 																		<img style="height: 30px" src="./img/Bitcoin.svg">
@@ -495,8 +493,12 @@
 																	<input type="radio" name="mainAddressRadio">
 																</span>
 															</div>
-															<div class="col-1">
-																<button class="btn btn-outline-success" style="height: 80%; margin-left: -20px; margin-top: 3px;" onclick="PhoenixUI.addPaymentAddress(this);">+</button>
+															<div class="col-2">
+																<div class="row justify-content-center align-items-center" style="margin-top: 7px; float: left;">
+																	<button class="btn btn-sm btn-outline-danger" onclick="PhoenixUI.removePaymentAddress(this);">-</button>
+																	<div style="width: 5px"> </div>
+																	<button class="btn btn-sm btn-outline-success" onclick="PhoenixUI.addPaymentAddress(this);">+</button>
+																</div>
 															</div>
 														</div>
 													</div>
@@ -1203,6 +1205,8 @@
 			    } else {
 			    	$('#paymentInfo').hide();
 			    }
+
+			    PhoenixUI.updatePubFee();
 			});
 
 			$(function () {

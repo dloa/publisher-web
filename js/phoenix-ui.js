@@ -37,12 +37,13 @@ var bulkProgressBarInfoElement = document.getElementById('bulkProgressBarInfo');
 var pubStatusTableElement = document.getElementById('pubStatusTable');
 var advancedSettingsElement = document.getElementById('advancedSettings');
 var mainPubStatusDiv = document.getElementById('mainPubStatusDiv');
+var mediaDrop = document.getElementById('mediaDrop');
 
 // Accepts a set of Selectors to load the artifact into view. Generates code for all of the different sections to fill it.
 PhoenixEvents.on("onError", function(msg){ console.log(msg.message) });
 PhoenixEvents.on("onLogin", function(msg){ console.log("Logging in"); })
 PhoenixEvents.on("onLoginFail", function(msg){ console.log("Login Failed"); })
-PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success"); })
+PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success");PhoenixUI.updatePubFee(); })
 PhoenixEvents.on("onPublishStart", function(msg){ 
 	PhoenixUI.drawPublishStatus();
 	PhoenixUI.notify("Publishing Artifact", 'warning');
@@ -1271,30 +1272,30 @@ var PhoenixUI = (function(){
 			{display: "SD 480p", publish: "SD480"},
 			{display: "LOW 320p", publish: "LOW320"},
 			{display: "Mobile 240p", publish: "MOB240"},
-			{display: "Feature - 4k", publish: "F-4K"},
-			{display: "Feature - HD 1080p", publish: "F-HD1080"},
-			{display: "Feature - HD 720p", publish: "F-HD720"},
-			{display: "Feature - SD 480p", publish: "F-SD480"},
-			{display: "Feature - LOW 320p", publish: "F-LOW320"},
-			{display: "Feature - Mobile 240p", publish: "F-MOB240"},
-			{display: "Trailer A - 4k", publish: "TA-4K"},
-			{display: "Trailer A - HD 1080p", publish: "TA-HD1080"},
-			{display: "Trailer A - HD 720p", publish: "TA-HD720"},
-			{display: "Trailer A - SD 480p", publish: "TA-SD480"},
-			{display: "Trailer A - LOW 320p", publish: "TA-LOW320"},
-			{display: "Trailer A - Mobile 240p", publish: "TA-MOB240"},
-			{display: "Trailer B - 4k", publish: "TB-4K"},
-			{display: "Trailer B - HD 1080p", publish: "TB-HD1080"},
-			{display: "Trailer B - HD 720p", publish: "TB-HD720"},
-			{display: "Trailer B - SD 480p", publish: "TB-SD480"},
-			{display: "Trailer B - LOW 320p", publish: "TB-LOW320"},
-			{display: "Trailer B - Mobile 240p", publish: "TB-MOB240"},
-			{display: "Trailer C - 4k", publish: "TC-4K"},
-			{display: "Trailer C - HD 1080p", publish: "TC-HD1080"},
-			{display: "Trailer C - HD 720p", publish: "TC-HD720"},
-			{display: "Trailer C - SD 480p", publish: "TC-SD480"},
-			{display: "Trailer C - LOW 320p", publish: "TC-LOW320"},
-			{display: "Trailer C - Mobile 240p", publish: "TC-MOB240"}
+			{subtype: "Movie", display: "Feature - 4k", publish: "F-4K"},
+			{subtype: "Movie", display: "Feature - HD 1080p", publish: "F-HD1080"},
+			{subtype: "Movie", display: "Feature - HD 720p", publish: "F-HD720"},
+			{subtype: "Movie", display: "Feature - SD 480p", publish: "F-SD480"},
+			{subtype: "Movie", display: "Feature - LOW 320p", publish: "F-LOW320"},
+			{subtype: "Movie", display: "Feature - Mobile 240p", publish: "F-MOB240"},
+			{subtype: "Movie", display: "Trailer A - 4k", publish: "TA-4K"},
+			{subtype: "Movie", display: "Trailer A - HD 1080p", publish: "TA-HD1080"},
+			{subtype: "Movie", display: "Trailer A - HD 720p", publish: "TA-HD720"},
+			{subtype: "Movie", display: "Trailer A - SD 480p", publish: "TA-SD480"},
+			{subtype: "Movie", display: "Trailer A - LOW 320p", publish: "TA-LOW320"},
+			{subtype: "Movie", display: "Trailer A - Mobile 240p", publish: "TA-MOB240"},
+			{subtype: "Movie", display: "Trailer B - 4k", publish: "TB-4K"},
+			{subtype: "Movie", display: "Trailer B - HD 1080p", publish: "TB-HD1080"},
+			{subtype: "Movie", display: "Trailer B - HD 720p", publish: "TB-HD720"},
+			{subtype: "Movie", display: "Trailer B - SD 480p", publish: "TB-SD480"},
+			{subtype: "Movie", display: "Trailer B - LOW 320p", publish: "TB-LOW320"},
+			{subtype: "Movie", display: "Trailer B - Mobile 240p", publish: "TB-MOB240"},
+			{subtype: "Movie", display: "Trailer C - 4k", publish: "TC-4K"},
+			{subtype: "Movie", display: "Trailer C - HD 1080p", publish: "TC-HD1080"},
+			{subtype: "Movie", display: "Trailer C - HD 720p", publish: "TC-HD720"},
+			{subtype: "Movie", display: "Trailer C - SD 480p", publish: "TC-SD480"},
+			{subtype: "Movie", display: "Trailer C - LOW 320p", publish: "TC-LOW320"},
+			{subtype: "Movie", display: "Trailer C - Mobile 240p", publish: "TC-MOB240"}
 		],
 		'Image': [
 			"Basic",
@@ -1500,8 +1501,9 @@ var PhoenixUI = (function(){
 					}
 				}
 			}
-				
 		}
+
+		PhoenixUI.updateAllSubtypeSelects();
 	}
 
 	PhoenixUX.updateMetadata = function(type, newType){
@@ -2074,6 +2076,9 @@ var PhoenixUI = (function(){
 			if (PhoenixUX.mediaFiles.length === 0){
 				pricingElement.style.display = 'none';
 				mediaFilesTableElement.style.display = 'none';
+				mediaDrop.style.height="250px";
+			} else {
+				mediaDrop.style.height="100px";
 			}
 		}
 
@@ -2094,6 +2099,9 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.appendFileToMediaTable = function(file, iconURL, coverart) {
+		// Set uploader to be smaller since we have a file:
+		mediaDrop.style.height="100px";
+		
 		if (coverart){
 			var coverArtFile = document.getElementById("coverArtFile");
 
@@ -2129,13 +2137,20 @@ var PhoenixUI = (function(){
 		for (var i = 0; i < subtypes.length; i++) {
 			var value;
 			var display;
+			var subtype;
 
 			if (subtypes[i] !== null && typeof subtypes[i] === 'object'){
 				value = subtypes[i].publish;
 				display = subtypes[i].display;
+				subtype = subtypes[i].subtype;
 			} else {
 				value = subtypes[i];
 				display = subtypes[i];
+			}
+
+			if (subtype){
+				if (PhoenixUX.subtype != subtype)
+					continue;
 			}
 
 		 	htmlStr += "<option value='" + value + "'>" + display + "</option>";
@@ -2457,6 +2472,16 @@ var PhoenixUI = (function(){
 		}
 	}
 
+	PhoenixUX.updateAllSubtypeSelects = function(){
+		if (PhoenixUX.mediaFiles){
+			for (var j = 0; j < PhoenixUX.mediaFiles.length; j++) {
+				var typeSelect = document.getElementById(PhoenixUX.mediaFiles[j].id).children[3].children[0].children[0];
+
+				PhoenixUX.onMediaSelectChange(typeSelect);
+			}
+		}
+	}
+
 	PhoenixUX.onMediaSelectChange = function(elem){
 		PhoenixUX.mediaChangeSelect = elem;
 
@@ -2479,15 +2504,22 @@ var PhoenixUI = (function(){
 					secondSelector.innerHTML = '';
 					var tmpString = '';
 					for (var i = 0; i < PhoenixUX.fileSelectTypes[v].length; i++) {
-						var value = "";
-						var display = "";
+						var value;
+						var display;
+						var subtype;
 
 						if (PhoenixUX.fileSelectTypes[v][i] !== null && typeof PhoenixUX.fileSelectTypes[v][i] === 'object'){
 							value = PhoenixUX.fileSelectTypes[v][i].publish;
 							display = PhoenixUX.fileSelectTypes[v][i].display;
+							subtype = PhoenixUX.fileSelectTypes[v][i].subtype;
 						} else {
 							value = PhoenixUX.fileSelectTypes[v][i];
 							display = PhoenixUX.fileSelectTypes[v][i];
+						}
+
+						if (subtype){
+							if (PhoenixUX.subtype != subtype)
+								continue;
 						}
 
 						tmpString += '<option value="' + value + '">' + display + '</option>';
@@ -2529,7 +2561,7 @@ var PhoenixUI = (function(){
 		var content = document.createElement("div");
 		content.innerHTML = '\
 		<div class="row" id="' + (numOfPaymentAddresses) + '">\
-			<div class="input-group col-11" style="margin-bottom: 5px;">\
+			<div class="input-group col-10" style="margin-bottom: 5px;">\
 				<div class="input-group-btn">\
 					<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
 						<img style="height: 30px" src="./img/Bitcoin.svg">\
@@ -2545,12 +2577,28 @@ var PhoenixUI = (function(){
 					<input type="radio" name="mainAddressRadio">\
 				</span>\
 			</div>\
-			<div class="col-1">\
-				<button class="btn btn-outline-success" style="height: 80%; margin-left: -20px; margin-top: 3px;" onclick="PhoenixUI.addPaymentAddress(this);">+</button>\
+			<div class="col-2">\
+				<div class="row justify-content-center align-items-center" style="margin-top: 7px; float: left;">\
+					<button class="btn btn-sm btn-outline-danger" onclick="PhoenixUI.removePaymentAddress(this);">-</button>\
+					<div style="width: 5px"> </div>\
+					<button class="btn btn-sm btn-outline-success" onclick="PhoenixUI.addPaymentAddress(this);">+</button>\
+				</div>\
 			</div>\
 		</div>';
 
 		paymentAddressesElement.appendChild(content);
+	}
+
+	PhoenixUX.removePaymentAddress = function(elem){
+		var paymentRow = elem.parentNode.parentNode.parentNode;
+		var id = paymentRow.id;
+
+		if (PhoenixUX.paymentAddresses && PhoenixUX.paymentAddresses[id])
+			PhoenixUX.paymentAddresses[id] = {};
+
+		paymentRow.parentNode.removeChild(paymentRow);
+
+		PhoenixUX.updatePubFee();
 	}
 
 	PhoenixUX.changePaymentAddressType = function(elem){
@@ -2654,18 +2702,20 @@ var PhoenixUI = (function(){
 
 		if (elem.value > 100){
 			elem.value = 100;
-		}
-
-		// Truncate zeros
-		elem.value = parseInt(elem.value);
+		}		
 
 		if (!PhoenixUX.advancedPricing)
 			PhoenixUX.advancedPricing = {};
 
 		if (elem.value == "")
 			delete PhoenixUX.advancedPricing[id];
-		else
+		else {
+			// Truncate zeros
+			elem.value = parseInt(elem.value);
 			PhoenixUX.advancedPricing[id] = elem.value;
+		}
+
+		PhoenixUI.updatePubFee();
 	}
 
 	PhoenixUX.onFileNameInput = function(elem){
@@ -3092,6 +3142,10 @@ var PhoenixUI = (function(){
 
 	PhoenixUX.hideAdvanced = function(elem){
 		advancedSettingsElement.style.display = "none";
+	}
+
+	PhoenixUX.onIntInputUpdate = function(elem){
+
 	}
 
 	return PhoenixUX;
