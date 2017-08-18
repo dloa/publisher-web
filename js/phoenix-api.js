@@ -259,9 +259,9 @@ var Phoenix = (function() {
 					console.log("Error: " + data);
 					return;
 				}
-
-				PhoenixEvents.trigger("onPublishEnd", data);
 				callback(data);
+
+				PhoenixEvents.trigger("onPublishEnd", data);		
 			});
 		})
 			

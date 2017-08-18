@@ -36,6 +36,7 @@ var bulkProgressBarElement = document.getElementById('bulkProgressBar');
 var bulkProgressBarInfoElement = document.getElementById('bulkProgressBarInfo');
 var pubStatusTableElement = document.getElementById('pubStatusTable');
 var advancedSettingsElement = document.getElementById('advancedSettings');
+var mainPubStatusDiv = document.getElementById('mainPubStatusDiv');
 
 // Accepts a set of Selectors to load the artifact into view. Generates code for all of the different sections to fill it.
 PhoenixEvents.on("onError", function(msg){ console.log(msg.message) });
@@ -2723,12 +2724,59 @@ var PhoenixUI = (function(){
 			if (idSel == PhoenixUX.bulkCSVJSON[0][col] || filesSel == PhoenixUX.bulkCSVJSON[0][col])
 				continue;
 
-			bulkColDetails.innerHTML += '<div class="form-group row">\
-										<label for="staticEmail" class="col-sm-4 col-form-label">' + PhoenixUX.bulkCSVJSON[0][col] + '</label>\
-										<div class="col-sm-8">\
-											<input type="text" class="form-control" placeholder="artifact." id="BulkCol' + PhoenixUX.bulkCSVJSON[0][col] + '">\
-										</div>\
-									</div>';
+			// bulkColDetails.innerHTML += '<div class="form-group row">\
+			// 							<label for="staticEmail" class="col-sm-4 col-form-label">' + PhoenixUX.bulkCSVJSON[0][col] + '</label>\
+			// 							<div class="col-sm-8">\
+			// 								<input type="text" class="form-control" placeholder="artifact." id="BulkCol' + PhoenixUX.bulkCSVJSON[0][col] + '">\
+			// 							</div>\
+			// 						</div>';
+
+			var colName = PhoenixUX.bulkCSVJSON[0][col];
+
+			var inputStart = "artifact.";
+
+			switch(colName){
+				case "Type":
+					inputStart = "artifact.type";
+					break;
+				case "Title":
+					inputStart = "artifact.info.title";
+					break;
+				case "Description":
+					inputStart = "artifact.info.description";
+					break;
+				case "Artist":
+					inputStart = "artifact.info.extraInfo.artist";
+					break;
+				case "Year":
+					inputStart = "artifact.info.year";
+					break;
+				case "Payment":
+					inputStart = "artifact.payment";
+					break;
+				case "Network":
+					inputStart = "artifact.storage.network";
+					break;
+			}
+
+			var formGroupDiv = document.createElement("div");
+			formGroupDiv.classList = ["form-group row"];
+			var label = document.createElement("label");
+			label.classList = ["col-4 col-form-label"];
+			label.innerHTML = colName;
+			var inputDiv = document.createElement("div");
+			inputDiv.classList = ["col-8"];
+			var input = document.createElement("input");
+			input.type = "text";
+			input.classList = ["form-control"];
+			input.value = inputStart;
+			input.id = "BulkCol" + colName;
+
+			formGroupDiv.appendChild(label);
+			inputDiv.appendChild(input);
+			formGroupDiv.appendChild(inputDiv);
+
+			bulkColDetails.appendChild(formGroupDiv);
 		}
 	}
 
@@ -2788,7 +2836,16 @@ var PhoenixUI = (function(){
 
 		for (var artifact = 1; artifact < PhoenixUX.bulkCSVJSON.length; artifact++){
 			var artCSVRow = PhoenixUX.bulkCSVJSON[artifact];
-			var artifactJSON = {};
+			var artifactJSON = {
+				artifact: {
+					info: {
+
+					},
+					storage: {
+						network: "IPFS"
+					}
+				}
+			};
 
 			var idColVal, fileColVal;
 
@@ -2813,14 +2870,22 @@ var PhoenixUI = (function(){
 
 				var path = columnInput.split('.');
 
+				var value = artCSVRow[col];
+
+				try {
+					var tmpValue =  JSON.parse("["+value.replace(/^\n+|\n+$/g, "").replace(/\n+/g, ",")+"]")[0];
+					console.log(tmpValue);
+					value = tmpValue;
+				} catch (e) { console.log(e); /* do nothing */ }
+
 				if (path.length == 1){
-					artifactJSON[path[0]] = artCSVRow[col];
+					artifactJSON[path[0]] = value;
 				} else if (path.length == 2) {
 					if (!artifactJSON[path[0]]){
 						artifactJSON[path[0]] = {}
 					}
 
-					artifactJSON[path[0]][path[1]] = artCSVRow[col];
+					artifactJSON[path[0]][path[1]] = value;
 				} else if (path.length == 3) {
 					if (!artifactJSON[path[0]]){
 						artifactJSON[path[0]] = {}
@@ -2829,7 +2894,7 @@ var PhoenixUI = (function(){
 						artifactJSON[path[0]][path[1]] = {}
 					}
 
-					artifactJSON[path[0]][path[1]][path[2]] = artCSVRow[col];
+					artifactJSON[path[0]][path[1]][path[2]] = value;
 				} else if (path.length == 4) {
 					if (!artifactJSON[path[0]]){
 						artifactJSON[path[0]] = {}
@@ -2841,7 +2906,7 @@ var PhoenixUI = (function(){
 						artifactJSON[path[0]][path[1]][path[2]] = {}
 					}
 
-					artifactJSON[path[0]][path[1]][path[2]][path[3]] = artCSVRow[col];
+					artifactJSON[path[0]][path[1]][path[2]][path[3]] = value;
 				} else if (path.length > 4) {
 					// Don't allow more than 4.
 				}
@@ -2996,7 +3061,7 @@ var PhoenixUI = (function(){
 		if (waiting.length > 0) {
 			for (var i = 0; i < waiting.length; i++) {
 				pubStatusTableElement.innerHTML += '<tr>\
-					<th scope="row">1</th>\
+					<th scope="row">' + i + '</th>\
 					<td><code>' + waiting[i].artifact.info.title + '</code></td>\
 					<td>\
 						<div class="progress">\
@@ -3009,6 +3074,11 @@ var PhoenixUI = (function(){
 				</tr>';
 			}
 		}
+
+		if (!current && waiting.length == 0)
+			mainPubStatusDiv.style.display = "none";
+		else
+			mainPubStatusDiv.style.display = "block";
 	}
 
 	PhoenixUX.toggleAdvanced = function(elem){
