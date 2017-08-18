@@ -1,0 +1,3 @@
+ID,Type,Title,Description,Artist,Year,Payment,Network,Files
+e567,Video-Basic,Prelude2Hope Teaser,star wars fan films rule!,Clear Concrete Productions,2005,"{""addresses"":[{""address"":""1AaMehNHLRDH4JPKaCkBjn8WFjJ8nEwvsr"",""token"":""BTC""}],""fiat"":""USD"",""scale"":""1000:1""}",IPFS,"{""fname"":""Prelude 2 Hope Teaser.m4v"",""dname"":""Prelude 2 Hope Hyper"",""sugBuy"":100,""minBuy"":70,""type"":""video""};{""fname"":""p2h-screenshot.png"",""type"":""preview""}"
+e123,Video-Basic,Alexandria Bulk Content Publisher Demo,Bulk content publishing coming soon,Skylar Ostler,2017,,IPFS,"{""fname"":""Bulk Publish Demo.m4v"",""dname"":""Alexandria Bulk Publisher Demo"",""type"":""video""};{""fname"":""bulk publish frame.png"",""type"":""preview""}"
