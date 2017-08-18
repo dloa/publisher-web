@@ -1,2 +1,0 @@
-ID,Type,Title,Description,Artist,Year,Payment,Network,Files
-a123,video,Prelude2Hope Teaser,star wars fan films rule!,Devon,2011,"{""addresses"":[{""address"":""1AaMehNHLRDH4JPKaCkBjn8WFjJ8nEwvsr"",""token"":""BTC""}]}",IPFS,"{""fname"":""dog.mp4"",""type"":""video""};{""fname"":""image.png"",""type"":""preview""}"
