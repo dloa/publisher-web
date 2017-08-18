@@ -3021,7 +3021,7 @@ var PhoenixUI = (function(){
 
 			var addWrapper = function(ids, artifactNum, filesJSON){
 				Phoenix.addFilesToIPFS(ids, function(ipfsData){
-					//console.log(ipfsData);
+					console.log(ipfsData);
 
 					if (!artifactJSONs[artifactNum].artifact)
 						artifactJSONs[artifactNum].artifact = {};

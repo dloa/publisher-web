@@ -34,7 +34,7 @@ var PhoenixStatus = {
 var Phoenix = (function() {	
 	var PhoenixAPI = {};
 
-	PhoenixAPI.tusIPFSEndpoint = "http://localhost:11945";
+	PhoenixAPI.tusIPFSEndpoint = "http://163.172.45.41:11945";
 	PhoenixAPI.tusFiles = [];
 	PhoenixAPI.publishQueue = [];
 	PhoenixAPI.publishState = "Loading";
@@ -473,7 +473,7 @@ var Phoenix = (function() {
 	    	metadata: {
 	    		"name": newName ? newName : file.name
 	    	},
-	        endpoint: "http://localhost:11945/files/",
+	        endpoint: PhoenixAPI.tusIPFSEndpoint + "/files/",
 	        retryDelays: [0, 1000, 3000, 5000],
 	        onError: function(error) {
 	            onError(error);
