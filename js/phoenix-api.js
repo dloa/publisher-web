@@ -371,9 +371,7 @@ var Phoenix = (function() {
 							sugPlayArray.push(parseFloat(files[i].sugPlay))
 						}
 					}
-				}	
-
-				console.log(minBuyArray,minPlayArray,sugBuyArray,sugPlayArray);			
+				}		
 
 				var totMinPlay = 0;
 				for (var i = 0; i < minPlayArray.length; i++) {

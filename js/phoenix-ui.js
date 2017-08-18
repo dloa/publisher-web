@@ -1837,17 +1837,21 @@ var PhoenixUI = (function(){
 								artifactJSON.artifact.storage.files[i].dname = PhoenixUX.mediaPricing[pricing].displayName;
 
 							if (paid){
-								if (PhoenixUX.mediaPricing[pricing].minPlay)
-									artifactJSON.artifact.storage.files[i].minPlay = PhoenixUX.mediaPricing[pricing].minPlay;
-								
-								if (PhoenixUX.mediaPricing[pricing].sugPlay)
-									artifactJSON.artifact.storage.files[i].sugPlay = PhoenixUX.mediaPricing[pricing].sugPlay;
-								
-								if (PhoenixUX.mediaPricing[pricing].minBuy)
-									artifactJSON.artifact.storage.files[i].minBuy = PhoenixUX.mediaPricing[pricing].minBuy;
-								
-								if (PhoenixUX.mediaPricing[pricing].sugBuy)
-									artifactJSON.artifact.storage.files[i].sugBuy = PhoenixUX.mediaPricing[pricing].sugBuy;
+								if (!artifactJSON.artifact.payment)
+									artifactJSON.artifact.payment = {}
+
+								if (artifactJSON.artifact && artifactJSON.artifact.payment && !artifactJSON.artifact.payment.disPer)
+									artifactJSON.artifact.payment.disPer == 0.30;
+
+								if (PhoenixUX.mediaPricing[pricing].sugBuy){
+									// disPer stands for discount percentage
+									artifactJSON.artifact.storage.files[i].minBuy = parseFloat(PhoenixUX.mediaPricing[pricing].sugBuy) * (1-artifactJSON.artifact.payment.disPer)
+									artifactJSON.artifact.storage.files[i].sugBuy = parseFloat(PhoenixUX.mediaPricing[pricing].sugBuy)
+								}
+								if (PhoenixUX.mediaPricing[pricing].sugPlay){
+									artifactJSON.artifact.storage.files[i].minPlay = parseFloat(PhoenixUX.mediaPricing[pricing].sugPlay) * (1-artifactJSON.artifact.payment.disPer)
+									artifactJSON.artifact.storage.files[i].sugPlay = parseFloat(PhoenixUX.mediaPricing[pricing].sugPlay)
+								}
 							}
 								
 
@@ -2025,7 +2029,7 @@ var PhoenixUI = (function(){
 			if (subtypefor != "cover")
 				PhoenixUX.mediaFiles.push(file);
 
-			Phoenix.uploadFileToTus(file, function(id){ console.log(id) }, function(err){console.log(err)}, function(percent){
+			Phoenix.uploadFileToTus(file, function(id){ /*console.log(id)*/ }, function(err){console.log(err)}, function(percent){
 
 				PhoenixUX.setProgress(percent, file.id)
 				PhoenixUX.updateProgress(file.id)
@@ -2252,13 +2256,13 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.checkboxToggle = function(elem){
-		console.log(elem.id);
+		//console.log(elem.id);
 
 		var parent = elem.parentNode.parentNode.parentNode.parentNode;
-		console.log(parent);
+		//console.log(parent);
 
 		var id = parent.id;
-		console.log(id);
+		//console.log(id);
 
 		var disPlayCheck = parent.children[1].children[0].children[0].children[0];
 		var disPlayBlock = parent.children[1].children[0].children[1].children[0];
@@ -2333,10 +2337,10 @@ var PhoenixUI = (function(){
 		var checkboxDiv = elem.parentElement.parentElement.parentElement.children[5];
 
 		var parent = elem.parentNode.parentNode.parentNode;
-		console.log(parent);
+		//console.log(parent);
 
 		var id = parent.id;
-		console.log(id);
+		//console.log(id);
 
 		var disPlayCheck = parent.children[1].children[0].children[0].children[0];
 		var disPlayBlock = parent.children[1].children[0].children[1].children[0];
