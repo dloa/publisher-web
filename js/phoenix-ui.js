@@ -1451,6 +1451,8 @@ var PhoenixUI = (function(){
 				PhoenixUX.changeSubtype(PhoenixUX.types[0].type + ',' + PhoenixUX.types[0].subtypes[0].subtype);
 			}
 		}
+
+		PhoenixUI.loadWIPIntoPublisher(Phoenix.wipArtifacts[Phoenix.currentWIPID]);
 	}
 
 	PhoenixUX.changeType = function(type){
@@ -1540,15 +1542,21 @@ var PhoenixUI = (function(){
 		}
 	}
 
+	PhoenixUX.loadWIPIntoPublisher = function(wipArtifact){
+		if (wipArtifact && wipArtifact.artifactJSON)
+			PhoenixUX.loadIntoPublisher(wipArtifact.artifactJSON);
+	}
+
 	PhoenixUX.loadIntoPublisher = function(oip041){
 		var mainType, subType;
 
-		console.log(oip041);
+		if (!oip041.artifact || !oip041.artifact.type)
+			return;
 
 		if (oip041.artifact.type){
-			if (Array.isArray(oip041.artifact.type)){
-				mainType = oip041.artifact.type[0];
-				subType = oip041.artifact.type[1];
+			if (Array.isArray(oip041.artifact.type.split('-'))){
+				mainType = oip041.artifact.type.split('-')[0];
+				subType = oip041.artifact.type.split('-')[1];
 			} else {
 				if (oip041.artifact.type == 'thing') {
 					mainType = ('Image');
@@ -1916,6 +1924,7 @@ var PhoenixUI = (function(){
 			}
 		}
 
+		Phoenix.updateWIPArtifactJSON(artifactJSON);
 
 		return artifactJSON;
 	}
@@ -2101,7 +2110,7 @@ var PhoenixUI = (function(){
 	PhoenixUX.appendFileToMediaTable = function(file, iconURL, coverart) {
 		// Set uploader to be smaller since we have a file:
 		mediaDrop.style.height="100px";
-		
+
 		if (coverart){
 			var coverArtFile = document.getElementById("coverArtFile");
 

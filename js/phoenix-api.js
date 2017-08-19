@@ -38,6 +38,7 @@ var Phoenix = (function() {
 	PhoenixAPI.tusFiles = [];
 	PhoenixAPI.publishQueue = [];
 	PhoenixAPI.publishState = "Loading";
+	PhoenixAPI.wipArtifacts = {};
 
 	// Load info from LibraryD
 	PhoenixAPI.searchAPI = function(module, searchOn, searchFor) {
@@ -165,6 +166,61 @@ var Phoenix = (function() {
 		window.location.href = 'login.html';
 	}
 
+	PhoenixAPI.loadWIPArtifacts = function(callback){
+		try {
+			var localWIP = JSON.parse(localStorage.wipArtifacts);
+			PhoenixAPI.wipArtifacts = localWIP;
+
+			for (var id in PhoenixAPI.wipArtifacts)
+				if (!PhoenixAPI.currentWIPID)
+					PhoenixAPI.currentWIPID = id;
+		} catch (e) {
+			PhoenixAPI.wipArtifacts = {};
+			PhoenixAPI.createWIPArtifact(function(){});
+		}
+	}
+
+	PhoenixAPI.saveWIPArtifacts = function(callback){
+		localStorage.wipArtifacts = JSON.stringify(PhoenixAPI.wipArtifacts);
+	}
+
+	PhoenixAPI.createWIPArtifact = function(callback){
+		// This UniqueID is just an internal ID that we reference the draft artifact by.
+		var uniqueID = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
+
+		var newWIPArtifact = {
+			state: "Draft",
+			startPublish: false,
+			tusUploadComplete: false,
+			tusUploadFail: false,
+			ipfsAddComplete: false,	
+			ipfsAddFail: false,
+			artifactJSON: {},
+			files: [],
+			tusFiles: [],
+			txs: []	
+		}
+
+		PhoenixAPI.wipArtifacts[uniqueID] = newWIPArtifact;
+
+		PhoenixAPI.currentWIPID = uniqueID;
+
+		PhoenixAPI.saveWIPArtifacts();
+
+		callback(uniqueID);
+	}
+
+	PhoenixAPI.updateWIPArtifactJSON = function(artifactJSON){
+		if (PhoenixAPI.wipArtifacts && PhoenixAPI.currentWIPID){
+			if (!PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].artifactJSON){
+				PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].artifactJSON = {}
+			}
+
+			PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].artifactJSON = artifactJSON;
+			PhoenixAPI.saveWIPArtifacts();
+		}
+	}
+
 	PhoenixAPI.addAndPublish = function(artifactJSON, callback){
 		var idsToAdd = [];
 
@@ -172,8 +228,8 @@ var Phoenix = (function() {
 
 		for (var i = 0; i < files.length; i++) {
 			for (var j = 0; j < PhoenixAPI.tusFiles.length; j++) {
-				if (PhoenixAPI.tusFiles[j].name == files[i].fname){
-					idsToAdd.push(PhoenixAPI.tusFiles[j].id);
+				if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[j].name == files[i].fname){
+					idsToAdd.push(PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[j].id);
 				}
 			}
 		}
@@ -466,7 +522,8 @@ var Phoenix = (function() {
 		if (!onProgress)
 			onProgress = function(){};
 
-		PhoenixAPI.tusFiles.push({"name": newName ? newName : file.name});
+		PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.push({"name": newName ? newName : file.name});
+		PhoenixAPI.saveWIPArtifacts();
 
 		// Create a new tus upload
 	    var upload = new tus.Upload(file, {
@@ -486,9 +543,10 @@ var Phoenix = (function() {
 	        	var id = upload.url.replace(PhoenixAPI.tusIPFSEndpoint + '/files/', '');
 	        	onSuccess(id);
 
-	        	for (var i = 0; i < PhoenixAPI.tusFiles.length; i++) {
-	        		if (PhoenixAPI.tusFiles[i].name == file.name){
-	        			PhoenixAPI.tusFiles[i].id = id;
+	        	for (var i = 0; i < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; i++) {
+	        		if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name == file.name){
+	        			PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].id = id;
+	        			PhoenixAPI.saveWIPArtifacts();
 	        		}
 	        	}
 	        }
@@ -505,3 +563,4 @@ var Phoenix = (function() {
 setInterval(Phoenix.processPublishQueue, 1 * 1000);
 
 Phoenix.login();
+Phoenix.loadWIPArtifacts();
