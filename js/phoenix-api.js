@@ -210,6 +210,10 @@ var Phoenix = (function() {
 		callback(uniqueID);
 	}
 
+	PhoenixAPI.publishCurrentWIP = function(){
+		PhoenixAPI.addAndPublish(PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].artifactJSON, function(d){console.log(d);})
+	}
+
 	PhoenixAPI.updateWIPArtifactJSON = function(artifactJSON){
 		if (PhoenixAPI.wipArtifacts && PhoenixAPI.currentWIPID){
 			if (!PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].artifactJSON){
@@ -227,7 +231,7 @@ var Phoenix = (function() {
 		var files = artifactJSON.artifact.storage.files;
 
 		for (var i = 0; i < files.length; i++) {
-			for (var j = 0; j < PhoenixAPI.tusFiles.length; j++) {
+			for (var j = 0; j < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; j++) {
 				if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[j].name == files[i].fname){
 					idsToAdd.push(PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[j].id);
 				}
@@ -323,8 +327,14 @@ var Phoenix = (function() {
 			
 	}
 
-	PhoenixAPI.addToPublishQueue = function(artifactJSON){
-		PhoenixAPI.publishQueue.push(artifactJSON);
+	PhoenixAPI.addToPublishQueue = function(artJSON){
+		PhoenixAPI.publishQueue.push({
+			status: "",
+			ipfsUploadComplete: false,
+			txPushComplete: false,
+			txs: [],
+			artifactJSON: artJSON
+		});
 	}
 
 	PhoenixAPI.processPublishQueue = function(){
@@ -333,18 +343,44 @@ var Phoenix = (function() {
 				PhoenixAPI.publishState = "Publishing";
 
 				// Get the first element and remove it from the array
-				var pubJSON = PhoenixAPI.publishQueue.shift();
-				PhoenixAPI.currentArtifactPublish = pubJSON;
+				var pubObj = PhoenixAPI.publishQueue.shift();
+				PhoenixAPI.currentArtifactPublish = pubObj;
 
-				PhoenixAPI.publishArtifact(pubJSON, function(data){
-					PhoenixAPI.publishState = "Ready";
-					PhoenixAPI.currentArtifactPublish = undefined;
+				PhoenixAPI.currentArtifactPublish.splitStrings = LibraryDJS.createMultipartStrings(JSON.stringify(pubObj.artifactJSON));
+
+				PhoenixAPI.calculatePublishFee(pubObj.artifactJSON, function(usd, pubFee){
+					PhoenixAPI.currentArtifactPublish.pubFee = pubFee;
+					PhoenixEvents.trigger("onPublishStart", "Starting publish attempt");
 				})
-			}
-		} else {
 
+				// PhoenixAPI.publishArtifact(pubObj.artifactJSON, function(data){
+				// 	PhoenixAPI.publishState = "Ready";
+				// 	PhoenixAPI.currentArtifactPublish = undefined;
+				// })
+			}
+		}
+
+		if (PhoenixAPI.publishState === "Publishing"){
+			LibraryDJS.processTXPublishObj(PhoenixAPI.currentArtifactPublish, {
+				wallet: PhoenixAPI.wallet,
+				address: PhoenixAPI.currentPublisher.address
+			}, PhoenixAPI.publishQueueOnTXSuccess, PhoenixAPI.publishQueueOnTXError);
 		}
 	}
+
+	PhoenixAPI.publishQueueOnTXSuccess = function(data){
+		PhoenixAPI.currentArtifactPublish.txs.push(data);
+
+		if (PhoenixAPI.currentArtifactPublish.txs.length === PhoenixAPI.currentArtifactPublish.splitStrings.length){
+			PhoenixAPI.publishState = "Ready";
+			PhoenixAPI.currentArtifactPublish = undefined;
+			PhoenixEvents.trigger("onPublishEnd", data);
+		}
+
+		PhoenixEvents.trigger("onPublishTXSuccess", data);
+	}
+
+	PhoenixAPI.publishQueueOnTXError = function(error){ }
 
 	PhoenixAPI.getMarketData = function(callback){
 		$.getJSON("https://api.alexandria.io/flo-market-data/v1/getAll", function(data){

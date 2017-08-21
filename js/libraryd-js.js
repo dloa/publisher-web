@@ -30,27 +30,6 @@ LibraryDJS.signArtifactDeactivate = function (wallet, txid, publisher, timestamp
 LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, publishFee, callback) {
 	var time = unixTime();
 
-	var test = {
-		"torrent": "Qmeke1CyonqgKErvGhE18WLBuhrLaScbpSAS6vGLuoSCXM",
-		"publisher": "F6yEsikfYQPRAEL8FfDzumLqPD9WDPmKtK",
-		"timestamp": 0,
-		"type": "music",
-		"payment": {},
-		"info": {
-			"title": "Lady J",
-			"description": "Lady J with a really long description so it goes into multiple parts and really tests stuff.",
-			"year": 2003,
-			"extra-info": {
-				"filename": "320bit_mp3/10%20Lady%20J.mp3",
-				"filetype": "album track",
-				"displayname": "Lady J",
-				"albumtrack": "10",
-				"runtime": 241
-			}
-		}
-	};
-	//ipfs = "Qmeke1CyonqgKErvGhE18WLBuhrLaScbpSAS6vGLuoSCXM";
-
 	var signature = LibraryDJS.signArtifact(wallet, ipfs, address, time);
 
 	var data = {
@@ -201,7 +180,8 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee,
     var max = chop.length - 1;
 
     // var perPubFee = publishFee / chop.length; just publish all in the first tx fee
-    var perPubFee = 1 / Math.pow(10,8); //one satoshi so that it defaults to the normal amount
+    // hardcoded to one satoshi so that it defaults to the normal amount
+    var perPubFee = 1 / Math.pow(10,8);
 
     // the first reference tx id is always 64 zeros
     var reference = new Array(65).join("0");
@@ -225,6 +205,10 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee,
         })
     });
 };
+
+LibraryDJS.createMultipartStrings = function(longTxComment){
+	return LibraryDJS.chopString(longTxComment);
+}
 
 var txIDs = [];
 // Callback contains txIDs
@@ -263,5 +247,91 @@ LibraryDJS.chopString = function (input) {
 	return chunks;
 };
 
-const CHOP_MAX_LEN = 200;
-const TXCOMMENT_MAX_LEN = 400;
+
+LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError){
+	// If we have published all parts, don't!
+	if (txObj.txs.length === txObj.splitStrings.length)
+		return;
+
+	if (LibraryDJS.walletStatus === "Sending")
+		return;
+
+	var amount = 1 / Math.pow(10,8);
+
+	if (txObj.txs.length > 0 && txObj.splitStrings.length > 0){
+		// Not the first transaction, go ahead and build the multipart based on the txid of the first
+		if (!txObj.txs[0].txid){
+			console.error("Error, no first txid available");
+		} else {
+			// If there is a txid, go ahead and build from it
+			var publishedSoFar = txObj.txs.length;
+			var numberOfPieces = txObj.splitStrings.length - 1;
+			var txid = txObj.txs[0].txid;
+
+			// If there is no more strings, STOP!
+			if (!txObj.splitStrings[publishedSoFar])
+				return;
+
+			// Grab the first element from the array of chopped strings.
+			var chopStr = txObj.splitStrings[publishedSoFar];
+
+			var preImage = publishedSoFar.toString() + "-" + numberOfPieces.toString() + "-" + options.address.substring(0,10) + "-" + txid.substring(0,10) + "-" + chopStr;
+
+		    var signature = options.wallet.signMessage(options.address, preImage);
+
+			// Build our publish message
+			var multiPartMessage = MP_PREFIX + publishedSoFar.toString() + "," + numberOfPieces.toString() + "," + options.address.substring(0,10) + "," + txid.substring(0,10) + "," + signature + "," + "):" + chopStr;
+
+			// var perPubFee = publishFee / chop.length; just publish all in the first tx fee
+			// hardcoded to one satoshi so that it defaults to the normal amount
+			var perPubFee = 1 / Math.pow(10,8);
+
+			LibraryDJS.walletStatus = "Sending";
+			options.wallet.sendCoins(options.address, options.address, amount, multiPartMessage, perPubFee, function (err, data) {
+				if (err){
+					onTxError(err);
+				} else {
+					LibraryDJS.walletStatus = "Idle";
+					onTxSuccess(data);
+				}
+			});
+		}
+	} else {
+		if (!txObj.pubFee){
+			// Pub fee has not been calculated yet, wait.
+			return;
+		}
+
+		if (txObj.txs.length > 0){
+			return;
+		}
+
+		// send first transaction
+		var publishedSoFar = 0;
+		var numberOfPieces = txObj.splitStrings.length - 1;
+
+		// Grab the first element from the array of chopped strings.
+		var chopStr = txObj.splitStrings[publishedSoFar];
+
+		var preImage = publishedSoFar.toString() + "-" + numberOfPieces.toString() + "-" + options.address.substring(0,10) + "-" + chopStr;
+
+	    var signature = options.wallet.signMessage(options.address, preImage);
+
+		// Build our publish message
+		var multiPartMessage = MP_PREFIX + publishedSoFar.toString() + "," + numberOfPieces.toString() + "," + options.address.substring(0,10) + "," + "," + signature + "," + "):" + chopStr;
+
+		LibraryDJS.walletStatus = "Sending";
+		options.wallet.sendCoins(options.address, options.address, amount, multiPartMessage, txObj.pubFee, function (err, data) {
+			if (err){
+				onTxError(err);
+			} else {
+				LibraryDJS.walletStatus = "Idle";
+				onTxSuccess(data);
+			}
+		});
+	}
+}
+
+const MP_PREFIX = "oip-mp(";
+const CHOP_MAX_LEN = 318;
+const TXCOMMENT_MAX_LEN = 528;

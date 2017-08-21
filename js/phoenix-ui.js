@@ -49,6 +49,10 @@ PhoenixEvents.on("onPublishStart", function(msg){
 	PhoenixUI.notify("Publishing Artifact", 'warning');
 	console.log(msg);
 })
+PhoenixEvents.on("onPublishTXSuccess", function(msg){ 
+	PhoenixUI.drawPublishStatus();
+	console.log(msg);
+})
 PhoenixEvents.on("onPublishEnd", function(msg){ 
 	PhoenixUI.drawPublishStatus();
 	PhoenixUI.notify("Artifact Publish Successful!", 'success'); 
@@ -1443,7 +1447,6 @@ var PhoenixUI = (function(){
 			typesCircleHTML += '<div id="' + PhoenixUX.types[i].type + '" onclick="PhoenixUI.changeType(\'' + PhoenixUX.types[i].type + '\')" class="col-' + width + '"><div id="' + PhoenixUX.types[i].type + '" class="type-circle ' + PhoenixUX.types[i].icon + ( i == 0 ? ' type-circle-active' : '') + '"></div>' + PhoenixUX.types[i].type + '</div>';
 		}
 		typeCirclesElement.innerHTML = typesCircleHTML;
-
 
 		if (PhoenixUX.types[0]){
 			PhoenixUX.changeType(PhoenixUX.types[0].type);
@@ -3107,12 +3110,17 @@ var PhoenixUI = (function(){
 		pubStatusTableElement.innerHTML = "";
 
 		if (current){
+			var progress = 0;
+
+			if (Phoenix.currentArtifactPublish.txs && Phoenix.currentArtifactPublish.txs.length && Phoenix.currentArtifactPublish.splitStrings && Phoenix.currentArtifactPublish.splitStrings.length)
+				progress = Phoenix.currentArtifactPublish.txs.length / Phoenix.currentArtifactPublish.splitStrings.length;
+
 			pubStatusTableElement.innerHTML += '<tr>\
 				<th scope="row">1</th>\
-				<td><code>' + current.artifact.info.title + '</code></td>\
+				<td><code>' + current.artifactJSON.artifact.info.title + '</code></td>\
 				<td>\
 					<div class="progress">\
-						<div class="progress-bar progress-bar-animated progress-bar-striped bg-warning" role="progressbar" style="width: 100%"></div>\
+						<div class="progress-bar progress-bar-animated progress-bar-striped bg-warning" role="progressbar" style="width: ' + (progress*100) + '%"></div>\
 					</div>\
 				</td>\
 				<td>\
