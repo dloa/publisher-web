@@ -34,7 +34,7 @@ var PhoenixStatus = {
 var Phoenix = (function() {	
 	var PhoenixAPI = {};
 
-	PhoenixAPI.tusIPFSEndpoint = "http://163.172.45.41:11945";
+	PhoenixAPI.tusIPFSEndpoint = "http://ipfs-tus.alexandria.io:11945";
 	PhoenixAPI.tusFiles = [];
 	PhoenixAPI.publishQueue = [];
 	PhoenixAPI.publishState = "Loading";
@@ -349,6 +349,9 @@ var Phoenix = (function() {
 				PhoenixAPI.currentArtifactPublish.splitStrings = LibraryDJS.createMultipartStrings(JSON.stringify(pubObj.artifactJSON));
 
 				PhoenixAPI.calculatePublishFee(pubObj.artifactJSON, function(usd, pubFee){
+					if (isNaN(pubFee)){
+						pubFee = 0.002;
+					}
 					PhoenixAPI.currentArtifactPublish.pubFee = pubFee;
 					PhoenixEvents.trigger("onPublishStart", "Starting publish attempt");
 				})
@@ -371,7 +374,7 @@ var Phoenix = (function() {
 	PhoenixAPI.publishQueueOnTXSuccess = function(data){
 		PhoenixAPI.currentArtifactPublish.txs.push(data);
 
-		if (PhoenixAPI.currentArtifactPublish.txs.length === PhoenixAPI.currentArtifactPublish.splitStrings.length){
+		if (PhoenixAPI.currentArtifactPublish.txs && PhoenixAPI.currentArtifactPublish.splitStrings && PhoenixAPI.currentArtifactPublish.txs.length > 0 && PhoenixAPI.currentArtifactPublish.splitStrings.length > 0 && PhoenixAPI.currentArtifactPublish.txs.length === PhoenixAPI.currentArtifactPublish.splitStrings.length){
 			PhoenixAPI.publishState = "Ready";
 			PhoenixAPI.currentArtifactPublish = undefined;
 			PhoenixEvents.trigger("onPublishEnd", data);

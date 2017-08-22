@@ -3133,7 +3133,7 @@ var PhoenixUI = (function(){
 			for (var i = 0; i < waiting.length; i++) {
 				pubStatusTableElement.innerHTML += '<tr>\
 					<th scope="row">' + i + '</th>\
-					<td><code>' + waiting[i].artifact.info.title + '</code></td>\
+					<td><code>' + waiting[i].artifactJSON.artifact.info.title + '</code></td>\
 					<td>\
 						<div class="progress">\
 							<div class="progress-bar" role="progressbar" style="width: 0%"></div>\
@@ -3174,7 +3174,7 @@ PhoenixUI.updatePubFee();
 
 // Handle all of the drag and drop setup
 var posterDropzone = new Dropzone("div#poster", { 
-	url: '/url',
+	url: '/',
 	createImageThumbnails: false,
 	previewTemplate: '<div></div>',
 	acceptedFiles: "png,jpg",
@@ -3184,7 +3184,7 @@ var posterDropzone = new Dropzone("div#poster", {
 posterDropzone.on("addedfile", PhoenixUI.posterFileSelectHandler);
 
 var mediaDropzone = new Dropzone("div#mediaDrop", { 
-	url: '/url',
+	url: '/',
 	createImageThumbnails: false,
 	previewTemplate: '<div></div>'
 });
@@ -3192,7 +3192,7 @@ var mediaDropzone = new Dropzone("div#mediaDrop", {
 mediaDropzone.on("addedfile", PhoenixUI.mediaFileSelectHandler);
 
 var bulkDropzone = new Dropzone("div#bulk", { 
-	url: '/url',
+	url: '/',
 	createImageThumbnails: false,
 	previewTemplate: '<div></div>'
 });
