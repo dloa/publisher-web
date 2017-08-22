@@ -172,7 +172,6 @@ var Phoenix = (function() {
 			PhoenixAPI.wipArtifacts = localWIP;
 		} catch (e) {
 			PhoenixAPI.wipArtifacts = {};
-			PhoenixAPI.createWIPArtifact(function(){});
 		}
 	}
 
@@ -200,7 +199,11 @@ var Phoenix = (function() {
 	}
 
 	PhoenixAPI.publishCurrentWIP = function(){
-		PhoenixAPI.addAndPublish(PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].artifactJSON, function(d){console.log(d);})
+		var artJSON = PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].artifactJSON;
+		PhoenixAPI.addAndPublish(artJSON, function(d){console.log(d);})
+		delete PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID];
+		PhoenixAPI.currentWIPID = undefined;
+		PhoenixAPI.saveWIPArtifacts();
 	}
 
 	PhoenixAPI.updateWIPArtifactJSON = function(artifactJSON){
@@ -221,9 +224,11 @@ var Phoenix = (function() {
 		var files = artifactJSON.artifact.storage.files;
 
 		for (var i = 0; i < files.length; i++) {
-			for (var j = 0; j < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; j++) {
-				if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[j].name == files[i].fname){
-					idsToAdd.push(PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[j].id);
+			if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles){
+				for (var j = 0; j < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; j++) {
+					if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[j].name == files[i].fname){
+						idsToAdd.push(PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[j].id);
+					}
 				}
 			}
 		}

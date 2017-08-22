@@ -39,6 +39,42 @@ var mainPubStatusDiv = document.getElementById('mainPubStatusDiv');
 var mediaDrop = document.getElementById('mediaDrop');
 var draftTBodyElement = document.getElementById('draftTbody')
 
+// Basic JSON to manage page
+var showWizardPage = function(){
+	hideAll();
+	$('#wizard').show();
+}
+
+var showArtifactPage = function(){
+	hideAll();
+	$('#artifacts').show();
+}
+
+var showWalletPage = function(){
+	hideAll();
+	$('#WalletPage').show();
+}
+
+var showToolsPage = function(){
+	hideAll();
+	$('#tools').show();
+}
+
+var showDraftsPage = function(){
+	hideAll();
+	$('#draftSelect').show();
+}
+
+var hideAll = function(){
+	$('#wizard').hide();
+	$('#artifacts').hide();
+	$('#editArtifact').hide();
+	$('#WalletPage').hide();
+	$('#tools').hide();
+	$('#draftSelect').hide();
+	document.body.scrollTop = document.documentElement.scrollTop = 0;
+}
+
 // Accepts a set of Selectors to load the artifact into view. Generates code for all of the different sections to fill it.
 PhoenixEvents.on("onError", function(msg){ console.log(msg.message) });
 PhoenixEvents.on("onLogin", function(msg){ console.log("Logging in"); })
@@ -1759,14 +1795,11 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.publish = function(){
-		var json = PhoenixUX.generateArtifactJSONFromView();
 		PhoenixUX.resetPublisher();
 
+		Phoenix.publishCurrentWIP();
+
 		showArtifactPage();
-
-		Phoenix.addAndPublish(json, function(data){
-
-		});
 	}
 
 	PhoenixUX.generateArtifactJSONFromView = function(){
@@ -3179,31 +3212,38 @@ var PhoenixUI = (function(){
 	PhoenixUX.generateDraftRows = function(){
 		draftTBodyElement.innerHTML = "";
 
+		var oneMade = false;
 		for (var i in Phoenix.wipArtifacts) {
-			console.log(Phoenix.wipArtifacts[i]);
-			draftTBodyElement.innerHTML += '<tr id="' + i + '">\
-				<th scope="row"></th>\
-				<td>' + Phoenix.wipArtifacts[i].artifactJSON.artifact.type + '</td>\
-				<td>' + Phoenix.wipArtifacts[i].artifactJSON.artifact.info.title + '</td>\
-				<td>\
-					<button class="btn btn-outline-info" onClick="PhoenixUI.resumeWIP(this);"><span class="icon icon-pencil"></span> Resume</button>\
-					<button class="btn btn-outline-danger" onClick="PhoenixUI.deleteWIP(this);"><span class="icon icon-trash"></span> Delete</button>\
-				</td>\
-			</tr>';
+			if (Phoenix.wipArtifacts[i].artifactJSON.artifact){
+				oneMade = true;
+				draftTBodyElement.innerHTML += '<tr id="' + i + '">\
+					<th scope="row"></th>\
+					<td>' + Phoenix.wipArtifacts[i].artifactJSON.artifact.type + '</td>\
+					<td>' + Phoenix.wipArtifacts[i].artifactJSON.artifact.info.title + '</td>\
+					<td>\
+						<button class="btn btn-outline-info" onClick="PhoenixUI.resumeWIP(this);"><span class="icon icon-pencil"></span> Resume</button>\
+						<button class="btn btn-outline-danger" onClick="PhoenixUI.deleteWIP(this);"><span class="icon icon-trash"></span> Delete</button>\
+					</td>\
+				</tr>';
+			}	
+		}
+
+		if (!oneMade){
+			PhoenixUX.startNewWIP();
 		}
 	}
 
 	PhoenixUX.resumeWIP = function(elem){
 		var id = elem.parentNode.parentNode.id;
 		Phoenix.currentWIPID = id;
-		showWizardPage();
 		PhoenixUX.loadWIPIntoPublisher(Phoenix.wipArtifacts[Phoenix.currentWIPID]);
+		showWizardPage();
 	}
 
 	PhoenixUX.startNewWIP = function(){
 		Phoenix.createWIPArtifact(function(id){
-			showWizardPage();
 			PhoenixUX.loadWIPIntoPublisher(Phoenix.wipArtifacts[Phoenix.currentWIPID]);
+			showWizardPage();
 		})
 	}
 
@@ -3217,6 +3257,11 @@ var PhoenixUI = (function(){
 
 	return PhoenixUX;
 })();
+
+// By default show
+//showWizardPage();
+// showArtifactPage();
+showDraftsPage();
 
 // Initialize
 PhoenixUI.loadTypes();
