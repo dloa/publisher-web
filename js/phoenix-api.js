@@ -170,10 +170,6 @@ var Phoenix = (function() {
 		try {
 			var localWIP = JSON.parse(localStorage.wipArtifacts);
 			PhoenixAPI.wipArtifacts = localWIP;
-
-			for (var id in PhoenixAPI.wipArtifacts)
-				if (!PhoenixAPI.currentWIPID)
-					PhoenixAPI.currentWIPID = id;
 		} catch (e) {
 			PhoenixAPI.wipArtifacts = {};
 			PhoenixAPI.createWIPArtifact(function(){});
@@ -221,6 +217,7 @@ var Phoenix = (function() {
 			}
 
 			PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].artifactJSON = artifactJSON;
+
 			PhoenixAPI.saveWIPArtifacts();
 		}
 	}

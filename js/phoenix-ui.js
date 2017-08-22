@@ -1,5 +1,4 @@
 // At the top we define all of our variables used below that link to our UI. This uses regular html selectors currently, not jQuery selectors.
-var x = document.getElementById('id');
 var pubNameElement = document.getElementById('pub-name');
 var nsfwToggle = document.getElementById('nsfwToggle');
 var walletBalanceElement = document.getElementById('walletBalance');
@@ -38,6 +37,7 @@ var pubStatusTableElement = document.getElementById('pubStatusTable');
 var advancedSettingsElement = document.getElementById('advancedSettings');
 var mainPubStatusDiv = document.getElementById('mainPubStatusDiv');
 var mediaDrop = document.getElementById('mediaDrop');
+var draftTBodyElement = document.getElementById('draftTbody')
 
 // Accepts a set of Selectors to load the artifact into view. Generates code for all of the different sections to fill it.
 PhoenixEvents.on("onError", function(msg){ console.log(msg.message) });
@@ -1454,8 +1454,6 @@ var PhoenixUI = (function(){
 				PhoenixUX.changeSubtype(PhoenixUX.types[0].type + ',' + PhoenixUX.types[0].subtypes[0].subtype);
 			}
 		}
-
-		PhoenixUI.loadWIPIntoPublisher(Phoenix.wipArtifacts[Phoenix.currentWIPID]);
 	}
 
 	PhoenixUX.changeType = function(type){
@@ -3165,12 +3163,44 @@ var PhoenixUI = (function(){
 
 	}
 
+	PhoenixUX.generateDraftRows = function(){
+		draftTBodyElement.innerHTML = "";
+
+		for (var i in Phoenix.wipArtifacts) {
+			console.log(Phoenix.wipArtifacts[i]);
+			draftTBodyElement.innerHTML += '<tr id="' + i + '">\
+				<th scope="row">1</th>\
+				<td>' + Phoenix.wipArtifacts[i].artifactJSON.artifact.type + '</td>\
+				<td>' + Phoenix.wipArtifacts[i].artifactJSON.artifact.info.title + '</td>\
+				<td>\
+					<button class="btn btn-outline-info" onClick="PhoenixUI.resumeWIP(this);"><span class="icon icon-pencil"></span> Resume</button>\
+					<button class="btn btn-outline-danger" onClick="PhoenixUI.deleteWIP(this);"><span class="icon icon-trash"></span> Delete</button>\
+				</td>\
+			</tr>';
+		}
+	}
+
+	PhoenixUX.resumeWIP = function(elem){
+		var id = elem.parentNode.parentNode.id;
+		Phoenix.currentWIPID = id;
+		showWizardPage();
+		PhoenixUX.loadWIPIntoPublisher(Phoenix.wipArtifacts[Phoenix.currentWIPID]);
+	}
+
+	PhoenixUX.startNewWIP = function(){
+		Phoenix.createWIPArtifact(function(id){
+			showWizardPage();
+			PhoenixUX.loadWIPIntoPublisher(Phoenix.wipArtifacts[Phoenix.currentWIPID]);
+		})
+	}
+
 	return PhoenixUX;
 })();
 
 // Initialize
 PhoenixUI.loadTypes();
 PhoenixUI.updatePubFee();
+PhoenixUI.generateDraftRows();
 
 // Handle all of the drag and drop setup
 var posterDropzone = new Dropzone("div#poster", { 

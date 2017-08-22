@@ -32,20 +32,20 @@
 			}*/
 
 			@media (min-width: 768px) {
-			    .navbar .navbar-nav {
-		            display: inline-block;
-		            float: none;
+				.navbar .navbar-nav {
+					display: inline-block;
+					float: none;
 					vertical-align: top;
-		        }
-		        
-		        .navbar .navbar-collapse {
-		            text-align: center;
-		        }
+				}
+					
+				.navbar .navbar-collapse {
+					text-align: center;
+				}
 
-		        .navbar-center {
-	        	    float: left;
-				    margin-left: 50%;
-		        }
+				.navbar-center {
+					float: left;
+					margin-left: 50%;
+				}
 			}
 
 			h1 {
@@ -60,17 +60,17 @@
 			}
 
 			.custom-file-control::before {
-			    color: #5bc0de;
-			    background-color: #fff;
-			    border: 1px solid rgba(91, 192, 222, 1);
-			    border-radius: 0 .25rem .25rem 0;
+					color: #5bc0de;
+					background-color: #fff;
+					border: 1px solid rgba(91, 192, 222, 1);
+					border-radius: 0 .25rem .25rem 0;
 			}
 
 			.custom-file-control::before:hover{
-			    color: #fff;
-			    background-color: #5bc0de;
-			    border: 1px solid rgba(91, 192, 222, 1);
-			    border-radius: 0 .25rem .25rem 0;
+					color: #fff;
+					background-color: #5bc0de;
+					border: 1px solid rgba(91, 192, 222, 1);
+					border-radius: 0 .25rem .25rem 0;
 			}
 
 			.table-icon {
@@ -82,15 +82,15 @@
 
 			.type-circle {
 				margin: 0 auto;
-			    border-radius: 50%;
-			    border: 1px solid #979797;
-			    background-color: #ffffff;
-			    height: 60px;
-			    width: 60px;
-			    background-size: 40px 40px;
-			    background-repeat: no-repeat;
-			    background-position: center;
-			    color: #979797;
+					border-radius: 50%;
+					border: 1px solid #979797;
+					background-color: #ffffff;
+					height: 60px;
+					width: 60px;
+					background-size: 40px 40px;
+					background-repeat: no-repeat;
+					background-position: center;
+					color: #979797;
 				fill: currentColor;
 			}
 
@@ -156,9 +156,9 @@
 			}
 
 			.nav-pills li a:active {
-			    background: rgba(83, 139, 212, 0.2);
-			    color: #8e8e90;
-			    transition: 0.1s all;
+					background: rgba(83, 139, 212, 0.2);
+					color: #8e8e90;
+					transition: 0.1s all;
 			}
 
 			.loader {
@@ -166,17 +166,17 @@
 				top: 50%;
 				left: 45%;
 				top: 200px;
-			    border: 16px solid #f3f3f3; /* Light grey */
-			    border-top: 16px solid #3498db; /* Blue */
-			    border-radius: 50%;
-			    width: 120px;
-			    height: 120px;
-			    animation: spin 2s linear infinite;
+					border: 16px solid #f3f3f3; /* Light grey */
+					border-top: 16px solid #3498db; /* Blue */
+					border-radius: 50%;
+					width: 120px;
+					height: 120px;
+					animation: spin 2s linear infinite;
 			}
 
 			@keyframes spin {
-			    0% { transform: rotate(0deg); }
-			    100% { transform: rotate(360deg); }
+					0% { transform: rotate(0deg); }
+					100% { transform: rotate(360deg); }
 			}
 
 			.navbar-center {
@@ -193,7 +193,7 @@
 				<span style="margin-left: 5px;">ΛLΞXΛNDRIΛ Publisher</span>
 			</a>
 			<form class="form-inline mr-auto" style="margin: 0px auto">
-				<ul class="navbar-nav" style="list-style: none;width: 100%; padding-right: 20px; padding-left: 25px;  margin: 0 auto; text-align: center;">
+				<ul class="navbar-nav" style="list-style: none;width: 100%; padding-right: 20px; padding-left: 25px;	margin: 0 auto; text-align: center;">
 					<li style="display:inline-block;">
 						<select id="publisherSelect" class="custom-select" style="display: none;" onchange="PhoenixUI.onPublisherSelectChange(this);">
 							<option value="a"></option>
@@ -683,6 +683,48 @@
 								</div>
 							</div>
 							<video src="" width="1" height="1" id="video_player"></video>
+						</div>
+					</section>
+
+					<section class="text-center container" id="draftSelect">
+						<div class="col-12" style="margin-top: 20px">
+							<h4 class="m0 text-thin">Please select a draft or start a new Artifact!</h4><small>Please select from in the table below</small>
+						</div>
+						<br />
+						<br />
+						<br />
+						<div>
+							<button class="btn btn-outline-success btn-lg" onClick="PhoenixUI.startNewWIP()"><span class="icon icon-pencil"></span> Start New Artifact</button>
+						</div>
+						<br />
+						<br />
+						<div>
+							<h3>or</h3>
+						</div>
+						<br />
+						<br />
+						<div class="col-12">
+							<table class="table">
+								<thead>
+									<tr>
+										<th style="text-align:center">#</th>
+										<th style="text-align:center">Type</th>
+										<th style="text-align:center">Title</th>
+										<th style="text-align:center">Controls</th>
+									</tr>
+								</thead>
+								<tbody id="draftTbody">
+									<!-- <tr>
+										<th scope="row">1</th>
+										<td>Audio - Basic</td>
+										<td>Beach Ambiance Audio</td>
+										<td>
+											<button class="btn btn-outline-info"><span class="icon icon-pencil"></span> Resume</button>
+											<button class="btn btn-outline-danger"><span class="icon icon-trash"></span> Delete</button>
+										</td>
+									</tr> -->
+								</tbody>
+							</table>
 						</div>
 					</section>
 
@@ -1197,20 +1239,20 @@
 			var free, paid;
 
 			$(document).on("change","input[type=radio]",function(){
-			    free = $('[name="free"]')[0].checked;
-			    paid = $('[name="free"]')[1].checked;
+					free = $('[name="free"]')[0].checked;
+					paid = $('[name="free"]')[1].checked;
 
-			    if (paid) {
-			    	$('#paymentInfo').show();
-			    } else {
-			    	$('#paymentInfo').hide();
-			    }
+					if (paid) {
+						$('#paymentInfo').show();
+					} else {
+						$('#paymentInfo').hide();
+					}
 
-			    PhoenixUI.updatePubFee();
+					PhoenixUI.updatePubFee();
 			});
 
 			$(function () {
-			  $('[data-toggle="popover"]').popover()
+				$('[data-toggle="popover"]').popover()
 			})
 
 			// $('#publisherNav').on('click', function(evt){
@@ -1259,18 +1301,25 @@
 				$('#tools').show();
 			}
 
+			var showDraftsPage = function(){
+				hideAll();
+				$('#draftSelect').show();
+			}
+
 			var hideAll = function(){
 				$('#wizard').hide();
 				$('#artifacts').hide();
 				$('#editArtifact').hide();
 				$('#WalletPage').hide();
 				$('#tools').hide();
+				$('#draftSelect').hide();
 				document.body.scrollTop = document.documentElement.scrollTop = 0;
 			}
 
 			// By default show
-			showWizardPage();
+			//showWizardPage();
 			// showArtifactPage();
+			showDraftsPage();
 
 
 			// $('#paymentInfo').hide();
