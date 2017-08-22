@@ -185,16 +185,9 @@ var Phoenix = (function() {
 		var uniqueID = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 10);
 
 		var newWIPArtifact = {
-			state: "Draft",
-			startPublish: false,
-			tusUploadComplete: false,
-			tusUploadFail: false,
-			ipfsAddComplete: false,	
-			ipfsAddFail: false,
 			artifactJSON: {},
 			files: [],
-			tusFiles: [],
-			txs: []	
+			tusFiles: []
 		}
 
 		PhoenixAPI.wipArtifacts[uniqueID] = newWIPArtifact;

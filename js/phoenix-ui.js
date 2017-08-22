@@ -1584,15 +1584,28 @@ var PhoenixUI = (function(){
 							var value;
 
 							if (location.includes('extraInfo.')){
-								location.replace('extraInfo.', '');
-								value = oip041.artifact.info.extraInfo[location];
+								var newLoc = location.replace('extraInfo.', '');
+								value = oip041.artifact.info.extraInfo[newLoc];
 							} else {
 								value = oip041.artifact.info[location];
 							}
 
-							if (value){
+							if (value) {
 								if (forms[k].id.includes('tags')){
 									// ToDo: Load tags
+									for (var z = 0; z < value.length; z++) {
+										$("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput('add', value[z]);
+									}
+								} else if (forms[k].id.includes('genre')) {
+									var splitVal = value.split(',');
+									if (splitVal.length > 1){
+										console.log(splitVal[0]);
+										$('.genreOne option[value="' + splitVal[0] + '"]').attr('selected','selected');
+										$('.genreTwo option[value="' + splitVal[1] + '"]').attr('selected','selected');
+									} else {
+										$('.genreSelectr option[value="' + value + '"]').attr('selected','selected');
+									}
+									
 								} else {
 									document.getElementById(forms[k].id).value = value;
 								}
@@ -1668,19 +1681,19 @@ var PhoenixUI = (function(){
 				// If we are dealing with 2 level genres
 				if (Array.isArray(firstSubArray)){
 					for (var genre in formJSON.genres){
-						selectInner += '<option>' + genre + '</option>';
+						selectInner += '<option value="' + genre + '">' + genre + '</option>';
 					}
 
 					var selectInner2 = '';
 					for (var genre in firstSubArray){
-						selectInner2 += '<option>' + firstSubArray[genre] + '</option>';
+						selectInner2 += '<option value="' + firstSubArray[genre] + '">' + firstSubArray[genre] + '</option>';
 					}
 					return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
 						<div class="dual-selector">\
-							<select class="form-control" style="width: 50%" id="mainGenreSelector" onchange="PhoenixUI.updateSubGenre(this);">\
+							<select class="form-control genreOne" style="width: 50%" id="mainGenreSelector" onchange="PhoenixUI.updateSubGenre(this);PhoenixUI.generateArtifactJSONFromView(function(){});">\
 								' + selectInner + '\
 							</select>\
-							<select class="form-control" style="width: 50%" id="subGenreSelector">\
+							<select class="form-control genreTwo" style="width: 50%" id="subGenreSelector" onChange="PhoenixUI.generateArtifactJSONFromView(function(){})">\
 								' + selectInner2 + '\
 							</select>\
 						</div>\
@@ -1688,11 +1701,11 @@ var PhoenixUI = (function(){
 				} else {
 					// else we are dealing with single level.
 					for (var genre in formJSON.genres){
-						selectInner += '<option>' + formJSON.genres[genre] + '</option>';
+						selectInner += '<option value="' + formJSON.genres[genre] + '">' + formJSON.genres[genre] + '</option>';
 					}
 
 					return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
-						<select class="form-control" id="' + formJSON.id + '">' + selectInner + '</select>\
+						<select class="form-control genreSelectr" id="' + formJSON.id + '" onChange="PhoenixUI.generateArtifactJSONFromView(function(){})">' + selectInner + '</select>\
 					</div>';
 				}
 			} else {
@@ -3169,7 +3182,7 @@ var PhoenixUI = (function(){
 		for (var i in Phoenix.wipArtifacts) {
 			console.log(Phoenix.wipArtifacts[i]);
 			draftTBodyElement.innerHTML += '<tr id="' + i + '">\
-				<th scope="row">1</th>\
+				<th scope="row"></th>\
 				<td>' + Phoenix.wipArtifacts[i].artifactJSON.artifact.type + '</td>\
 				<td>' + Phoenix.wipArtifacts[i].artifactJSON.artifact.info.title + '</td>\
 				<td>\
@@ -3192,6 +3205,14 @@ var PhoenixUI = (function(){
 			showWizardPage();
 			PhoenixUX.loadWIPIntoPublisher(Phoenix.wipArtifacts[Phoenix.currentWIPID]);
 		})
+	}
+
+	PhoenixUX.deleteWIP = function(elem){
+		var id = elem.parentNode.parentNode.id;
+		delete Phoenix.wipArtifacts[id];
+		Phoenix.currentWIPID = undefined;
+		Phoenix.saveWIPArtifacts();
+		PhoenixUX.generateDraftRows();
 	}
 
 	return PhoenixUX;
