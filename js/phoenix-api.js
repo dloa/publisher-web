@@ -34,7 +34,7 @@ var PhoenixStatus = {
 var Phoenix = (function() {	
 	var PhoenixAPI = {};
 
-	PhoenixAPI.tusIPFSEndpoint = "https://ipfs-tus.alexandria.io:11945";
+	PhoenixAPI.tusIPFSEndpoint = "https://ipfs-tus.alexandria.io";
 	PhoenixAPI.tusFiles = [];
 	PhoenixAPI.publishQueue = [];
 	PhoenixAPI.publishState = "Loading";
