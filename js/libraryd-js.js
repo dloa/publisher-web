@@ -312,7 +312,7 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 				}
 			});
 		}
-	} else {
+	} else if (txObj.splitStrings.length > 1) {
 		if (!txObj.pubFee){
 			// Pub fee has not been calculated yet, wait.
 			return;
@@ -335,6 +335,31 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 
 		// Build our publish message
 		var multiPartMessage = MP_PREFIX + publishedSoFar.toString() + "," + numberOfPieces.toString() + "," + options.address.substring(0,10) + "," + "," + signature + "," + "):" + chopStr;
+
+		LibraryDJS.walletStatus = "Sending";
+		options.wallet.sendCoins(options.address, options.address, amount, multiPartMessage, txObj.pubFee, function (err, data) {
+			if (err){
+				onTxError(err);
+			} else {
+				LibraryDJS.walletStatus = "Idle";
+				onTxSuccess(data);
+			}
+		});
+	} else {
+		if (!txObj.pubFee){
+			// Pub fee has not been calculated yet, wait.
+			return;
+		}
+
+		if (txObj.txs.length > 0){
+			return;
+		}
+
+		// Grab the first element from the array of chopped strings.
+		var chopStr = txObj.splitStrings[0];
+		
+		// Build our publish message
+		var multiPartMessage = chopStr;
 
 		LibraryDJS.walletStatus = "Sending";
 		options.wallet.sendCoins(options.address, options.address, amount, multiPartMessage, txObj.pubFee, function (err, data) {
