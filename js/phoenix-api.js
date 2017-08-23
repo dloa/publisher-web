@@ -174,7 +174,13 @@ var Phoenix = (function() {
 	PhoenixAPI.loadWIPArtifacts = function(callback){
 		try {
 			var localWIP = JSON.parse(localStorage.wipArtifacts);
-			PhoenixAPI.wipArtifacts = localWIP;
+
+			var newWIPObj = {};
+			for (var i in localWIP){
+				if (localWIP && localWIP[i] && localWIP[i].artifactJSON && localWIP[i].artifactJSON.artifact)
+					newWIPObj[i] = localWIP[i];
+			}
+			PhoenixAPI.wipArtifacts = newWIPObj;
 		} catch (e) {
 			PhoenixAPI.wipArtifacts = {};
 		}
@@ -226,7 +232,8 @@ var Phoenix = (function() {
 	PhoenixAPI.addAndPublishWIP = function(wipArtifact){
 		var publishObject = {
 			artifactJSON: wipArtifact.artifactJSON,
-			status: "Uploading"
+			status: "Uploading",
+			ipfsAddStart: false
 		}
 
 		var filesUploadState = [];
@@ -322,11 +329,13 @@ var Phoenix = (function() {
 
 				var files = wipArtifact.artifactJSON.artifact.storage.files;
 
-				for (var i = 0; i < files.length; i++) {
+				for (var k = 0; k < files.length; k++) {
 					if (wipArtifact.tusFiles){
 						for (var j = 0; j < wipArtifact.tusFiles.length; j++) {
-							if (wipArtifact.tusFiles[j].name == files[i].fname){
-								idsToAdd.push(wipArtifact.tusFiles[j].id);
+							if (wipArtifact.tusFiles[j]){
+								if (wipArtifact.tusFiles[j].name == files[k].fname){
+									idsToAdd.push(wipArtifact.tusFiles[j].id);
+								}
 							}
 						}
 					}
@@ -779,9 +788,10 @@ var Phoenix = (function() {
 				
 				for (var j = 0; j < PhoenixAPI.pendingUploadQueue.length; j++){
 					for (var i = 0; i < PhoenixAPI.pendingUploadQueue[j].tusFiles.length; i++) {
-						console.log(i, PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name, file.name)
-						if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == file.name){
-							PhoenixAPI.pendingUploadQueue[j].tusFiles[i].id = id;
+						if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i]){
+							if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == file.name){
+								PhoenixAPI.pendingUploadQueue[j].tusFiles[i].id = id;
+							}
 						}
 		        	}
 				}

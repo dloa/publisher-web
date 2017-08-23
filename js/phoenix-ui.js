@@ -3287,6 +3287,7 @@ var PhoenixUI = (function(){
 
 	PhoenixUX.deleteWIP = function(elem){
 		var id = elem.parentNode.parentNode.id;
+		console.log(id);
 		delete Phoenix.wipArtifacts[id];
 		Phoenix.currentWIPID = undefined;
 		Phoenix.saveWIPArtifacts();
@@ -3300,9 +3301,12 @@ var PhoenixUI = (function(){
 			var overallPer = 0;
 			var complete = 0;
 			var incomplete = 0;
+			var total = 0;
 			for (var j = 0; j < Phoenix.pendingUploadQueue[i].tusFiles.length; j++) {
 				if (!Phoenix.pendingUploadQueue[i].tusFiles[j])
 					continue;
+
+				total++;
 
 				if (Phoenix.pendingUploadQueue[i].tusFiles[j].progress)
 					overallPer += parseFloat(Phoenix.pendingUploadQueue[i].tusFiles[j].progress);
@@ -3318,8 +3322,7 @@ var PhoenixUI = (function(){
 					incomplete++;
 				}
 			}
-			overallPer / (complete+incomplete);
-			console.log(Phoenix.pendingUploadQueue[i]);
+			overallPer = overallPer / total;
 			var str = '<tr>\
 				<th scope="row">' + (i + 1) + '</th>\
 				<td><code>' + Phoenix.pendingUploadQueue[i].artifactJSON.artifact.info.title + '</code></td>\
@@ -3329,7 +3332,7 @@ var PhoenixUI = (function(){
 					</div>\
 				</td>\
 				<td>\
-					Uploaded ' + complete + '/' + (complete+incomplete) + ' Files (' + parseFloat(overallPer).toFixed(0) + '%)\
+					Uploaded ' + complete + '/' + total + ' Files (' + parseFloat(overallPer).toFixed(0) + '%)\
 				</td>\
 			</tr>';
 
@@ -3340,7 +3343,7 @@ var PhoenixUI = (function(){
 		if (Phoenix.pendingUploadQueue.length === 0){
 			mainUploadStatusDiv.style.display = "none";
 		} else {
-			mainUploadStatusDiv.style.display = "flex";
+			mainUploadStatusDiv.style.display = "block";
 		}
 	}
 
