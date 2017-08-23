@@ -327,6 +327,7 @@ var Phoenix = (function() {
 			if (uploadComplete){
 				if (!PhoenixAPI.pendingUploadQueue[i].ipfsAddStart){
 					PhoenixAPI.pendingUploadQueue[i].ipfsAddStart = true;
+					PhoenixEvents.trigger("onIPFSStart", {});
 
 					var idsToAdd = [];
 
@@ -354,7 +355,7 @@ var Phoenix = (function() {
 							PhoenixAPI.addToPublishQueue(wipArtifact.artifactJSON);
 						});
 					}
-					
+
 					addNFinish(i);
 				}
 			}

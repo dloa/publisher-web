@@ -106,6 +106,9 @@ PhoenixEvents.on("onTusUploadSuccess", function(msg){
 PhoenixEvents.on("onTusUploadError", function(msg){ 
 	PhoenixUI.drawUploadStatus();
 })
+PhoenixEvents.on("onIPFSStart", function(msg){ 
+	PhoenixUI.drawUploadStatus();
+})
 PhoenixEvents.on("onArtifactDeactivateSuccess", function(msg,txid){ 
 	console.log("Artifact Deactivation Success",msg); 
 	$('#' + txid).remove();
@@ -3333,11 +3336,11 @@ var PhoenixUI = (function(){
 				<td><code>' + title + '</code></td>\
 				<td>\
 					<div class="progress">\
-						<div class="progress-bar progress-bar-animated progress-bar-striped bg-warning" role="progressbar" style="width: ' + overallPer + '%"></div>\
+						<div class="progress-bar progress-bar-animated progress-bar-striped bg-' + (Phoenix.pendingUploadQueue[i].ipfsAddStart ? 'info' : 'warning') + '" role="progressbar" style="width: ' + overallPer + '%"></div>\
 					</div>\
 				</td>\
 				<td>\
-					Uploaded ' + complete + '/' + total + ' Files (' + parseFloat(overallPer).toFixed(0) + '%)\
+					' + (Phoenix.pendingUploadQueue[i].ipfsAddStart ? 'Adding files to IPFS...' : 'Uploaded ' + complete + '/' + total + ' Files (' + parseFloat(overallPer).toFixed(0) + '%)') + '\
 				</td>\
 			</tr>';
 
