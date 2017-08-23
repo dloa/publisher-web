@@ -26,6 +26,22 @@ LibraryDJS.signArtifactDeactivate = function (wallet, txid, publisher, timestamp
 	return wallet.signMessage(publisher, toSign);
 };
 
+LibraryDJS.signPublishArtifact = function(wallet, ipfs, address, alexandriaMedia) {
+	var time = unixTime();
+
+	var signature = LibraryDJS.signArtifact(wallet, ipfs, address, time);
+
+	var data = {
+			"oip-041": {"artifact": alexandriaMedia.artifact, //test,
+			signature: signature}
+	};
+
+	data["oip-041"]["artifact"].timestamp = parseInt(time);
+	data["oip-041"]["artifact"].publisher = address;
+
+	return data;
+};
+
 // callback is (errorString, response) response=http://api.alexandria.io/#publish-new-artifact
 LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, publishFee, callback) {
 	var time = unixTime();
@@ -333,5 +349,5 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 }
 
 const MP_PREFIX = "oip-mp(";
-const CHOP_MAX_LEN = 318;
+const CHOP_MAX_LEN = 400;
 const TXCOMMENT_MAX_LEN = 528;
