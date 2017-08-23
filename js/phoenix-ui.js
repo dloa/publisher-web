@@ -85,6 +85,7 @@ PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success");P
 PhoenixEvents.on("onPublishStart", function(msg){ 
 	PhoenixUI.drawPublishStatus();
 	PhoenixUI.notify("Publishing Artifact", 'warning');
+	PhoenixUI.drawUploadStatus()
 	console.log(msg);
 })
 PhoenixEvents.on("onPublishTXSuccess", function(msg){ 
@@ -3323,9 +3324,13 @@ var PhoenixUI = (function(){
 				}
 			}
 			overallPer = overallPer / total;
+
+			var title = "";
+
+			try { title = Phoenix.pendingUploadQueue[i].artifactJSON.artifact.info.title; } catch(e){}
 			var str = '<tr>\
 				<th scope="row">' + (i + 1) + '</th>\
-				<td><code>' + Phoenix.pendingUploadQueue[i].artifactJSON.artifact.info.title + '</code></td>\
+				<td><code>' + title + '</code></td>\
 				<td>\
 					<div class="progress">\
 						<div class="progress-bar progress-bar-animated progress-bar-striped bg-warning" role="progressbar" style="width: ' + overallPer + '%"></div>\

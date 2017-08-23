@@ -325,32 +325,37 @@ var Phoenix = (function() {
 			}
 
 			if (uploadComplete){
-				var idsToAdd = [];
+				if (!PhoenixAPI.pendingUploadQueue[i].ipfsAddStart){
+					PhoenixAPI.pendingUploadQueue[i].ipfsAddStart = true;
 
-				var files = wipArtifact.artifactJSON.artifact.storage.files;
+					var idsToAdd = [];
 
-				for (var k = 0; k < files.length; k++) {
-					if (wipArtifact.tusFiles){
-						for (var j = 0; j < wipArtifact.tusFiles.length; j++) {
-							if (wipArtifact.tusFiles[j]){
-								if (wipArtifact.tusFiles[j].name == files[k].fname){
-									idsToAdd.push(wipArtifact.tusFiles[j].id);
+					var files = wipArtifact.artifactJSON.artifact.storage.files;
+
+					for (var k = 0; k < files.length; k++) {
+						if (wipArtifact.tusFiles){
+							for (var j = 0; j < wipArtifact.tusFiles.length; j++) {
+								if (wipArtifact.tusFiles[j]){
+									if (wipArtifact.tusFiles[j].name == files[k].fname){
+										idsToAdd.push(wipArtifact.tusFiles[j].id);
+									}
 								}
 							}
 						}
 					}
-				}
 
-				if (!PhoenixAPI.pendingUploadQueue[i].ipfsAddStart){
-					PhoenixAPI.pendingUploadQueue[i].ipfsAddStart = true;
-					PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
-						PhoenixAPI.pendingUploadQueue.splice(i, 1);
-						wipArtifact.artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
-						wipArtifact.artifactJSON = LibraryDJS.signPublishArtifact(PhoenixAPI.wallet, wipArtifact.artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, wipArtifact.artifactJSON);
+					var addNFinish = function(i){
+						PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
+							PhoenixAPI.pendingUploadQueue.splice(i, 1);
+							wipArtifact.artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
+							wipArtifact.artifactJSON = LibraryDJS.signPublishArtifact(PhoenixAPI.wallet, wipArtifact.artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, wipArtifact.artifactJSON);
 
-						// Publish the artifact JSON into the blockchain.
-						PhoenixAPI.addToPublishQueue(wipArtifact.artifactJSON);
-					});
+							// Publish the artifact JSON into the blockchain.
+							PhoenixAPI.addToPublishQueue(wipArtifact.artifactJSON);
+						});
+					}
+					
+					addNFinish(i);
 				}
 			}
 		}
