@@ -229,21 +229,23 @@ var Phoenix = (function() {
 
 		var uploadComplete = true;
 		for (var i = 0; i < wipArtifact.tusFiles.length; i++) {
-			var len = 0;
-			for (var v in wipArtifact.tusFiles[i])
-				len++;
+			if (wipArtifact.tusFiles[i]){
+				var len = 0;
+				for (var v in wipArtifact.tusFiles[i])
+					len++;
 
-			if (len === 3 && !wipArtifact.tusFiles[i].error){
-				filesUploadState.push({
-					uploadComplete: true,
-					obj: wipArtifact.tusFiles[i]
-				})
-			} else {
-				uploadComplete = false;
-				filesUploadState.push({
-					uploadComplete: false,
-					obj: wipArtifact.tusFiles[i]
-				})
+				if (len === 3 && !wipArtifact.tusFiles[i].error){
+					filesUploadState.push({
+						uploadComplete: true,
+						obj: wipArtifact.tusFiles[i]
+					})
+				} else {
+					uploadComplete = false;
+					filesUploadState.push({
+						uploadComplete: false,
+						obj: wipArtifact.tusFiles[i]
+					})
+				}
 			}
 		}
 
@@ -291,21 +293,23 @@ var Phoenix = (function() {
 
 			var uploadComplete = true;
 			for (var i = 0; i < wipArtifact.tusFiles.length; i++) {
-				var len = 0;
-				for (var v in wipArtifact.tusFiles[i])
-					len++;
+				if (wipArtifact.tusFiles[i]){
+					var len = 0;
+					for (var v in wipArtifact.tusFiles[i])
+						len++;
 
-				if (len === 3 && !wipArtifact.tusFiles[i].error){
-					filesUploadState.push({
-						uploadComplete: true,
-						obj: wipArtifact.tusFiles[i]
-					})
-				} else {
-					uploadComplete = false;
-					filesUploadState.push({
-						uploadComplete: false,
-						obj: wipArtifact.tusFiles[i]
-					})
+					if (len === 3 && !wipArtifact.tusFiles[i].error){
+						filesUploadState.push({
+							uploadComplete: true,
+							obj: wipArtifact.tusFiles[i]
+						})
+					} else {
+						uploadComplete = false;
+						filesUploadState.push({
+							uploadComplete: false,
+							obj: wipArtifact.tusFiles[i]
+						})
+					}
 				}
 			}
 
@@ -673,9 +677,13 @@ var Phoenix = (function() {
 	PhoenixAPI.removeTusInfo = function(filename){
 		if (PhoenixAPI.wipArtifacts && PhoenixAPI.currentWIPID){
 			for (var i = 0; i < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; i++) {
-				if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name == filename){
-					delete PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i];
-					PhoenixAPI.saveWIPArtifacts();
+				if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i]){
+					if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name === filename){
+						var tmpTus = PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles;
+						delete tmpTus[i];
+						PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles = JSON.parse(JSON.stringify(tmpTus));
+						PhoenixAPI.saveWIPArtifacts();
+					}
 				}
 			}
 		}
@@ -683,7 +691,9 @@ var Phoenix = (function() {
 		for (var j = 0; j < PhoenixAPI.pendingUploadQueue.length; j++){
 			for (var i = 0; i < PhoenixAPI.pendingUploadQueue[j].tusFiles.length; i++) {
 				if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == filename){
-					delete PhoenixAPI.pendingUploadQueue[j].tusFiles[i];
+					var tmpTus = PhoenixAPI.pendingUploadQueue[j].tusFiles;
+					delete tmpTus[i];
+					PhoenixAPI.pendingUploadQueue[j].tusFiles = JSON.parse(JSON.stringify(tmpTus));
 				}
 	    	}
 		}
@@ -735,18 +745,21 @@ var Phoenix = (function() {
 
 	            if (PhoenixAPI.wipArtifacts && PhoenixAPI.currentWIPID){
 	        		for (var i = 0; i < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; i++) {
-						if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name == file.name){
-							PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].progress = percentage;
-							PhoenixAPI.saveWIPArtifacts();
-						}
+	        			if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i]){
+	        				if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name == file.name){
+								PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].progress = percentage;
+								PhoenixAPI.saveWIPArtifacts();
+							}
+	        			}
 					}
 	        	}
 				
 				for (var j = 0; j < PhoenixAPI.pendingUploadQueue.length; j++){
 					for (var i = 0; i < PhoenixAPI.pendingUploadQueue[j].tusFiles.length; i++) {
-						console.log(i, PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name, file.name)
-						if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == file.name){
-							PhoenixAPI.pendingUploadQueue[j].tusFiles[i].progress = percentage;
+						if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i]){
+							if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == file.name){
+								PhoenixAPI.pendingUploadQueue[j].tusFiles[i].progress = percentage;
+							}
 						}
 		        	}
 				}
@@ -760,10 +773,12 @@ var Phoenix = (function() {
 
 	        	if (PhoenixAPI.wipArtifacts && PhoenixAPI.currentWIPID){
 	        		for (var i = 0; i < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; i++) {
-						if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name == file.name){
-							PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].id = id;
-							PhoenixAPI.saveWIPArtifacts();
-						}
+	        			if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i]){
+	        				if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name == file.name){
+								PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].id = id;
+								PhoenixAPI.saveWIPArtifacts();
+							}
+	        			}
 					}
 	        	}
 				

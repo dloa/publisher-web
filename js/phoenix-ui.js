@@ -3325,8 +3325,11 @@ var PhoenixUI = (function(){
 			var complete = 0;
 			var incomplete = 0;
 			for (var j = 0; j < Phoenix.pendingUploadQueue[i].tusFiles.length; j++) {
+				if (!Phoenix.pendingUploadQueue[i].tusFiles[j])
+					continue;
+
 				if (Phoenix.pendingUploadQueue[i].tusFiles[j].progress)
-					overallPer += Phoenix.pendingUploadQueue[i].tusFiles[j].progress;
+					overallPer += parseFloat(Phoenix.pendingUploadQueue[i].tusFiles[j].progress);
 
 				uploadComplete = true;
 				var len = 0;
@@ -3339,7 +3342,7 @@ var PhoenixUI = (function(){
 					incomplete++;
 				}
 			}
-			overallPer / Phoenix.pendingUploadQueue[i].tusFiles.length;
+			overallPer / (complete+incomplete);
 			console.log(Phoenix.pendingUploadQueue[i]);
 			var str = '<tr>\
 				<th scope="row">' + (i + 1) + '</th>\
