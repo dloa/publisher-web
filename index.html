@@ -191,6 +191,7 @@
 			<a class="navbar-brand" href="#">
 				<img src="./img/logo.png" width="30px" height="30px" class="d-inline-block align-top" alt="">
 				<span style="margin-left: 5px;">ΛLΞXΛNDRIΛ Publisher</span>
+				<div style="display: inline-block;"><span class="badge badge-primary" style="font-size: 12px; margin-top: -21px; position: absolute; margin-left: 3px;">beta</span></div>
 			</a>
 			<form class="form-inline mr-auto" style="margin: 0px auto">
 				<ul class="navbar-nav" style="list-style: none;width: 100%; padding-right: 20px; padding-left: 25px;	margin: 0 auto; text-align: center;">
@@ -216,14 +217,14 @@
 					<div class="text-center" style="margin-bottom: 0px"> <strong>FLO</strong>: <code><span id="walletBalance"></span></code></strong></div>
 					<div class="text-center" style="margin-bottom: 10px"> <strong>USD</strong>: <code style="color: green"><span id="walletBalanceUSD"></span></code></strong></div>
 					<ul class="nav nav-pills flex-column">
-						<li class="nav-item"><a href="#" class="nav-link" id="publisherNav" style="color: black" onclick="showWizardPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/publish.svg"">Publisher</a></li>
+						<li class="nav-item"><a href="#" class="nav-link" id="publisherNav" style="color: black" onclick="showDraftsPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/publish.svg"">Publisher</a></li>
 						<li class="nav-item"><a href="#" class="nav-link" id="artifactsNav" style="color: black" onclick="showArtifactPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/menu.svg">My Artifacts</a></li>
 						<li class="nav-item"><a href="#" class="nav-link" id="walletNav" style="color: black" onclick="showWalletPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/wallet.svg">Wallet</a></li>
 						<li class="nav-item"><a href="#" class="nav-link" id="toolsNav" style="color: black" onclick="showToolsPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/scissors.svg">Tools</a></li>
 					</ul>
 				</nav>
 
-				<main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+				<main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3" style="overflow-y: auto;">
 					<section class="row text-center" id="wizard">
 						<div class="col-sm-12" style="margin-top: 20px">
 							<h4 class="m0 text-thin">Welcome to Alexandria Publisher</h4><small>Please fill in the fields below</small>
@@ -349,10 +350,10 @@
 										<center style="margin-top: 15px; margin-bottom: 20px">
 											<span style="font-size: 1.5em; font-weight: 100;">My Artifact is for:</span>
 											<div class="btn-group" data-toggle="buttons">
-												<label class="btn btn-outline-primary active" id='freeRadioLabel'>
+												<label class="btn btn-outline-primary active" id='allRadioLabel'>
 													<input id='allRadio' type="radio" name="nsfw" id="artifactFreeBtn" autocomplete="off" onclick="" checked> All Ages
 												</label>
-												<label class="btn btn-outline-danger" id='paidRadioLabel'>
+												<label class="btn btn-outline-danger" id='nsfwRadioLabel'>
 													<input id='nsfwToggle' type="radio" name="nsfw" id="artifactPaidBtn" autocomplete="off" onclick="" unchecked> 18+ (NSFW) 
 												</label>
 											</div>
@@ -1363,8 +1364,8 @@
 			checkEnv();
 
 			var doneLoading = function(){
-				document.getElementById('main').style = '';
-				document.getElementById('loader').style = 'display:none;';
+				document.getElementById('main').style = 'height: 93vh;';
+				document.getElementById('loader').style = 'display:none;height: 93vh;';
 			}
 
 			// loadTransactions();

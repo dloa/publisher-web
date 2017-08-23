@@ -1670,7 +1670,6 @@ var PhoenixUI = (function(){
 		var togglePaid = false;
 		if (oip041.artifact.payment){
 			if (oip041.artifact.payment.addresses){
-				togglePaid = true;
 
 				while (paymentAddressesElement.children.length < oip041.artifact.payment.addresses.length){
 					PhoenixUX.addPaymentAddress();
@@ -1680,10 +1679,14 @@ var PhoenixUI = (function(){
 						paymentAddressesElement.children[j].children[0].children[1].value = oip041.artifact.payment.addresses[i].address;
 					}
 				}
+
+				if (oip041.artifact.payment.addresses.length > 1){
+					togglePaid = true;
+				}
 			}
 
 			if (oip041.artifact.payment.sugTip){
-				togglePaid = true;
+				//togglePaid = true;
 
 				if (Array.isArray(oip041.artifact.payment.sugTip)){
 					for (var i = 0; i < oip041.artifact.payment.sugTip.length; i++) {
@@ -3184,7 +3187,7 @@ var PhoenixUI = (function(){
 
 			pubStatusTableElement.innerHTML += '<tr>\
 				<th scope="row">1</th>\
-				<td><code>' + current.artifactJSON.artifact.info.title + '</code></td>\
+				<td><code>' + current.artifactJSON["oip-041"].artifact.info.title + '</code></td>\
 				<td>\
 					<div class="progress">\
 						<div class="progress-bar progress-bar-animated progress-bar-striped bg-warning" role="progressbar" style="width: ' + (progress*100) + '%"></div>\
@@ -3200,7 +3203,7 @@ var PhoenixUI = (function(){
 			for (var i = 0; i < waiting.length; i++) {
 				pubStatusTableElement.innerHTML += '<tr>\
 					<th scope="row">' + i + '</th>\
-					<td><code>' + waiting[i].artifactJSON.artifact.info.title + '</code></td>\
+					<td><code>' + waiting[i].artifactJSON["oip-041"].artifact.info.title + '</code></td>\
 					<td>\
 						<div class="progress">\
 							<div class="progress-bar" role="progressbar" style="width: 0%"></div>\

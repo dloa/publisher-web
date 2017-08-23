@@ -26,6 +26,22 @@ LibraryDJS.signArtifactDeactivate = function (wallet, txid, publisher, timestamp
 	return wallet.signMessage(publisher, toSign);
 };
 
+LibraryDJS.signPublishArtifact = function(wallet, ipfs, address, alexandriaMedia) {
+	var time = unixTime();
+
+	var signature = LibraryDJS.signArtifact(wallet, ipfs, address, time);
+
+	var data = {
+			"oip-041": {"artifact": alexandriaMedia.artifact, //test,
+			signature: signature}
+	};
+
+	data["oip-041"]["artifact"].timestamp = parseInt(time);
+	data["oip-041"]["artifact"].publisher = address;
+
+	return data;
+};
+
 // callback is (errorString, response) response=http://api.alexandria.io/#publish-new-artifact
 LibraryDJS.publishArtifact = function (wallet, ipfs, address, alexandriaMedia, publishFee, callback) {
 	var time = unixTime();
@@ -296,7 +312,7 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 				}
 			});
 		}
-	} else {
+	} else if (txObj.splitStrings.length > 1) {
 		if (!txObj.pubFee){
 			// Pub fee has not been calculated yet, wait.
 			return;
@@ -329,9 +345,34 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 				onTxSuccess(data);
 			}
 		});
+	} else {
+		if (!txObj.pubFee){
+			// Pub fee has not been calculated yet, wait.
+			return;
+		}
+
+		if (txObj.txs.length > 0){
+			return;
+		}
+
+		// Grab the first element from the array of chopped strings.
+		var chopStr = txObj.splitStrings[0];
+		
+		// Build our publish message
+		var multiPartMessage = chopStr;
+
+		LibraryDJS.walletStatus = "Sending";
+		options.wallet.sendCoins(options.address, options.address, amount, multiPartMessage, txObj.pubFee, function (err, data) {
+			if (err){
+				onTxError(err);
+			} else {
+				LibraryDJS.walletStatus = "Idle";
+				onTxSuccess(data);
+			}
+		});
 	}
 }
 
 const MP_PREFIX = "oip-mp(";
-const CHOP_MAX_LEN = 318;
+const CHOP_MAX_LEN = 400;
 const TXCOMMENT_MAX_LEN = 528;

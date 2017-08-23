@@ -34,7 +34,7 @@ var PhoenixStatus = {
 var Phoenix = (function() {	
 	var PhoenixAPI = {};
 
-	PhoenixAPI.tusIPFSEndpoint = "http://ipfs-tus.alexandria.io:11945";
+	PhoenixAPI.tusIPFSEndpoint = "https://ipfs-tus.alexandria.io:11945";
 	PhoenixAPI.tusFiles = [];
 	PhoenixAPI.publishQueue = [];
 	PhoenixAPI.publishState = "Loading";
@@ -267,6 +267,8 @@ var Phoenix = (function() {
 			PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
 				wipArtifact.artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
 
+				wipArtifact.artifactJSON = LibraryDJS.signPublishArtifact(PhoenixAPI.wallet, wipArtifact.artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, wipArtifact.artifactJSON)
+
 				// Publish the artifact JSON into the blockchain.
 				PhoenixAPI.addToPublishQueue(wipArtifact.artifactJSON);
 			});
@@ -327,6 +329,7 @@ var Phoenix = (function() {
 					PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
 						PhoenixAPI.pendingUploadQueue.splice(i, 1);
 						wipArtifact.artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
+						wipArtifact.artifactJSON = LibraryDJS.signPublishArtifact(PhoenixAPI.wallet, wipArtifact.artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, wipArtifact.artifactJSON);
 
 						// Publish the artifact JSON into the blockchain.
 						PhoenixAPI.addToPublishQueue(wipArtifact.artifactJSON);
