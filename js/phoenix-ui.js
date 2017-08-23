@@ -312,6 +312,12 @@ var PhoenixUI = (function(){
 
 	// Variables
 	PhoenixUX.paymentAddresses = {};
+	PhoenixUX.mediaFiles = [];
+	PhoenixUX.mediaPricing = {};
+	PhoenixUX.tips = {};
+	PhoenixUX.advancedPricing = {};
+	PhoenixUX.bulkFiles = [];
+	PhoenixUX.bulkFilesComplete = [];
 
 	// IMDB genres
 	PhoenixUX.movieGenres = {
@@ -2004,9 +2010,6 @@ var PhoenixUI = (function(){
 			subtypefor = "";
 		}
 
-		if (!PhoenixUX.mediaFiles)
-			PhoenixUX.mediaFiles = [];
-
 		if (Array.isArray(files)){
 			for (var i = 0; i < files.length; i++) {
 				files[i].id = PhoenixUX.sanitizeID(files[i].name);
@@ -2378,10 +2381,6 @@ var PhoenixUI = (function(){
 
 		var sugBuy = parent.children[4].children[0].children[1];
 
-		if (!PhoenixUX.mediaPricing){
-			PhoenixUX.mediaPricing = {};
-		}
-
 		if (!PhoenixUX.mediaPricing[id]){
 			PhoenixUX.mediaPricing[id] = {};
 		}
@@ -2490,10 +2489,6 @@ var PhoenixUI = (function(){
 			}
 		}
 
-		if (!PhoenixUX.mediaPricing){
-			PhoenixUX.mediaPricing = {};
-		}
-
 		if (!PhoenixUX.mediaPricing[id]){
 			PhoenixUX.mediaPricing[id] = {};
 		}
@@ -2578,9 +2573,6 @@ var PhoenixUI = (function(){
 		var type = elem.parentNode.children[0].value;
 		var secondSelector = elem.parentNode.children[1];
 
-		if (!PhoenixUX.mediaPricing){
-			PhoenixUX.mediaPricing = {};
-		}
 		if (!PhoenixUX.mediaPricing[id + 'price']){
 			PhoenixUX.mediaPricing[id + 'price'] = { }
 		}
@@ -2778,9 +2770,6 @@ var PhoenixUI = (function(){
 	PhoenixUX.onTipsInput = function(elem, ignoreTypingHelpers){
 		var id = elem.id.replace('tip','');
 
-		if (!PhoenixUX.tips)
-			PhoenixUX.tips = {};
-
 		if (elem.value == "")
 			delete PhoenixUX.tips[id];
 		else {
@@ -2822,9 +2811,6 @@ var PhoenixUI = (function(){
 			elem.value = 100;
 		}		
 
-		if (!PhoenixUX.advancedPricing)
-			PhoenixUX.advancedPricing = {};
-
 		if (elem.value == "")
 			delete PhoenixUX.advancedPricing[id];
 		else {
@@ -2838,10 +2824,6 @@ var PhoenixUI = (function(){
 
 	PhoenixUX.onFileNameInput = function(elem){
 		var id = elem.parentElement.parentElement.id + 'price';
-
-		if (!PhoenixUX.mediaPricing){
-			PhoenixUX.mediaPricing = {};
-		}
 
 		if (!PhoenixUX.mediaPricing[id]){
 			PhoenixUX.mediaPricing[id] = {};
@@ -2953,12 +2935,6 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.handleBulkUpload = function (file){
-		if (!PhoenixUX.bulkFiles)
-			PhoenixUX.bulkFiles = [];
-
-		if (!PhoenixUX.bulkFilesComplete)
-			PhoenixUX.bulkFilesComplete = [];
-
 		PhoenixUX.bulkFiles.push(file);
 
 		var updateProg = function(){

@@ -34,6 +34,10 @@ var PhoenixStatus = {
 var Phoenix = (function() {	
 	var PhoenixAPI = {};
 
+	PhoenixAPI.artifacts = {}
+	PhoenixAPI.marketData = { timestamp: 0 };
+	PhoenixAPI.librarydInfo = { timestamp: 0 };
+
 	PhoenixAPI.tusIPFSEndpoint = "https://ipfs-tus.alexandria.io";
 	PhoenixAPI.tusFiles = [];
 	PhoenixAPI.publishQueue = [];
@@ -415,9 +419,6 @@ var Phoenix = (function() {
 	PhoenixAPI.loadArtifactsForPub = function(pubAddress){
 		var results = PhoenixAPI.searchAPI('media', 'publisher', pubAddress);
 
-		if (!PhoenixAPI.artifacts)
-			PhoenixAPI.artifacts = {}
-
 		PhoenixAPI.artifacts[pubAddress] = results;
 		PhoenixEvents.trigger('onArtifactsLoad', {address: pubAddress, results: results})
 	}
@@ -639,9 +640,6 @@ var Phoenix = (function() {
 		if (PhoenixAPI.marketData && PhoenixAPI.marketData.timestamp > yesterday){
 			callback(PhoenixAPI.marketData.data);
 		} else {
-			if (!PhoenixAPI.marketData)
-				PhoenixAPI.marketData = {};
-
 			$.getJSON(librarianHost + "/flo-market-data/v1/getAll", function( data ) {
 				PhoenixAPI.marketData.timestamp = Date.now();
 				PhoenixAPI.marketData.data = data;
@@ -656,9 +654,6 @@ var Phoenix = (function() {
 
 		if (!callback)
 			callback = function(){};
-
-		if (!PhoenixAPI.librarydInfo)
-			PhoenixAPI.librarydInfo = {};
 
 		var timeNow = Date.now();
 		var yesterday = timeNow - (24*60*60*1000);
