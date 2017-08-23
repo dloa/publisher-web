@@ -34,8 +34,10 @@ var selFilesColElement = document.getElementById('selFilesCol');
 var bulkProgressBarElement = document.getElementById('bulkProgressBar');
 var bulkProgressBarInfoElement = document.getElementById('bulkProgressBarInfo');
 var pubStatusTableElement = document.getElementById('pubStatusTable');
+var uploadStatusTableElement = document.getElementById('uploadStatusTable');
 var advancedSettingsElement = document.getElementById('advancedSettings');
 var mainPubStatusDiv = document.getElementById('mainPubStatusDiv');
+var mainUploadStatusDiv = document.getElementById('mainUploadStatusDiv');
 var mediaDrop = document.getElementById('mediaDrop');
 var draftTBodyElement = document.getElementById('draftTbody')
 
@@ -92,6 +94,18 @@ PhoenixEvents.on("onPublishTXSuccess", function(msg){
 PhoenixEvents.on("onPublishEnd", function(msg){ 
 	PhoenixUI.drawPublishStatus();
 	PhoenixUI.notify("Artifact Publish Successful!", 'success'); 
+	console.log(msg); 
+})
+PhoenixEvents.on("onTusUploadProgress", function(msg){ 
+	PhoenixUI.drawUploadStatus();
+	console.log(msg); 
+})
+PhoenixEvents.on("onTusUploadSuccess", function(msg){ 
+	PhoenixUI.drawUploadStatus();
+	console.log(msg); 
+})
+PhoenixEvents.on("onTusUploadError", function(msg){ 
+	PhoenixUI.drawUploadStatus();
 	console.log(msg); 
 })
 PhoenixEvents.on("onArtifactDeactivateSuccess", function(msg,txid){ 
@@ -2096,29 +2110,38 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.updateProgress = function (id) {
-	    var tr = document.getElementById(id);
-        var pr = tr.querySelector('.progress-so');
-        pr.style.left = (parseFloat(tr.dataset.progress) - 100)+'%';
-        pr.style.height = tr.clientHeight + 'px';
+		try {
+			var tr = document.getElementById(id);
+			var pr = tr.querySelector('.progress-so');
+			pr.style.left = (parseFloat(tr.dataset.progress) - 100)+'%';
+			pr.style.height = tr.clientHeight + 'px';
+		} catch (e) {
+
+		}
 	}
 
 	PhoenixUX.setProgress = function(percent, id, err) {
-	    var tr = document.getElementById(id);
+		try {
+			var tr = document.getElementById(id);
 
-	    var pr = tr.querySelector('.progress-so');
+		    var pr = tr.querySelector('.progress-so');
 
-	    if (err){
-	    	pr.classList.remove('uploading');
-	    	pr.classList.add('upload-error');
-	    	return;
-	    }
+		    if (err){
+		    	pr.classList.remove('uploading');
+		    	pr.classList.add('upload-error');
+		    	return;
+		    }
 
-	    if (parseFloat(percent) == 100){
-	    	pr.classList.remove('uploading');
-	    	pr.classList.add('upload-done');
-	    }
+		    if (parseFloat(percent) == 100){
+		    	pr.classList.remove('uploading');
+		    	pr.classList.add('upload-done');
+		    }
 
-	    tr.dataset.progress = Math.round(parseFloat(percent));
+		    tr.dataset.progress = Math.round(parseFloat(percent));
+		} catch (e) {
+
+		}
+		   
 	}
 
 	PhoenixUX.removeMediaFile = function(id){
@@ -3253,6 +3276,54 @@ var PhoenixUI = (function(){
 		Phoenix.currentWIPID = undefined;
 		Phoenix.saveWIPArtifacts();
 		PhoenixUX.generateDraftRows();
+	}
+
+	PhoenixUX.drawUploadStatus = function(){
+		uploadStatusTableElement.innerHTML = "";
+
+		for (var i = 0; i < Phoenix.pendingUploadQueue.length; i++){
+			var overallPer = 0;
+			var complete = 0;
+			var incomplete = 0;
+			for (var j = 0; j < Phoenix.pendingUploadQueue[i].tusFiles.length; j++) {
+				if (Phoenix.pendingUploadQueue[i].tusFiles[j].progress)
+					overallPer += Phoenix.pendingUploadQueue[i].tusFiles[j].progress;
+
+				uploadComplete = true;
+				var len = 0;
+				for (var v in Phoenix.pendingUploadQueue[i].tusFiles[j])
+					len++;
+
+				if (len === 3 && !Phoenix.pendingUploadQueue[i].tusFiles[j].error){
+					complete++;
+				} else {
+					incomplete++;
+				}
+			}
+			overallPer / Phoenix.pendingUploadQueue[i].tusFiles.length;
+			console.log(Phoenix.pendingUploadQueue[i]);
+			var str = '<tr>\
+				<th scope="row">' + (i + 1) + '</th>\
+				<td><code>' + Phoenix.pendingUploadQueue[i].artifactJSON.artifact.info.title + '</code></td>\
+				<td>\
+					<div class="progress">\
+						<div class="progress-bar progress-bar-animated progress-bar-striped bg-warning" role="progressbar" style="width: ' + overallPer + '%"></div>\
+					</div>\
+				</td>\
+				<td>\
+					Uploaded ' + complete + '/' + (complete+incomplete) + ' Files (' + parseFloat(overallPer).toFixed(0) + '%)\
+				</td>\
+			</tr>';
+
+			uploadStatusTableElement.innerHTML += str;
+
+		}
+
+		if (Phoenix.pendingUploadQueue.length === 0){
+			mainUploadStatusDiv.style.display = "none";
+		} else {
+			mainUploadStatusDiv.style.display = "flex";
+		}
 	}
 
 	return PhoenixUX;

@@ -39,6 +39,7 @@ var Phoenix = (function() {
 	PhoenixAPI.publishQueue = [];
 	PhoenixAPI.publishState = "Loading";
 	PhoenixAPI.wipArtifacts = {};
+	PhoenixAPI.pendingUploadQueue = [];
 
 	// Load info from LibraryD
 	PhoenixAPI.searchAPI = function(module, searchOn, searchFor) {
@@ -200,7 +201,7 @@ var Phoenix = (function() {
 
 	PhoenixAPI.publishCurrentWIP = function(){
 		var artJSON = PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].artifactJSON;
-		PhoenixAPI.addAndPublish(artJSON, function(d){console.log(d);})
+		PhoenixAPI.addAndPublishWIP(PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID])
 		delete PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID];
 		PhoenixAPI.currentWIPID = undefined;
 		PhoenixAPI.saveWIPArtifacts();
@@ -216,6 +217,124 @@ var Phoenix = (function() {
 
 			PhoenixAPI.saveWIPArtifacts();
 		}
+	}
+
+	PhoenixAPI.addAndPublishWIP = function(wipArtifact){
+		var publishObject = {
+			artifactJSON: wipArtifact.artifactJSON,
+			status: "Uploading"
+		}
+
+		var filesUploadState = [];
+
+		var uploadComplete = true;
+		for (var i = 0; i < wipArtifact.tusFiles.length; i++) {
+			var len = 0;
+			for (var v in wipArtifact.tusFiles[i])
+				len++;
+
+			if (len === 3 && !wipArtifact.tusFiles[i].error){
+				filesUploadState.push({
+					uploadComplete: true,
+					obj: wipArtifact.tusFiles[i]
+				})
+			} else {
+				uploadComplete = false;
+				filesUploadState.push({
+					uploadComplete: false,
+					obj: wipArtifact.tusFiles[i]
+				})
+			}
+		}
+
+		console.log(filesUploadState);
+
+		if (uploadComplete){
+			var idsToAdd = [];
+
+			var files = wipArtifact.artifactJSON.artifact.storage.files;
+
+			for (var i = 0; i < files.length; i++) {
+				if (wipArtifact.tusFiles){
+					for (var j = 0; j < wipArtifact.tusFiles.length; j++) {
+						if (wipArtifact.tusFiles[j].name == files[i].fname){
+							idsToAdd.push(wipArtifact.tusFiles[j].id);
+						}
+					}
+				}
+			}
+
+			PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
+				wipArtifact.artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
+
+				// Publish the artifact JSON into the blockchain.
+				PhoenixAPI.addToPublishQueue(wipArtifact.artifactJSON);
+			});
+		} else {
+			PhoenixAPI.pendingUploadQueue.push(wipArtifact);
+		}
+	}
+
+	PhoenixAPI.checkUploadStatus = function(){
+		// Checks the upload status for all pendingUploadQueue items & publishes if finished uploading.
+		for (var i = 0; i < PhoenixAPI.pendingUploadQueue.length; i++) {
+			var wipArtifact = PhoenixAPI.pendingUploadQueue[i];
+
+			var publishObject = {
+				artifactJSON: wipArtifact.artifactJSON,
+				status: "Uploading"
+			}
+
+			var filesUploadState = [];
+
+			var uploadComplete = true;
+			for (var i = 0; i < wipArtifact.tusFiles.length; i++) {
+				var len = 0;
+				for (var v in wipArtifact.tusFiles[i])
+					len++;
+
+				if (len === 3 && !wipArtifact.tusFiles[i].error){
+					filesUploadState.push({
+						uploadComplete: true,
+						obj: wipArtifact.tusFiles[i]
+					})
+				} else {
+					uploadComplete = false;
+					filesUploadState.push({
+						uploadComplete: false,
+						obj: wipArtifact.tusFiles[i]
+					})
+				}
+			}
+
+			if (uploadComplete){
+				var idsToAdd = [];
+
+				var files = wipArtifact.artifactJSON.artifact.storage.files;
+
+				for (var i = 0; i < files.length; i++) {
+					if (wipArtifact.tusFiles){
+						for (var j = 0; j < wipArtifact.tusFiles.length; j++) {
+							if (wipArtifact.tusFiles[j].name == files[i].fname){
+								idsToAdd.push(wipArtifact.tusFiles[j].id);
+							}
+						}
+					}
+				}
+
+				if (!PhoenixAPI.pendingUploadQueue[i].ipfsAddStart){
+					PhoenixAPI.pendingUploadQueue[i].ipfsAddStart = true;
+					PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
+						PhoenixAPI.pendingUploadQueue.splice(i, 1);
+						wipArtifact.artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
+
+						// Publish the artifact JSON into the blockchain.
+						PhoenixAPI.addToPublishQueue(wipArtifact.artifactJSON);
+					});
+				}
+			}
+		}
+			
 	}
 
 	PhoenixAPI.addAndPublish = function(artifactJSON, callback){
@@ -567,22 +686,77 @@ var Phoenix = (function() {
 	        endpoint: PhoenixAPI.tusIPFSEndpoint + "/files/",
 	        retryDelays: [0, 1000, 3000, 5000],
 	        onError: function(error) {
+	        	 if (PhoenixAPI.wipArtifacts && PhoenixAPI.currentWIPID){
+	        		for (var i = 0; i < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; i++) {
+						if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name == file.name){
+							PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].error = error;
+							PhoenixAPI.saveWIPArtifacts();
+						}
+					}
+	        	}
+				
+				for (var j = 0; j < PhoenixAPI.pendingUploadQueue.length; j++){
+					for (var i = 0; i < PhoenixAPI.pendingUploadQueue[j].tusFiles.length; i++) {
+						console.log(i, PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name, file.name)
+						if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == file.name){
+							PhoenixAPI.pendingUploadQueue[j].tusFiles[i].error = error;
+						}
+		        	}
+				}
+
+				PhoenixEvents.trigger('onTusUploadError', {});
+
 	            onError(error);
 	        },
 	        onProgress: function(bytesUploaded, bytesTotal) {
-	            var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2)
+	            var percentage = (bytesUploaded / bytesTotal * 100).toFixed(2);
+
+	            if (PhoenixAPI.wipArtifacts && PhoenixAPI.currentWIPID){
+	        		for (var i = 0; i < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; i++) {
+						if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name == file.name){
+							PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].progress = percentage;
+							PhoenixAPI.saveWIPArtifacts();
+						}
+					}
+	        	}
+				
+				for (var j = 0; j < PhoenixAPI.pendingUploadQueue.length; j++){
+					for (var i = 0; i < PhoenixAPI.pendingUploadQueue[j].tusFiles.length; i++) {
+						console.log(i, PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name, file.name)
+						if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == file.name){
+							PhoenixAPI.pendingUploadQueue[j].tusFiles[i].progress = percentage;
+						}
+		        	}
+				}
+
+				PhoenixEvents.trigger('onTusUploadProgress', {});
+
 	            onProgress(percentage, bytesUploaded, bytesTotal);
 	        },
 	        onSuccess: function() {
 	        	var id = upload.url.replace(PhoenixAPI.tusIPFSEndpoint + '/files/', '');
-	        	onSuccess(id);
 
-	        	for (var i = 0; i < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; i++) {
-	        		if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name == file.name){
-	        			PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].id = id;
-	        			PhoenixAPI.saveWIPArtifacts();
-	        		}
+	        	if (PhoenixAPI.wipArtifacts && PhoenixAPI.currentWIPID){
+	        		for (var i = 0; i < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; i++) {
+						if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name == file.name){
+							PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].id = id;
+							PhoenixAPI.saveWIPArtifacts();
+						}
+					}
 	        	}
+				
+				for (var j = 0; j < PhoenixAPI.pendingUploadQueue.length; j++){
+					for (var i = 0; i < PhoenixAPI.pendingUploadQueue[j].tusFiles.length; i++) {
+						console.log(i, PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name, file.name)
+						if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == file.name){
+							PhoenixAPI.pendingUploadQueue[j].tusFiles[i].id = id;
+						}
+		        	}
+				}
+
+				PhoenixEvents.trigger("onTusUploadSuccess", {});
+
+	        	onSuccess(id);
 	        }
 	    })
 
@@ -595,6 +769,7 @@ var Phoenix = (function() {
 
 // Attempt a new publish every 1 second
 setInterval(Phoenix.processPublishQueue, 1 * 1000);
+setInterval(Phoenix.checkUploadStatus, 1 * 1000);
 
 Phoenix.login();
 Phoenix.loadWIPArtifacts();
