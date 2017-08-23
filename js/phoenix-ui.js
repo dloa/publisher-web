@@ -313,6 +313,9 @@ PhoenixEvents.on("onWalletUpdate", function(wallet){ console.log("Wallet Updated
 var PhoenixUI = (function(){
 	var PhoenixUX = {};
 
+	// Variables
+	PhoenixUX.paymentAddresses = {};
+
 	// IMDB genres
 	PhoenixUX.movieGenres = {
 		"Action": ["Comedy", "Crime", "Thriller"],
@@ -1669,18 +1672,23 @@ var PhoenixUI = (function(){
 		// Load the payment info
 		var togglePaid = false;
 		if (oip041.artifact.payment){
-			if (oip041.artifact.payment.addresses){
+			if (oip041.artifact.payment.tokens){
 
-				while (paymentAddressesElement.children.length < oip041.artifact.payment.addresses.length){
+				var arr = [{address: "pub", currency: "FLO"}];
+				for (var z in oip041.artifact.payment.tokens) {
 					PhoenixUX.addPaymentAddress();
+					arr.push({address: oip041.artifact.payment.tokens[z], currency: z})
 				}
-				for (var i = 0; i < oip041.artifact.payment.addresses.length; i++) {
-					for (var j = 0; j < paymentAddressesElement.children.length; j++) {
-						paymentAddressesElement.children[j].children[0].children[1].value = oip041.artifact.payment.addresses[i].address;
-					}
+				console.log(paymentAddressesElement);
+
+				for (var j = 1; j < paymentAddressesElement.children.length - 1; j++) {
+					console.log(paymentAddressesElement.children[j]);
+					paymentAddressesElement.children[j].children[0].children[1].value = arr[j].address;
+					console.log(paymentAddressesElement.children[j]);
+					PhoenixUX.setPaymentAddressType(paymentAddressesElement.children[j], arr[j].currency);
 				}
 
-				if (oip041.artifact.payment.addresses.length > 1){
+				if (oip041.artifact.payment.tokens.length > 1){
 					togglePaid = true;
 				}
 			}
@@ -1976,7 +1984,8 @@ var PhoenixUI = (function(){
 			
 		if (PhoenixUX.paymentAddresses){
 			for (var addr in PhoenixUX.paymentAddresses){
-				artifactJSON.artifact.payment.tokens[PhoenixUX.paymentAddresses[addr].currency] = PhoenixUX.paymentAddresses[addr].address;
+				if (addr && PhoenixUX.paymentAddresses[addr] && PhoenixUX.paymentAddresses[addr].address)
+					artifactJSON.artifact.payment.tokens[PhoenixUX.paymentAddresses[addr].currency] = PhoenixUX.paymentAddresses[addr].address;
 			}
 		}
 
@@ -2636,7 +2645,8 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.addPaymentAddress = function(elem){
-		elem.remove();
+		if (elem)
+			elem.remove();
 
 		var numOfPaymentAddresses = paymentAddressesElement.children.length;
 
@@ -2652,6 +2662,7 @@ var PhoenixUI = (function(){
 						<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>\
 						<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>\
 						<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>\
+						<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/bch.png"> <span> Bitcoin Cash</span></a>\
 					</div>\
 				</div>\
 				<input type="text" class="form-control" oninput="PhoenixUI.onPaymentAddressChange(this);">\
@@ -2668,7 +2679,7 @@ var PhoenixUI = (function(){
 			</div>\
 		</div>';
 
-		paymentAddressesElement.appendChild(content);
+		paymentAddressesElement.appendChild(content.children[0]);
 	}
 
 	PhoenixUX.removePaymentAddress = function(elem){
@@ -2687,12 +2698,14 @@ var PhoenixUI = (function(){
 		// Save the changed type into the payment array
 		var dropdownImgSrc = elem.children[0].src;
 
-		if (dropdownImgSrc.includes('Bitcoin'))
+		if (dropdownImgSrc.includes('Bitcoin') && !dropdownImgSrc.includes('Cash'))
 			dropdownImgSrc = "./img/Bitcoin.svg";
 		else if (dropdownImgSrc.includes('FLO'))
 			dropdownImgSrc = "./img/FLOflat2.png";
 		else if (dropdownImgSrc.includes('Litecoin'))
 			dropdownImgSrc = "./img/Litecoin.svg";
+		else if (dropdownImgSrc.includes('Bitcoin') && dropdownImgSrc.includes('Cash'))
+			dropdownImgSrc = "./img/bch.svg";
 
 		elem.parentElement.parentElement.children[0].children[0].src = dropdownImgSrc;
 
@@ -2703,17 +2716,42 @@ var PhoenixUI = (function(){
 		return false;
 	}
 
+	PhoenixUX.setPaymentAddressType = function(elem, type){
+		// Save the changed type into the payment array
+		var dropdownImgSrc = "";
+
+		if (type === "BTC")
+			dropdownImgSrc = "./img/Bitcoin.svg";
+		else if (type === "FLO")
+			dropdownImgSrc = "./img/FLOflat2.png";
+		else if (type === "LTC")
+			dropdownImgSrc = "./img/Litecoin.svg";
+		else if (type === "BCH")
+			dropdownImgSrc = "./img/bch.png";
+
+		// Set the icon
+		elem.children[0].children[0].children[0].children[0].src = dropdownImgSrc;
+
+		// Update the validation state of the input for this element
+		PhoenixUX.onPaymentAddressChange(elem.children[0].children[1]);
+
+		// Return false to prevent page reload
+		return false;
+	}
+
 	PhoenixUX.onPaymentAddressChange = function(elem){
 		try {
 			// Validate the address based on the type of cryptocurrency currently selected
 			var typeSelected = elem.parentElement.children[0].children[0].children[0].src;
 
-			if (typeSelected.includes('Bitcoin'))
+			if (typeSelected.includes('Bitcoin') && !typeSelected.includes('Cash'))
 				typeSelected = 'BTC';
 			else if (typeSelected.includes('FLO'))
 				typeSelected = 'FLO';
 			else if (typeSelected.includes('Litecoin'))
 				typeSelected = 'LTC';
+			else if (typeSelected.includes('bch'))
+				typeSelected = 'BCH';
 
 			var id = elem.parentElement.parentElement.id;
 
@@ -2721,17 +2759,16 @@ var PhoenixUI = (function(){
 			if(valid){
 				elem.style['border-color'] = '#5cb85c'; // Green outline
 
-				if (!PhoenixUX.paymentAddresses)
-					PhoenixUX.paymentAddresses = {};
-
 				PhoenixUX.paymentAddresses[id] = {currency: typeSelected, address: elem.value};
+
+				// Generate Artifact JSON and to save the draft
+				PhoenixUX.generateArtifactJSONFromView();
 			} else {
 				elem.style['border-color'] = '#d9534f'; // Red outline
 
-				if (!PhoenixUX.paymentAddresses)
-					PhoenixUX.paymentAddresses = {};
-
-				PhoenixUX.paymentAddresses[id] = {};
+				var pmntTmp = PhoenixUX.paymentAddresses[id];
+				delete pmntTmp[id];
+				PhoenixUX.paymentAddresses = JSON.parse(JSON.stringify(pmntTmp));
 			}
 		} catch (e) {
 			elem.style['border-color'] = '#d9534f';
