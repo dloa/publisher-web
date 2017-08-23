@@ -303,22 +303,22 @@ var Phoenix = (function() {
 			var filesUploadState = [];
 
 			var uploadComplete = true;
-			for (var i = 0; i < wipArtifact.tusFiles.length; i++) {
-				if (wipArtifact.tusFiles[i]){
+			for (var z = 0; z < wipArtifact.tusFiles.length; z++) {
+				if (wipArtifact.tusFiles[z]){
 					var len = 0;
-					for (var v in wipArtifact.tusFiles[i])
+					for (var v in wipArtifact.tusFiles[z])
 						len++;
 
-					if (len === 3 && !wipArtifact.tusFiles[i].error){
+					if (len === 3 && !wipArtifact.tusFiles[z].error){
 						filesUploadState.push({
 							uploadComplete: true,
-							obj: wipArtifact.tusFiles[i]
+							obj: wipArtifact.tusFiles[z]
 						})
 					} else {
 						uploadComplete = false;
 						filesUploadState.push({
 							uploadComplete: false,
-							obj: wipArtifact.tusFiles[i]
+							obj: wipArtifact.tusFiles[z]
 						})
 					}
 				}
