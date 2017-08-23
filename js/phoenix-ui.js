@@ -98,15 +98,12 @@ PhoenixEvents.on("onPublishEnd", function(msg){
 })
 PhoenixEvents.on("onTusUploadProgress", function(msg){ 
 	PhoenixUI.drawUploadStatus();
-	console.log(msg); 
 })
 PhoenixEvents.on("onTusUploadSuccess", function(msg){ 
 	PhoenixUI.drawUploadStatus();
-	console.log(msg); 
 })
 PhoenixEvents.on("onTusUploadError", function(msg){ 
 	PhoenixUI.drawUploadStatus();
-	console.log(msg); 
 })
 PhoenixEvents.on("onArtifactDeactivateSuccess", function(msg,txid){ 
 	console.log("Artifact Deactivation Success",msg); 
@@ -2160,6 +2157,7 @@ var PhoenixUI = (function(){
 		if (PhoenixUX.mediaFiles){
 			for (var i = 0; i < PhoenixUX.mediaFiles.length; i++){
 				if (PhoenixUX.mediaFiles[i].id == id){
+					Phoenix.removeTusInfo(PhoenixUX.mediaFiles[i].name);
 					PhoenixUX.mediaFiles.splice(i, 1);
 				}
 			}
@@ -2739,7 +2737,7 @@ var PhoenixUI = (function(){
 		return false;
 	}
 
-	PhoenixUX.onPaymentAddressChange = function(elem){
+	PhoenixUX.onPaymentAddressChange = function(elem, dontGen){
 		try {
 			// Validate the address based on the type of cryptocurrency currently selected
 			var typeSelected = elem.parentElement.children[0].children[0].children[0].src;
@@ -2762,7 +2760,8 @@ var PhoenixUI = (function(){
 				PhoenixUX.paymentAddresses[id] = {currency: typeSelected, address: elem.value};
 
 				// Generate Artifact JSON and to save the draft
-				PhoenixUX.generateArtifactJSONFromView();
+				if (!dontGen)
+					PhoenixUX.generateArtifactJSONFromView();
 			} else {
 				elem.style['border-color'] = '#d9534f'; // Red outline
 
@@ -3381,17 +3380,21 @@ PhoenixUI.generateDraftRows();
 
 // Handle all of the drag and drop setup
 var posterDropzone = new Dropzone("div#poster", { 
-	url: '/',
+	url: "/",
 	createImageThumbnails: false,
+	autoProcessQueue: false,
 	previewTemplate: '<div></div>',
 	acceptedFiles: "png,jpg",
-	maxFiles: 1
+	maxFiles: 1,
+	accept: function(){}
 });
 
 posterDropzone.on("addedfile", PhoenixUI.posterFileSelectHandler);
 
 var mediaDropzone = new Dropzone("div#mediaDrop", { 
-	url: '/',
+	url: "/",
+	autoProcessQueue: false,
+	accept: function(){},
 	createImageThumbnails: false,
 	previewTemplate: '<div></div>'
 });
@@ -3399,7 +3402,9 @@ var mediaDropzone = new Dropzone("div#mediaDrop", {
 mediaDropzone.on("addedfile", PhoenixUI.mediaFileSelectHandler);
 
 var bulkDropzone = new Dropzone("div#bulk", { 
-	url: '/',
+	url: "/",
+	accept: function(){},
+	autoProcessQueue: false,
 	createImageThumbnails: false,
 	previewTemplate: '<div></div>'
 });

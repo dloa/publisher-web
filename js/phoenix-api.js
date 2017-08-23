@@ -670,6 +670,25 @@ var Phoenix = (function() {
 		}
 	}
 
+	PhoenixAPI.removeTusInfo = function(filename){
+		if (PhoenixAPI.wipArtifacts && PhoenixAPI.currentWIPID){
+			for (var i = 0; i < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; i++) {
+				if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name == filename){
+					delete PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i];
+					PhoenixAPI.saveWIPArtifacts();
+				}
+			}
+		}
+		
+		for (var j = 0; j < PhoenixAPI.pendingUploadQueue.length; j++){
+			for (var i = 0; i < PhoenixAPI.pendingUploadQueue[j].tusFiles.length; i++) {
+				if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == filename){
+					delete PhoenixAPI.pendingUploadQueue[j].tusFiles[i];
+				}
+	    	}
+		}
+	}
+
 	PhoenixAPI.uploadFileToTus = function(file, onSuccess, onError, onProgress, newName){
 		if (!onSuccess)
 			onSuccess = function(){};
