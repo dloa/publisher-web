@@ -1910,6 +1910,10 @@ var PhoenixUI = (function(){
 			}
 		}
 
+		if (artifactJSON.artifact.info.year && typeof artifactJSON.artifact.info.year === "string"){
+			artifactJSON.artifact.info.year = parseInt(artifactJSON.artifact.info.year);
+		}
+
 		if (PhoenixUX.mediaFiles){
 			for (var i = 0; i < PhoenixUX.mediaFiles.length; i++) {
 				artifactJSON.artifact.storage.files[i] = {
