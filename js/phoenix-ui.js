@@ -161,7 +161,7 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 				var markup = "<tr id='" + msg.results[i].txid + "'>\
 								<th scope='row'>" + (1+parseInt(i)) + "</th>\
 								<td><code>" + msg.results[i]['media-data']['alexandria-media'].info.title + "</code></td>\
-								<td>TXID: <code>.." + msg.results[i].txid.substr(msg.results[i].txid.length - 8) + "</code></td>\
+								<td>TXID: <a href='https://florincoin.info/tx/" + msg.results[i].txid + "'><code>" + msg.results[i].txid.substring(0,10) + "...</code></a></td>\
 								<td><button onClick='Phoenix.artifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='dev btn btn-outline-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-danger'>Deactivate</button></td>\
 							</tr>";
 				$("#ArtifactsTable > tbody").append(markup);
@@ -169,7 +169,7 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 				var markup = "<tr id='" + msg.results[i].txid + "'>\
 								<th scope='row'>" + (1+parseInt(i)) + "</th>\
 								<td><code>" + msg.results[i]['oip-041'].artifact.info.title + "</code></td>\
-								<td>TXID: <code>.." + msg.results[i].txid.substr(msg.results[i].txid.length - 8) + "</code></td>\
+								<td>TXID: <a href='https://florincoin.info/tx/" + msg.results[i].txid + "'><code>" + msg.results[i].txid.substring(0,10) + "...</code></td>\
 								<td><button onClick='ArtifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-danger'>Deactivate</button></td>\
 							</tr>";
 				$("#ArtifactsTable > tbody").append(markup);
