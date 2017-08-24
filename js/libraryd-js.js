@@ -291,14 +291,12 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 			// Grab the first element from the array of chopped strings.
 			var chopStr = txObj.splitStrings[publishedSoFar];
 
-			// var preImage = publishedSoFar.toString() + "-" + numberOfPieces.toString() + "-" + options.address.substring(0,10) + "-" + txid.substring(0,10) + "-" + chopStr;
-			var preImage = publishedSoFar.toString() + "-" + numberOfPieces.toString() + "-" + options.address + "-" + txid + "-" + chopStr;
+			var preImage = publishedSoFar.toString() + "-" + numberOfPieces.toString() + "-" + options.address + "-" + txid.substring(0,10) + "-" + chopStr;
 
 		    var signature = options.wallet.signMessage(options.address, preImage);
 
 			// Build our publish message
-			// var multiPartMessage = MP_PREFIX + publishedSoFar.toString() + "," + numberOfPieces.toString() + "," + options.address.substring(0,10) + "," + txid.substring(0,10) + "," + signature + "," + "):" + chopStr;
-			var multiPartMessage = MP_PREFIX + publishedSoFar.toString() + "," + numberOfPieces.toString() + "," + options.address + "," + txid + "," + signature + "," + "):" + chopStr;
+			var multiPartMessage = MP_PREFIX + publishedSoFar.toString() + "," + numberOfPieces.toString() + "," + options.address + "," + txid.substring(0,10) + "," + signature + "," + "):" + chopStr;
 
 			// var perPubFee = publishFee / chop.length; just publish all in the first tx fee
 			// hardcoded to one satoshi so that it defaults to the normal amount
@@ -331,14 +329,12 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 		// Grab the first element from the array of chopped strings.
 		var chopStr = txObj.splitStrings[publishedSoFar];
 
-		//var preImage = publishedSoFar.toString() + "-" + numberOfPieces.toString() + "-" + options.address.substring(0,10) + "-" + chopStr;
 		var preImage = publishedSoFar.toString() + "-" + numberOfPieces.toString() + "-" + options.address + "-" + chopStr;
 
 	    var signature = options.wallet.signMessage(options.address, preImage);
 
 		// Build our publish message
-		//var multiPartMessage = MP_PREFIX + publishedSoFar.toString() + "," + numberOfPieces.toString() + "," + options.address.substring(0,10) + "," + "," + signature + "," + "):" + chopStr;
-		var multiPartMessage = MP_PREFIX + publishedSoFar.toString() + "," + numberOfPieces.toString() + "," + options.address + "," + "," + signature + "," + "):" + chopStr;
+		var multiPartMessage = MP_PREFIX + publishedSoFar.toString() + "," + numberOfPieces.toString() + "," + options.address + "," + "," + signature + "):" + chopStr;
 
 		LibraryDJS.walletStatus = "Sending";
 		options.wallet.sendCoins(options.address, options.address, amount, multiPartMessage, txObj.pubFee, function (err, data) {
@@ -378,6 +374,5 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 }
 
 const MP_PREFIX = "oip-mp(";
-//const CHOP_MAX_LEN = 400;
-const CHOP_MAX_LEN = 300;
+const CHOP_MAX_LEN = 400;
 const TXCOMMENT_MAX_LEN = 528;
