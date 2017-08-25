@@ -54,7 +54,7 @@
 						<hr class="colorgraph">
 						<div class="row">
 							<div class="col-xs-6 col-sm-6 col-md-6">
-		                        <button type="submit" class="btn btn-lg btn-success btn-block" onclick="tryLogin()">Sign In</button>
+		                        <button id="signin" class="btn btn-lg btn-success btn-block" onclick="tryLogin()">Sign In</button>
 							</div>
 							<div class="col-xs-6 col-sm-6 col-md-6">
 								<a href="signup.html" class="btn btn-lg btn-primary btn-block">Register</a>
@@ -84,9 +84,11 @@
 
 		<script type="text/javascript">
 			var tryLogin = function(){
+				setSignInText()
 				// Validate login info
 				var wallet = new Wallet($('#email').val(), $('#password').val());
 				wallet.load(function (res) {
+					//resetSignInText()
 					console.log(res);
 					console.log("Wallet Post-Load");
 					console.log(wallet);
@@ -100,6 +102,14 @@
 				});
 			};
 
+			var resetSignInText = function(){
+				document.getElementById('signin').innerHTML = 'Sign In';
+			}
+
+			var setSignInText = function(){
+				document.getElementById('signin').innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i> Logging in...';
+			}
+
 			window.addEventListener('wallet', function (e) { 
 				if (e.detail == "There is no wallet with that identifier"){
 					$('#email').trigger('focus');
@@ -108,6 +118,7 @@
 
 		    		$('#feedback_email').show();
 		    		$('#feedback_password').hide();
+		    		resetSignInText();
 				} else if (e.detail == 'invalid-password'){
 		    		$('#email').attr('class', 'form-control is-valid');
 					$('#password').trigger('focus');
@@ -115,9 +126,11 @@
 
 		    		$('#feedback_email').hide();
 		    		$('#feedback_password').show();
+		    		resetSignInText();
 				} else {
 					$('#email').attr('class', 'form-control is-valid');
 					$('#password').attr('class', 'form-control is-valid');
+					resetSignInText();
 				}
 			}, false);
 		</script>

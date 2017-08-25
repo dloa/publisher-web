@@ -3267,7 +3267,7 @@ var PhoenixUI = (function(){
 				draftTBodyElement.innerHTML += '<tr id="' + i + '">\
 					<th scope="row"></th>\
 					<td>' + Phoenix.wipArtifacts[i].artifactJSON.artifact.type + '</td>\
-					<td>' + Phoenix.wipArtifacts[i].artifactJSON.artifact.info.title + '</td>\
+					<td>' + (Phoenix.wipArtifacts[i].artifactJSON.artifact.info.title ? Phoenix.wipArtifacts[i].artifactJSON.artifact.info.title : "") + '</td>\
 					<td>\
 						<button class="btn btn-outline-info" onClick="PhoenixUI.resumeWIP(this);"><span class="icon icon-pencil"></span> Resume</button>\
 						<button class="btn btn-outline-danger" onClick="PhoenixUI.deleteWIP(this);"><span class="icon icon-trash"></span> Delete</button>\
