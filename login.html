@@ -31,32 +31,36 @@
 			<img src="./img/logo-long.png" height="75" style="filter: invert(60%);">
 			    <div class="col-12 col-sm-8 col-md-6 col-lg-6 col-xl-6 col-sm-offset-2 col-md-offset-3 col-lg-offset-3 col-xl-offset-3 align-content-center align-self-center">
 			    	<div style="height: 50px;"></div>
-					<form role="form">
-						<fieldset>
-							<h2>Please Sign In</h2>
-							<hr class="colorgraph">
-							<div class="form-group">
-			                    <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address">
+					<fieldset>
+						<h2>Please Sign In</h2>
+						<hr class="colorgraph">
+						<div class="form-group">
+		                    <input type="text" name="email" id="email" class="form-control input-lg" placeholder="Email/Identifier">
+							<div class="invalid-feedback" id="feedback_email">
+								Email/Identifier is invalid. Please provide your identifier or your account Email.
 							</div>
-							<div class="form-group">
-			                    <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password">
+						</div>
+						<div class="form-group">
+		                    <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password">
+		                    <div class="invalid-feedback" id="feedback_password">
+								Invalid Password.
 							</div>
-							<span class="button-checkbox">
-								<button type="button" class="btn" data-color="primary">Remember Me</button>
-			                    <input type="checkbox" name="remember_me" id="remember_me" checked="checked" class="d-none">
-								<a href="" class="btn btn-link pull-right">Forgot Password?</a>
-							</span>
-							<hr class="colorgraph">
-							<div class="row">
-								<div class="col-xs-6 col-sm-6 col-md-6">
-			                        <input type="submit" class="btn btn-lg btn-success btn-block" value="Sign In">
-								</div>
-								<div class="col-xs-6 col-sm-6 col-md-6">
-									<a href="signup.html" class="btn btn-lg btn-primary btn-block">Register</a>
-								</div>
+						</div>
+						<span class="button-checkbox">
+							<button type="button" class="btn" data-color="primary">Remember Me</button>
+		                    <input type="checkbox" name="remember-me" id="remember-me" checked="checked" class="d-none">
+							<a href="" class="btn btn-link pull-right">Forgot Password?</a>
+						</span>
+						<hr class="colorgraph">
+						<div class="row">
+							<div class="col-xs-6 col-sm-6 col-md-6">
+		                        <button type="submit" class="btn btn-lg btn-success btn-block" onclick="tryLogin()">Sign In</button>
 							</div>
-						</fieldset>
-					</form>
+							<div class="col-xs-6 col-sm-6 col-md-6">
+								<a href="signup.html" class="btn btn-lg btn-primary btn-block">Register</a>
+							</div>
+						</div>
+					</fieldset>
 				</div>
 			</div>
 		</div>
@@ -68,33 +72,55 @@
 		<script src="./js/popper.min.js"></script>
 		<script src="./js/bootstrap.min.js"></script>
 		<script src="./js/backbone-min.js"></script>
-		<script src="./js/dropzonejs.js"></script>
-		<script type="text/javascript">
-			Dropzone.autoDiscover = false;
-		</script>
-		<script src="./js/wallet-address-validator.min.js"></script>
-		<script src="./js/bootstrap-tagsinput.js"></script>
-		<script src="./js/tus.min.js"></script>
-		<script src="./js/papaparse.min.js"></script>
-		<script src="./js/bootstrap-notify.min.js"></script>
-		<!-- Bootstrap Tour JS -->
-		<script src="./js/bootstrap-tour.js"></script>
-		<script src="./js/bootstrap-tour.js"></script>
+		<!-- Logging Scripts -->
 		<script src="https://cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
 		<script type="text/javascript">
 			(function() { var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = '//api.usersnap.com/load/14a5209d-6d3f-4699-8832-5f709e647ba0.js';
 			var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); })();
 		</script>
 		<!-- Load Dependencies JS -->
-		<script src="./js/SimpleDeps.js"></script>
-		<script src="./js/SimpleWallet.js"></script>
-		<script src="./js/libraryd-js.js"></script>
-		<!-- <script src="./js/artifacts.js"></script> -->
-		<script src="./js/qrcode.min.js"></script>
-		<!-- <script src="./js/wallet.js"></script> -->
-		<!-- Load Phoenix -->
-		<script src="./js/phoenix-api.js"></script>
-		<script src="./js/phoenix-ui.js"></script>
+		<script src="js/SimpleDeps.js"></script>
+		<script src="js/SimpleWallet.js"></script>
+
+		<script type="text/javascript">
+			var tryLogin = function(){
+				// Validate login info
+				var wallet = new Wallet($('#email').val(), $('#password').val());
+				wallet.load(function (res) {
+					console.log(res);
+					console.log("Wallet Post-Load");
+					console.log(wallet);
+
+					localStorage.setItem("identifier", $('#email').val());
+					localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt($('#password').val(), $('#email').val()));
+					localStorage.setItem("remember-me", document.getElementById('remember-me').checked);
+
+					// Redirect to main dashboard page.
+					window.location.href = 'index.html';
+				});
+			};
+
+			window.addEventListener('wallet', function (e) { 
+				if (e.detail == "There is no wallet with that identifier"){
+					$('#email').trigger('focus');
+		    		$('#email').attr('class', 'form-control is-invalid');
+		    		$('#password').attr('class', 'form-control is-invalid');
+
+		    		$('#feedback_email').show();
+		    		$('#feedback_password').hide();
+				} else if (e.detail == 'invalid-password'){
+		    		$('#email').attr('class', 'form-control is-valid');
+					$('#password').trigger('focus');
+		    		$('#password').attr('class', 'form-control is-invalid');
+
+		    		$('#feedback_email').hide();
+		    		$('#feedback_password').show();
+				} else {
+					$('#email').attr('class', 'form-control is-valid');
+					$('#password').attr('class', 'form-control is-valid');
+				}
+			}, false);
+		</script>
 
 		<script type="text/javascript">
 			Raven.config('https://c06e40d616e2425db7d419113c957b6a@sentry.io/207690').install()

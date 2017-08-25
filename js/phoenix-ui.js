@@ -80,7 +80,9 @@ var hideAll = function(){
 // Accepts a set of Selectors to load the artifact into view. Generates code for all of the different sections to fill it.
 PhoenixEvents.on("onError", function(msg){ console.log(msg.message) });
 PhoenixEvents.on("onLogin", function(msg){ console.log("Logging in"); })
-PhoenixEvents.on("onLoginFail", function(msg){ console.log("Login Failed"); })
+PhoenixEvents.on("onLoginFail", function(msg){ 
+	document.location.href = "login.html"
+})
 PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success");PhoenixUI.updatePubFee(); })
 PhoenixEvents.on("onPublishStart", function(msg){ 
 	PhoenixUI.drawPublishStatus();

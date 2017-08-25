@@ -292,6 +292,7 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 			var chopStr = txObj.splitStrings[publishedSoFar];
 
 			var preImage = publishedSoFar.toString() + "-" + numberOfPieces.toString() + "-" + options.address + "-" + txid.substring(0,10) + "-" + chopStr;
+			console.log(preImage);
 
 		    var signature = options.wallet.signMessage(options.address, preImage);
 

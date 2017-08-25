@@ -194,10 +194,30 @@ var Phoenix = (function() {
 					identifier = localStorage.identifier;
 					password = CryptoJS.AES.decrypt(localStorage.loginWalletEnc, identifier).toString(CryptoJS.enc.Utf8);
 
-					// If we are on the login page and there is login info, then we should redirect to the dashboard.
-					// if (window.location.pathname.includes('login.html') || !window.location.pathname.includes('.html')){
-					// 	window.location.href = 'index.html';
-					// }
+					$.get(flovaultBaseURL + "/wallet/checkload/" + identifier, function (response) {
+						if (response.gauth_enabled) {
+							// ToDo: add 2FA support, needs further research
+							PhoenixEvents.trigger("onLoginFail", { 
+								title: "Error!", 
+								type: "error", 
+								message: "Two Factor Authentication is not currently supported, please disable it or create a new wallet." 
+							});
+						}
+						PhoenixAPI.wallet = new Wallet(response.identifier, password);
+						PhoenixAPI.wallet.load(function () {
+							if (localStorage["remember-me"] == "false"){
+								localStorage.identifier = '';
+								localStorage.loginWalletEnc = '';
+							}
+
+							PhoenixEvents.trigger("onLoginSuccess", {});
+							PhoenixEvents.trigger("onWalletLoad", PhoenixAPI.wallet);
+
+							PhoenixAPI.publishState = "Ready";
+
+							PhoenixAPI.getPublishersFromLibraryD();
+						});
+					});
 				} else {
 					PhoenixEvents.trigger("onLoginFail", "Missing identifier or password and none found in localStorage!")
 					// if (window.location.pathname.includes('index.html')){
@@ -210,75 +230,6 @@ var Phoenix = (function() {
 			    // console.log('No Support for storing locally.')
 			}
 		}
-		$.get(flovaultBaseURL + "/wallet/checkload/" + identifier, function (response) {
-			if (response.gauth_enabled) {
-				// ToDo: add 2FA support, needs further research
-				PhoenixEvents.trigger("onLoginFail", { 
-					title: "Error!", 
-					type: "error", 
-					message: "Two Factor Authentication is not currently supported, please disable it or create a new wallet." 
-				});
-			}
-			PhoenixAPI.wallet = new Wallet(response.identifier, password);
-			PhoenixAPI.wallet.load(function () {
-				PhoenixEvents.trigger("onLoginSuccess", {});
-				PhoenixEvents.trigger("onWalletLoad", PhoenixAPI.wallet);
-
-				PhoenixAPI.publishState = "Ready";
-
-				PhoenixAPI.getPublishersFromLibraryD();
-			});
-		});
-
-		// If remember me is false then wipe the data, we just needed to store it until after redirect
-		if (localStorage["remember-me"] == "false"){
-			localStorage.identifier = '';
-			localStorage.loginWalletEnc = '';
-		}
-
-		// This should only be filled if the user just signed up and their data cannot be found in LibraryD yet.
-		if (localStorage.justSignedUp == "true"){
-			var data = localStorage.justSignedUpData.split('/');
-
-			PhoenixAPI.wallet = new Wallet(data[0], data[1]);
-			PhoenixAPI.wallet.load(function () {
-				PhoenixEvents.trigger("onLoginSuccess", {});
-				PhoenixEvents.trigger("onWalletLoad", PhoenixAPI.wallet);
-
-				PhoenixAPI.getPublishersFromLibraryD();
-			});
-
-			var inwal = false;
-			for (var addr in PhoenixAPI.wallet.addresses){
-				if (addr == data[0])
-					inwal = true;
-			}
-
-			if (inwal){
-				$.getJSON(librarianHost + "/alexandria/v1/publisher/get/all", function( data ) {
-					var addrInPubs = false;
-					for (var i = 0; i < data.length; i++) {
-						//console.log(data[i]["publisher-data"]["alexandria-publisher"]);
-						for (var addr in PhoenixAPI.wallet.addresses) {
-							var address = PhoenixAPI.wallet.addresses[addr].addr;
-							if (data[i]["publisher-data"]["alexandria-publisher"].address == address){
-								addrInPubs = true;
-							}
-						}
-					}
-
-					// If LibraryD has picked up the publisher, we can wipe the data in the localstorage
-					if (addrInPubs){
-						localStorage.justSignedUp = '';
-						localStorage.justSignedUpData = '';
-					}
-				});
-			} else {
-				PhoenixEvents.trigger("onLoginFail", { message: "Unable to find publisher address inside of the loaded wallet for the just signed up data." });
-			}
-		}
-
-		PhoenixEvents.trigger("onLoginSuccess", "Success");
 	}
 
 	PhoenixAPI.logout = function(){
