@@ -374,5 +374,5 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 }
 
 const MP_PREFIX = "oip-mp(";
-const CHOP_MAX_LEN = 400;
+const CHOP_MAX_LEN = 380;
 const TXCOMMENT_MAX_LEN = 528;
