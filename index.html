@@ -202,7 +202,7 @@
 					</li>
 				</ul>
 			</form>
-			<button class="btn btn-outline-danger" style="right: 20px;" onclick="Phoenix.logout();">Sign Out</button>
+			<button class="btn btn-outline-light" style="right: 20px;" onclick="Phoenix.logout();">Sign Out</button>
 		</nav>
 
 		<div class="container-fluid" style="margin-top: 60px">
@@ -343,23 +343,23 @@
 															<h4 style="color: #ccc; margin-bottom: -10px;">Please Click or Drag &amp; Drop to Upload...</h4>
 														</div>
 														<input type="file" id="posterFile" class="custom-file-input" style="display: none;">
+														<div style="bottom:10px;position:absolute;">
+															<span style="font-size: 1em; font-weight: 100;">My Artifact is ok for:</span>
+															<div class="btn-group" data-toggle="buttons">
+																<label class="btn btn-sm btn-outline-primary active" id='allRadioLabel'>
+																	<input id='allRadio' type="radio" name="nsfw" id="artifactFreeBtn" autocomplete="off" onclick="" checked> All Ages
+																</label>
+																<label class="btn btn-sm btn-outline-dark" id='nsfwRadioLabel'>
+																	<input id='nsfwToggle' type="radio" name="nsfw" id="artifactPaidBtn" autocomplete="off" onclick="" unchecked> 18+ (NSFW) 
+																</label>
+															</div>
+															<br />
+															<a data-toggle="popover" data-trigger="hover" data-placement="bottom" title="What is NSFW content?" data-content="NSFW content would be things you wouldn't want your boss or children to know you were watching. This includes all content which contains nudity, intense sexuality, intense profanity, violence/gore or other disturbing content."><small class="text-muted">Please select if your content is suitible for all ages or if it has NSFW/sensitive content. <span class="icon icon-help-with-circle"></span></small></a>
+														</div>
 													</center>
 												</div>
 											</div>
 										</div>
-										<center style="margin-top: 15px; margin-bottom: 20px">
-											<span style="font-size: 1.5em; font-weight: 100;">My Artifact is for:</span>
-											<div class="btn-group" data-toggle="buttons">
-												<label class="btn btn-outline-primary active" id='allRadioLabel'>
-													<input id='allRadio' type="radio" name="nsfw" id="artifactFreeBtn" autocomplete="off" onclick="" checked> All Ages
-												</label>
-												<label class="btn btn-outline-danger" id='nsfwRadioLabel'>
-													<input id='nsfwToggle' type="radio" name="nsfw" id="artifactPaidBtn" autocomplete="off" onclick="" unchecked> 18+ (NSFW) 
-												</label>
-											</div>
-											<br />
-											<a data-toggle="popover" data-trigger="hover" data-placement="bottom" title="What is NSFW content?" data-content="NSFW content would be things you wouldn't want your boss or children to know you were watching. This includes all content which contains nudity, intense sexuality, intense profanity, violence/gore or other disturbing content."><small class="text-muted">Please select if your content is suitible for all ages or if it has NSFW/sensitive content. <span class="icon icon-help-with-circle"></span></small></a>
-										</center>
 									</div>
 									<div class="row" id='bitcoinAddressField'>
 										<div class="col-sm-12">
