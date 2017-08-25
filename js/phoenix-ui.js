@@ -3362,53 +3362,6 @@ var PhoenixUI = (function(){
 	return PhoenixUX;
 })();
 
-// By default show
-//showWizardPage();
-// showArtifactPage();
-showDraftsPage();
-
-// Initialize
-PhoenixUI.loadTypes();
-PhoenixUI.updatePubFee();
-PhoenixUI.generateDraftRows();
-
-// Handle all of the drag and drop setup
-var posterDropzone = new Dropzone("div#poster", { 
-	url: "/",
-	createImageThumbnails: false,
-	autoProcessQueue: false,
-	previewTemplate: '<div></div>',
-	acceptedFiles: "png,jpg",
-	maxFiles: 1,
-	accept: function(){}
-});
-
-posterDropzone.on("addedfile", PhoenixUI.posterFileSelectHandler);
-
-var mediaDropzone = new Dropzone("div#mediaDrop", { 
-	url: "/",
-	autoProcessQueue: false,
-	accept: function(){},
-	createImageThumbnails: false,
-	previewTemplate: '<div></div>'
-});
-
-mediaDropzone.on("addedfile", PhoenixUI.mediaFileSelectHandler);
-
-var bulkDropzone = new Dropzone("div#bulk", { 
-	url: "/",
-	accept: function(){},
-	autoProcessQueue: false,
-	createImageThumbnails: false,
-	previewTemplate: '<div></div>'
-});
-
-bulkDropzone.on("addedfile", PhoenixUI.handleBulkUpload);
-
-// window.onbeforeunload = function() {
-//   return "Are you sure you want to navigate away?";
-// }
-
 function csv2JSON(csv){
 	var data = Papa.parse(csv);
 

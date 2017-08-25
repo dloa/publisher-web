@@ -39,11 +39,14 @@ var Phoenix = (function() {
 	PhoenixAPI.librarydInfo = { timestamp: 0 };
 
 	PhoenixAPI.tusIPFSEndpoint = "https://ipfs-tus.alexandria.io";
+	PhoenixAPI.flovaultBaseURL = "https://flovault.alexandria.io";
+	PhoenixAPI.tradebotURL = "https://api.alexandria.io/tradebot";
 	PhoenixAPI.tusFiles = [];
 	PhoenixAPI.publishQueue = [];
 	PhoenixAPI.publishState = "Loading";
 	PhoenixAPI.wipArtifacts = {};
 	PhoenixAPI.pendingUploadQueue = [];
+	PhoenixAPI.sentPubUsers = (localStorage.sentPubUsers ? JSON.parse(localStorage.sentPubUsers) : []);
 
 	// Load info from LibraryD
 	PhoenixAPI.searchAPI = function(module, searchOn, searchFor) {
@@ -65,6 +68,119 @@ var Phoenix = (function() {
 		});
 
 		return mediaData;
+	}
+
+	PhoenixAPI.register = function(username, password, email){
+		var data = {};
+
+		if (email)
+			data = {email: email};
+
+		$.post(PhoenixAPI.flovaultBaseURL + "/wallet/create", data, function (response) {
+			if (response.error) {
+				//swal("Error", "Registration failed, please try again!", "error");
+				console.error(response.error);
+				PhoenixEvents.trigger("onWalletCreateFail", response);
+				return;
+			}
+			//identifierInput.val(response.identifier);
+			PhoenixAPI.wallet = new Wallet(response.identifier, password);
+			PhoenixAPI.wallet.setSharedKey(response.shared_key);
+			//PhoenixAPI.wallet.store();
+
+			// Create one address by default.
+			PhoenixAPI.wallet.generateAddress();
+
+			// Store wallet.
+			PhoenixAPI.wallet.store();
+
+			// Request 1 FLO from tradebot
+			var address = "";
+			for (var addr in PhoenixAPI.wallet.addresses) {
+				address = PhoenixAPI.wallet.addresses[addr].addr;
+			}
+
+			if (address === ""){
+				PhoenixEvents.trigger("onWalletCreateFail", {error: {type: "ADD_ADDRESS_ERR", message: "No address found, aborting..."}});
+				return;
+			}
+
+			var faucetData = {
+				flo_address: address,
+				recaptcha: grecaptcha.getResponse()
+			}
+
+			$.post(PhoenixAPI.tradebotURL + "/faucet", faucetData, function(response){
+				if (response.includes("reCAPTCHAv2 error!")){
+					PhoenixEvents.trigger("reCAPTCHAFail", response);
+					return;
+				}
+
+				var res = JSON.parse(response);
+
+				if (res.success){
+					var txid = res.txid;
+					var inf = res['tx-info'].replace(/u'/g, "'").replace(/'/g, '"').replace(/Decimal\(\"/g, '').replace(/\"\)/g, '');
+					var txinfo = JSON.parse(inf);
+					var tmpVout = 1;
+					for (var i = 0; i < txinfo.vout.length; i++){
+						if (txinfo.vout[i].value == 1)
+							tmpVout = txinfo.vout[i].n;
+					}
+					PhoenixAPI.wallet.known_unspent.push({ address: address, amount: 1, confirmations: -1, txid: res.txid, vout: tmpVout});
+
+					LibraryDJS.announcePublisher(PhoenixAPI.wallet, username, address, "", email, function(err, data){
+						if (err){
+							PhoenixEvents.trigger("onPublisherAnnounceFail", err);
+							console.error(err);
+							return;
+						} 
+
+						PhoenixAPI.sentPubUsers.push({
+							username: username,
+							address: address,
+							email: email
+						});
+
+						localStorage.sentPubUsers = JSON.stringify(PhoenixAPI.sentPubUsers);
+
+						localStorage.setItem("identifier", PhoenixAPI.wallet.identifier);
+						localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt(password, PhoenixAPI.wallet.identifier));
+						localStorage.setItem("remember-me", "true");
+
+
+						PhoenixEvents.trigger("onPublisherAnnounceSuccess", {
+							identifier: PhoenixAPI.wallet.identifier,
+							username: username,
+							address: address,
+							email: email
+						});
+
+						// Redirect to main dashboard page.
+						//window.location.href = 'index.html';
+					});
+				} else {
+					console.error(res);
+					PhoenixEvents.trigger("onFaucetFail", res);
+				}
+				
+			});
+			//$(".sweet-alert .lead").html("Register was successful, here is your identifier, please keep this safe or you may lose access to your coins and Publisher ID: <br><code>" + response.identifier + "</code><br>Your initial Florincoin address is: <br><code>" + address + "</code>");
+		});
+	}
+
+	PhoenixAPI.checkEmail = function(email, callback){
+		$.get("https://flovault.alexandria.io/wallet/checkload/" + email, function (response) {
+			if (response.error){
+				if (response.error.message === "Unable to find ID for Email"){
+					callback(false);
+				} else {
+					callback(true);
+				}
+			} else {
+				callback(true);
+			}
+		}, 'json');
 	}
 
 	// Used to login. Should we call this Sync or Async?
@@ -411,12 +527,23 @@ var Phoenix = (function() {
 						var publisher = data[i]["publisher-data"]["alexandria-publisher"];
 						if (publisher.address == walletAddress){
 							myPublishers.push(publisher);
-							
 						}
 					}
 				}
 
-				if (myPublishers.length == 0){
+				if (myPublishers.length === 0){
+					for (var i = 0; i < PhoenixAPI.sentPubUsers.length; i++) {
+						for (var addr in wallet.addresses) {
+							var walletAddress = wallet.addresses[addr].addr;
+							if (PhoenixAPI.sentPubUsers[i].address == walletAddress){
+								PhoenixAPI.sentPubUsers[i].name = PhoenixAPI.sentPubUsers[i].username;
+								myPublishers.push(PhoenixAPI.sentPubUsers[i]);
+							}
+						}
+					}
+				}
+
+				if (myPublishers.length === 0){
 					PhoenixEvents.trigger("onPublisherLoadFailure", { message: 'No publishers found in LibraryD that match any wallet addresses.' });
 				} else {
 					PhoenixAPI.publishers = myPublishers;
@@ -814,10 +941,3 @@ var Phoenix = (function() {
 
 	return PhoenixAPI;
 })();
-
-// Attempt a new publish every 1 second
-setInterval(Phoenix.processPublishQueue, 1 * 1000);
-setInterval(Phoenix.checkUploadStatus, 1 * 1000);
-
-Phoenix.login();
-Phoenix.loadWIPArtifacts();

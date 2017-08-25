@@ -1,113 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="Bootstrap Admin Template">
-    <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin">
-    <title>Alexandria Publisher</title>
-    <!-- build:css(../app) css/vendor-user.css-->
-    <!-- Animate.CSS-->
-    <link rel="stylesheet" href="vendor/animate.css/animate.css">
-    <!-- Bootstrap-->
-    <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css">
-    <!-- Ionicons-->
-    <link rel="stylesheet" href="vendor/ionicons/css/ionicons.css">
-    <!-- Material Colors-->
-    <link rel="stylesheet" href="vendor/material-colors/dist/colors.css">
-    <!-- endbuild-->
-    <!-- Application styles-->
-    <link rel="stylesheet" href="css/app.css">
-  </head>
-  <body>
-    <div class="layout-container">
-      <div class="page-container bg-blue-grey-900">
-        <div class="container-full">
-          <div class="container container-xs"><img src="img/logo.png" class="mv-lg block-center img-responsive thumb64">
-            <div class="card b0 form-validate">
-              <div class="card-offset pb0">
-                <div style="right: 30px" class="card-offset-item text-right"><a  href="signup.html" class="btn-raised btn btn-info btn-circle btn-lg"><em class="ion-person-add"></em></a><p><a href="signup.html" style="margin-right: -20px; color: #444">Create Account</a></p></div>
-                <div class="card-offset-item text-right hidden">
-                  <div class="btn btn-success btn-circle btn-lg"><em class="ion-checkmark-round"></em></div>
-                </div>
-              </div>
-              <div class="card-heading">
-                <div class="card-title text-center">Login</div>
-              </div>
-              <div class="card-body">
-                <div class="mda-form-group float-label mda-input-group">
-                  <div class="mda-form-control">
-                    <input id="username" type="text" name="username" required="true" class="form-control">
-                    <div class="mda-form-control-line"></div>
-                    <label>Wallet Identifier</label>
-                  </div><span class="mda-input-group-addon"><em class="ion-ios-email-outline icon-lg"></em></span>
-                </div>
-                <div class="mda-form-group float-label mda-input-group">
-                  <div class="mda-form-control">
-                    <input id="password" type="password" name="accountPassword" class="form-control">
-                    <div class="mda-form-control-line"></div>
-                    <label>Password</label>
-                  </div><span class="mda-input-group-addon"><em class="ion-ios-locked-outline icon-lg"></em></span>
-                </div>
-              </div>
-              <div class="mda-form-group float-label mda-input-group">
-                  <label class="form-check-label" style="margin-left: 30px;">
-			        <input id="remember-me" class="form-check-input" type="checkbox">
-					<div class="mda-form-control-line"></div>
-			        <label style="padding-left:5px;">Remember me</label>
-			      </label>
-              </div>
-              <button onclick="tryLogin();" class="btn btn-primary btn-flat">Authenticate</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- build:js(../app) js/vendor-user.js-->
-    <!-- Modernizr-->
-    <script src="vendor/modernizr/modernizr.custom.js"></script>
-    <!-- jQuery-->
-    <script src="vendor/jquery/dist/jquery.js"></script>
-    <!-- Bootstrap-->
-    <script src="vendor/bootstrap/dist/js/bootstrap.js"></script>
-    <!-- jQuery Browser-->
-    <script src="vendor/jquery.browser/dist/jquery.browser.js"></script>
-    <!-- Material Colors-->
-    <script src="vendor/material-colors/dist/colors.js"></script>
-    <!-- jQuery Form Validation-->
-    <script src="vendor/jquery-validation/dist/jquery.validate.js"></script>
-    <script src="vendor/jquery-validation/dist/additional-methods.js"></script>
-    <!-- endbuild-->
-    <!-- App script-->
-    <script src="js/SimpleDeps.js"></script>
-    <script src="js/SimpleWallet.js"></script>
-    <script src="js/wallet.js"></script>
-    <script type="text/javascript">
-    	var tryLogin = function(){
-    		// Validate login info
-    		wallet = new Wallet($('#username').val(), $('#password').val());
-  			wallet.load(function () {
-  				console.log("Wallet Post-Load");
-  				console.log(wallet);
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="description" content="DLOA | Publish, Manage, & Control Content like Never Before">
+		<meta name="keywords" content="DLOA, Alexandria, Bitcoin, Florincoin, Decentralized, P2P, FLO, BTC, Free, Video, Publisher">
+		<title>ΛLΞXΛNDRIΛ Publisher</title>
+		
+		<!-- Application styles-->
+		<link rel="stylesheet" href="./css/bootstrap.min.css">
+		<link rel="stylesheet" href="./css/entypo.css">
+		<link rel="stylesheet" href="./css/font-awesome.css">
 
-  				localStorage.setItem("identifier", $('#username').val());
-  				localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt($('#password').val(), $('#username').val()));
-  				localStorage.setItem("remember-me", document.getElementById('remember-me').checked);
+		<style type="text/css">
+			.colorgraph {
+				height: 5px;
+				border-top: 0;
+				background: #c4e17f;
+				border-radius: 5px;
+				background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+				background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+				background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+				background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+			}
+		</style>
+	</head>
+	<body class="bg-light" style="height: 55vh;">
+		<div class="container" style="margin-top: 60px; height: 100%;">
+			<div class="row justify-content-center" style="margin-top:20px; height: 100%;">
+			<img src="./img/logo-long.png" height="75" style="filter: invert(60%);">
+			    <div class="col-12 col-sm-8 col-md-6 col-lg-6 col-xl-6 col-sm-offset-2 col-md-offset-3 col-lg-offset-3 col-xl-offset-3 align-content-center align-self-center">
+			    	<div style="height: 50px;"></div>
+					<form role="form">
+						<fieldset>
+							<h2>Please Sign In</h2>
+							<hr class="colorgraph">
+							<div class="form-group">
+			                    <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address">
+							</div>
+							<div class="form-group">
+			                    <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password">
+							</div>
+							<span class="button-checkbox">
+								<button type="button" class="btn" data-color="primary">Remember Me</button>
+			                    <input type="checkbox" name="remember_me" id="remember_me" checked="checked" class="d-none">
+								<a href="" class="btn btn-link pull-right">Forgot Password?</a>
+							</span>
+							<hr class="colorgraph">
+							<div class="row">
+								<div class="col-xs-6 col-sm-6 col-md-6">
+			                        <input type="submit" class="btn btn-lg btn-success btn-block" value="Sign In">
+								</div>
+								<div class="col-xs-6 col-sm-6 col-md-6">
+									<a href="signup.html" class="btn btn-lg btn-primary btn-block">Register</a>
+								</div>
+							</div>
+						</fieldset>
+					</form>
+				</div>
+			</div>
+		</div>
 
-  				// Redirect to main dashboard page.
-  				window.location.href = 'index.html';
-  			});
-    	};
+		<!-- Load external JS helper files -->
+		<script src="./js/jquery-3.2.1.min.js"></script>
+		<script src="./js/tether.min.js"></script>
+		<script src="./js/underscore.js"></script>
+		<script src="./js/popper.min.js"></script>
+		<script src="./js/bootstrap.min.js"></script>
+		<script src="./js/backbone-min.js"></script>
+		<script src="./js/dropzonejs.js"></script>
+		<script type="text/javascript">
+			Dropzone.autoDiscover = false;
+		</script>
+		<script src="./js/wallet-address-validator.min.js"></script>
+		<script src="./js/bootstrap-tagsinput.js"></script>
+		<script src="./js/tus.min.js"></script>
+		<script src="./js/papaparse.min.js"></script>
+		<script src="./js/bootstrap-notify.min.js"></script>
+		<!-- Bootstrap Tour JS -->
+		<script src="./js/bootstrap-tour.js"></script>
+		<script src="./js/bootstrap-tour.js"></script>
+		<script src="https://cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
+		<script type="text/javascript">
+			(function() { var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = '//api.usersnap.com/load/14a5209d-6d3f-4699-8832-5f709e647ba0.js';
+			var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); })();
+		</script>
+		<!-- Load Dependencies JS -->
+		<script src="./js/SimpleDeps.js"></script>
+		<script src="./js/SimpleWallet.js"></script>
+		<script src="./js/libraryd-js.js"></script>
+		<!-- <script src="./js/artifacts.js"></script> -->
+		<script src="./js/qrcode.min.js"></script>
+		<!-- <script src="./js/wallet.js"></script> -->
+		<!-- Load Phoenix -->
+		<script src="./js/phoenix-api.js"></script>
+		<script src="./js/phoenix-ui.js"></script>
 
-    	window.addEventListener('wallet', function (e) { 
-    		if (e.detail == "There is no wallet with that identifier"){
-				$('#username').trigger('focus');
-	    		$('#username').attr('class', 'form-control has-value error');
-    		} else if (e.detail == 'invalid-password'){
-    			$('#password').trigger('focus');
-	    		$('#password').attr('class', 'form-control has-value error');
-    		}
-    	}, false);
-    </script>
-  </body>
+		<script type="text/javascript">
+			Raven.config('https://c06e40d616e2425db7d419113c957b6a@sentry.io/207690').install()
+
+			$(function(){
+				$('.button-checkbox').each(function(){
+					var $widget = $(this),
+						$button = $widget.find('button'),
+						$checkbox = $widget.find('input:checkbox'),
+						color = $button.data('color'),
+						settings = {
+								on: {
+									icon: 'fa fa-check-square-o'
+								},
+								off: {
+									icon: 'fa fa-square-o'
+								}
+						};
+
+					$button.on('click', function () {
+						$checkbox.prop('checked', !$checkbox.is(':checked'));
+						$checkbox.triggerHandler('change');
+						updateDisplay();
+					});
+
+					$checkbox.on('change', function () {
+						updateDisplay();
+					});
+
+					function updateDisplay() {
+						var isChecked = $checkbox.is(':checked');
+						// Set the button's state
+						$button.data('state', (isChecked) ? "on" : "off");
+
+						// Set the button's icon
+						$button.find('.state-icon')
+							.removeClass()
+							.addClass('state-icon ' + settings[$button.data('state')].icon);
+
+						// Update the button's color
+						if (isChecked) {
+							$button
+								.removeClass('btn-outline-primary')
+								.addClass('btn-' + color + ' active');
+						}
+						else
+						{
+							$button
+								.removeClass('btn-' + color + ' active')
+								.addClass('btn-outline-primary');
+						}
+					}
+					function init() {
+						updateDisplay();
+						// Inject the icon if applicable
+						if ($button.find('.state-icon').length == 0) {
+							$button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
+						}
+					}
+					init();
+				});
+			});
+		</script>
+	</body>
 </html>

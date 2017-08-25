@@ -1,200 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="Bootstrap Admin Template">
-    <meta name="keywords" content="app, responsive, jquery, bootstrap, dashboard, admin">
-    <title>Alexandria Publisher</title>
-    <!-- build:css(../app) css/vendor-user.css-->
-    <!-- Animate.CSS-->
-    <link rel="stylesheet" href="vendor/animate.css/animate.css">
-    <!-- Bootstrap-->
-    <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css">
-    <!-- Ionicons-->
-    <link rel="stylesheet" href="vendor/ionicons/css/ionicons.css">
-    <!-- Material Colors-->
-    <link rel="stylesheet" href="vendor/material-colors/dist/colors.css">
-    <!-- endbuild-->
-    <!-- Application styles-->
-    <link rel="stylesheet" href="css/app.css">
-    <link href="./css/sweet-alert.css" rel="stylesheet">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="description" content="DLOA | Publish, Manage, & Control Content like Never Before">
+		<meta name="keywords" content="DLOA, Alexandria, Bitcoin, Florincoin, Decentralized, P2P, FLO, BTC, Free, Video, Publisher">
+		<title>ΛLΞXΛNDRIΛ Publisher</title>
+		
+		<!-- Application styles-->
+		<link rel="stylesheet" href="./css/bootstrap.min.css">
+		<link rel="stylesheet" href="./css/entypo.css">
+		<link rel="stylesheet" href="./css/font-awesome.css">
+		<link href="./css/sweet-alert.css" rel="stylesheet">
 
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-  </head>
-  <body>
-    <div class="layout-container">
-      <div class="page-container bg-blue-grey-900">
-        <div class="container-full">
-          <div class="container container-xs"><img src="img/logo.png" class="mv-lg block-center img-responsive thumb64">
-            <form id="user-signup" action="" name="createForm" novalidate="" class="card b0 form-validate">
-              <div class="card-offset pb0">
-                <div class="card-offset-item text-right">
-                  <div id="form-ok" class="btn btn-success btn-circle btn-lg hidden"><em class="ion-checkmark-round"></em></div>
-                </div>
-              </div>
-              <div class="card-heading">
-                <div class="card-title text-center">Create account</div>
-              </div>
-              <div class="card-body">
-                <div class="mda-form-group float-label mda-input-group">
-                  <div class="mda-form-control">
-                    <input id="name" type="text" name="pubName" required="" class="form-control">
-                    <div class="mda-form-control-line"></div>
-                    <label>Publisher Name</label>
-                  </div><span class="mda-input-group-addon"><em class="ion-ios-person-outline icon-lg"></em></span>
-                </div>
-                <div class="mda-form-group float-label mda-input-group">
-                  <div class="mda-form-control">
-                    <input id="email" type="email" name="accountName" required="" class="form-control">
-                    <div class="mda-form-control-line"></div>
-                    <label>Email address</label>
-                  </div><span class="mda-input-group-addon"><em class="ion-ios-email-outline icon-lg"></em></span>
-                </div>
-                <div class="mda-form-group float-label mda-input-group">
-                  <div class="mda-form-control">
-                    <input id="account-password" type="password" name="accountPassword" required="" class="form-control">
-                    <div class="mda-form-control-line"></div>
-                    <label>Password</label>
-                  </div><span class="mda-input-group-addon"><em class="ion-ios-locked-outline icon-lg"></em></span>
-                </div>
-                <div class="mda-form-group float-label mda-input-group">
-                  <div class="mda-form-control">
-                    <input type="password" name="accountPasswordCheck" required="" class="form-control">
-                    <div class="mda-form-control-line"></div>
-                    <label>Confirm password</label>
-                  </div><span class="mda-input-group-addon"><em class="ion-ios-locked-outline icon-lg"></em></span>
-                </div>
-              </div>
-              <div class="g-recaptcha" data-sitekey="6LdpKBYUAAAAACnfrr-0wEfMrLXURVs-pV5vhvM_" style="margin-left:15%;margin-bottom:15px;"></div>
-              <button type="submit" class="btn btn-primary btn-flat">Create</button>
-              <div class="card-body bg-gray-lighter text-center text-sm"><span class="spr">By registering I accept the</span><a href="#" class="spr">Terms of Service</a><span class="spr">and</span><a href="#" class="spr">Privacy</a></div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- build:js(../app) js/vendor-user.js-->
-    <!-- Modernizr-->
-    <script src="vendor/modernizr/modernizr.custom.js"></script>
-    <!-- jQuery-->
-    <script src="vendor/jquery/dist/jquery.js"></script>
-    <!-- Bootstrap-->
-    <script src="vendor/bootstrap/dist/js/bootstrap.js"></script>
-    <!-- jQuery Browser-->
-    <script src="vendor/jquery.browser/dist/jquery.browser.js"></script>
-    <!-- Material Colors-->
-    <script src="vendor/material-colors/dist/colors.js"></script>
-    <!-- jQuery Form Validation-->
-    <script src="vendor/jquery-validation/dist/jquery.validate.js"></script>
-    <script src="vendor/jquery-validation/dist/additional-methods.js"></script>
-    <!-- endbuild-->
-    <!-- App script-->
-    <script src="js/app.js"></script>
-    <script src="js/SimpleDeps.js"></script>
-    <script src="js/SimpleWallet.js"></script>
-    <script src="js/wallet.js"></script>
-    <script src="js/libraryd-js.js"></script>
-    <script src="js/sweet-alert.min.js"></script>
-    <script type="text/javascript">
-    	var $form = $('#user-signup').on('submit', function(){
-    		console.log("Yep!");
-    		// Create new wallet, request 
-    		var data = {};
-			if ($("#email").val().length > 3)
-				data = {email: $("#email").val()};
+		<style type="text/css">
+			.colorgraph {
+				height: 5px;
+				border-top: 0;
+				background: #c4e17f;
+				border-radius: 5px;
+				background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+				background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+				background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+				background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+			}
+		</style>
+	</head>
+	<body class="bg-light" style="height: 55vh;">
+		<div class="container" style="margin-top: 60px; height: 100%;">
+			<div class="row justify-content-center" style="margin-top:20px; height: 100%;">
+			<img src="./img/logo-long.png" style="filter: invert(60%);max-width:100%;max-height:75px;object-fit: cover;">
+			    <div class="col-12 col-sm-8 col-md-6 col-lg-6 col-xl-6 col-sm-offset-2 col-md-offset-3 col-lg-offset-3 col-xl-offset-3 align-content-center align-self-center">
+			    	<div style="height: 50px;"></div>
+					<h2>Please Sign Up <small style="font-size: 16px;padding-left:20px">It's free and always will be.</small></h2>
+					<hr class="colorgraph">
+					<div class="form-group">
+						<input type="text" name="username" id="username" class="form-control input-lg" placeholder="Username*" tabindex="1" oninput="checkUsername()">
+						<div class="invalid-feedback" id="feedback_username">
+							Please provide a Username.
+						</div>
+					</div>
+					<div class="form-group">
+						<input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address" tabindex="2" oninput="checkEmail()">
+						<div class="invalid-feedback" id="feedback_email">
+							Email is invalid or is already in use, please choose another one.
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-6 col-md-6">
+							<div class="form-group">
+								<input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password*" tabindex="3" oninput="checkPassword()">
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6 col-md-6">
+							<div class="form-group">
+								<input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-lg" placeholder="Confirm Password*" tabindex="4" oninput="checkPassword()">
+								<div class="invalid-feedback" id="feedback_password_confirmation">
+									Passwords must match
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<!-- <div class="col-xs-4 col-sm-3 col-md-3">
+							<span class="button-checkbox">
+								<button type="button" class="btn" data-color="primary" tabindex="7">I Agree</button>
+		                        <input type="checkbox" name="t_and_c" id="t_and_c" class="d-none" value="1">
+							</span>
+						</div> -->
+						<div class="col-12" style="font-size: 13.5px;">
+							By <strong>Registering</strong>, you agree to the <a href="#" data-toggle="modal" data-target="#t_and_c_m">Terms and Conditions</a>, including our Cookie Use.
+						</div>
+					</div>
+					<div class="row">
+						<div class="g-recaptcha" data-sitekey="6LdpKBYUAAAAACnfrr-0wEfMrLXURVs-pV5vhvM_" style="margin: 0px auto;margin-top:10px;margin-bottom:-5px;"></div>
+					</div>
+					<hr class="colorgraph">
+					<div class="row">
+						<div class="col-xs-12 col-md-6"><button id="register" class="btn btn-primary btn-block btn-lg" onClick="onRegisterClick();" tabindex="5">Register</button></div>
+						<div class="col-xs-12 col-md-6"><a href="login.html" class="btn btn-success btn-block btn-lg">Sign In</a></div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-			$.post("https://flovault.alexandria.io/wallet/create", data, function (response) {
-				console.log("Create Response");
-				console.log(response);
-				if (response.error) {
-					//swal("Error", "Registration failed, please try again!", "error");
-					console.log(response.error);
+		<!-- Load external JS helper files -->
+		<script src="./js/jquery-3.2.1.min.js"></script>
+		<script src="./js/tether.min.js"></script>
+		<script src="./js/underscore.js"></script>
+		<script src="./js/popper.min.js"></script>
+		<script src="./js/bootstrap.min.js"></script>
+		<script src="./js/backbone-min.js"></script>
+		<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+		<script src="https://cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
+		<script type="text/javascript">
+			(function() { var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = '//api.usersnap.com/load/14a5209d-6d3f-4699-8832-5f709e647ba0.js';
+			var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); })();
+		</script>
+		<!-- Load Dependencies JS -->
+		<script src="./js/SimpleDeps.js"></script>
+		<script src="./js/SimpleWallet.js"></script>
+		<script src="./js/libraryd-js.js"></script>
+		<script src="./js/sweet-alert.min.js"></script>
+		<!-- Load Phoenix -->
+		<script src="./js/phoenix-api.js"></script>
+		<script src="./js/phoenix-ui.js"></script>
+
+		<script type="text/javascript">
+			Raven.config('https://c06e40d616e2425db7d419113c957b6a@sentry.io/207690').install()
+
+			var onRegisterClick = function(){
+				var username = $('#username').val();
+				var password = $('#password').val();
+				var email = $('#email').val();
+
+				if (checkUsername()){
+					if (checkPassword()){
+						checkEmail(function(isTaken){
+							if (!isTaken){
+								setRegisterText();
+								Phoenix.register(username, password, email);
+							}
+						})
+					}
+				}
+			}
+
+			var resetRegisterText = function(){
+				document.getElementById('register').innerHTML = 'Register';
+			}
+
+			var setRegisterText = function(){
+				document.getElementById('register').innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i> Loading';
+			}
+
+			PhoenixEvents.on("onWalletCreateFail", function(msg){ 
+				resetRegisterText();
+				swal({
+					type: "error",
+					title: "Wallet Creation Error",
+					text: "Please try again"
+				});
+			});
+			PhoenixEvents.on("onPublisherAnnounceFail", function(msg){ 
+				resetRegisterText();
+				swal({
+					type: "error",
+					title: "Publisher Announce Error",
+					text: "Please try again"
+				});
+			});
+			PhoenixEvents.on("onFaucetFail", function(msg){ 
+				resetRegisterText();
+				swal({
+					type: "error",
+					title: "Florincoin Faucet Error",
+					text: "Please try again later..."
+				});
+			});
+			PhoenixEvents.on("reCAPTCHAFail", function(msg){ 
+				resetRegisterText();
+				swal({
+					type: "error",
+					title: "reCAPTCHA Error",
+					text: "Please try again"
+				});
+			});
+			PhoenixEvents.on("onPublisherAnnounceSuccess", function(msg){ 
+				if (msg.email && msg.email != ""){
+					document.location.href = "index.html"
+				} else {
+					swal({
+						title: "Register Successful",
+						type: "success",
+						text: "Your identifier is " + msg.identifier + ", please save this to Login with",
+						showCloseButton: true
+					}, function () { 
+						document.location.href = "index.html"; 
+					});
+				}
+			});
+
+			var checkUsername = function(){
+				var username = $('#username').val();
+
+				if (username === ""){
+					$('#username').removeClass('is-valid');
+					$('#username').addClass('is-invalid');
+
+					$('#feedback_username').show();
+
+					return false;
+				} else {
+					$('#username').removeClass('is-invalid');
+					$('#username').addClass('is-valid');
+
+					$('#feedback_username').hide();
+
+					return true;
+				}
+			}
+
+			var checkPassword = function(){
+				var password = $('#password').val();
+				var password_confirmation = $('#password_confirmation').val();
+
+				if (password === ""){
+					$('#password').removeClass('is-valid');
+					$('#password').addClass('is-invalid');
+
+					return false;
+				} else {
+					$('#password').removeClass('is-invalid');
+					$('#password').addClass('is-valid');
+				}
+
+				if (password_confirmation === ""){
+					$('#password_confirmation').removeClass('is-valid');
+					$('#password_confirmation').addClass('is-invalid');
+
+					return false;
+				}
+
+				if (password === password_confirmation){
+					$('#password').removeClass('is-invalid');
+					$('#password').addClass('is-valid');
+
+					$('#password_confirmation').removeClass('is-invalid');
+					$('#password_confirmation').addClass('is-valid');
+
+					$('#feedback_password_confirmation').hide();
+
+					return true;
+				} else {
+					$('#password_confirmation').removeClass('is-valid');
+					$('#password_confirmation').addClass('is-invalid');
+
+					$('#feedback_password_confirmation').show();
+					return false;
+				}
+			}
+
+			var checkEmail = function(callback){
+				if (!callback)
+					callback = function(){}
+				
+				var email = $('#email').val();
+
+				if (!email || email === ""){
+					callback(false);
 					return;
 				}
-				//identifierInput.val(response.identifier);
-				wallet = new Wallet(response.identifier, $("#account-password").val());
-				wallet.setSharedKey(response.shared_key);
-				wallet.store();
 
-				// Create one address by default.
-				wallet.generateAddress();
+				Phoenix.checkEmail(email, function(isTaken){
+					if (isTaken){
+						$('#email').removeClass('is-valid');
+						$('#email').addClass('is-invalid');
 
-				// Store wallet.
-				wallet.store();
-
-				console.log(wallet);
-
-				// Request 1 FLO from tradebot
-				var address = "";
-				for (var addr in wallet.addresses) {
-					address = wallet.addresses[addr].addr;
-					console.log(address);
-				}
-
-				var faucetData = {
-					flo_address: address,
-					recaptcha: grecaptcha.getResponse()
-				}
-
-				$.post("https://api.alexandria.io/tradebot/faucet", faucetData, function(response){
-					var res = JSON.parse(response);
-					if (res.success){
-						var txid = res.txid;
-						console.log(JSON.parse(response));
-						var inf = res['tx-info'].replace(/u'/g, "'").replace(/'/g, '"').replace(/Decimal\(\"/g, '').replace(/\"\)/g, '');
-						console.log(inf);
-						var txinfo = JSON.parse(inf);
-						console.log(txinfo);
-						var tmpVout = 1;
-						for (var i = 0; i < txinfo.vout.length; i++){
-							if (txinfo.vout[i].value == 1)
-								tmpVout = txinfo.vout[i].n;
-						}
-						wallet.known_unspent.push({ address: address, amount: 1, confirmations: 0, txid: res.txid, vout: tmpVout});
-						console.log(wallet);
-						LibraryDJS.announcePublisher(wallet, $('#name').val(), address, "", $("#email").val(), function(err, data){
-							if (err){
-								//swal("Error!", "Error registering, please refresh and try again!", "error");
-								//$('#newPublisherModal').modal('hide');
-								console.log(err);
-								return;
-							} 
-							console.log("Success!");
-							console.log(data);
-							swal({title: "Success!", text: "Your new publisher address has been successfully registered!", type: "success"}, function(){
-								localStorage.setItem("identifier", wallet.identifier);
-								localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt($('#account-password').val(), wallet.identifier));
-								localStorage.setItem("remember-me", "true");
-								localStorage.setItem("justSignedUp", "true");
-								localStorage.setItem("justSignedUpData", address + '/' + $('#name').val());
-
-								// Redirect to main dashboard page.
-								window.location.href = 'index.html';
-							});
-							$(".sweet-alert .lead").html("Register was successful, here is your identifier, please keep this safe or you may lose access to your coins and Publisher ID: <br><code>" + wallet.identifier + "</code>");
-						});
+						$('#feedback_email').show();
 					} else {
-						console.log(res);
-						swal("Error", "There was an error registering your publisher address, please refresh and try again.", "error");
-					}
-					
-				});
-				//$(".sweet-alert .lead").html("Register was successful, here is your identifier, please keep this safe or you may lose access to your coins and Publisher ID: <br><code>" + response.identifier + "</code><br>Your initial Florincoin address is: <br><code>" + address + "</code>");
-			});
-    	});
+						$('#email').removeClass('is-invalid');
+						$('#email').addClass('is-valid');
 
-    	window.addEventListener('wallet', function (e) { 
-    		if (e.detail == "There is no wallet with that identifier"){
-				$('#walletID').trigger('focus');
-	    		$('#walletID').attr('class', 'form-control has-value error');
-    		} else if (e.detail == 'invalid-password'){
-    			$('#password').trigger('focus');
-	    		$('#password').attr('class', 'form-control has-value error');
-    		} else {
-    			console.log(e);
-    		}
-    	}, false);
-    </script>
-  </body>
+						$('#feedback_email').hide();
+					}
+					callback(isTaken);
+				})
+			}
+
+			$(function(){
+				$('.button-checkbox').each(function(){
+					var $widget = $(this),
+						$button = $widget.find('button'),
+						$checkbox = $widget.find('input:checkbox'),
+						color = $button.data('color'),
+						settings = {
+								on: {
+									icon: 'fa fa-check-square-o'
+								},
+								off: {
+									icon: 'fa fa-square-o'
+								}
+						};
+
+					$button.on('click', function () {
+						$checkbox.prop('checked', !$checkbox.is(':checked'));
+						$checkbox.triggerHandler('change');
+						updateDisplay();
+					});
+
+					$checkbox.on('change', function () {
+						updateDisplay();
+					});
+
+					function updateDisplay() {
+						var isChecked = $checkbox.is(':checked');
+						// Set the button's state
+						$button.data('state', (isChecked) ? "on" : "off");
+
+						// Set the button's icon
+						$button.find('.state-icon')
+							.removeClass()
+							.addClass('state-icon ' + settings[$button.data('state')].icon);
+
+						// Update the button's color
+						if (isChecked) {
+							$button
+								.removeClass('btn-outline-primary')
+								.addClass('btn-' + color + ' active');
+						}
+						else
+						{
+							$button
+								.removeClass('btn-' + color + ' active')
+								.addClass('btn-outline-primary');
+						}
+					}
+					function init() {
+						updateDisplay();
+						// Inject the icon if applicable
+						if ($button.find('.state-icon').length == 0) {
+							$button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
+						}
+					}
+					init();
+				});
+			});
+		</script>
+	</body>
 </html>
