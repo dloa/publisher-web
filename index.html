@@ -1149,6 +1149,7 @@
 		<script src="./js/bootstrap-notify.min.js"></script>
 		<!-- Bootstrap Tour JS -->
 		<script src="./js/bootstrap-tour.js"></script>
+		<script src="./js/bootstrap-tour.js"></script><script src="https://cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
 		<!-- Load Dependencies JS -->
 		<script src="./js/SimpleDeps.js"></script>
 		<script src="./js/SimpleWallet.js"></script>
@@ -1160,140 +1161,12 @@
 		<script src="./js/phoenix-api.js"></script>
 		<script src="./js/phoenix-ui.js"></script>
 
-		<!-- Visual JS -->
 		<script type="text/javascript">
+			Raven.config('https://c06e40d616e2425db7d419113c957b6a@sentry.io/207690').install()
 			// // Set the version number in the footer
 			// var version = "1.2.7";
 			var env = "production";
-			// //document.getElementById("footerText").innerHTML = "Alexandria Web Publisher v" + version + " - Questions? Comments? Want to Help? Join us on our <a href='http://dloaslack.bitspill.net/'>Slack chat</a>!";
-
-			// $(document).ready(function () {
-
-			// 	// Redirect to login if user is not logged into wallet.
-			// 	checkLogin(0);
-
-			// 	//Initialize
-			// 	$('.nav-tabs > li a[title]').tooltip();
-			// 	$('#pricing').hide();
-			// 	$('#mediaFilesTable').hide();
-			// 	$('#extraTable').hide();
-				
-			// 	//Wizard
-			// 	$('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-
-			// 		var $target = $(e.target);
-				
-			// 		if ($target.parent().hasClass('disabled')) {
-			// 			return false;
-			// 		}
-			// 	});
-
-			// 	$(".next-step").click(function (e) {
-
-			// 		var $active = $('.wizard .nav-tabs li.active');
-			// 		$active.next().removeClass('disabled');
-			// 		nextTab($active);
-
-			// 	});
-			// 	$(".prev-step").click(function (e) {
-
-			// 		var $active = $('.wizard .nav-tabs li.active');
-			// 		prevTab($active);
-
-			// 	});
-
-			// });
-
-			// function nextTab(elem) {
-			// 	$(elem).next().find('a[data-toggle="tab"]').click();
-			// }
-			// function prevTab(elem) {
-			// 	$(elem).prev().find('a[data-toggle="tab"]').click();
-			// }
-
-			// $('#login a').click(function (e) {
-			// 	e.preventDefault()
-			// 	$(this).tab('show');
-			// })
-			// $('#register a').click(function (e) {
-			// 	e.preventDefault()
-			// 	$(this).tab('show');
-			// })
-
-			// $("#loginWalletPassword").keyup(function(event){
-			// 	if(event.keyCode == 13){
-			// 		$("#walletLoginButton").click();
-			// 	}
-			// });
-
-			// function fade(element) {
-			// 	var op = 1;	// initial opacity
-			// 	var timer = setInterval(function () {
-			// 		if (op <= 0.1){
-			// 			clearInterval(timer);
-			// 			element.style.display = 'none';
-			// 		}
-			// 		element.style.opacity = op;
-			// 		element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-			// 		op -= op * 0.1;
-			// 	}, 20);
-			// }
-
-			// function unfade(element) {
-			// 	var op = 0.01;	// initial opacity
-			// 	element.style.display = 'block';
-			// 	var timer = setInterval(function () {
-			// 		if (op >= 1){
-			// 			clearInterval(timer);
-			// 		}
-			// 		element.style.opacity = op;
-			// 		element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-			// 		op += op * 0.1;
-			// 	}, 15);
-			// }
-
-			// function changeArtifactType(mediaType){
-			// 	// Remove all media files when artifact type is changed.
-			// 	$('.mediaRow').each(function(){
-			// 		$(this).find('.btn-danger').click();
-			// 	});
-			// 	// Change supported files to be uploaded
-			// 	// Get type in order to validate files
-			// 	if (mediaType == 'video'){
-			// 		mediaType = 'video/*';
-			// 	}
-			// 	else if (mediaType == 'music'){
-			// 		mediaType = 'audio/*';
-			// 	}
-			// 	else if (mediaType == 'podcast'){
-			// 		mediaType = 'audio/*';
-			// 	}
-			// 	else if (mediaType == 'book'){
-			// 		mediaType = 'application/pdf,text/*';
-			// 	}
-			// 	else if (mediaType == 'movie'){
-			// 		mediaType = 'video/*';
-			// 	}
-			// 	else if (mediaType == 'thing'){
-			// 		mediaType = '*/*';
-			// 	}
-			// 	else if (mediaType == 'html'){
-			// 		mediaType = '*/*';
-			// 	}
-
-			// 	$('#mediaFiles').attr('accept', mediaType);
-
-			// }
-
-			// function next(){
-			// 	var $active = $('.wizard .nav-tabs li.active');
-			// 	$active.next().removeClass('disabled');
-			// 	nextTab($active);
-			// }
-
-			// // Hide the coinbase buy button if not on alexandria.io as it will not work
-			// testDomain();
-
+			
 			$('#paymentInfo').hide();
 
 			var free, paid;
@@ -1314,37 +1187,6 @@
 			$(function () {
 				$('[data-toggle="popover"]').popover()
 			})
-
-			// $('#publisherNav').on('click', function(evt){
-			// 	$('#wizard').show();
-			// 	$('#artifacts').hide();
-			// 	$('#editArtifact').hide();
-			// 	$('#WalletPage').hide();
-			// })
-
-			// $('#artifactsNav').on('click', function(evt){
-			// 	$('#wizard').hide();
-			// 	$('#artifacts').show();
-			// 	$('#editArtifact').hide();
-			// 	$('#WalletPage').hide();
-			// })
-
-			// $('#walletNav').on('click', function(evt){
-				// $('#wizard').hide();
-				// $('#artifacts').hide();
-				// $('#editArtifact').hide();
-				// $('#WalletPage').show();
-			// })
-
-			// $('#wizard').show();
-			// $('#artifacts').hide();
-			// $('#editArtifact').hide();
-			// $('#WalletPage').hide();
-
-
-			// $('#paymentInfo').hide();
-
-			// 	//$('#walletModal').modal('show');
 
 			// ##################################################################################################
 			// #					 								Hello There!			 								#

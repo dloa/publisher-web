@@ -200,7 +200,7 @@ LibraryDJS.multiPart = function (wallet, txComment, address, amount, publishFee,
     var perPubFee = 1 / Math.pow(10,8);
 
     // the first reference tx id is always 64 zeros
-    var reference = new Array(65).join("0");
+    var reference = "";
 
     var data = chop[part];
     var preImage = part.toString() + "-" + max.toString() + "-" + address + "-" + reference + "-" + data;
@@ -232,12 +232,12 @@ function publishPart(wallet, perPubFee, chopPieces, numberOfPieces, lastPiecesCo
     var part = lastPiecesCompleted + 1;
 
     var data = chopPieces[part];
-    var preImage = part.toString() + "-" + numberOfPieces.toString() + "-" + address + "-" + reference + "-" + data;
+    var preImage = part.toString() + "-" + numberOfPieces.toString() + "-" + address + "-" + reference.substring(0,10) + "-" + data;
 
     var signature = wallet.signMessage(address, preImage);
 
     var multiPart = multiPartPrefix + part.toString() + "," + numberOfPieces.toString() +
-        "," + address + "," + reference + "," + signature + "," + "):" + data;
+        "," + address + "," + reference.substring(0,10) + "," + signature + "," + "):" + data;
 
     wallet.sendCoins(address, address, amount, multiPart, perPubFee, function (err, data) {
     	txIDs[txIDs.length] = data.txid;
@@ -329,7 +329,7 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 		// Grab the first element from the array of chopped strings.
 		var chopStr = txObj.splitStrings[publishedSoFar];
 
-		var preImage = publishedSoFar.toString() + "-" + numberOfPieces.toString() + "-" + options.address + "-" + chopStr;
+		var preImage = publishedSoFar.toString() + "-" + numberOfPieces.toString() + "-" + options.address + "--" + chopStr;
 
 	    var signature = options.wallet.signMessage(options.address, preImage);
 
