@@ -47,6 +47,7 @@ var Phoenix = (function() {
 	PhoenixAPI.wipArtifacts = {};
 	PhoenixAPI.pendingUploadQueue = [];
 	PhoenixAPI.sentPubUsers = (localStorage.sentPubUsers ? JSON.parse(localStorage.sentPubUsers) : []);
+	PhoenixAPI.bulkTusFiles = [];
 
 	// Load info from LibraryD
 	PhoenixAPI.searchAPI = function(module, searchOn, searchFor) {
@@ -544,6 +545,12 @@ var Phoenix = (function() {
 			
 	}
 
+	PhoenixAPI.addBulkToPublishQueue = function(artifactJSON){
+		artifactJSON = LibraryDJS.signPublishArtifact(PhoenixAPI.wallet, artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, artifactJSON);
+
+		PhoenixAPI.addToPublishQueue(artifactJSON);
+	}
+
 	PhoenixAPI.addToPublishQueue = function(artJSON){
 		PhoenixAPI.publishQueue.push({
 			status: "",
@@ -789,7 +796,7 @@ var Phoenix = (function() {
 		}
 	}
 
-	PhoenixAPI.uploadFileToTus = function(file, onSuccess, onError, onProgress, newName){
+	PhoenixAPI.uploadFileToTus = function(file, onSuccess, onError, onProgress, newName, saveToBulk){
 		if (!onSuccess)
 			onSuccess = function(){};
 		if (!onError)
@@ -797,7 +804,15 @@ var Phoenix = (function() {
 		if (!onProgress)
 			onProgress = function(){};
 
-		PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.push({"name": newName ? newName : file.name});
+		if (!PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID]){
+			PhoenixAPI.bulkTusFiles.push({"name": newName ? newName : file.name});
+		} else {
+			if (!PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles)
+				PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles = [];
+
+			PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.push({"name": newName ? newName : file.name});
+		}
+			
 		PhoenixAPI.saveWIPArtifacts();
 
 		// Create a new tus upload
@@ -824,6 +839,14 @@ var Phoenix = (function() {
 							PhoenixAPI.pendingUploadQueue[j].tusFiles[i].error = error;
 						}
 		        	}
+				}
+
+				for (var i = 0; i < PhoenixAPI.bulkTusFiles.length; i++) {
+					if (PhoenixAPI.bulkTusFiles[i]){
+						if (PhoenixAPI.bulkTusFiles[i].name == file.name){
+							PhoenixAPI.bulkTusFiles[i].error = error;
+						}
+					}
 				}
 
 				PhoenixEvents.trigger('onTusUploadError', {});
@@ -854,6 +877,14 @@ var Phoenix = (function() {
 		        	}
 				}
 
+				for (var i = 0; i < PhoenixAPI.bulkTusFiles.length; i++) {
+					if (PhoenixAPI.bulkTusFiles[i]){
+						if (PhoenixAPI.bulkTusFiles[i].name == file.name){
+							PhoenixAPI.bulkTusFiles[i].progress = percentage;
+						}
+					}
+				}
+
 				PhoenixEvents.trigger('onTusUploadProgress', {});
 
 	            onProgress(percentage, bytesUploaded, bytesTotal);
@@ -880,6 +911,14 @@ var Phoenix = (function() {
 							}
 						}
 		        	}
+				}
+
+				for (var i = 0; i < PhoenixAPI.bulkTusFiles.length; i++) {
+					if (PhoenixAPI.bulkTusFiles[i]){
+						if (PhoenixAPI.bulkTusFiles[i].name == file.name){
+							PhoenixAPI.bulkTusFiles[i].id = id;
+						}
+					}
 				}
 
 				PhoenixEvents.trigger("onTusUploadSuccess", {});

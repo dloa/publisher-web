@@ -2982,7 +2982,7 @@ var PhoenixUI = (function(){
 			updateProg();
 		}, function(error){ console.log(error) }, function(percent){
 			updateProg();
-		}, newName);
+		}, newName, true);
 	}
 
 	PhoenixUX.bulkPublish = function(){
@@ -3139,7 +3139,7 @@ var PhoenixUI = (function(){
 					artifactJSONs[artifactNum].artifact.storage.files = filesJSON;
 
 					showArtifactPage();
-					Phoenix.addToPublishQueue(artifactJSONs[artifactNum]);
+					Phoenix.addBulkToPublishQueue(artifactJSONs[artifactNum]);
 
 					console.log(artifactJSONs);
 				})
@@ -3224,7 +3224,7 @@ var PhoenixUI = (function(){
 		if (waiting.length > 0) {
 			for (var i = 0; i < waiting.length; i++) {
 				pubStatusTableElement.innerHTML += '<tr>\
-					<th scope="row">' + i + '</th>\
+					<th scope="row">' + (i + 2) + '</th>\
 					<td><code>' + waiting[i].artifactJSON["oip-041"].artifact.info.title + '</code></td>\
 					<td>\
 						<div class="progress">\
