@@ -1269,7 +1269,7 @@
 
 			var doneLoading = function(){
 				document.getElementById('main').style.display = 'flex';
-				document.getElementById('main').style.height = '56rem';
+				document.getElementById('main').style.height = ($(window).height() - 60) + "px";
 				document.getElementById('loader').style.display = 'none';
 			}
 		</script>
