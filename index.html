@@ -1268,8 +1268,9 @@
 			checkEnv();
 
 			var doneLoading = function(){
-				document.getElementById('main').style = 'height: 93vh;';
-				document.getElementById('loader').style = 'display:none;height: 93vh;';
+				document.getElementById('main').style.display = 'flex';
+				document.getElementById('main').style.height = '56rem';
+				document.getElementById('loader').style.display = 'none';
 			}
 		</script>
 	</body>
