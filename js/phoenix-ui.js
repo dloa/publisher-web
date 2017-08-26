@@ -1685,32 +1685,32 @@ var PhoenixUI = (function(){
 			file.name = oip041.artifact.storage.files[i].fname;
 			file.size = oip041.artifact.storage.files[i].size;
 
-			var type = oip041.artifact.storage.files[i].type;
+			file.type = oip041.artifact.storage.files[i].type;
+			file.subtype = oip041.artifact.storage.files[i].subtype;
+
 			var iconURL = "";
 
-			if (type == '')
+			if (file.type == '')
 				type = "Other"
 
-			if (type == 'Audio'){
+			if (file.type == 'Audio'){
 				iconURL = './assets/svg/beamed-note.svg';
-			} else if (type == 'Video'){
+			} else if (file.type == 'Video'){
 				iconURL = './assets/svg/video-camera.svg';
-			} else if (type == 'Image'){
+			} else if (file.type == 'Image'){
 				iconURL = './assets/svg/image.svg';
-			} else if (type == 'Text'){
+			} else if (file.type == 'Text'){
 				iconURL = './assets/svg/text-document.svg';
-			} else if (type == 'Software'){
+			} else if (file.type == 'Software'){
 				iconURL = './assets/svg/code.svg';
-			} else if (type == 'Web'){
+			} else if (file.type == 'Web'){
 				iconURL = './assets/svg/browser.svg';
-			} else if (type == 'Other'){
+			} else if (file.type == 'Other'){
 				iconURL = './assets/svg/bucket.svg';
 			}
 
 			var continueUpload = true;
 			var percent = 0;
-
-			console.log("yolo");
 
 			for (var j = 0; j < Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles.length; j++) {
 				if (Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles[j]){
@@ -1728,10 +1728,10 @@ var PhoenixUI = (function(){
 
 			PhoenixUX.appendFileToMediaTable(file, iconURL, null, continueUpload);
 			PhoenixUX.appendFileToPricingTable(file);
+			PhoenixUX.changeMediaSelect(file.id, file.type, file.subtype);
 
-			fileDatas[i] = {id: file.id, percent: percent};
+			fileDatas[i] = {id: file.id, type: file.type, subtype: file.subtype, percent: percent};
 
-			console.log(file.id, percent);
 			var updateProg = function(){
 				for (var i in fileDatas) {
 					PhoenixUX.setProgress(fileDatas[i].percent, fileDatas[i].id);
@@ -1889,6 +1889,8 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.publish = function(){
+		PhoenixUX.generateArtifactJSONFromView();
+
 		PhoenixUX.resetPublisher();
 
 		Phoenix.publishCurrentWIP();
@@ -2640,7 +2642,7 @@ var PhoenixUI = (function(){
 		for (var i = 0; i < typeSelect.children.length; i++) {
 			if (typeSelect.children[i].value == newType){
 				typeSelect.value = newType;
-				PhoenixUX.onMediaSelectChange(typeSelect);
+				PhoenixUX.onMediaSelectChange(typeSelect, true);
 			}
 		}
 
@@ -2662,7 +2664,7 @@ var PhoenixUI = (function(){
 		}
 	}
 
-	PhoenixUX.onMediaSelectChange = function(elem){
+	PhoenixUX.onMediaSelectChange = function(elem, manualRun){
 		PhoenixUX.mediaChangeSelect = elem;
 
 		var id = elem.parentNode.parentNode.parentNode.id;
@@ -2725,8 +2727,14 @@ var PhoenixUI = (function(){
 			}
 
 			var icon = parent.children[0].children[0].src = newIconURL;
+
+			if (!manualRun){
+				PhoenixUX.generateArtifactJSONFromView();
+			}
 		} else if (elem.id === "subtypeSelect") {
 			PhoenixUX.mediaPricing[id + 'price'].subtype = elem.value;
+
+			PhoenixUX.generateArtifactJSONFromView();
 		}
 	}
 
