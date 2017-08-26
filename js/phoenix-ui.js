@@ -1889,13 +1889,10 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.publish = function(){
-		PhoenixUX.generateArtifactJSONFromView();
-
-		PhoenixUX.resetPublisher();
-
 		Phoenix.publishCurrentWIP();
 
 		showArtifactPage();
+		PhoenixUX.resetPublisher();
 	}
 
 	PhoenixUX.generateArtifactJSONFromView = function(){

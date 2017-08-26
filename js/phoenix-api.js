@@ -42,10 +42,11 @@ var Phoenix = (function() {
 	PhoenixAPI.flovaultBaseURL = "https://flovault.alexandria.io";
 	PhoenixAPI.tradebotURL = "https://api.alexandria.io/tradebot";
 	PhoenixAPI.tusFiles = [];
-	PhoenixAPI.publishQueue = [];
+	PhoenixAPI.publishQueue = (localStorage.publishQueue ? JSON.parse(localStorage.publishQueue) : []);
 	PhoenixAPI.publishState = "Loading";
 	PhoenixAPI.wipArtifacts = {};
-	PhoenixAPI.pendingUploadQueue = [];
+	PhoenixAPI.currentArtifactPublish = ((localStorage.currentArtifactPublish && localStorage.currentArtifactPublish != "undefined") ? JSON.parse(localStorage.currentArtifactPublish) : {});
+	PhoenixAPI.pendingUploadQueue = (localStorage.pendingUploadQueue ? JSON.parse(localStorage.pendingUploadQueue) : []);
 	PhoenixAPI.sentPubUsers = (localStorage.sentPubUsers ? JSON.parse(localStorage.sentPubUsers) : []);
 	PhoenixAPI.bulkTusFiles = [];
 
@@ -193,6 +194,11 @@ var Phoenix = (function() {
 			if (typeof(Storage) !== "undefined") {
 				if (localStorage.getItem("identifier") != ''){
 					identifier = localStorage.identifier;
+
+					Raven.setUserContext({
+					    id: identifier
+					});
+					
 					password = CryptoJS.AES.decrypt(localStorage.loginWalletEnc, identifier).toString(CryptoJS.enc.Utf8);
 
 					$.get(flovaultBaseURL + "/wallet/checkload/" + identifier, function (response) {
@@ -309,11 +315,7 @@ var Phoenix = (function() {
 		var uploadComplete = true;
 		for (var i = 0; i < wipArtifact.tusFiles.length; i++) {
 			if (wipArtifact.tusFiles[i]){
-				var len = 0;
-				for (var v in wipArtifact.tusFiles[i])
-					len++;
-
-				if (len === 3 && !wipArtifact.tusFiles[i].error){
+				if (wipArtifact.tusFiles[i].progress && parseFloat(wipArtifact.tusFiles[i].progress) === 100 && !wipArtifact.tusFiles[i].error){
 					filesUploadState.push({
 						uploadComplete: true,
 						obj: wipArtifact.tusFiles[i]
@@ -375,11 +377,7 @@ var Phoenix = (function() {
 			var uploadComplete = true;
 			for (var z = 0; z < wipArtifact.tusFiles.length; z++) {
 				if (wipArtifact.tusFiles[z]){
-					var len = 0;
-					for (var v in wipArtifact.tusFiles[z])
-						len++;
-
-					if (len === 3 && !wipArtifact.tusFiles[z].error){
+					if (wipArtifact.tusFiles[i].progress && parseFloat(wipArtifact.tusFiles[i].progress) === 100  && !wipArtifact.tusFiles[z].error){
 						filesUploadState.push({
 							uploadComplete: true,
 							obj: wipArtifact.tusFiles[z]
@@ -430,7 +428,8 @@ var Phoenix = (function() {
 				}
 			}
 		}
-			
+		
+		localStorage.pendingUploadQueue = JSON.stringify(PhoenixAPI.pendingUploadQueue);	
 	}
 
 	PhoenixAPI.addAndPublish = function(artifactJSON, callback){
@@ -603,6 +602,9 @@ var Phoenix = (function() {
 				address: PhoenixAPI.currentPublisher.address
 			}, PhoenixAPI.publishQueueOnTXSuccess, PhoenixAPI.publishQueueOnTXError);
 		}
+
+		localStorage.currentArtifactPublish = JSON.stringify(PhoenixAPI.currentArtifactPublish);
+		localStorage.publishQueue = JSON.stringify(PhoenixAPI.publishQueue);
 	}
 
 	PhoenixAPI.publishQueueOnTXSuccess = function(data){
