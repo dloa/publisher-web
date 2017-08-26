@@ -326,8 +326,8 @@ td.unpin {
   min-height: 75px; }
 
 .publish .thumbnail {
-  width: 38vh;
-  height: 21vh;
+  width: 100%;
+  height: 200px;
   box-sizing: border-box;
   padding-top: 56.25%;
   display: table;

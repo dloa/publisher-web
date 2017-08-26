@@ -198,7 +198,12 @@ var Phoenix = (function() {
 					Raven.setUserContext({
 					    id: identifier
 					});
-					
+
+					if (!localStorage.loginWalletEnc || localStorage.loginWalletEnc === ""){
+						PhoenixEvents.trigger("onLoginFail", "Missing identifier or password and none found in localStorage!");
+						return;
+					}
+
 					password = CryptoJS.AES.decrypt(localStorage.loginWalletEnc, identifier).toString(CryptoJS.enc.Utf8);
 
 					$.get(flovaultBaseURL + "/wallet/checkload/" + identifier, function (response) {
