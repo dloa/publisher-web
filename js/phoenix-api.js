@@ -337,8 +337,10 @@ var Phoenix = (function() {
 			for (var i = 0; i < files.length; i++) {
 				if (wipArtifact.tusFiles){
 					for (var j = 0; j < wipArtifact.tusFiles.length; j++) {
-						if (wipArtifact.tusFiles[j].name == files[i].fname){
-							idsToAdd.push(wipArtifact.tusFiles[j].id);
+						if(wipArtifact.tusFiles[j]){
+							if (wipArtifact.tusFiles[j].name == files[i].fname){
+								idsToAdd.push(wipArtifact.tusFiles[j].id);
+							}
 						}
 					}
 				}
