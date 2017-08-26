@@ -815,12 +815,22 @@ var Phoenix = (function() {
 			onProgress = function(){};
 
 		if (!PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID]){
-			PhoenixAPI.bulkTusFiles.push({"name": newName ? newName : file.name});
+			PhoenixAPI.bulkTusFiles.push({"name": newName ? newName : file.name, size: file.size});
 		} else {
 			if (!PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles)
 				PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles = [];
 
-			PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.push({"name": newName ? newName : file.name});
+			var inFiles = false;
+			for (var i = 0; i < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; i++) {
+				if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i]){
+					if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name === file.name || PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name === newName){
+						inFiles = true;
+					}
+				}
+			}
+
+			if (!inFiles)
+				PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.push({"name": newName ? newName : file.name, size: file.size});
 		}
 			
 		PhoenixAPI.saveWIPArtifacts();

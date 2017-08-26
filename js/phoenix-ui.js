@@ -1678,6 +1678,70 @@ var PhoenixUI = (function(){
 			}
 		}
 
+		var fileDatas = {};
+		for (var i = 0; i < oip041.artifact.storage.files.length; i++) {
+			var file = {};
+			file.id = PhoenixUX.sanitizeID(oip041.artifact.storage.files[i].fname);
+			file.name = oip041.artifact.storage.files[i].fname;
+			file.size = oip041.artifact.storage.files[i].size;
+
+			var type = oip041.artifact.storage.files[i].type;
+			var iconURL = "";
+
+			if (type == '')
+				type = "Other"
+
+			if (type == 'Audio'){
+				iconURL = './assets/svg/beamed-note.svg';
+			} else if (type == 'Video'){
+				iconURL = './assets/svg/video-camera.svg';
+			} else if (type == 'Image'){
+				iconURL = './assets/svg/image.svg';
+			} else if (type == 'Text'){
+				iconURL = './assets/svg/text-document.svg';
+			} else if (type == 'Software'){
+				iconURL = './assets/svg/code.svg';
+			} else if (type == 'Web'){
+				iconURL = './assets/svg/browser.svg';
+			} else if (type == 'Other'){
+				iconURL = './assets/svg/bucket.svg';
+			}
+
+			var continueUpload = true;
+			var percent = 0;
+
+			console.log("yolo");
+
+			for (var j = 0; j < Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles.length; j++) {
+				if (Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles[j]){
+					if (Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles[j].name === file.name){
+						percent = parseFloat(Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles[j].progress);
+						file.size = Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles[j].size;
+
+						if (percent === 100){
+							continueUpload = false;
+							PhoenixUX.mediaFiles.push(file);
+						}
+					}
+				}
+			}
+
+			PhoenixUX.appendFileToMediaTable(file, iconURL, null, continueUpload);
+			PhoenixUX.appendFileToPricingTable(file);
+
+			fileDatas[i] = {id: file.id, percent: percent};
+
+			console.log(file.id, percent);
+			var updateProg = function(){
+				for (var i in fileDatas) {
+					PhoenixUX.setProgress(fileDatas[i].percent, fileDatas[i].id);
+					PhoenixUX.updateProgress(fileDatas[i].id);
+				}
+			}
+			setTimeout(updateProg, 100);
+			
+		}
+
 		// Load the payment info
 		var togglePaid = false;
 		if (oip041.artifact.payment){
@@ -1822,10 +1886,6 @@ var PhoenixUI = (function(){
 				}
 			}
 		}
-	}
-
-	PhoenixUX.loadArtifactIntoView = function(artifact){
-
 	}
 
 	PhoenixUX.publish = function(){
@@ -2165,9 +2225,25 @@ var PhoenixUI = (function(){
 
 		    tr.dataset.progress = Math.round(parseFloat(percent));
 		} catch (e) {
+			console.log(e)
+		} 
+	}
 
-		}
-		   
+	PhoenixUX.onFileResumeAdd = function(elem){
+		console.log(elem);
+		var file = elem.files[0];
+
+		PhoenixUX.mediaFiles.push(file);
+
+		file.id = PhoenixUX.sanitizeID(file.name);
+
+		Phoenix.uploadFileToTus(file, function(id){ /*console.log(id)*/ }, function(err){console.log(err)}, function(percent){
+			PhoenixUX.setProgress(percent, file.id)
+			PhoenixUX.updateProgress(file.id)
+		});
+
+		var child = elem.parentNode.parentNode.parentNode;
+		child.parentNode.removeChild(child);
 	}
 
 	PhoenixUX.removeMediaFile = function(id){
@@ -2204,7 +2280,7 @@ var PhoenixUI = (function(){
 		}
 	}
 
-	PhoenixUX.appendFileToMediaTable = function(file, iconURL, coverart) {
+	PhoenixUX.appendFileToMediaTable = function(file, iconURL, coverart, continueUpload) {
 		// Set uploader to be smaller since we have a file:
 		mediaDrop.style.height="100px";
 
@@ -2275,6 +2351,12 @@ var PhoenixUI = (function(){
 		 </tr>';
 
 		$('#mediaTable').append(htmlStr);
+
+		if (continueUpload){
+			$('#mediaTable').append('<tr style="background-color: rgba(0,0,0,0.8); margin-top: -43px; position: absolute; height: 43px; width: 100%;">\
+				<td style="padding-top: 4px;margin-top:3px;color:#fff;width: 100%;position: absolute;" colspan="5"><center>Please select file to resume upload <div style="width:20px;display: -webkit-inline-box;"></div> <input type="file" onchange="PhoenixUI.onFileResumeAdd(this);" /></center></td>\
+			</tr>');
+		}
 
 		if (coverart)
 			$("#coverArtFile").find("input,button,textarea,select").attr("disabled", "disabled");
