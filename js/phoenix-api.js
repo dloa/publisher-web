@@ -448,6 +448,16 @@ var Phoenix = (function() {
 			}
 		}
 
+		for (var j = 0; j < PhoenixAPI.pendingUploadQueue.length; j++){
+			for (var i = 0; i < PhoenixAPI.pendingUploadQueue[j].tusFiles.length; i++) {
+				if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i]){
+					if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == file.name){
+						idsToAdd.push(PhoenixAPI.pendingUploadQueue[j].tusFiles[i].id);
+					}
+				}
+			}
+		}
+
 		PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
 			artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
 
@@ -910,7 +920,7 @@ var Phoenix = (function() {
 								PhoenixAPI.pendingUploadQueue[j].tusFiles[i].id = id;
 							}
 						}
-		        	}
+					}
 				}
 
 				for (var i = 0; i < PhoenixAPI.bulkTusFiles.length; i++) {

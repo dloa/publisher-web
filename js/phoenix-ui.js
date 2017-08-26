@@ -2070,6 +2070,8 @@ var PhoenixUI = (function(){
 				if (subtypefor != "cover")
 					PhoenixUX.mediaFiles.push(files[i]);
 
+				PhoenixUX.generateArtifactJSONFromView();
+
 				Phoenix.uploadFileToTus(files[i]);
 			}
 		} else {
@@ -2122,6 +2124,8 @@ var PhoenixUI = (function(){
 
 			if (subtypefor != "cover")
 				PhoenixUX.mediaFiles.push(file);
+
+			PhoenixUX.generateArtifactJSONFromView();
 
 			Phoenix.uploadFileToTus(file, function(id){ /*console.log(id)*/ }, function(err){console.log(err)}, function(percent){
 
