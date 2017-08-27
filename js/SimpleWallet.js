@@ -109,9 +109,9 @@ var Wallet = (function () {
 			url : flovaultBaseURL + "/wallet/load/" + this.identifier,
 			type: "GET",
 			dataType: "json",
-			xhrFields: {
-				withCredentials: true
-			},
+			// xhrFields: {
+			// 	withCredentials: true
+			// },
 			error: function (error) {
 				console.log(error);
 				//swal("Error", "Error loading wallet from server. Possible connection problems. Try again later.", "error");
