@@ -105,52 +105,62 @@ var Wallet = (function () {
 			};
 		}
 		var _this = this;
-		$.get(flovaultBaseURL + '/wallet/load/' + this.identifier, function (data) {
-			if (data.error !== false) {
-				//swal("Error!", data.error.message, "error");
-				var event = new CustomEvent('wallet', {'detail': data.error.message});
-			
+		$.ajax({
+			url : flovaultBaseURL + "/wallet/load/" + this.identifier,
+			type: "GET",
+			dataType: "json",
+			xhrFields: {
+				withCredentials: true
+			},
+			error: function (error) {
+				console.log(error);
+				//swal("Error", "Error loading wallet from server. Possible connection problems. Try again later.", "error");
+				var event = new CustomEvent('wallet', {'detail': 'server-no-response'});
+				
 				window.dispatchEvent(event);
-			}
-			else {
-				var decWallet, decWalletString, decWalletJSON;
-				//console.log("Decrypting data: '" + data.wallet + "' with password " + _this.password);
-				// console.log('Decrypting wallet');
-				try {
-					// Decrypt wallet
-					decWallet = CryptoJS.AES.decrypt(data.wallet, _this.password, _this.CryptoConfig);
-					decWalletString = decWallet.toString(CryptoJS.enc.Utf8);
-					// Load the JSON, then use it to initialize the wallet
-					decWalletJSON = JSON.parse(decWalletString);
-					_this.setSharedKey(decWalletJSON.shared_key);
-					_this.addresses = decWalletJSON.addresses;
-					// console.log('Wallet loaded successfully. Refreshing balances and running success callback.');
+			},
+			success: function (data) {
+				if (data.error !== false) {
+					//swal("Error!", data.error.message, "error");
+					var event = new CustomEvent('wallet', {'detail': data.error.message});
+				
+					window.dispatchEvent(event);
+				}
+				else {
+					var decWallet, decWalletString, decWalletJSON;
+					//console.log("Decrypting data: '" + data.wallet + "' with password " + _this.password);
+					// console.log('Decrypting wallet');
 					try {
-						_this.refreshBalances();
-						// run the success callback
-						_success();
+						// Decrypt wallet
+						decWallet = CryptoJS.AES.decrypt(data.wallet, _this.password, _this.CryptoConfig);
+						decWalletString = decWallet.toString(CryptoJS.enc.Utf8);
+						// Load the JSON, then use it to initialize the wallet
+						decWalletJSON = JSON.parse(decWalletString);
+						_this.setSharedKey(decWalletJSON.shared_key);
+						_this.addresses = decWalletJSON.addresses;
+						// console.log('Wallet loaded successfully. Refreshing balances and running success callback.');
+						try {
+							_this.refreshBalances();
+							// run the success callback
+							_success();
+						}
+						catch (ex) {
+							//swal("Error", "There was an error rendering this page. Please contact an administrator.", "error");
+							var event = new CustomEvent('wallet', {'detail': 'render-error'});
+						
+							window.dispatchEvent(event);
+							// console.log(ex);
+						}
 					}
 					catch (ex) {
-						//swal("Error", "There was an error rendering this page. Please contact an administrator.", "error");
-						var event = new CustomEvent('wallet', {'detail': 'render-error'});
-					
+						var event = new CustomEvent('wallet', {'detail': 'invalid-password'});
+						
 						window.dispatchEvent(event);
+						//swal("Error", "Error decrypting wallet - Invalid password?", "error");
 						// console.log(ex);
 					}
 				}
-				catch (ex) {
-					var event = new CustomEvent('wallet', {'detail': 'invalid-password'});
-					
-					window.dispatchEvent(event);
-					//swal("Error", "Error decrypting wallet - Invalid password?", "error");
-					// console.log(ex);
-				}
 			}
-		}, "json").fail(function () {
-			//swal("Error", "Error loading wallet from server. Possible connection problems. Try again later.", "error");
-			var event = new CustomEvent('wallet', {'detail': 'server-no-response'});
-			
-			window.dispatchEvent(event);
 		});
 	};
 	Wallet.prototype.store = function () {

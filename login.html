@@ -29,32 +29,32 @@
 		<div class="container" style="margin-top: 60px; height: 100%;">
 			<div class="row justify-content-center" style="margin-top:20px; height: 100%;">
 			<img src="./img/logo-long.png" height="75" style="filter: invert(60%);">
-			    <div class="col-12 col-sm-8 col-md-6 col-lg-6 col-xl-6 col-sm-offset-2 col-md-offset-3 col-lg-offset-3 col-xl-offset-3 align-content-center align-self-center">
-			    	<div style="height: 50px;"></div>
+					<div class="col-12 col-sm-8 col-md-6 col-lg-6 col-xl-6 col-sm-offset-2 col-md-offset-3 col-lg-offset-3 col-xl-offset-3 align-content-center align-self-center">
+						<div style="height: 50px;"></div>
 					<fieldset>
 						<h2>Please Sign In</h2>
 						<hr class="colorgraph">
 						<div class="form-group">
-		                    <input type="text" name="email" id="email" class="form-control input-lg" placeholder="Email/Identifier">
+							<input type="text" name="email" id="email" class="form-control input-lg" placeholder="Email/Identifier">
 							<div class="invalid-feedback" id="feedback_email">
 								Email/Identifier is invalid. Please provide your identifier or your account Email.
 							</div>
 						</div>
 						<div class="form-group">
-		                    <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password">
-		                    <div class="invalid-feedback" id="feedback_password">
+							<input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password">
+							<div class="invalid-feedback" id="feedback_password">
 								Invalid Password.
 							</div>
 						</div>
 						<span class="button-checkbox">
 							<button type="button" class="btn" data-color="primary">Remember Me</button>
-		                    <input type="checkbox" name="remember-me" id="remember-me" checked="checked" class="d-none">
+							<input type="checkbox" name="remember-me" id="remember-me" checked="checked" class="d-none">
 							<!-- <a href="" class="btn btn-link pull-right">Forgot Password?</a> -->
 						</span>
 						<hr class="colorgraph">
 						<div class="row">
 							<div class="col-xs-6 col-sm-6 col-md-6">
-		                        <button id="signin" class="btn btn-lg btn-success btn-block" onclick="tryLogin()">Sign In</button>
+								<button id="signin" class="btn btn-lg btn-success btn-block" onclick="tryLogin()">Sign In</button>
 							</div>
 							<div class="col-xs-6 col-sm-6 col-md-6">
 								<a href="signup.html" class="btn btn-lg btn-primary btn-block">Register</a>
@@ -64,9 +64,34 @@
 				</div>
 			</div>
 		</div>
-
+		<div class="modal" id="2FA_modal" style="margin: 10% auto;">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title text-center">You have 2 Factor Authentication Enabled</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body text-center">
+						<p>Please enter the code from your authenticator app.</p>
+						<input class="form-control" type="text" name="2fa_code" id="2fa_code" placeholder="e.g. 123456">
+						<br />
+						<span class="button-checkbox">
+							<button type="button" class="btn" data-color="primary">Trust Device for 2 weeks</button>
+							<input type="checkbox" name="trust" id="trust" checked="checked" class="d-none">
+						</span>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+						<button type="button" class="btn btn-success" onclick="twoFASignIn()">Finish Sign In</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<!-- Load external JS helper files -->
 		<script src="./js/jquery-3.2.1.min.js"></script>
+		<script src="./js/jquery.cookie.js"></script>
 		<script src="./js/tether.min.js"></script>
 		<script src="./js/underscore.js"></script>
 		<script src="./js/popper.min.js"></script>
@@ -81,6 +106,8 @@
 		<!-- Load Dependencies JS -->
 		<script src="js/SimpleDeps.js"></script>
 		<script src="js/SimpleWallet.js"></script>
+		<!-- Load Phoenix -->
+		<script src="./js/phoenix-api.js"></script>
 
 		<script type="text/javascript">
 			var tryLogin = function(){
@@ -89,9 +116,7 @@
 				var wallet = new Wallet($('#email').val(), $('#password').val());
 				wallet.load(function (res) {
 					//resetSignInText()
-					console.log(res);
 					console.log("Wallet Post-Load");
-					console.log(wallet);
 
 					localStorage.setItem("identifier", $('#email').val());
 					localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt($('#password').val(), $('#email').val()));
@@ -102,31 +127,50 @@
 				});
 			};
 
+			var twoFASignIn = function(){
+				Phoenix.twoAuthLogin($('#email').val(), $('#2fa_code').val(), document.getElementById('remember-me').checked, function(err, data){
+					if (err){
+						console.error(err);
+					}
+
+					console.log(data);
+					document.cookie = "auth_key=" + data.data.auth_key + ";expires=" + (new Date(data.data.expires)) + ';';
+
+					$('#2FA_modal').modal('hide')
+					tryLogin();
+				})
+			}
+
 			var resetSignInText = function(){
 				document.getElementById('signin').innerHTML = 'Sign In';
 			}
 
 			var setSignInText = function(){
-				document.getElementById('signin').innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i> Logging in...';
+				document.getElementById('signin').innerHTML = '<i class="fa fa-circle-o-notch fa-spin"></i> Signing in...';
 			}
 
 			window.addEventListener('wallet', function (e) { 
+				console.log(e);
 				if (e.detail == "There is no wallet with that identifier"){
 					$('#email').trigger('focus');
-		    		$('#email').attr('class', 'form-control is-invalid');
-		    		$('#password').attr('class', 'form-control is-invalid');
+						$('#email').attr('class', 'form-control is-invalid');
+						$('#password').attr('class', 'form-control is-invalid');
 
-		    		$('#feedback_email').show();
-		    		$('#feedback_password').hide();
-		    		resetSignInText();
+						$('#feedback_email').show();
+						$('#feedback_password').hide();
+						resetSignInText();
 				} else if (e.detail == 'invalid-password'){
-		    		$('#email').attr('class', 'form-control is-valid');
+						$('#email').attr('class', 'form-control is-valid');
 					$('#password').trigger('focus');
-		    		$('#password').attr('class', 'form-control is-invalid');
+						$('#password').attr('class', 'form-control is-invalid');
 
-		    		$('#feedback_email').hide();
-		    		$('#feedback_password').show();
-		    		resetSignInText();
+						$('#feedback_email').hide();
+						$('#feedback_password').show();
+						resetSignInText();
+				} else if (e.detail == "2FA is enabled for this account, but you're not authenticated."){
+					resetSignInText();
+
+					$('#2FA_modal').modal('show')
 				} else {
 					$('#email').attr('class', 'form-control is-valid');
 					$('#password').attr('class', 'form-control is-valid');

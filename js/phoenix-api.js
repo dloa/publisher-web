@@ -172,7 +172,7 @@ var Phoenix = (function() {
 	}
 
 	PhoenixAPI.checkEmail = function(email, callback){
-		$.get("https://flovault.alexandria.io/wallet/checkload/" + email, function (response) {
+		$.get(PhoenixAPI.flovaultBaseURL + "/wallet/checkload/" + email, function (response) {
 			if (response.error){
 				if (response.error.message === "Unable to find ID for Email"){
 					callback(false);
@@ -207,14 +207,15 @@ var Phoenix = (function() {
 					password = CryptoJS.AES.decrypt(localStorage.loginWalletEnc, identifier).toString(CryptoJS.enc.Utf8);
 
 					$.get(flovaultBaseURL + "/wallet/checkload/" + identifier, function (response) {
-						if (response.gauth_enabled) {
-							// ToDo: add 2FA support, needs further research
-							PhoenixEvents.trigger("onLoginFail", { 
-								title: "Error!", 
-								type: "error", 
-								message: "Two Factor Authentication is not currently supported, please disable it or create a new wallet." 
-							});
-						}
+						console.log(response);
+						// if (response.gauth_enabled) {
+						// 	// ToDo: add 2FA support, needs further research
+						// 	PhoenixEvents.trigger("onLoginFail", { 
+						// 		title: "Error!", 
+						// 		type: "error", 
+						// 		message: "Two Factor Authentication is not currently supported, please disable it or create a new wallet." 
+						// 	});
+						// }
 						PhoenixAPI.wallet = new Wallet(response.identifier, password);
 						PhoenixAPI.wallet.load(function () {
 							if (localStorage["remember-me"] == "false"){
@@ -242,6 +243,38 @@ var Phoenix = (function() {
 			    // console.log('No Support for storing locally.')
 			}
 		}
+	}
+
+	PhoenixAPI.twoAuthLogin = function(id, token, trust, callback){
+		var data = {};
+
+		data.identifier = id;
+		data.token = token;
+		data.is_trusted = trust;
+
+		$.ajax({
+			url : PhoenixAPI.flovaultBaseURL + "/wallet/gauth",
+			type: "POST",
+			data: JSON.stringify(data),
+			contentType: "application/json; charset=utf-8",
+			dataType   : "json",
+			success    : function(response){
+				if (response.error){
+					callback(response, null);
+				} else {
+					callback(null, response);
+					document.cookie = "auth_key=" + response.data.auth_key + ";expires=" + (new Date(response.data.expires)) + ';';
+				}
+			}
+		});
+
+		// $.post(PhoenixAPI.flovaultBaseURL + "/wallet/gauth", JSON.stringify(data), function (response) {
+		// 	if (response.error){
+		// 		callback(response, null);
+		// 	} else {
+		// 		callback(null, response);
+		// 	}
+		// }, 'json');
 	}
 
 	PhoenixAPI.logout = function(){
