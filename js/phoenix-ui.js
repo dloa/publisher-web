@@ -2619,14 +2619,16 @@ var PhoenixUI = (function(){
 				publishFeeFLOElement.style.display = "inline";
 				publishFeeFLOElement.innerHTML = floDisplay;
 
-				if (flo > Phoenix.wallet.getTotalBalance()){
-					publishSubmitSectionElement.style['background-color'] = "rgba(217,83,79,0.3)";
-					publishSubmitSectionElement.style.border = "1px solid rgba(217,83,79,1)";
-					pubBalanceTooLowElement.style.display = "inline";
-				} else {
-					publishSubmitSectionElement.style['background-color'] = "#ffffff";
-					publishSubmitSectionElement.style.border = "1px solid #000";
-					pubBalanceTooLowElement.style.display = "none";
+				if (Phoenix.wallet){
+					if (flo > Phoenix.wallet.getTotalBalance()){
+						publishSubmitSectionElement.style['background-color'] = "rgba(217,83,79,0.3)";
+						publishSubmitSectionElement.style.border = "1px solid rgba(217,83,79,1)";
+						pubBalanceTooLowElement.style.display = "inline";
+					} else {
+						publishSubmitSectionElement.style['background-color'] = "#ffffff";
+						publishSubmitSectionElement.style.border = "1px solid #000";
+						pubBalanceTooLowElement.style.display = "none";
+					}
 				}
 			}
 		})
