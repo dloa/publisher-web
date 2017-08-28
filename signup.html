@@ -192,7 +192,7 @@
 				swal({
 					type: "error",
 					title: "Florincoin Faucet Error",
-					text: "Please try again later..."
+					text: msg.message + " Please try again later!"
 				});
 			});
 			PhoenixEvents.on("reCAPTCHAFail", function(msg){ 
