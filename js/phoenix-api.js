@@ -48,6 +48,7 @@ var Phoenix = (function() {
 	PhoenixAPI.currentArtifactPublish = ((localStorage.currentArtifactPublish && localStorage.currentArtifactPublish != "undefined") ? JSON.parse(localStorage.currentArtifactPublish) : {});
 	PhoenixAPI.pendingUploadQueue = (localStorage.pendingUploadQueue ? JSON.parse(localStorage.pendingUploadQueue) : []);
 	PhoenixAPI.sentPubUsers = (localStorage.sentPubUsers ? JSON.parse(localStorage.sentPubUsers) : []);
+	PhoenixAPI.publishedArtifacts = (localStorage.publishedArtifacts ? JSON.parse(localStorage.publishedArtifacts) : []);
 	PhoenixAPI.bulkTusFiles = [];
 
 	// Load info from LibraryD
@@ -655,6 +656,10 @@ var Phoenix = (function() {
 
 		if (PhoenixAPI.currentArtifactPublish.txs && PhoenixAPI.currentArtifactPublish.splitStrings && PhoenixAPI.currentArtifactPublish.txs.length > 0 && PhoenixAPI.currentArtifactPublish.splitStrings.length > 0 && PhoenixAPI.currentArtifactPublish.txs.length === PhoenixAPI.currentArtifactPublish.splitStrings.length){
 			PhoenixAPI.publishState = "Ready";
+
+			PhoenixAPI.publishedArtifacts.push(PhoenixAPI.currentArtifactPublish);
+			localStorage.publishedArtifacts = JSON.stringify(PhoenixAPI.publishedArtifacts);
+
 			PhoenixAPI.currentArtifactPublish = undefined;
 			PhoenixEvents.trigger("onPublishEnd", data);
 		}

@@ -42,6 +42,8 @@ var mediaDrop = document.getElementById('mediaDrop');
 var draftTBodyElement = document.getElementById('draftTbody');
 var draftTableElement = document.getElementById('draftTable');
 var draftOrElement = document.getElementById('draftOr');
+var proccessingArtifactsTableElement = document.getElementById('proccessingArtifactsTable');
+var proccessingArtifactsTitleElement = document.getElementById('proccessingArtifactsTitle');
 
 // Basic JSON to manage page
 var showWizardPage = function(){
@@ -99,6 +101,7 @@ PhoenixEvents.on("onPublishTXSuccess", function(msg){
 })
 PhoenixEvents.on("onPublishEnd", function(msg){ 
 	PhoenixUI.drawPublishStatus();
+	PhoenixUI.drawProcessingArtifacts();
 	PhoenixUI.notify("Artifact Publish Successful!", 'success'); 
 	console.log(msg); 
 })
@@ -160,6 +163,9 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 		// Wipe the artifact table clean
 		$("#ArtifactsTable > tbody").empty();
 
+		if (!PhoenixUI.successfulTXIDs)
+			PhoenixUI.successfulTXIDs = [];
+
 		// Load in all the artifacts to the Table
 		for (var i in msg.results){
 			if (msg.results[i]['media-data']) {
@@ -171,6 +177,7 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 							</tr>";
 				$("#ArtifactsTable > tbody").append(markup);
 			} else if (msg.results[i]['oip-041']){
+				PhoenixUI.successfulTXIDs.push(msg.results[i].txid);
 				var markup = "<tr id='" + msg.results[i].txid + "'>\
 								<th scope='row'>" + (1+parseInt(i)) + "</th>\
 								<td><code>" + msg.results[i]['oip-041'].artifact.info.title + "</code></td>\
@@ -180,6 +187,11 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 				$("#ArtifactsTable > tbody").append(markup);
 			}
 		}
+
+		if (!PhoenixUI.processingArtifacts)
+			PhoenixUI.processingArtifacts = [];
+
+		PhoenixUI.drawProcessingArtifacts()
 
 		checkEnv();
 	}
@@ -3458,6 +3470,46 @@ var PhoenixUI = (function(){
 			mainUploadStatusDiv.style.display = "none";
 		} else {
 			mainUploadStatusDiv.style.display = "block";
+		}
+	}
+
+	PhoenixUX.drawProcessingArtifacts = function(){
+		PhoenixUX.successfulTXIDs = [];
+
+		for (var i in Phoenix.artifacts){
+			for(var j in Phoenix.artifacts[i]){
+				PhoenixUX.successfulTXIDs.push(Phoenix.artifacts[i][j].txid);
+			}
+		}
+
+		for (var i in Phoenix.publishedArtifacts){
+			var match = false;
+			for (var j in Phoenix.publishedArtifacts[i].txs){
+				for (var k in PhoenixUX.successfulTXIDs){
+					if (Phoenix.publishedArtifacts[i].txs[j].txid === PhoenixUX.successfulTXIDs[k])
+						match = true;
+				}
+			}
+
+			if (!match){
+				PhoenixUI.processingArtifacts.push(Phoenix.publishedArtifacts[i]);
+			}
+		}
+
+		for (var i in PhoenixUI.processingArtifacts){
+			var markup = "<tr id='" + PhoenixUI.processingArtifacts[i].txs[0].txid + "'>\
+							<td><code>" + PhoenixUI.processingArtifacts[i].artifactJSON['oip-041'].artifact.info.title + "</code></td>\
+							<td>TXID: <a href='https://florincoin.info/tx/" + PhoenixUI.processingArtifacts[i].txs[0].txid + "'><code>" + PhoenixUI.processingArtifacts[i].txs[0].txid.substring(0,10) + "...</code></td>\
+						</tr>";
+			$("#proccessingArtifactsTable > tbody").append(markup);
+		}
+
+		if (PhoenixUI.processingArtifacts.length === 0){
+			proccessingArtifactsTableElement.style.display = "none";
+			proccessingArtifactsTitleElement.style.display = "none";
+		} else {
+			proccessingArtifactsTableElement.style.display = "table";
+			proccessingArtifactsTitleElement.style.display = "block";
 		}
 	}
 
