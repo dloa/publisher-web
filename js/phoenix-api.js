@@ -289,9 +289,14 @@ var Phoenix = (function() {
 
 			var newWIPObj = {};
 			for (var i in localWIP){
-				if (localWIP && localWIP[i] && localWIP[i].artifactJSON && localWIP[i].artifactJSON.artifact)
+				if (localWIP && localWIP[i] && localWIP[i].artifactJSON && localWIP[i].artifactJSON.artifact){
+					if (JSON.stringify(localWIP[i].artifactJSON) === '"{"artifact":{"type":"Audio-Basic","info":{"extraInfo":{"genre":"Acoustic"}},"storage":{"network":"IPFS","files":[]},"payment":{"fiat":"USD","scale":"1000:1","disPer":0.3,"sugTip":[],"tokens":{}}}}"')
+						continue;
+
 					newWIPObj[i] = localWIP[i];
+				}
 			}
+
 			PhoenixAPI.wipArtifacts = newWIPObj;
 		} catch (e) {
 			PhoenixAPI.wipArtifacts = {};

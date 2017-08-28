@@ -39,7 +39,9 @@ var advancedSettingsElement = document.getElementById('advancedSettings');
 var mainPubStatusDiv = document.getElementById('mainPubStatusDiv');
 var mainUploadStatusDiv = document.getElementById('mainUploadStatusDiv');
 var mediaDrop = document.getElementById('mediaDrop');
-var draftTBodyElement = document.getElementById('draftTbody')
+var draftTBodyElement = document.getElementById('draftTbody');
+var draftTableElement = document.getElementById('draftTable');
+var draftOrElement = document.getElementById('draftOr');
 
 // Basic JSON to manage page
 var showWizardPage = function(){
@@ -64,6 +66,7 @@ var showToolsPage = function(){
 
 var showDraftsPage = function(){
 	hideAll();
+	PhoenixUI.generateDraftRows();
 	$('#draftSelect').show();
 }
 
@@ -3369,8 +3372,12 @@ var PhoenixUI = (function(){
 			}	
 		}
 
-		if (!oneMade){
-			PhoenixUX.startNewWIP();
+		if (oneMade){
+			draftOrElement.style.display = "block";
+			draftTableElement.style.display = "table";
+		} else {
+			draftOrElement.style.display = "none";
+			draftTableElement.style.display = "none";
 		}
 	}
 

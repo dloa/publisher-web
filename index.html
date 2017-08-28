@@ -702,12 +702,12 @@
 						<br />
 						<br />
 						<div>
-							<h3>or</h3>
+							<h3 id="draftOr">or</h3>
 						</div>
 						<br />
 						<br />
 						<div class="col-12">
-							<table class="table">
+							<table class="table" id="draftTable">
 								<thead>
 									<tr>
 										<th style="text-align:center">#</th>
@@ -1168,8 +1168,6 @@
 			// // Set the version number in the footer
 			// var version = "1.2.7";
 			var env = "production";
-
-
 
 			// Attempt a new publish every 1 second
 			setInterval(Phoenix.processPublishQueue, 1 * 1000);
