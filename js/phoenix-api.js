@@ -49,6 +49,7 @@ var Phoenix = (function() {
 	PhoenixAPI.pendingUploadQueue = (localStorage.pendingUploadQueue ? JSON.parse(localStorage.pendingUploadQueue) : []);
 	PhoenixAPI.sentPubUsers = (localStorage.sentPubUsers ? JSON.parse(localStorage.sentPubUsers) : []);
 	PhoenixAPI.publishedArtifacts = (localStorage.publishedArtifacts ? JSON.parse(localStorage.publishedArtifacts) : []);
+	PhoenixAPI.disabledArtifactTXIDs = (localStorage.disabledArtifactTXIDs ? JSON.parse(localStorage.disabledArtifactTXIDs) : []);
 	PhoenixAPI.bulkTusFiles = [];
 
 	// Load info from LibraryD
@@ -709,7 +710,8 @@ var Phoenix = (function() {
 						return;
 					}
 
-					//PhoenixAPI.artifacts[artPublisher]
+					PhoenixAPI.disabledArtifactTXIDs.push(artifactTxid);
+					localStorage.disabledArtifactTXIDs = JSON.stringify(PhoenixAPI.disabledArtifactTXIDs);
 
 					PhoenixEvents.trigger('onArtifactDeactivateSuccess', response, artifactTxid);
 				});

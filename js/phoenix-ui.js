@@ -1939,7 +1939,7 @@ var PhoenixUI = (function(){
 				},
 				"payment": {
 					"fiat": "USD",
-					"scale": scale + ":1",
+					//"scale": scale + ":1",
 					"disPer": discountPercentage,
 					"sugTip": [ ],
 					"tokens": { }
@@ -3480,6 +3480,10 @@ var PhoenixUI = (function(){
 			for(var j in Phoenix.artifacts[i]){
 				PhoenixUX.successfulTXIDs.push(Phoenix.artifacts[i][j].txid);
 			}
+		}
+
+		for (var i in Phoenix.disabledArtifactTXIDs){
+			PhoenixUX.successfulTXIDs.push(Phoenix.disabledArtifactTXIDs[i]);
 		}
 
 		for (var i in Phoenix.publishedArtifacts){
