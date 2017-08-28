@@ -228,7 +228,30 @@ var Wallet = (function () {
 				success: function (data) {
 					if (data) {
 						var addr_data = data;
-						_this.setBalance(addr_data['addrStr'], parseFloat(addr_data['balance']));
+
+						var unspentBal = 0;
+
+						if (_this.known_unspent){
+							for (var j = 0; j < _this.known_unspent.length; j++) {
+								if (_this.known_unspent[j].address === addr_data['addrStr']){
+									var match = false;
+
+									if (addr_data['transactions']){
+										for (var k = 0; k < addr_data['transactions'].length; k++) {
+											if (addr_data['transactions'][k] === _this.known_unspent[j].txid)
+												match = true;
+										}
+									}
+
+									if (!match){
+										unspentBal += _this.known_unspent[j].amount;
+									}
+								}
+							}
+						}
+							
+
+						_this.setBalance(addr_data['addrStr'], (parseFloat(addr_data['balance']) + unspentBal));
 						_this.totBal += addr_data['balance'];
 						_this.updateBal(_this.totBal);
 						callback(data);
