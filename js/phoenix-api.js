@@ -849,7 +849,7 @@ var Phoenix = (function() {
 		
 		for (var j = 0; j < PhoenixAPI.pendingUploadQueue.length; j++){
 			for (var i = 0; i < PhoenixAPI.pendingUploadQueue[j].tusFiles.length; i++) {
-				if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == filename){
+				if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i] && PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == filename){
 					var tmpTus = PhoenixAPI.pendingUploadQueue[j].tusFiles;
 					delete tmpTus[i];
 					PhoenixAPI.pendingUploadQueue[j].tusFiles = JSON.parse(JSON.stringify(tmpTus));
