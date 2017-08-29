@@ -2227,6 +2227,10 @@ var PhoenixUI = (function(){
 		try {
 			var tr = document.getElementById(id);
 
+			if (!tr){
+				return;
+			}
+
 		    var pr = tr.querySelector('.progress-so');
 
 		    if (err){
