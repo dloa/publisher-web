@@ -897,7 +897,7 @@ var Phoenix = (function() {
 	        onError: function(error) {
 	        	 if (PhoenixAPI.wipArtifacts && PhoenixAPI.currentWIPID){
 	        		for (var i = 0; i < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; i++) {
-						if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name == file.name){
+						if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i] && PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].name == file.name){
 							PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[i].error = error;
 							PhoenixAPI.saveWIPArtifacts();
 						}

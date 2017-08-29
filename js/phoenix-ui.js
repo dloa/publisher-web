@@ -1727,19 +1727,22 @@ var PhoenixUI = (function(){
 			var continueUpload = true;
 			var percent = 0;
 
-			for (var j = 0; j < Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles.length; j++) {
-				if (Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles[j]){
-					if (Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles[j].name === file.name){
-						percent = parseFloat(Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles[j].progress);
-						file.size = Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles[j].size;
+			if (Phoenix.wipArtifacts && Phoenix.currentWIPID && Phoenix.wipArtifacts[Phoenix.currentWIPID] && Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles){
+				for (var j = 0; j < Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles.length; j++) {
+					if (Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles[j]){
+						if (Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles[j].name === file.name){
+							percent = parseFloat(Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles[j].progress);
+							file.size = Phoenix.wipArtifacts[Phoenix.currentWIPID].tusFiles[j].size;
 
-						if (percent === 100){
-							continueUpload = false;
-							PhoenixUX.mediaFiles.push(file);
+							if (percent === 100){
+								continueUpload = false;
+								PhoenixUX.mediaFiles.push(file);
+							}
 						}
 					}
 				}
 			}
+				
 
 			PhoenixUX.appendFileToMediaTable(file, iconURL, null, continueUpload);
 			PhoenixUX.appendFileToPricingTable(file);
@@ -1815,7 +1818,7 @@ var PhoenixUI = (function(){
 			return '<div class="col-' + formJSON.width + ' form-group" id="' + formJSON.id + 'grp">\
 				<textarea oninput="PhoenixUI.onMetadataChange(this)" rows="' + formJSON.rows + '" class="form-control" id="' + formJSON.id + '" placeholder="' + formJSON.placeholder + '"></textarea>\
 			</div>';
-		} else if (formJSON.id.includes('genre')){
+		} else if (formJSON.id && formJSON.id.includes('genre')){
 			if (formJSON.genres){
 				var selectInner = '';
 				var first = true;
