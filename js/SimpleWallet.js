@@ -238,8 +238,19 @@ var Wallet = (function () {
 
 									if (addr_data['transactions']){
 										for (var k = 0; k < addr_data['transactions'].length; k++) {
-											if (addr_data['transactions'][k] === _this.known_unspent[j].txid)
+											if (addr_data['transactions'][k] === _this.known_unspent[j].txid){
+												matchObj = _this.known_unspent[j];
 												match = true;
+											}
+										}
+									}
+
+									if (_this.known_spent){
+										for (var k = 0; k < _this.known_spent.length; k++) {
+											if (_this.known_spent[k].txid === _this.known_unspent[j].txid){  
+												matchObj = _this.known_unspent[j];
+												match = true;
+											}
 										}
 									}
 
@@ -249,9 +260,17 @@ var Wallet = (function () {
 								}
 							}
 						}
-							
+						
+						var showBalance = 0;
 
-						_this.setBalance(addr_data['addrStr'], (parseFloat(addr_data['balance']) + unspentBal));
+						if (parseFloat(addr_data['balance']) > unspentBal && unspentBal != 0){
+							showBalance = unspentBal;
+						} else {
+							showBalance = parseFloat(addr_data['balance']);
+						}
+
+
+						_this.setBalance(addr_data['addrStr'], parseFloat(showBalance));
 						_this.totBal += addr_data['balance'];
 						_this.updateBal(_this.totBal);
 						callback(data);
