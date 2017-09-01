@@ -377,34 +377,34 @@ var Phoenix = (function() {
 
 		console.log(filesUploadState);
 
-		if (uploadComplete){
-			var idsToAdd = [];
+		// if (uploadComplete){
+		// 	var idsToAdd = [];
 
-			var files = wipArtifact.artifactJSON.artifact.storage.files;
+		// 	var files = wipArtifact.artifactJSON.artifact.storage.files;
 
-			for (var i = 0; i < files.length; i++) {
-				if (wipArtifact.tusFiles){
-					for (var j = 0; j < wipArtifact.tusFiles.length; j++) {
-						if(wipArtifact.tusFiles[j]){
-							if (wipArtifact.tusFiles[j].name == files[i].fname){
-								idsToAdd.push(wipArtifact.tusFiles[j].id);
-							}
-						}
-					}
-				}
-			}
+		// 	for (var i = 0; i < files.length; i++) {
+		// 		if (wipArtifact.tusFiles){
+		// 			for (var j = 0; j < wipArtifact.tusFiles.length; j++) {
+		// 				if(wipArtifact.tusFiles[j]){
+		// 					if (wipArtifact.tusFiles[j].name == files[i].fname){
+		// 						idsToAdd.push(wipArtifact.tusFiles[j].id);
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 	}
 
-			PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
-				wipArtifact.artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
+		// 	PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
+		// 		wipArtifact.artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
 
-				wipArtifact.artifactJSON = LibraryDJS.signPublishArtifact(PhoenixAPI.wallet, wipArtifact.artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, wipArtifact.artifactJSON)
+		// 		wipArtifact.artifactJSON = LibraryDJS.signPublishArtifact(PhoenixAPI.wallet, wipArtifact.artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, wipArtifact.artifactJSON)
 
-				// Publish the artifact JSON into the blockchain.
-				PhoenixAPI.addToPublishQueue(wipArtifact.artifactJSON);
-			});
-		} else {
-			PhoenixAPI.pendingUploadQueue.push(wipArtifact);
-		}
+		// 		// Publish the artifact JSON into the blockchain.
+		// 		PhoenixAPI.addToPublishQueue(wipArtifact.artifactJSON);
+		// 	});
+		// } else {
+		PhoenixAPI.pendingUploadQueue.push(wipArtifact);
+		// }
 	}
 
 	PhoenixAPI.checkUploadStatus = function(){
@@ -458,18 +458,45 @@ var Phoenix = (function() {
 						}
 					}
 
-					var addNFinish = function(i){
-						PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
-							PhoenixAPI.pendingUploadQueue.splice(i, 1);
-							wipArtifact.artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
-							wipArtifact.artifactJSON = LibraryDJS.signPublishArtifact(PhoenixAPI.wallet, wipArtifact.artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, wipArtifact.artifactJSON);
+					var startIPFSAdd = function(i){
+						PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsStatus){
+							PhoenixAPI.pendingUploadQueue[i].ipfsStatus = ipfsStatus;
+
+							//PhoenixAPI.pendingUploadQueue.splice(i, 1);
+							//wipArtifact.artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
+							//wipArtifact.artifactJSON = LibraryDJS.signPublishArtifact(PhoenixAPI.wallet, wipArtifact.artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, wipArtifact.artifactJSON);
 
 							// Publish the artifact JSON into the blockchain.
-							PhoenixAPI.addToPublishQueue(wipArtifact.artifactJSON);
+							//PhoenixAPI.addToPublishQueue(wipArtifact.artifactJSON);
 						});
 					}
 
-					addNFinish(i);
+					startIPFSAdd(i);
+				} else {
+					if (PhoenixAPI.pendingUploadQueue[i].ipfsStatus && PhoenixAPI.pendingUploadQueue[i].ipfsStatus.id){
+						var checkIPFSAdd = function(i){
+							PhoenixAPI.checkIPFSaddStatus(PhoenixAPI.pendingUploadQueue[i].ipfsStatus.id, function(data){
+								if (PhoenixAPI.pendingUploadQueue[i]){
+									PhoenixAPI.pendingUploadQueue[i].ipfsStatus = data;
+
+									if (PhoenixAPI.pendingUploadQueue[i].ipfsStatus.status === "ipfs_file_check_complete"){
+										wipArtifact.artifactJSON.artifact.storage.location = PhoenixAPI.pendingUploadQueue[i].ipfsStatus.mainHash;
+
+										PhoenixAPI.pendingUploadQueue.splice(i, 1);
+
+										wipArtifact.artifactJSON = LibraryDJS.signPublishArtifact(PhoenixAPI.wallet, wipArtifact.artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, wipArtifact.artifactJSON);
+
+										//Publish the artifact JSON into the blockchain.
+										PhoenixAPI.addToPublishQueue(wipArtifact.artifactJSON);
+									}
+								}
+
+								console.log(data);
+							})
+						}
+						
+						checkIPFSAdd(i);
+					}
 				}
 			}
 		}
@@ -515,6 +542,16 @@ var Phoenix = (function() {
 		    "contentType" : 'application/json',
 		    "type" : 'POST',
 			"data": JSON.stringify({"fileids": idsToAdd}), 
+			"success": function( data ) {
+				callback(data);
+			}
+		});
+	}
+
+	PhoenixAPI.checkIPFSaddStatus = function(id, callback){
+		$.ajax(PhoenixAPI.tusIPFSEndpoint + "/check/" + id, {
+		    "contentType" : 'application/json',
+		    "type" : 'GET',
 			"success": function( data ) {
 				callback(data);
 			}
@@ -608,7 +645,6 @@ var Phoenix = (function() {
 	PhoenixAPI.addToPublishQueue = function(artJSON){
 		PhoenixAPI.publishQueue.push({
 			status: "",
-			ipfsUploadComplete: false,
 			txPushComplete: false,
 			txs: [],
 			artifactJSON: artJSON

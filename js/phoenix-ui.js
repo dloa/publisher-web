@@ -44,6 +44,7 @@ var draftTableElement = document.getElementById('draftTable');
 var draftOrElement = document.getElementById('draftOr');
 var proccessingArtifactsTableElement = document.getElementById('proccessingArtifactsTable');
 var proccessingArtifactsTitleElement = document.getElementById('proccessingArtifactsTitle');
+var artifactsTBodyElement = document.getElementById('artifactsTBody');
 
 // Basic JSON to manage page
 var showWizardPage = function(){
@@ -90,36 +91,35 @@ PhoenixEvents.on("onLoginFail", function(msg){
 })
 PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success");PhoenixUI.updatePubFee(); })
 PhoenixEvents.on("onPublishStart", function(msg){ 
-	PhoenixUI.drawPublishStatus();
+	PhoenixUI.drawArtifacts();
 	PhoenixUI.notify("Publishing Artifact", 'warning');
-	PhoenixUI.drawUploadStatus()
 	console.log(msg);
 })
 PhoenixEvents.on("onPublishTXSuccess", function(msg){ 
-	PhoenixUI.drawPublishStatus();
+	PhoenixUI.drawArtifacts();
 	console.log(msg);
 })
 PhoenixEvents.on("onPublishEnd", function(msg){ 
-	PhoenixUI.drawPublishStatus();
-	PhoenixUI.drawProcessingArtifacts();
+	PhoenixUI.drawArtifacts();
+	//PhoenixUI.drawProcessingArtifacts();
 	PhoenixUI.notify("Artifact Publish Successful!", 'success'); 
 	console.log(msg); 
 })
 PhoenixEvents.on("onTusUploadProgress", function(msg){ 
-	PhoenixUI.drawUploadStatus();
+	PhoenixUI.drawArtifacts();
 })
 PhoenixEvents.on("onTusUploadSuccess", function(msg){ 
-	PhoenixUI.drawUploadStatus();
+	PhoenixUI.drawArtifacts();
 })
 PhoenixEvents.on("onTusUploadError", function(msg){ 
-	PhoenixUI.drawUploadStatus();
+	PhoenixUI.drawArtifacts();
 })
 PhoenixEvents.on("onIPFSStart", function(msg){ 
-	PhoenixUI.drawUploadStatus();
+	PhoenixUI.drawArtifacts();
 })
 PhoenixEvents.on("onArtifactDeactivateSuccess", function(msg,txid){ 
 	console.log("Artifact Deactivation Success",msg); 
-	$('#' + txid).remove();
+	PhoenixUI.drawArtifacts();
 	swal("Success!", "Deactivation Successful!", "success")
 })
 PhoenixEvents.on("onArtifactDeactivateFail", function(msg){ 
@@ -158,40 +158,42 @@ PhoenixEvents.on("onPublisherLoadFailure", function(msg){ console.log(msg); })
 PhoenixEvents.on("onArtifactsLoad", function(msg){ 
 	console.log("Successfully loaded Artifacts for " + msg.address + ".", msg.results);
 
+	PhoenixUI.curArtifacts = msg.results;
+
 	// If we are on the currently selected one, then load in the artifacts to the Artifact page.
 	if (publisherSelectElement.value == msg.address){
 		// Wipe the artifact table clean
-		$("#ArtifactsTable > tbody").empty();
+		// $("#ArtifactsTable > tbody").empty();
 
 		if (!PhoenixUI.successfulTXIDs)
 			PhoenixUI.successfulTXIDs = [];
 
 		// Load in all the artifacts to the Table
-		for (var i in msg.results){
-			if (msg.results[i]['media-data']) {
-				var markup = "<tr id='" + msg.results[i].txid + "'>\
-								<th scope='row'>" + (1+parseInt(i)) + "</th>\
-								<td><code>" + msg.results[i]['media-data']['alexandria-media'].info.title + "</code></td>\
-								<td>TXID: <a href='https://florincoin.info/tx/" + msg.results[i].txid + "'><code>" + msg.results[i].txid.substring(0,10) + "...</code></a></td>\
-								<td><button onClick='Phoenix.artifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='dev btn btn-outline-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-danger'>Deactivate</button></td>\
-							</tr>";
-				$("#ArtifactsTable > tbody").append(markup);
-			} else if (msg.results[i]['oip-041']){
-				PhoenixUI.successfulTXIDs.push(msg.results[i].txid);
-				var markup = "<tr id='" + msg.results[i].txid + "'>\
-								<th scope='row'>" + (1+parseInt(i)) + "</th>\
-								<td><code>" + msg.results[i]['oip-041'].artifact.info.title + "</code></td>\
-								<td>TXID: <a href='https://florincoin.info/tx/" + msg.results[i].txid + "'><code>" + msg.results[i].txid.substring(0,10) + "...</code></td>\
-								<td><button onClick='ArtifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-danger'>Deactivate</button></td>\
-							</tr>";
-				$("#ArtifactsTable > tbody").append(markup);
-			}
-		}
+		// for (var i in msg.results){
+		// 	if (msg.results[i]['media-data']) {
+		// 		var markup = "<tr id='" + msg.results[i].txid + "'>\
+		// 						<th scope='row'>" + (1+parseInt(i)) + "</th>\
+		// 						<td><code>" + msg.results[i]['media-data']['alexandria-media'].info.title + "</code></td>\
+		// 						<td>TXID: <a href='https://florincoin.info/tx/" + msg.results[i].txid + "'><code>" + msg.results[i].txid.substring(0,10) + "...</code></a></td>\
+		// 						<td><button onClick='Phoenix.artifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='dev btn btn-outline-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-danger'>Deactivate</button></td>\
+		// 					</tr>";
+		// 		$("#ArtifactsTable > tbody").append(markup);
+		// 	} else if (msg.results[i]['oip-041']){
+		// 		PhoenixUI.successfulTXIDs.push(msg.results[i].txid);
+		// 		var markup = "<tr id='" + msg.results[i].txid + "'>\
+		// 						<th scope='row'>" + (1+parseInt(i)) + "</th>\
+		// 						<td><code>" + msg.results[i]['oip-041'].artifact.info.title + "</code></td>\
+		// 						<td>TXID: <a href='https://florincoin.info/tx/" + msg.results[i].txid + "'><code>" + msg.results[i].txid.substring(0,10) + "...</code></td>\
+		// 						<td><button onClick='ArtifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-danger'>Deactivate</button></td>\
+		// 					</tr>";
+		// 		$("#ArtifactsTable > tbody").append(markup);
+		// 	}
+		// }
 
 		if (!PhoenixUI.processingArtifacts)
 			PhoenixUI.processingArtifacts = [];
 
-		PhoenixUI.drawProcessingArtifacts()
+		PhoenixUI.drawArtifacts();
 
 		checkEnv();
 	}
@@ -3310,55 +3312,6 @@ var PhoenixUI = (function(){
 		});
 	}
 
-	PhoenixUX.drawPublishStatus = function(){
-		var current = Phoenix.currentArtifactPublish;
-		var waiting = Phoenix.publishQueue;
-
-		pubStatusTableElement.innerHTML = "";
-
-		if (current){
-			var progress = 0;
-
-			if (Phoenix.currentArtifactPublish.txs && Phoenix.currentArtifactPublish.txs.length && Phoenix.currentArtifactPublish.splitStrings && Phoenix.currentArtifactPublish.splitStrings.length)
-				progress = Phoenix.currentArtifactPublish.txs.length / Phoenix.currentArtifactPublish.splitStrings.length;
-
-			pubStatusTableElement.innerHTML += '<tr>\
-				<th scope="row">1</th>\
-				<td><code>' + current.artifactJSON["oip-041"].artifact.info.title + '</code></td>\
-				<td>\
-					<div class="progress">\
-						<div class="progress-bar progress-bar-animated progress-bar-striped bg-warning" role="progressbar" style="width: ' + (progress*100) + '%"></div>\
-					</div>\
-				</td>\
-				<td>\
-					Publishing...\
-				</td>\
-			</tr>';
-		}		
-
-		if (waiting.length > 0) {
-			for (var i = 0; i < waiting.length; i++) {
-				pubStatusTableElement.innerHTML += '<tr>\
-					<th scope="row">' + (i + 2) + '</th>\
-					<td><code>' + waiting[i].artifactJSON["oip-041"].artifact.info.title + '</code></td>\
-					<td>\
-						<div class="progress">\
-							<div class="progress-bar" role="progressbar" style="width: 0%"></div>\
-						</div>\
-					</td>\
-					<td>\
-						Waiting...\
-					</td>\
-				</tr>';
-			}
-		}
-
-		if (!current && waiting.length == 0)
-			mainPubStatusDiv.style.display = "none";
-		else
-			mainPubStatusDiv.style.display = "block";
-	}
-
 	PhoenixUX.toggleAdvanced = function(elem){
 		advancedSettingsElement.style.display = (advancedSettingsElement.style.display == "none" ? "flex" : "none");
 		elem.innerHTML = (advancedSettingsElement.style.display == "none" ? "Show Advanced Settings <span class=\"icon icon-chevron-down\"></span>" : "Hide Advanced Settings <span class=\"icon icon-chevron-up\"></span>");
@@ -3423,14 +3376,15 @@ var PhoenixUI = (function(){
 		PhoenixUX.generateDraftRows();
 	}
 
-	PhoenixUX.drawUploadStatus = function(){
-		uploadStatusTableElement.innerHTML = "";
+	PhoenixUX.drawArtifacts = function(){
+		artifactsTBodyElement.innerHTML = "";
 
 		for (var i = 0; i < Phoenix.pendingUploadQueue.length; i++){
 			var overallPer = 0;
 			var complete = 0;
 			var incomplete = 0;
 			var total = 0;
+			var uploadComplete = true;
 			for (var j = 0; j < Phoenix.pendingUploadQueue[i].tusFiles.length; j++) {
 				if (!Phoenix.pendingUploadQueue[i].tusFiles[j])
 					continue;
@@ -3440,48 +3394,42 @@ var PhoenixUI = (function(){
 				if (Phoenix.pendingUploadQueue[i].tusFiles[j].progress)
 					overallPer += parseFloat(Phoenix.pendingUploadQueue[i].tusFiles[j].progress);
 
-				uploadComplete = true;
-				var len = 0;
-				for (var v in Phoenix.pendingUploadQueue[i].tusFiles[j])
-					len++;
-
-				if (len === 3 && !Phoenix.pendingUploadQueue[i].tusFiles[j].error){
+				if (Phoenix.pendingUploadQueue[i].tusFiles[j].progress && parseFloat(Phoenix.pendingUploadQueue[i].tusFiles[j].progress) === 100  && !Phoenix.pendingUploadQueue[i].tusFiles[j].error){
 					complete++;
 				} else {
+					uploadComplete = false;
 					incomplete++;
 				}
 			}
 			overallPer = overallPer / total;
 
+			var state = "uploading";
+
+			if (Phoenix.pendingUploadQueue[i].ipfsAddStart){
+				state = "adding_to_ipfs"
+			}
+
 			var title = "";
 
 			try { title = Phoenix.pendingUploadQueue[i].artifactJSON.artifact.info.title; } catch(e){}
-			var str = '<tr>\
-				<th scope="row">' + (i + 1) + '</th>\
+			var str = '<tr class="table-' + (state === "uploading" ? "warning" : "info") + '">\
+				<th scope="row"><span class="badge badge-' + (state === "uploading" ? "warning" : "info") + '">' + (state === "uploading" ? "Uploading" : "Adding to IPFS") + '</span</th>\
 				<td><code>' + title + '</code></td>\
 				<td>\
 					<div class="progress">\
-						<div class="progress-bar progress-bar-animated progress-bar-striped bg-' + (Phoenix.pendingUploadQueue[i].ipfsAddStart ? 'info' : 'warning') + '" role="progressbar" style="width: ' + overallPer + '%"></div>\
+						<div class="progress-bar progress-bar-animated progress-bar-striped bg-' + (state === "adding_to_ipfs" ? 'info' : 'warning') + '" role="progressbar" style="width: ' + overallPer + '%">' + (state === "adding_to_ipfs" ? 'Adding files to IPFS...' : 'Uploaded ' + complete + '/' + total + ' Files (' + parseFloat(overallPer).toFixed(0) + '%)') + '</div>\
 					</div>\
 				</td>\
 				<td>\
-					' + (Phoenix.pendingUploadQueue[i].ipfsAddStart ? 'Adding files to IPFS...' : 'Uploaded ' + complete + '/' + total + ' Files (' + parseFloat(overallPer).toFixed(0) + '%)') + '\
+					<button class="btn btn-no-pad btn-outline-info btn-background-white">More Info</button>\
 				</td>\
 			</tr>';
 
-			uploadStatusTableElement.innerHTML += str;
-
+			artifactsTBodyElement.innerHTML += str;
 		}
 
-		if (Phoenix.pendingUploadQueue.length === 0){
-			mainUploadStatusDiv.style.display = "none";
-		} else {
-			mainUploadStatusDiv.style.display = "block";
-		}
-	}
-
-	PhoenixUX.drawProcessingArtifacts = function(){
 		PhoenixUX.successfulTXIDs = [];
+		PhoenixUX.processingArtifacts = [];
 
 		for (var i in Phoenix.artifacts){
 			for(var j in Phoenix.artifacts[i]){
@@ -3503,26 +3451,101 @@ var PhoenixUI = (function(){
 			}
 
 			if (!match){
-				PhoenixUI.processingArtifacts.push(Phoenix.publishedArtifacts[i]);
+				PhoenixUX.processingArtifacts.push(Phoenix.publishedArtifacts[i]);
 			}
 		}
 
-		for (var i in PhoenixUI.processingArtifacts){
-			var markup = "<tr id='" + PhoenixUI.processingArtifacts[i].txs[0].txid + "'>\
-							<td><code>" + PhoenixUI.processingArtifacts[i].artifactJSON['oip-041'].artifact.info.title + "</code></td>\
-							<td>TXID: <a href='https://florincoin.info/tx/" + PhoenixUI.processingArtifacts[i].txs[0].txid + "'><code>" + PhoenixUI.processingArtifacts[i].txs[0].txid.substring(0,10) + "...</code></td>\
-						</tr>";
-			$("#proccessingArtifactsTable > tbody").append(markup);
+		for (var i in PhoenixUX.processingArtifacts){
+			var title = "";
+			try { title = PhoenixUX.processingArtifacts[i].artifactJSON['oip-041'].artifact.info.title; } catch(e){}
+			var markup = '<tr class="table-secondary">\
+				<th scope="row"><span class="badge badge-secondary">Processing</span></th>\
+				<td><code>' + title + '</code></td>\
+				<td>\
+					<div class="progress">\
+						<div class="progress-bar progress-bar-animated progress-bar-striped bg-secondary" role="progressbar" style="width: 100%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">Waiting for Artifact to be picked up by Front End</div>\
+					</div>\
+				</td>\
+				<td>\
+					<button class="btn btn-no-pad btn-outline-info btn-background-white">More Info</button>\
+				</td>\
+			</tr>';
+
+			artifactsTBodyElement.innerHTML += markup;
 		}
 
-		if (PhoenixUI.processingArtifacts.length === 0){
-			proccessingArtifactsTableElement.style.display = "none";
-			proccessingArtifactsTitleElement.style.display = "none";
-		} else {
-			proccessingArtifactsTableElement.style.display = "table";
-			proccessingArtifactsTitleElement.style.display = "block";
+		var current = Phoenix.currentArtifactPublish;
+		var waiting = Phoenix.publishQueue;
+
+		if (current && current.artifactJSON){
+			var progress = 0;
+
+			if (Phoenix.currentArtifactPublish.txs && Phoenix.currentArtifactPublish.txs.length && Phoenix.currentArtifactPublish.splitStrings && Phoenix.currentArtifactPublish.splitStrings.length)
+				progress = Phoenix.currentArtifactPublish.txs.length / Phoenix.currentArtifactPublish.splitStrings.length;
+
+			var title = "";
+			try { title = current.artifactJSON['oip-041'].artifact.info.title; } catch(e){}
+			artifactsTBodyElement.innerHTML += '<tr class="table-primary">\
+				<th scope="row"><span class="badge badge-primary">Publishing</span></th>\
+				<td><code>' + title + '</code></td>\
+				<td>\
+					<div class="progress">\
+						<div class="progress-bar progress-bar-animated progress-bar-striped bg-primary" role="progressbar" style="width: ' + (progress*100) + '%"></div>\
+					</div>\
+				</td>\
+				<td>\
+					<button class="btn btn-no-pad btn-outline-info btn-background-white">More Info</button>\
+				</td>\
+			</tr>';
+		}		
+
+		if (waiting.length > 0) {
+			for (var i = 0; i < waiting.length; i++) {
+				var title = "";
+				try { title = waiting[i].artifactJSON['oip-041'].artifact.info.title; } catch(e){}
+				artifactsTBodyElement.innerHTML += '<tr class="table-secondary">\
+					<th scope="row"><span class="badge badge-secondary">Waiting</span></th>\
+					<td><code>' + title + '</code></td>\
+					<td>\
+						<div class="progress">\
+							<div class="progress-bar" role="progressbar" style="width: 0%"></div>\
+						</div>\
+					</td>\
+					<td>\
+						<button class="btn btn-no-pad btn-outline-info btn-background-white">More Info</button>\
+					</td>\
+				</tr>';
+			}
+		}
+
+		for (var i = 0; i < PhoenixUX.curArtifacts.length; i++) {
+			var skip = false;
+			for (var j in Phoenix.disabledArtifactTXIDs){
+				if (PhoenixUX.curArtifacts[i].txid === Phoenix.disabledArtifactTXIDs[j])
+					skip = true;
+			}
+
+			if (skip)
+				continue;
+			
+			var title = "";
+			try { title = PhoenixUX.curArtifacts[i]['oip-041'].artifact.info.title; } catch(e){}
+			
+			artifactsTBodyElement.innerHTML += '<tr>\
+					<th scope="row"><span class="badge badge-success">Active</span></th>\
+					<td><code>' + title + '</code></td>\
+					<td>\
+					</td>\
+					<td>\
+						<button class="btn btn-no-pad btn-outline-info">View</button>\
+						<button class="btn btn-no-pad btn-outline-danger" onClick="Phoenix.deactivateArtifact(\'' + PhoenixUX.curArtifacts[i].txid + '\');">Deactivate</button>\
+					</td>\
+				</tr>';
 		}
 	}
+
+
+
 
 	return PhoenixUX;
 })();
