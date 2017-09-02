@@ -355,62 +355,7 @@ var Phoenix = (function() {
 	}
 
 	PhoenixAPI.addAndPublishWIP = function(wipArtifact){
-		var publishObject = {
-			artifactJSON: wipArtifact.artifactJSON,
-			status: "Uploading",
-			ipfsAddStart: false
-		}
-
-		var filesUploadState = [];
-
-		var uploadComplete = true;
-		for (var i = 0; i < wipArtifact.tusFiles.length; i++) {
-			if (wipArtifact.tusFiles[i]){
-				if (wipArtifact.tusFiles[i].progress && parseFloat(wipArtifact.tusFiles[i].progress) === 100 && !wipArtifact.tusFiles[i].error){
-					filesUploadState.push({
-						uploadComplete: true,
-						obj: wipArtifact.tusFiles[i]
-					})
-				} else {
-					uploadComplete = false;
-					filesUploadState.push({
-						uploadComplete: false,
-						obj: wipArtifact.tusFiles[i]
-					})
-				}
-			}
-		}
-
-		console.log(filesUploadState);
-
-		// if (uploadComplete){
-		// 	var idsToAdd = [];
-
-		// 	var files = wipArtifact.artifactJSON.artifact.storage.files;
-
-		// 	for (var i = 0; i < files.length; i++) {
-		// 		if (wipArtifact.tusFiles){
-		// 			for (var j = 0; j < wipArtifact.tusFiles.length; j++) {
-		// 				if(wipArtifact.tusFiles[j]){
-		// 					if (wipArtifact.tusFiles[j].name == files[i].fname){
-		// 						idsToAdd.push(wipArtifact.tusFiles[j].id);
-		// 					}
-		// 				}
-		// 			}
-		// 		}
-		// 	}
-
-		// 	PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
-		// 		wipArtifact.artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
-
-		// 		wipArtifact.artifactJSON = LibraryDJS.signPublishArtifact(PhoenixAPI.wallet, wipArtifact.artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, wipArtifact.artifactJSON)
-
-		// 		// Publish the artifact JSON into the blockchain.
-		// 		PhoenixAPI.addToPublishQueue(wipArtifact.artifactJSON);
-		// 	});
-		// } else {
 		PhoenixAPI.pendingUploadQueue.push(wipArtifact);
-		// }
 	}
 
 	PhoenixAPI.checkUploadStatus = function(){
@@ -428,7 +373,7 @@ var Phoenix = (function() {
 			var uploadComplete = true;
 			for (var z = 0; z < wipArtifact.tusFiles.length; z++) {
 				if (wipArtifact.tusFiles[z]){
-					if (wipArtifact.tusFiles[z].progress && parseFloat(wipArtifact.tusFiles[z].progress) === 100  && !wipArtifact.tusFiles[z].error){
+					if (wipArtifact.tusFiles[z].id && wipArtifact.tusFiles[z].progress && parseFloat(wipArtifact.tusFiles[z].progress) === 100 && !wipArtifact.tusFiles[z].error){
 						filesUploadState.push({
 							uploadComplete: true,
 							obj: wipArtifact.tusFiles[z]
@@ -456,7 +401,9 @@ var Phoenix = (function() {
 						if (wipArtifact.tusFiles){
 							for (var j = 0; j < wipArtifact.tusFiles.length; j++) {
 								if (wipArtifact.tusFiles[j]){
-									if (wipArtifact.tusFiles[j].name == files[k].fname){
+									var fname = wipArtifact.tusFiles[j].name;
+									
+									if (fname == files[k].fname){
 										idsToAdd.push(wipArtifact.tusFiles[j].id);
 									}
 								}
@@ -486,7 +433,9 @@ var Phoenix = (function() {
 									PhoenixAPI.pendingUploadQueue[i].ipfsStatus = data;
 
 									if (PhoenixAPI.pendingUploadQueue[i].ipfsStatus.status === "ipfs_file_check_complete"){
-										wipArtifact.artifactJSON.artifact.storage.location = PhoenixAPI.pendingUploadQueue[i].ipfsStatus.mainHash;
+										PhoenixAPI.pendingUploadQueue[i].artifactJSON.artifact.storage.location = PhoenixAPI.pendingUploadQueue[i].ipfsStatus.mainHash;
+
+										var wipArtifact = PhoenixAPI.pendingUploadQueue[i];
 
 										PhoenixAPI.pendingUploadQueue.splice(i, 1);
 
@@ -511,6 +460,12 @@ var Phoenix = (function() {
 	}
 
 	PhoenixAPI.addAndPublish = function(artifactJSON, callback){
+		var publishObject = {
+			artifactJSON: artifactJSON,
+			tusFiles: [],
+			ipfsAddStart: false
+		}
+
 		var idsToAdd = [];
 
 		var files = artifactJSON.artifact.storage.files;
@@ -519,7 +474,7 @@ var Phoenix = (function() {
 			if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles){
 				for (var j = 0; j < PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles.length; j++) {
 					if (PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[j].name == files[i].fname){
-						idsToAdd.push(PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[j].id);
+						publishObject.tusFiles.push(PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles[j]);
 					}
 				}
 			}
@@ -529,18 +484,20 @@ var Phoenix = (function() {
 			for (var i = 0; i < PhoenixAPI.pendingUploadQueue[j].tusFiles.length; i++) {
 				if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i]){
 					if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == file.name){
-						idsToAdd.push(PhoenixAPI.pendingUploadQueue[j].tusFiles[i].id);
+						publishObject.tusFiles.push(PhoenixAPI.pendingUploadQueue[j].tusFiles[i]);
 					}
 				}
 			}
 		}
 
-		PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
-			artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
+		PhoenixAPI.pendingUploadQueue.push(publishObject);
 
-			// Publish the artifact JSON into the blockchain.
-			PhoenixAPI.addToPublishQueue(artifactJSON);
-		});
+		// PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsData){
+		// 	artifactJSON.artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
+
+		// 	// Publish the artifact JSON into the blockchain.
+		// 	PhoenixAPI.addToPublishQueue(artifactJSON);
+		// });
 	}
 
 	PhoenixAPI.addFilesToIPFS = function(idsToAdd, callback){
@@ -921,7 +878,11 @@ var Phoenix = (function() {
 			onProgress = function(){};
 
 		if (!PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID]){
-			PhoenixAPI.bulkTusFiles.push({"name": newName ? newName : file.name, size: file.size});
+			var obj = {"name": newName ? newName : file.name, size: file.size};
+			if (newName)
+				obj.oldName = file.name;
+
+			PhoenixAPI.bulkTusFiles.push(obj);
 		} else {
 			if (!PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles)
 				PhoenixAPI.wipArtifacts[PhoenixAPI.currentWIPID].tusFiles = [];
@@ -960,8 +921,12 @@ var Phoenix = (function() {
 				
 				for (var j = 0; j < PhoenixAPI.pendingUploadQueue.length; j++){
 					for (var i = 0; i < PhoenixAPI.pendingUploadQueue[j].tusFiles.length; i++) {
-						console.log(i, PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name, file.name)
-						if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == file.name){
+						var fname = PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name;
+
+						if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].oldName)
+							fname = PhoenixAPI.pendingUploadQueue[j].tusFiles[i].oldName;
+
+						if (fname == file.name){
 							PhoenixAPI.pendingUploadQueue[j].tusFiles[i].error = error;
 						}
 		        	}
@@ -969,7 +934,12 @@ var Phoenix = (function() {
 
 				for (var i = 0; i < PhoenixAPI.bulkTusFiles.length; i++) {
 					if (PhoenixAPI.bulkTusFiles[i]){
-						if (PhoenixAPI.bulkTusFiles[i].name == file.name){
+						var fname = PhoenixAPI.bulkTusFiles[i].name;
+
+						if (PhoenixAPI.bulkTusFiles[i].oldName)
+							fname = PhoenixAPI.bulkTusFiles[i].oldName;
+
+						if (fname == file.name){
 							PhoenixAPI.bulkTusFiles[i].error = error;
 						}
 					}
@@ -996,7 +966,12 @@ var Phoenix = (function() {
 				for (var j = 0; j < PhoenixAPI.pendingUploadQueue.length; j++){
 					for (var i = 0; i < PhoenixAPI.pendingUploadQueue[j].tusFiles.length; i++) {
 						if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i]){
-							if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == file.name){
+							var fname = PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name;
+						
+							if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].oldName)
+								fname = PhoenixAPI.pendingUploadQueue[j].tusFiles[i].oldName;
+
+							if (fname == file.name){
 								PhoenixAPI.pendingUploadQueue[j].tusFiles[i].progress = percentage;
 							}
 						}
@@ -1005,7 +980,12 @@ var Phoenix = (function() {
 
 				for (var i = 0; i < PhoenixAPI.bulkTusFiles.length; i++) {
 					if (PhoenixAPI.bulkTusFiles[i]){
-						if (PhoenixAPI.bulkTusFiles[i].name == file.name){
+						var fname = PhoenixAPI.bulkTusFiles[i].name;
+						
+						if (PhoenixAPI.bulkTusFiles[i].oldName)
+							fname = PhoenixAPI.bulkTusFiles[i].oldName;
+
+						if (fname == file.name){
 							PhoenixAPI.bulkTusFiles[i].progress = percentage;
 						}
 					}
@@ -1032,7 +1012,12 @@ var Phoenix = (function() {
 				for (var j = 0; j < PhoenixAPI.pendingUploadQueue.length; j++){
 					for (var i = 0; i < PhoenixAPI.pendingUploadQueue[j].tusFiles.length; i++) {
 						if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i]){
-							if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name == file.name){
+							var fname = PhoenixAPI.pendingUploadQueue[j].tusFiles[i].name;
+						
+							if (PhoenixAPI.pendingUploadQueue[j].tusFiles[i].oldName)
+								fname = PhoenixAPI.pendingUploadQueue[j].tusFiles[i].oldName;
+
+							if (fname == file.name){
 								PhoenixAPI.pendingUploadQueue[j].tusFiles[i].id = id;
 							}
 						}
@@ -1041,7 +1026,12 @@ var Phoenix = (function() {
 
 				for (var i = 0; i < PhoenixAPI.bulkTusFiles.length; i++) {
 					if (PhoenixAPI.bulkTusFiles[i]){
-						if (PhoenixAPI.bulkTusFiles[i].name == file.name){
+						var fname = PhoenixAPI.bulkTusFiles[i].name;
+						
+						if (PhoenixAPI.bulkTusFiles[i].oldName)
+							fname = PhoenixAPI.bulkTusFiles[i].oldName;
+
+						if (fname == file.name){
 							PhoenixAPI.bulkTusFiles[i].id = id;
 						}
 					}

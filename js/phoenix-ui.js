@@ -3094,12 +3094,12 @@ var PhoenixUI = (function(){
 
 			bulkProgressBarInfoElement.innerHTML = "Upload of \"" + file.name + "\" Complete";
 
-			for (var i = 0; i < bulk.length; i++) {
-				if (bulk[i] == file)
-					PhoenixUX.bulkFiles.splice(i, 1);
-			}
+			// for (var i = 0; i < bulk.length; i++) {
+			// 	if (bulk[i] == file)
+			// 		PhoenixUX.bulkFiles.splice(i, 1);
+			// }
 
-			PhoenixUX.bulkFilesComplete.push({file: file, id: id});
+			//.bulkFilesComplete.push({file: file, id: id});
 
 			updateProg();
 		}, function(error){ console.log(error) }, function(percent){
@@ -3113,6 +3113,10 @@ var PhoenixUI = (function(){
 
 		var idSel = colIdSelectorElement.value;
 		var filesSel = colFilesSelectorElement.value;
+
+		if (!PhoenixUX.bulkCSVJSON){
+			return;
+		}
 
 		for (var artifact = 1; artifact < PhoenixUX.bulkCSVJSON.length; artifact++){
 			var artCSVRow = PhoenixUX.bulkCSVJSON[artifact];
@@ -3229,46 +3233,33 @@ var PhoenixUI = (function(){
 			if (fileSearch.length == 0)
 				continue;
 
-			var ids = [];
+			var tusFiles = [];
 
 			//console.log(idColVal);
 			for (var i in fileSearch){
 				// console.log(fileSearch[i])
-				for (var x in PhoenixUX.bulkFilesComplete){
+				for (var x in Phoenix.bulkTusFiles){
 					// console.log(PhoenixUX.bulkFilesComplete[x])
-					if (fileSearch[i] == PhoenixUX.bulkFilesComplete[x].file.name.replace(idColVal + '.', '')){
-						ids.push(PhoenixUX.bulkFilesComplete[x].id);
+					var tmpStr = Phoenix.bulkTusFiles[x].name;
+					if (fileSearch[i] === tmpStr.replace(idColVal + '.', '')){
+						tusFiles.push(Phoenix.bulkTusFiles[x]);
 					}
 				}
 			}
 
+			artifactJSON.artifact.storage.files = filesJSON;
 
-			artifactJSONs[artifact - 1] = artifactJSON;
-
-			var addWrapper = function(ids, artifactNum, filesJSON){
-				Phoenix.addFilesToIPFS(ids, function(ipfsData){
-					console.log(ipfsData);
-
-					if (!artifactJSONs[artifactNum].artifact)
-						artifactJSONs[artifactNum].artifact = {};
-					if (!artifactJSONs[artifactNum].artifact.storage)
-						artifactJSONs[artifactNum].artifact.storage = {};
-					if (!artifactJSONs[artifactNum].artifact.storage.files)
-						artifactJSONs[artifactNum].artifact.storage.files = [];
-
-					artifactJSONs[artifactNum].artifact.storage.location = ipfsData[ipfsData.length - 1].hash;
-
-					artifactJSONs[artifactNum].artifact.storage.files = filesJSON;
-
-					showArtifactPage();
-					Phoenix.addBulkToPublishQueue(artifactJSONs[artifactNum]);
-
-					console.log(artifactJSONs);
-				})
+			var wipObj = {
+				artifactJSON: artifactJSON,
+				tusFiles: tusFiles
 			}
 
-			addWrapper(ids, artifact - 1, filesJSON);
+			console.log(wipObj);
+
+			Phoenix.addAndPublishWIP(wipObj);
 		}
+
+		showArtifactPage();
 	}
 
 	PhoenixUX.notify = function(message, type){
@@ -3551,9 +3542,7 @@ var PhoenixUI = (function(){
 			
 			artifactsTBodyElement.innerHTML += '<tr>\
 					<th scope="row"><span class="badge badge-success">Active</span></th>\
-					<td><code>' + title + '</code></td>\
-					<td>\
-					</td>\
+					<td colspan="2" style="text-align: left;"><code>' + title + '</code></td>\
 					<td>\
 						<a class="btn btn-no-pad btn-outline-info" href="' + Phoenix.browserURL + PhoenixUX.curArtifacts[i].txid.substring(0, 6) + '">View</a>\
 						<button class="btn btn-no-pad btn-outline-danger" onClick="Phoenix.deactivateArtifact(\'' + PhoenixUX.curArtifacts[i].txid + '\');">Deactivate</button>\
