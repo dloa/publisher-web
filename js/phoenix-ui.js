@@ -3529,7 +3529,12 @@ var PhoenixUI = (function(){
 				continue;
 			
 			var title = "";
-			try { title = PhoenixUX.curArtifacts[i]['oip-041'].artifact.info.title; } catch(e){}
+			try { 
+				if (PhoenixUX.curArtifacts[i]['oip-041'])
+					title = PhoenixUX.curArtifacts[i]['oip-041'].artifact.info.title; 
+				else 
+					continue;
+			} catch(e){}
 			
 			artifactsTBodyElement.innerHTML += '<tr>\
 					<th scope="row"><span class="badge badge-success">Active</span></th>\
