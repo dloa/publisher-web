@@ -422,7 +422,7 @@ var Phoenix = (function() {
 			var uploadComplete = true;
 			for (var z = 0; z < wipArtifact.tusFiles.length; z++) {
 				if (wipArtifact.tusFiles[z]){
-					if (wipArtifact.tusFiles[i].progress && parseFloat(wipArtifact.tusFiles[i].progress) === 100  && !wipArtifact.tusFiles[z].error){
+					if (wipArtifact.tusFiles[z].progress && parseFloat(wipArtifact.tusFiles[z].progress) === 100  && !wipArtifact.tusFiles[z].error){
 						filesUploadState.push({
 							uploadComplete: true,
 							obj: wipArtifact.tusFiles[z]
