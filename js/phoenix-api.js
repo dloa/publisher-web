@@ -41,6 +41,7 @@ var Phoenix = (function() {
 	PhoenixAPI.tusIPFSEndpoint = "https://ipfs-tus.alexandria.io";
 	PhoenixAPI.flovaultBaseURL = "https://flovault.alexandria.io";
 	PhoenixAPI.tradebotURL = "https://api.alexandria.io/tradebot";
+	PhoenixAPI.browserURL = "https://alexandria.io/browser/";
 	PhoenixAPI.tusFiles = [];
 	PhoenixAPI.publishQueue = (localStorage.publishQueue ? JSON.parse(localStorage.publishQueue) : []);
 	PhoenixAPI.publishState = "Loading";
@@ -770,6 +771,10 @@ var Phoenix = (function() {
 			// Most likely an issue with Sweet alert, abort for now.
 		}
 	}	
+
+	PhoenixAPI.viewArtifact = function(txid){
+		document.location.href = PhoenixAPI.browserURL + txid.substring(0, 6);
+	}
 
 	PhoenixAPI.calculatePublishFee = function(artJSON, callback){
 		PhoenixAPI.updateMarketData(function(marketData){

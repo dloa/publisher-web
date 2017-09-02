@@ -3555,7 +3555,7 @@ var PhoenixUI = (function(){
 					<td>\
 					</td>\
 					<td>\
-						<button class="btn btn-no-pad btn-outline-info">View</button>\
+						<button class="btn btn-no-pad btn-outline-info" onClick="Phoenix.viewArtifact(\'' + PhoenixUX.curArtifacts[i].txid + '\');">View</button>\
 						<button class="btn btn-no-pad btn-outline-danger" onClick="Phoenix.deactivateArtifact(\'' + PhoenixUX.curArtifacts[i].txid + '\');">Deactivate</button>\
 					</td>\
 				</tr>';
