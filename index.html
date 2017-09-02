@@ -1103,7 +1103,12 @@
 			Phoenix.login();
 			Phoenix.loadWIPArtifacts();
 
-			showDraftsPage();
+			if (localStorage.lastPage){
+				hideAll();
+				$('#' + localStorage.lastPage).show();
+			} else {
+				showDraftsPage();
+			}
 
 			// Initialize
 			PhoenixUI.loadTypes();

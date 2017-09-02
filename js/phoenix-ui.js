@@ -50,27 +50,32 @@ var artifactsTBodyElement = document.getElementById('artifactsTBody');
 var showWizardPage = function(){
 	hideAll();
 	$('#wizard').show();
+	localStorage.lastPage = "wizard";
 }
 
 var showArtifactPage = function(){
 	hideAll();
 	$('#artifacts').show();
+	localStorage.lastPage = "artifacts";
 }
 
 var showWalletPage = function(){
 	hideAll();
 	$('#WalletPage').show();
+	localStorage.lastPage = "WalletPage";
 }
 
 var showToolsPage = function(){
 	hideAll();
 	$('#tools').show();
+	localStorage.lastPage = "tools";
 }
 
 var showDraftsPage = function(){
 	hideAll();
 	PhoenixUI.generateDraftRows();
 	$('#draftSelect').show();
+	localStorage.lastPage = "draftSelect";
 }
 
 var hideAll = function(){
@@ -3556,9 +3561,6 @@ var PhoenixUI = (function(){
 				</tr>';
 		}
 	}
-
-
-
 
 	return PhoenixUX;
 })();
