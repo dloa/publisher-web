@@ -1951,8 +1951,8 @@ var PhoenixUI = (function(){
 					"fiat": "USD",
 					//"scale": scale + ":1",
 					"disPer": discountPercentage,
-					"sugTip": [ ],
-					"addresses": { }
+					"sugTip": [],
+					"addresses": []
 				}
 			}
 		};
@@ -2082,7 +2082,7 @@ var PhoenixUI = (function(){
 		if (PhoenixUX.paymentAddresses){
 			for (var addr in PhoenixUX.paymentAddresses){
 				if (addr && PhoenixUX.paymentAddresses[addr] && PhoenixUX.paymentAddresses[addr].address)
-					artifactJSON.artifact.payment.addresses[PhoenixUX.paymentAddresses[addr].currency] = PhoenixUX.paymentAddresses[addr].address;
+					artifactJSON.artifact.payment.addresses.push({"token": PhoenixUX.paymentAddresses[addr].currency, "address": PhoenixUX.paymentAddresses[addr].address});
 			}
 		}
 
