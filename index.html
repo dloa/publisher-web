@@ -1096,6 +1096,9 @@
 			setInterval(Phoenix.processPublishQueue, 1 * 1000);
 			setInterval(Phoenix.checkUploadStatus, 1 * 1000);
 
+			// Attempt to refresh artifacts if there is a pending publish every 40 seconds.
+			setInterval(Phoenix.updateArtifactList, 40 * 1000);
+
 			Phoenix.login();
 			Phoenix.loadWIPArtifacts();
 

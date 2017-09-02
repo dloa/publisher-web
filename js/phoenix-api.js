@@ -610,6 +610,12 @@ var Phoenix = (function() {
 		PhoenixEvents.trigger('onArtifactsLoad', {address: pubAddress, results: results})
 	}
 
+	PhoenixAPI.updateArtifactList = function(){
+		if (PhoenixAPI.pendingArtifact){
+			PhoenixAPI.loadArtifactsForPub(PhoenixAPI.currentPublisher.address);
+		}
+	}
+
 	PhoenixAPI.getWallet = function(){
 		return this.wallet;
 	}
@@ -695,7 +701,7 @@ var Phoenix = (function() {
 			PhoenixAPI.publishState = "Ready";
 
 			PhoenixAPI.currentArtifactPublish.publisher = PhoenixAPI.currentPublisher.address;
-			
+
 			PhoenixAPI.publishedArtifacts.push(PhoenixAPI.currentArtifactPublish);
 			localStorage.publishedArtifacts = JSON.stringify(PhoenixAPI.publishedArtifacts);
 

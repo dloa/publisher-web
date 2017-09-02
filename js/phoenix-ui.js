@@ -3457,6 +3457,12 @@ var PhoenixUI = (function(){
 			}
 		}
 
+		if (PhoenixUX.processingArtifacts.length > 0){
+			Phoenix.pendingArtifact = true;
+		} else {
+			Phoenix.pendingArtifact = false;
+		}
+
 		for (var i in PhoenixUX.processingArtifacts){
 			var title = "";
 			try { title = PhoenixUX.processingArtifacts[i].artifactJSON['oip-041'].artifact.info.title; } catch(e){}
