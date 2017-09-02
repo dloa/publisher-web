@@ -3043,6 +3043,12 @@ var PhoenixUI = (function(){
 				case "Network":
 					inputStart = "artifact.storage.network";
 					break;
+				case "Director":
+					inputStart = "artifact.info.extraInfo.director";
+					break;
+				case "Distributor":
+					inputStart = "artifact.info.extraInfo.distributor";
+					break;
 			}
 
 			var formGroupDiv = document.createElement("div");
@@ -3094,12 +3100,12 @@ var PhoenixUI = (function(){
 
 			bulkProgressBarInfoElement.innerHTML = "Upload of \"" + file.name + "\" Complete";
 
-			// for (var i = 0; i < bulk.length; i++) {
-			// 	if (bulk[i] == file)
-			// 		PhoenixUX.bulkFiles.splice(i, 1);
-			// }
+			for (var i = 0; i < bulk.length; i++) {
+				if (bulk[i] == file)
+					PhoenixUX.bulkFiles.splice(i, 1);
+			}
 
-			//.bulkFilesComplete.push({file: file, id: id});
+			PhoenixUX.bulkFilesComplete.push({file: file, id: id});
 
 			updateProg();
 		}, function(error){ console.log(error) }, function(percent){
@@ -3157,7 +3163,7 @@ var PhoenixUI = (function(){
 				var value = artCSVRow[col];
 
 				try {
-					var tmpValue =  JSON.parse("["+value.replace(/^\n+|\n+$/g, "").replace(/\n+/g, ",")+"]")[0];
+					var tmpValue =  JSON.parse("["+value.replace(/^\n+|\n+$/g, "").replace(/\n+/g, ",").replace(/'\b/g, "\u2018").replace(/\b'/g, "\u2019").replace(/"\b/g, "\u201c").replace(/\b"/g, "\u201d").replace(/--/g,  "\u2014").replace(/\b\u2018\b/g,  "'")+"]")[0];
 					console.log(tmpValue);
 					value = tmpValue;
 				} catch (e) { console.log(e); /* do nothing */ }
