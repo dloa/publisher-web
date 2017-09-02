@@ -1,5 +1,24 @@
 # Alexandria Web Publisher
-Lots of updates have recently been made to the Web Publisher, a more comprehensive README will be written shortly.
+An Open-Source free way to control & publish your content.
+
+## What is this?
+The Alexandria Web Publisher is a simple way to publish/add content to the Open Index (OIP). You create an account, upload your files, set your pricing, and then click Publish. Information about your content is then written permanantly into the Florincoin Blockchain.
+
+## Features
+- [x] Login to Cryptocurrency wallet using Email & Password
+- [x] Logout
+- [x] Publish Drafts
+- [x] Resumable File uploads using [tus.io](https://tus.io/)
+- [x] Upload files into [IPFS](https://ipfs.io/)
+- [x] Many Artifact Type & Subtypes
+- [x] Drag and Drop file selector
+- [x] Genre's and Tags supported
+- [x] Full File Pricing support
+- [x] Add Payment Addresses
+- [x] Control over Retailer and Promoter earning percentages
+- [x] Publishes content into the Florincoin Blockchain
+
+## How does it work?
 
 # License
 This project is licensed under the MIT License
