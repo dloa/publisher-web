@@ -3526,7 +3526,7 @@ var PhoenixUI = (function(){
 			}
 		}
 
-		for (var i = 0; i < PhoenixUX.curArtifacts.length; i++) {
+		for (var i = PhoenixUX.curArtifacts.length - 1; i >= 0; i--) {
 			var skip = false;
 			for (var j in Phoenix.disabledArtifactTXIDs){
 				if (PhoenixUX.curArtifacts[i].txid === Phoenix.disabledArtifactTXIDs[j])
