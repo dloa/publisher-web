@@ -694,6 +694,8 @@ var Phoenix = (function() {
 		if (PhoenixAPI.currentArtifactPublish.txs && PhoenixAPI.currentArtifactPublish.splitStrings && PhoenixAPI.currentArtifactPublish.txs.length > 0 && PhoenixAPI.currentArtifactPublish.splitStrings.length > 0 && PhoenixAPI.currentArtifactPublish.txs.length === PhoenixAPI.currentArtifactPublish.splitStrings.length){
 			PhoenixAPI.publishState = "Ready";
 
+			PhoenixAPI.currentArtifactPublish.publisher = PhoenixAPI.currentPublisher.address;
+			
 			PhoenixAPI.publishedArtifacts.push(PhoenixAPI.currentArtifactPublish);
 			localStorage.publishedArtifacts = JSON.stringify(PhoenixAPI.publishedArtifacts);
 
