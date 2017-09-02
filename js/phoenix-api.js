@@ -285,6 +285,11 @@ var Phoenix = (function() {
 		window.location.href = 'login.html';
 	}
 
+	PhoenixAPI.clearAndLogout = function(){
+		localStorage.clear();
+		window.location.href = 'login.html';
+	}
+
 	PhoenixAPI.loadWIPArtifacts = function(callback){
 		try {
 			var localWIP = JSON.parse(localStorage.wipArtifacts);
