@@ -3445,13 +3445,15 @@ var PhoenixUI = (function(){
 			var match = false;
 			for (var j in Phoenix.publishedArtifacts[i].txs){
 				for (var k in PhoenixUX.successfulTXIDs){
-					if (Phoenix.publishedArtifacts[i].txs[j].txid === PhoenixUX.successfulTXIDs[k])
+					if (Phoenix.publishedArtifacts[i].txs[j].txid === PhoenixUX.successfulTXIDs[k]){
 						match = true;
+					}
 				}
 			}
 
 			if (!match){
-				PhoenixUX.processingArtifacts.push(Phoenix.publishedArtifacts[i]);
+				if (Phoenix.currentPublisher.address === Phoenix.publishedArtifacts[i].publisher)
+					PhoenixUX.processingArtifacts.push(Phoenix.publishedArtifacts[i]);
 			}
 		}
 
