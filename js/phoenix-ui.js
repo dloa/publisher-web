@@ -1947,7 +1947,7 @@ var PhoenixUI = (function(){
 					//"scale": scale + ":1",
 					"disPer": discountPercentage,
 					"sugTip": [ ],
-					"tokens": { }
+					"addresses": { }
 				}
 			}
 		};
@@ -2077,7 +2077,7 @@ var PhoenixUI = (function(){
 		if (PhoenixUX.paymentAddresses){
 			for (var addr in PhoenixUX.paymentAddresses){
 				if (addr && PhoenixUX.paymentAddresses[addr] && PhoenixUX.paymentAddresses[addr].address)
-					artifactJSON.artifact.payment.tokens[PhoenixUX.paymentAddresses[addr].currency] = PhoenixUX.paymentAddresses[addr].address;
+					artifactJSON.artifact.payment.addresses[PhoenixUX.paymentAddresses[addr].currency] = PhoenixUX.paymentAddresses[addr].address;
 			}
 		}
 
