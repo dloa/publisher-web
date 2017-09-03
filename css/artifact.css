@@ -7,6 +7,18 @@
   box-shadow: none;
   border-color: #538bd4; }*/
 
+ .bootstrap-tagsinput {
+ 	height: 103%;
+ }
+
+ .bootstrap-tagsinput > input {
+ 	font-family:monospace;
+ }
+
+ .bootstrap-tagsinput .tag {
+ 	margin-bottom: 5px;
+ }
+
 .form-inline p {
   display: inline; }
 
