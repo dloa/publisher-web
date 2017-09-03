@@ -344,7 +344,7 @@ td.unpin {
   cursor: pointer;
   padding: 5px;
   transition: all 0.1s;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
 }
 

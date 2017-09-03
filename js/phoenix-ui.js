@@ -45,6 +45,7 @@ var draftOrElement = document.getElementById('draftOr');
 var proccessingArtifactsTableElement = document.getElementById('proccessingArtifactsTable');
 var proccessingArtifactsTitleElement = document.getElementById('proccessingArtifactsTitle');
 var artifactsTBodyElement = document.getElementById('artifactsTBody');
+var thumbTextElement = document.getElementById('thumbText');
 
 // Basic JSON to manage page
 var showWizardPage = function(){
@@ -2450,6 +2451,8 @@ var PhoenixUI = (function(){
 			reader.onload = function (e) {
 				$('#poster').css("background-image", "url('" + e.target.result + "')");
 			}
+
+			thumbTextElement.style.display = "none";
 
 			reader.readAsDataURL(file);
 		}
