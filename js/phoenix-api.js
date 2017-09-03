@@ -402,7 +402,7 @@ var Phoenix = (function() {
 							for (var j = 0; j < wipArtifact.tusFiles.length; j++) {
 								if (wipArtifact.tusFiles[j]){
 									var fname = wipArtifact.tusFiles[j].name;
-									
+
 									if (fname == files[k].fname){
 										idsToAdd.push(wipArtifact.tusFiles[j].id);
 									}
@@ -512,13 +512,15 @@ var Phoenix = (function() {
 	}
 
 	PhoenixAPI.checkIPFSaddStatus = function(id, callback){
-		$.ajax(PhoenixAPI.tusIPFSEndpoint + "/check/" + id, {
-		    "contentType" : 'application/json',
-		    "type" : 'GET',
-			"success": function( data ) {
-				callback(data);
-			}
-		});
+		try {
+			$.ajax(PhoenixAPI.tusIPFSEndpoint + "/check/" + id, {
+			    "contentType" : 'application/json',
+			    "type" : 'GET',
+				"success": function( data ) {
+					callback(data);
+				}
+			});
+		} catch (e) {  }
 	}
 
 	PhoenixAPI.getPublishersFromLibraryD = function(){

@@ -50,7 +50,7 @@ var artifactsTBodyElement = document.getElementById('artifactsTBody');
 var showWizardPage = function(){
 	hideAll();
 	$('#wizard').show();
-	localStorage.lastPage = "wizard";
+	localStorage.lastPage = "draftSelect";
 }
 
 var showArtifactPage = function(){
