@@ -716,7 +716,7 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Title"
+					"placeholder": "Title*"
 				},
 				{
 					"id": "extraInfo.artist",
@@ -761,12 +761,12 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Song Title"
+					"placeholder": "Song Title*"
 				},
 				{
 					"id": "extraInfo.artist",
 					"width": 12,
-					"placeholder": "Song Name"
+					"placeholder": "Artist Name"
 				},
 				{
 					"id": "extraInfo.genre",
@@ -806,7 +806,7 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Album Title"
+					"placeholder": "Album Title*"
 				},
 				{
 					"id": "extraInfo.artist",
@@ -851,13 +851,13 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Podcast Name",
+					"placeholder": "Podcast Name*",
 					"subtext": "This will be auto formatted with \"Podcast Name\": \"Episode Title\""
 				},
 				{
 					"id": "extraInfo.episodeTitle",
 					"width": 12,
-					"placeholder": "Episode Title",
+					"placeholder": "Episode Title*",
 					"subtext": "This will be auto formatted with \"Podcast Name\": \"Episode Title\""
 				},
 				{
@@ -907,7 +907,7 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Title"
+					"placeholder": "Title*"
 				},
 				{
 					"id": "extraInfo.artist",
@@ -947,13 +947,13 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Series Name",
+					"placeholder": "Series Name*",
 					"subtext": "This will be auto formatted with \"Series Name\": \"Episode Title\""
 				},
 				{
 					"id": "extraInfo.episodeTitle",
 					"width": 12,
-					"placeholder": "Episode Title",
+					"placeholder": "Episode Title*",
 					"subtext": "This will be auto formatted with \"Series Name\": \"Episode Title\""
 				},
 				{
@@ -1000,7 +1000,7 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Movie Title"
+					"placeholder": "Movie Title*"
 				},
 				{
 					"id": "extraInfo.artist",
@@ -1051,7 +1051,7 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Title"
+					"placeholder": "Title*"
 				},
 				{
 					"id": "extraInfo.artist",
@@ -1095,7 +1095,7 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Title"
+					"placeholder": "Title*"
 				},
 				{
 					"id": "extraInfo.artist",
@@ -1136,7 +1136,7 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "PDF Title"
+					"placeholder": "PDF Title*"
 				},
 				{
 					"id": "extraInfo.artist",
@@ -1177,7 +1177,7 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Book Title"
+					"placeholder": "Book Title*"
 				},
 				{
 					"id": "extraInfo.artist",
@@ -1222,7 +1222,7 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Title"
+					"placeholder": "Title*"
 				},
 				{
 					"id": "extraInfo.artist",
@@ -1262,7 +1262,7 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Title"
+					"placeholder": "Title*"
 				},
 				{
 					"id": "extraInfo.artist",
@@ -1305,7 +1305,7 @@ var PhoenixUI = (function(){
 			"forms": [{
 					"id": "title",
 					"width": 12,
-					"placeholder": "Title"
+					"placeholder": "Title*"
 				},
 				{
 					"id": "extraInfo.artist",
