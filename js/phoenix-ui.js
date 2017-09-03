@@ -2630,7 +2630,15 @@ var PhoenixUI = (function(){
 			var usdDisplay = "";
 
 			if (usd < 0.01){
-				usdDisplay = "~" + parseFloat((usd * 100).toFixed(2)) + "¢"; 
+				var val = usd.toFixed(3);
+				if (parseFloat(val) === 0){
+					val = 0.001;
+				}
+				usdDisplay = "~$" + val; 
+			} else if (usd < 0.10){
+				var val = usd.toFixed(3);
+
+				usdDisplay = "~$" + parseFloat(val); 
 			} else {
 				usdDisplay = '~$' + usd.toFixed(2);
 			}
