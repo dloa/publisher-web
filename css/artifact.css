@@ -13,6 +13,9 @@
 
  .bootstrap-tagsinput > input {
  	font-family:monospace;
+ 	height: 25px;
+ 	margin-top:-5px;
+ 	margin-bottom:5px;
  }
 
  .bootstrap-tagsinput .tag {
