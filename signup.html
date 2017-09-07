@@ -61,6 +61,17 @@
 				background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
 				background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
 			}
+
+			.warning-feedback {
+				color: #ffc107 !important;
+			}
+
+			.has-warning {
+				border-color: #ffc107;
+			}
+			.has-warning:focus {
+				border-color: #ffc107;
+			}
 		</style>
 	</head>
 	<body class="bg-light" style="height: 55vh;">
@@ -85,8 +96,18 @@
 					</div>
 					<div class="row">
 						<div class="col-xs-12 col-sm-6 col-md-6">
-							<div class="form-group">
-								<input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password*" tabindex="3" oninput="checkPassword()">
+							<div class="form-group has-warning">
+								<input type="password" name="password" id="password" class="form-control input-lg has-warning" placeholder="Password*" tabindex="3" oninput="checkPassword()">
+								<div class="warning-feedback" id="passwordValidation">
+									We suggest your password contain a minimum of:
+									<ul>
+										<li id="pwval-eight"><span class="icon icon-cross"></span> 8 Characters</li>
+										<li id="pwval-upper"><span class="icon icon-cross"></span> 1 Uppercase Letter</li>
+										<li id="pwval-lower"><span class="icon icon-cross"></span> 1 Lowercase Letter</li>
+										<li id="pwval-number"><span class="icon icon-cross"></span> 1 Number</li>
+										<li id="pwval-sc"><span class="icon icon-cross"></span> 1 Special Character</li>
+									</ul>
+								</div>
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-6 col-md-6">
@@ -242,15 +263,96 @@
 				var password = $('#password').val();
 				var password_confirmation = $('#password_confirmation').val();
 
-				if (password === ""){
-					$('#password').removeClass('is-valid');
-					$('#password').addClass('is-invalid');
+				var uppercase = false;
+				var lowercase = false;
+				var number = false;
+				var specialCharacter = false;
+				var atLeastEight = false;
 
-					return false;
-				} else {
-					$('#password').removeClass('is-invalid');
-					$('#password').addClass('is-valid');
+				function hasDigit(str) {
+					return (/^(?=.*\d)/.test(str));
 				}
+
+				function hasLowerCase(str) {
+					return (/^(?=.*[a-z])/.test(str));
+				}
+
+				function hasUpperCase(str) {
+					return (/^(?=.*[A-Z])/.test(str));
+				}
+
+				function hasSpecialCharacter(str) {
+					return (/[^A-Za-z0-9]/.test(str));
+				}
+
+				function isAtLeastEight(str){
+					return str.length >= 8;
+				}
+
+				var warningColor = "#ffc107";
+				var successColor = "#28a745";
+
+				if (hasDigit(password)){
+					number = true;
+					document.getElementById('pwval-number').innerHTML = '<span class="icon icon-check"></span> 1 Number';
+					document.getElementById('pwval-number').style.color = successColor;
+				} else {
+					document.getElementById('pwval-number').innerHTML = '<span class="icon icon-cross"></span> 1 Number';
+					document.getElementById('pwval-number').style.color = warningColor;
+				}
+
+				if (hasLowerCase(password)){
+					lowercase = true;
+					document.getElementById('pwval-lower').innerHTML = '<span class="icon icon-check"></span> 1 Lowercase Letter';
+					document.getElementById('pwval-lower').style.color = successColor;
+				} else {
+					document.getElementById('pwval-lower').innerHTML = '<span class="icon icon-cross"></span> 1 Lowercase Letter';
+					document.getElementById('pwval-lower').style.color = warningColor;
+				}
+
+				if (hasUpperCase(password)){
+					uppercase = true;
+					document.getElementById('pwval-upper').innerHTML = '<span class="icon icon-check"></span> 1 Uppercase Letter';
+					document.getElementById('pwval-upper').style.color = successColor;
+				} else {
+					document.getElementById('pwval-upper').innerHTML = '<span class="icon icon-cross"></span> 1 Uppercase Letter';
+					document.getElementById('pwval-upper').style.color = warningColor;
+				}
+
+				if (hasSpecialCharacter(password)){
+					specialCharacter = true;
+					document.getElementById('pwval-sc').innerHTML = '<span class="icon icon-check"></span> 1 Special Character';
+					document.getElementById('pwval-sc').style.color = successColor;
+				} else {
+					document.getElementById('pwval-sc').innerHTML = '<span class="icon icon-cross"></span> 1 Special Character';
+					document.getElementById('pwval-sc').style.color = warningColor;
+				}
+
+				if (isAtLeastEight(password)){
+					atLeastEight = true;
+					document.getElementById('pwval-eight').innerHTML = '<span class="icon icon-check"></span> 8 Characters';
+					document.getElementById('pwval-eight').style.color = successColor;
+				} else {
+					document.getElementById('pwval-eight').innerHTML = '<span class="icon icon-cross"></span> 8 Characters';
+					document.getElementById('pwval-eight').style.color = warningColor;
+				}
+
+				if (!number || !lowercase || !uppercase || !specialCharacter || !atLeastEight){
+					$('#passwordValidation').show();
+
+					$('#password').addClass('has-warning');
+					$('#password').removeClass('is-valid');
+					$('#password').removeClass('is-invalid');
+				} else {
+					$('#passwordValidation').hide();
+
+					$('#password').addClass('is-valid');
+					$('#password').removeClass('has-warning');
+					$('#password').removeClass('is-invalid');
+				}
+				
+				if (password === "")
+					return false;
 
 				if (password_confirmation === ""){
 					$('#password_confirmation').removeClass('is-valid');
@@ -260,6 +362,7 @@
 				}
 
 				if (password === password_confirmation){
+					$('#password').removeClass('has-warning');
 					$('#password').removeClass('is-invalid');
 					$('#password').addClass('is-valid');
 
