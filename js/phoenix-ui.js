@@ -15,6 +15,7 @@ var posterFileSelectElement = document.getElementById('posterFile');
 var typeCirclesElement = document.getElementById('typeCircles');
 var subtypePillsElement = document.getElementById('subtypePills');
 var posterElement = document.getElementById('poster');
+var mediaTableElement = document.getElementById('mediaTable');
 var mediaFilesTableElement = document.getElementById('mediaFilesTable');
 var posterFileElement = document.getElementById('posterFile');
 var publishFeeElement = document.getElementById('publishFee');
@@ -1478,10 +1479,16 @@ var PhoenixUI = (function(){
 	};
 
 	PhoenixUX.resetPublisher = function(){
+		PhoenixUX.mediaFiles = [];
+		
 		PhoenixUX.loadTypes();
 
-		mediaFilesTableElement.innerHTML = "";
+		mediaTableElement.innerHTML = "";
 		pricingTable.innerHTML = "";
+
+		pricingElement.style.display = 'none';
+		mediaFilesTableElement.style.display = 'none';
+		mediaDrop.style.height="250px";
 	}
 
 	PhoenixUX.loadIntoMeta = function(oip041){
