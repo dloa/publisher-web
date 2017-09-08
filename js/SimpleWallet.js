@@ -502,7 +502,7 @@ var Wallet = (function () {
 					   // estimatedFee = estimatedFee * 3;
 					}
 
-					if ((amount + estimatedFee) > (totalUnspent) && (amount + estimatedFee) > (_this.balances[fromAddress])) {
+					if ((amount + estimatedFee) > totalUnspent) {
 						var event = new CustomEvent('wallet', {'detail': "Can't fit fee of " + estimatedFee / Math.pow(10, 8) + " - lower your sending amount"});
 			
 						window.dispatchEvent(event);
