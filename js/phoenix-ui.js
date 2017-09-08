@@ -1480,7 +1480,7 @@ var PhoenixUI = (function(){
 
 	PhoenixUX.resetPublisher = function(){
 		PhoenixUX.mediaFiles = [];
-		
+
 		PhoenixUX.loadTypes();
 
 		mediaTableElement.innerHTML = "";
@@ -1540,6 +1540,36 @@ var PhoenixUI = (function(){
 	PhoenixUX.changeType = function(type){
 		PhoenixUX.type = type;
 
+		var fillState = {};
+
+		for (var i = 0; i < PhoenixUX.types.length; i++) {
+			if (PhoenixUX.types[i].type == PhoenixUX.type){
+				for (var j = 0; j < PhoenixUX.types[i].subtypes.length; j++) {
+					if (PhoenixUX.types[i].subtypes[j].subtype == PhoenixUX.subtype){
+						var forms = PhoenixUX.types[i].subtypes[j].forms;
+
+						for (var k = 0; k < forms.length; k++) {
+							var location = forms[k].id;
+
+							var formValue = "";
+
+							if (document.getElementById(location))
+								formValue = document.getElementById(location).value;
+							
+
+							if (formValue && formValue != ""){
+								if (location == 'extraInfo.tags'){
+									fillState[location] = formValue.split(',');
+								} else {
+									fillState[location] = formValue;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
 		for (var i = 0; i < typeCirclesElement.children.length; i++) {
 			typeCirclesElement.children[i].children[0].classList.remove('type-circle-active');
 
@@ -1560,7 +1590,12 @@ var PhoenixUI = (function(){
 			}
 		}
 
-		
+		for (var id in fillState){
+			console.log(id);
+			if (id != "extraInfo.genre"){
+				document.getElementById(id).value = fillState[id];
+			}
+		}
 	}
 
 	PhoenixUX.changeSubtype = function(str){
@@ -1568,6 +1603,35 @@ var PhoenixUI = (function(){
 		var subtype = str.split(',')[1];
 
 		PhoenixUX.subtype = subtype;
+
+		var fillState = {};
+
+		for (var i = 0; i < PhoenixUX.types.length; i++) {
+			if (PhoenixUX.types[i].type == PhoenixUX.type){
+				for (var j = 0; j < PhoenixUX.types[i].subtypes.length; j++) {
+					if (PhoenixUX.types[i].subtypes[j].subtype == PhoenixUX.subtype){
+						var forms = PhoenixUX.types[i].subtypes[j].forms;
+
+						for (var k = 0; k < forms.length; k++) {
+							var location = forms[k].id;
+
+							var formValue = "";
+
+							if (document.getElementById(location))
+								formValue = document.getElementById(location).value;
+
+							if (formValue && formValue != ""){
+								if (location == 'extraInfo.tags'){
+									fillState[location] = formValue.split(',');
+								} else {
+									fillState[location] = formValue;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 
 		for (var i = 0; i < subtypePillsElement.children.length; i++) {
 			subtypePillsElement.children[i].classList.remove('active');
@@ -1588,6 +1652,13 @@ var PhoenixUI = (function(){
 		}
 
 		PhoenixUI.updateAllSubtypeSelects();
+
+		for (var id in fillState){
+			console.log(id);
+			if (id != "extraInfo.genre"){
+				document.getElementById(id).value = fillState[id];
+			}
+		}
 	}
 
 	PhoenixUX.updateMetadata = function(type, newType){
@@ -2144,7 +2215,8 @@ var PhoenixUI = (function(){
 				PhoenixUX.appendFileToMediaTable(files[i],iconURL, coverArt);
 
 				PhoenixUX.changeMediaSelect(files[i].id, type, subtypefor);
-				PhoenixUX.trySetTitleAndType(file.name, type)
+
+				PhoenixUX.trySetTitleAndType(file.name, type);
 
 				if (subtypefor != "cover")
 					PhoenixUX.appendFileToPricingTable(files[i]);
@@ -2309,7 +2381,9 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.trySetTitleAndType = function(title, type){
-		PhoenixUX.changeType(type);
+		if (PhoenixUX.mediaFiles.length === 0){
+			PhoenixUX.changeType(type);
+		}
 
 		try {
 			var parts = title.split(".");
@@ -2318,7 +2392,8 @@ var PhoenixUI = (function(){
 				title = title.replace("." + parts[parts.length -1], '');
 			} 
 
-			document.getElementById('title').value = title;
+			if (document.getElementById('title').value === "")
+				document.getElementById('title').value = title;
 		} catch (e){}
 	}
 
