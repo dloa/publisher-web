@@ -367,11 +367,17 @@ var Wallet = (function () {
 			// if (a.confirmations < b.confirmations) {
 			//	 return 1;
 			// }
-			if (a.amount > b.amount) {
-				return 1;
+			if (a.confirmations && b.confirmations && a.amount > b.amount){
+			  return -1;
 			}
-			if (a.amount < b.amount) {
+			if (a.confirmations && b.confirmations && a.amount < b.amount){
+			  return 1;
+			}
+			if (a.confirmations > b.confirmations) {
 				return -1;
+			}
+			if (a.confirmations < b.confirmations) {
+				return 1;
 			}
 			return 0;
 		});
