@@ -490,7 +490,7 @@ var Wallet = (function () {
 					// console.log(tx);
 					var estimatedFee = _this.coin_network.estimateFee(tx);
 
-					if (parseInt(pubFee) > estimatedFee)
+					if (parseInt(pubFee) > estimatedFee && (amount + parseInt(pubFee)) <= totalUnspent)
 						estimatedFee = parseInt(pubFee);
 
 					// console.log(pubFee);
