@@ -2144,6 +2144,7 @@ var PhoenixUI = (function(){
 				PhoenixUX.appendFileToMediaTable(files[i],iconURL, coverArt);
 
 				PhoenixUX.changeMediaSelect(files[i].id, type, subtypefor);
+				PhoenixUX.trySetTitleAndType(file.name, type)
 
 				if (subtypefor != "cover")
 					PhoenixUX.appendFileToPricingTable(files[i]);
@@ -2199,6 +2200,8 @@ var PhoenixUI = (function(){
 
 			PhoenixUX.appendFileToMediaTable(file, iconURL, coverArt);
 			PhoenixUX.changeMediaSelect(file.id, type, subtypefor);
+
+			PhoenixUX.trySetTitleAndType(file.name, type)
 
 			if (subtypefor != "cover")
 				PhoenixUX.appendFileToPricingTable(file);
@@ -2303,6 +2306,20 @@ var PhoenixUI = (function(){
 		} catch (e) {
 
 		}
+	}
+
+	PhoenixUX.trySetTitleAndType = function(title, type){
+		PhoenixUX.changeType(type);
+
+		try {
+			var parts = title.split(".");
+
+			if (parts.length > 1){
+				title = title.replace("." + parts[parts.length -1], '');
+			} 
+
+			document.getElementById('title').value = title;
+		} catch (e){}
 	}
 
 	PhoenixUX.appendFileToMediaTable = function(file, iconURL, coverart, continueUpload) {
