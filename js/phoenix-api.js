@@ -646,6 +646,9 @@ var Phoenix = (function() {
 				// 	PhoenixAPI.currentArtifactPublish = undefined;
 				// })
 			}
+		} else if (PhoenixAPI.publishQueue.length === 0 && PhoenixAPI.publishState === "Ready" && typeof PhoenixAPI.currentArtifactPublish === "object" && PhoenixAPI.currentArtifactPublish.pubFee){
+			PhoenixEvents.trigger("onPublishStart", "Starting publish attempt");
+			PhoenixAPI.publishState = "Publishing";
 		}
 
 		if (PhoenixAPI.publishState === "Publishing"){
