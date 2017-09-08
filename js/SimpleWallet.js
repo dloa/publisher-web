@@ -487,20 +487,11 @@ var Wallet = (function () {
 						tx.addOutput(toAddress, amount);
 					}
 					
-					// console.log(tx);
 					var estimatedFee = _this.coin_network.estimateFee(tx);
 
 					if (parseInt(pubFee) > estimatedFee && (amount + parseInt(pubFee)) <= totalUnspent)
 						estimatedFee = parseInt(pubFee);
 
-					// console.log(pubFee);
-					// console.log(estimatedFee);
-
-					
-					if (estimatedFee > 0) {
-						// Temporary fix for "stuck" transactions
-					   // estimatedFee = estimatedFee * 3;
-					}
 
 					if ((amount + estimatedFee) > totalUnspent) {
 						var event = new CustomEvent('wallet', {'detail': "Can't fit fee of " + estimatedFee / Math.pow(10, 8) + " - lower your sending amount"});
