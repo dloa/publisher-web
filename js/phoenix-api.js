@@ -623,7 +623,10 @@ var Phoenix = (function() {
 	}
 
 	PhoenixAPI.processPublishQueue = function(){
-		if (PhoenixAPI.publishQueue.length > 0){
+		if (PhoenixAPI.publishQueue.length === 0 && PhoenixAPI.publishState === "Ready" && typeof PhoenixAPI.currentArtifactPublish === "object" && PhoenixAPI.currentArtifactPublish.pubFee){
+			PhoenixEvents.trigger("onPublishStart", "Starting publish attempt");
+			PhoenixAPI.publishState = "Publishing";
+		} else if (PhoenixAPI.publishQueue.length > 0){
 			if (PhoenixAPI.publishState === "Ready"){
 				PhoenixAPI.publishState = "Publishing";
 
@@ -646,9 +649,6 @@ var Phoenix = (function() {
 				// 	PhoenixAPI.currentArtifactPublish = undefined;
 				// })
 			}
-		} else if (PhoenixAPI.publishQueue.length === 0 && PhoenixAPI.publishState === "Ready" && typeof PhoenixAPI.currentArtifactPublish === "object" && PhoenixAPI.currentArtifactPublish.pubFee){
-			PhoenixEvents.trigger("onPublishStart", "Starting publish attempt");
-			PhoenixAPI.publishState = "Publishing";
 		}
 
 		if (PhoenixAPI.publishState === "Publishing"){
