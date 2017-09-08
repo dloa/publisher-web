@@ -95,18 +95,21 @@ PhoenixEvents.on("onLogin", function(msg){ console.log("Logging in"); })
 PhoenixEvents.on("onLoginFail", function(msg){ 
 	document.location.href = "login.html"
 })
-PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success");PhoenixUI.updatePubFee(); })
+PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success");PhoenixUI.updateBalanceDisplay();PhoenixUI.updatePubFee(); })
 PhoenixEvents.on("onPublishStart", function(msg){ 
 	PhoenixUI.drawArtifacts();
+	PhoenixUI.updateBalanceDisplay();
 	PhoenixUI.notify("Publishing Artifact", 'warning');
 	console.log(msg);
 })
 PhoenixEvents.on("onPublishTXSuccess", function(msg){ 
 	PhoenixUI.drawArtifacts();
+	PhoenixUI.updateBalanceDisplay();
 	console.log(msg);
 })
 PhoenixEvents.on("onPublishEnd", function(msg){ 
 	PhoenixUI.drawArtifacts();
+	PhoenixUI.updateBalanceDisplay();
 	//PhoenixUI.drawProcessingArtifacts();
 	PhoenixUI.notify("Artifact Publish Successful!", 'success'); 
 	console.log(msg); 
@@ -207,17 +210,7 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 	doneLoading();
 })
 PhoenixEvents.on("onWalletLoad", function(wallet){ 
-	var totalBalance = wallet.getTotalBalance() || 0;
-	try {
-		walletBalanceElement.value = totalBalance;
-		if (totalBalance < 10000) {
-			walletBalanceElement.innerHTML = totalBalance.toFixed(5);
-		} else {
-			walletBalanceElement.innerHTML = totalBalance.toFixed(3);
-		}
-	} catch (e) { 
-		// Oh well, give up setting balance.
-	}
+	PhoenixUI.updateBalanceDisplay();
 
 	walletIdentifierElement.innerHTML = wallet.identifier;
 
@@ -225,10 +218,6 @@ PhoenixEvents.on("onWalletLoad", function(wallet){
 		marketData = data; 
 		perBTC = marketData.USD/marketData.weighted;
 		var FLOUSD = marketData.USD;
-
-
-		var totalWalletBalanceInUSD = (parseFloat(walletBalanceElement.value)*parseFloat(FLOUSD)).toFixed(2);
-		walletBalanceUSDElement.innerHTML = '$' + totalWalletBalanceInUSD;
 	
 		// Wipe the div
 		$('#walletAccordian').html("");
@@ -3566,6 +3555,51 @@ var PhoenixUI = (function(){
 					</td>\
 				</tr>';
 		}
+	}
+
+	PhoenixUX.updateBalanceDisplay = function(){
+		var wallet = Phoenix.getWallet();
+
+		var totalBalance = wallet.getTotalBalance() || 0;
+
+		var knownBal = 0;
+
+		for (var i in wallet.known_unspent){
+			var spent = false;
+			for (var j in wallet.known_spent){
+				if (wallet.known_unspent[i].txid === wallet.known_spent[j].txid){
+					spent = true;
+				}
+			}
+			if (!spent){
+				knownBal += parseFloat(wallet.known_unspent[i].amount);
+			}
+		}
+
+		if (knownBal > 0){
+			totalBalance = knownBal;
+		}
+		
+		try {
+			walletBalanceElement.value = totalBalance;
+			if (totalBalance < 10000) {
+				walletBalanceElement.innerHTML = totalBalance.toFixed(5);
+			} else {
+				walletBalanceElement.innerHTML = totalBalance.toFixed(3);
+			}
+		} catch (e) { 
+			// Oh well, give up setting balance.
+		}
+
+		Phoenix.getMarketData(function(data){ 
+			marketData = data; 
+			perBTC = marketData.USD/marketData.weighted;
+			var FLOUSD = marketData.USD;
+
+
+			var totalWalletBalanceInUSD = (parseFloat(walletBalanceElement.value)*parseFloat(FLOUSD)).toFixed(2);
+			walletBalanceUSDElement.innerHTML = '$' + totalWalletBalanceInUSD;
+		})
 	}
 
 	return PhoenixUX;
