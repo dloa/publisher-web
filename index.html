@@ -1103,7 +1103,8 @@
 			setInterval(Phoenix.checkUploadStatus, 1 * 1000);
 
 			// Attempt to refresh artifacts if there is a pending publish every 40 seconds.
-			setInterval(Phoenix.updateArtifactList, 40 * 1000);
+			// Change from 40 seconds to 15 seconds to make checking time faster :)
+			setInterval(Phoenix.updateArtifactList, 15 * 1000);
 
 			Phoenix.login();
 			Phoenix.loadWIPArtifacts();
