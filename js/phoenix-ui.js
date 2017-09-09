@@ -25,6 +25,7 @@ var pubBalanceTooLowElement = document.getElementById('pubBalanceTooLow');
 var publishSubmitSectionElement = document.getElementById('publishSubmitSection');
 var paymentAddressesElement = document.getElementById('paymentAddresses');
 var pricingElement = document.getElementById('pricing');
+var pricingTableBodyElement = document.getElementById('pricingTableBody');
 var subGenreSelectorElement = document.getElementById('subGenreSelector');
 var discountPercentageElement = document.getElementById('discountPercentage');
 var colIdSelectorElement = document.getElementById('colIdSelector');
@@ -1501,7 +1502,7 @@ var PhoenixUI = (function(){
 		PhoenixUX.loadTypes();
 
 		mediaTableElement.innerHTML = "";
-		pricingTable.innerHTML = "";
+		pricingTableBodyElement.innerHTML = "";
 
 		pricingElement.style.display = 'none';
 		mediaFilesTableElement.style.display = 'none';
