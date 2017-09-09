@@ -1713,6 +1713,7 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.loadWIPIntoPublisher = function(wipArtifact){
+		PhoenixUI.resetPublisher();
 		if (wipArtifact && wipArtifact.artifactJSON)
 			PhoenixUX.loadIntoPublisher(wipArtifact.artifactJSON);
 	}
