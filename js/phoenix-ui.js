@@ -1481,6 +1481,23 @@ var PhoenixUI = (function(){
 	PhoenixUX.resetPublisher = function(){
 		PhoenixUX.mediaFiles = [];
 
+		for (var i = 0; i < PhoenixUX.types.length; i++) {
+			if (PhoenixUX.types[i].type == PhoenixUX.type){
+				for (var j = 0; j < PhoenixUX.types[i].subtypes.length; j++) {
+					if (PhoenixUX.types[i].subtypes[j].subtype == PhoenixUX.subtype){
+						var forms = PhoenixUX.types[i].subtypes[j].forms;
+
+						for (var k = 0; k < forms.length; k++) {
+							var location = forms[k].id;
+
+							if (document.getElementById(location))
+								document.getElementById(location).value = "";
+						}
+					}
+				}
+			}
+		}
+
 		PhoenixUX.loadTypes();
 
 		mediaTableElement.innerHTML = "";
