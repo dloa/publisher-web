@@ -479,11 +479,13 @@ var Wallet = (function () {
 					// console.log('Sending ' + amount + ' satoshis from ' + fromAddress + ' to ' + toAddress + ' unspent amt: ' + totalUnspent);
 					var unspents = data.unspent;
 					_this.putSpent.bind(_this);
+					_this.tmpPutSpent = [];
 					for (var v in unspents) {
 						console.log(unspents[v]);
 						if (unspents[v].confirmations || unspents[v].confirmations >= 0 || unspents[v].confirmations <= -1) {
 							tx.addInput(unspents[v].txid, unspents[v].vout);
-							_this.putSpent(unspents[v]);
+							//_this.putSpent(unspents[v]);
+							_this.tmpPutSpent.push(unspents[v]);
 						}
 					}
 					if (amount === 1 && toAddress === fromAddress){
@@ -560,6 +562,10 @@ var Wallet = (function () {
 						}
 
 						_this.putUnspent.bind(_this);
+						_this.putSpent.bind(_this);
+						for (var v in _this.tmpPutSpent)
+							_this.putSpent(_this.tmpPutSpent[v]);
+
 						// If I'm paying myself it's known_unspent, don't add if amount is one because we removed it up above.
 						if (toAddress == fromAddress && amount != 1) {
 							_this.putUnspent({
