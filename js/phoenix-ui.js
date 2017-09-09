@@ -3539,7 +3539,7 @@ var PhoenixUI = (function(){
 					</div>\
 				</td>\
 				<td>\
-					<button class="btn btn-no-pad btn-outline-info btn-background-white">More Info</button>\
+					<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'' + (state === "uploading" ? "Currently Uploading files, please wait!" : "Adding files to our Peer to Peer network via IPFS. This can sometimes take a little while, please wait. ETA 1 minute") + '\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
 				</td>\
 			</tr>';
 
@@ -3593,7 +3593,7 @@ var PhoenixUI = (function(){
 					</div>\
 				</td>\
 				<td>\
-					<button class="btn btn-no-pad btn-outline-info btn-background-white">More Info</button>\
+					<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'Waiting for your files & info to be picked up by the Open Index! This usually takes 20-40 seconds.\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
 				</td>\
 			</tr>';
 
@@ -3620,7 +3620,7 @@ var PhoenixUI = (function(){
 					</div>\
 				</td>\
 				<td>\
-					<button class="btn btn-no-pad btn-outline-info btn-background-white">More Info</button>\
+					<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'We are currently publishing your artifact information permanantly into the Florincoin Blockchain! Please wait. ETA 5 seconds.\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
 				</td>\
 			</tr>';
 		}		
@@ -3638,7 +3638,7 @@ var PhoenixUI = (function(){
 						</div>\
 					</td>\
 					<td>\
-						<button class="btn btn-no-pad btn-outline-info btn-background-white">More Info</button>\
+						<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'Waiting for the current publish to finish. This usually takes 10-15 seconds.\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
 					</td>\
 				</tr>';
 			}
