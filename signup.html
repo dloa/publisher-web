@@ -155,6 +155,21 @@
 			(function() { var s = document.createElement("script"); s.type = "text/javascript"; s.async = true; s.src = '//api.usersnap.com/load/14a5209d-6d3f-4699-8832-5f709e647ba0.js';
 			var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); })();
 		</script>
+		<!-- Start of Rocket.Chat Livechat Script -->
+		<style type="text/css">
+			.rocketchat-widget{
+				right: 150px !important;
+			}
+		</style>
+		<script type="text/javascript">
+		(function(w, d, s, u) {
+		    w.RocketChat = function(c) { w.RocketChat._.push(c) }; w.RocketChat._ = []; w.RocketChat.url = u;
+		    var h = d.getElementsByTagName(s)[0], j = d.createElement(s);
+		    j.async = true; j.src = "https://chat.alexandria.io/packages/rocketchat_livechat/assets/rocketchat-livechat.min.js?_=201702160944";
+		    h.parentNode.insertBefore(j, h);
+		})(window, document, "script", "https://chat.alexandria.io/livechat");
+		</script>
+		<!-- End of Rocket.Chat Livechat Script -->
 		<!-- Load Dependencies JS -->
 		<script src="./js/SimpleDeps.js"></script>
 		<script src="./js/SimpleWallet.js"></script>
