@@ -306,6 +306,7 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 			LibraryDJS.walletStatus = "Sending";
 			options.wallet.sendCoins(options.address, options.address, amount, multiPartMessage, perPubFee, function (err, data) {
 				if (err){
+					LibraryDJS.walletStatus = "Idle";
 					onTxError(err);
 				} else {
 					LibraryDJS.walletStatus = "Idle";
@@ -340,6 +341,7 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 		LibraryDJS.walletStatus = "Sending";
 		options.wallet.sendCoins(options.address, options.address, amount, multiPartMessage, txObj.pubFee, function (err, data) {
 			if (err){
+				LibraryDJS.walletStatus = "Idle";
 				onTxError(err);
 			} else {
 				LibraryDJS.walletStatus = "Idle";
@@ -365,6 +367,7 @@ LibraryDJS.processTXPublishObj = function(txObj, options, onTxSuccess, onTxError
 		LibraryDJS.walletStatus = "Sending";
 		options.wallet.sendCoins(options.address, options.address, amount, multiPartMessage, txObj.pubFee, function (err, data) {
 			if (err){
+				LibraryDJS.walletStatus = "Idle";
 				onTxError(err);
 			} else {
 				LibraryDJS.walletStatus = "Idle";

@@ -626,36 +626,38 @@ var Phoenix = (function() {
 		if (PhoenixAPI.publishQueue.length === 0 && PhoenixAPI.publishState === "Ready" && typeof PhoenixAPI.currentArtifactPublish === "object" && PhoenixAPI.currentArtifactPublish.pubFee){
 			PhoenixEvents.trigger("onPublishStart", "Starting publish attempt");
 			PhoenixAPI.publishState = "Publishing";
-		} else if (PhoenixAPI.publishQueue.length > 0){
-			if (PhoenixAPI.publishState === "Ready"){
-				PhoenixAPI.publishState = "Publishing";
+		} else if (PhoenixAPI.publishQueue.length > 0 && PhoenixAPI.publishState === "Ready"){
+			PhoenixAPI.publishState = "Publishing";
 
-				// Get the first element and remove it from the array
-				var pubObj = PhoenixAPI.publishQueue.shift();
-				PhoenixAPI.currentArtifactPublish = pubObj;
+			// Get the first element and remove it from the array
+			var pubObj = PhoenixAPI.publishQueue.shift();
+			PhoenixAPI.currentArtifactPublish = pubObj;
 
-				PhoenixAPI.currentArtifactPublish.splitStrings = LibraryDJS.createMultipartStrings(JSON.stringify(pubObj.artifactJSON));
+			PhoenixAPI.currentArtifactPublish.splitStrings = LibraryDJS.createMultipartStrings(JSON.stringify(pubObj.artifactJSON));
 
-				PhoenixAPI.calculatePublishFee(pubObj.artifactJSON, function(usd, pubFee){
-					if (isNaN(pubFee)){
-						pubFee = 0.002;
-					}
-					PhoenixAPI.currentArtifactPublish.pubFee = pubFee;
-					PhoenixEvents.trigger("onPublishStart", "Starting publish attempt");
-				})
+			PhoenixAPI.calculatePublishFee(pubObj.artifactJSON, function(usd, pubFee){
+				if (isNaN(pubFee)){
+					pubFee = 0.002;
+				}
+				PhoenixAPI.currentArtifactPublish.pubFee = pubFee;
+				PhoenixEvents.trigger("onPublishStart", "Starting publish attempt");
+			})
 
-				// PhoenixAPI.publishArtifact(pubObj.artifactJSON, function(data){
-				// 	PhoenixAPI.publishState = "Ready";
-				// 	PhoenixAPI.currentArtifactPublish = undefined;
-				// })
-			}
+			// PhoenixAPI.publishArtifact(pubObj.artifactJSON, function(data){
+			// 	PhoenixAPI.publishState = "Ready";
+			// 	PhoenixAPI.currentArtifactPublish = undefined;
+			// })
 		}
 
 		if (PhoenixAPI.publishState === "Publishing"){
-			LibraryDJS.processTXPublishObj(PhoenixAPI.currentArtifactPublish, {
-				wallet: PhoenixAPI.wallet,
-				address: PhoenixAPI.currentPublisher.address
-			}, PhoenixAPI.publishQueueOnTXSuccess, PhoenixAPI.publishQueueOnTXError);
+			try {
+				LibraryDJS.processTXPublishObj(PhoenixAPI.currentArtifactPublish, {
+					wallet: PhoenixAPI.wallet,
+					address: PhoenixAPI.currentPublisher.address
+				}, PhoenixAPI.publishQueueOnTXSuccess, PhoenixAPI.publishQueueOnTXError);
+			} catch (e) {
+				LibraryDJS.walletStatus = "Idle";
+			}
 		}
 
 		localStorage.currentArtifactPublish = JSON.stringify(PhoenixAPI.currentArtifactPublish);

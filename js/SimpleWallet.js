@@ -551,8 +551,14 @@ var Wallet = (function () {
 					// console.log("Raw");
 					// console.log(rawHex);
 
-					_this.pushTX(rawHex, estimatedFee, function (data) {
-						console.log(data);
+					_this.pushTX(rawHex, estimatedFee, function (err, data) {
+						if (err){
+							if (typeof callback == typeof Function)
+								callback(err, data);
+
+							return;
+						}
+
 						_this.putUnspent.bind(_this);
 						// If I'm paying myself it's known_unspent, don't add if amount is one because we removed it up above.
 						if (toAddress == fromAddress && amount != 1) {
@@ -612,24 +618,33 @@ var Wallet = (function () {
 		if (pubFee > 10)
 			options.highFee = true;
 
-		$.post(florinsightBaseURL + '/api/tx/send', options, function (data) {
-			//console.log(data);
-			if (!data.txid) {
+		try {
+			$.post(florinsightBaseURL + '/api/tx/send', options, function (data) {
+				//console.log(data);
+				if (!data.txid) {
+					var event = new CustomEvent('wallet', {'detail': 'txpush-post'});
+					
+					window.dispatchEvent(event);
+				}
+				else {
+					callback(undefined, data);
+				}
+				_this.refreshBalances();
+			}, "json").fail(function(data){
+				callback(data, undefined);
+
 				var event = new CustomEvent('wallet', {'detail': 'txpush-post'});
-				
+					
 				window.dispatchEvent(event);
-			}
-			else {
-				callback(data);
-			}
-			_this.refreshBalances();
-		}, "json").fail(function (data) {
-			// console.log(data);
-			//swal("Error", 'There was an error pushing your transaction. May be a temporary problem, please try again later.', "error");
+			});
+		} catch(e){ 
+			callback(e, undefined);
+
 			var event = new CustomEvent('wallet', {'detail': 'txpush-post'});
-			
+				
 			window.dispatchEvent(event);
-		});
+		}
+			
 	};
 	Wallet.prototype.setBalance = function (address, balance) {
 		this.balances[address] = balance;
