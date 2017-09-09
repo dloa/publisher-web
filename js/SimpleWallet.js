@@ -628,9 +628,11 @@ var Wallet = (function () {
 			$.post(florinsightBaseURL + '/api/tx/send', options, function (data) {
 				//console.log(data);
 				if (!data.txid) {
+					Phoenix.wallet.known_unspent = [];
 					var event = new CustomEvent('wallet', {'detail': 'txpush-post'});
 					
 					window.dispatchEvent(event);
+					callback(data, undefined);
 				}
 				else {
 					callback(undefined, data);
