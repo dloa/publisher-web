@@ -239,7 +239,7 @@ var Wallet = (function () {
 
 									if (addr_data['transactions']){
 										for (var k = 0; k < addr_data['transactions'].length; k++) {
-											if (addr_data['transactions'][k] === _this.known_unspent[j].txid){
+											if (_this.known_unspent[j] && addr_data['transactions'][k] === _this.known_unspent[j].txid){
 												_this.putSpent(_this.known_unspent[j]);
 												matchObj = _this.known_unspent[j];
 												match = true;
@@ -249,7 +249,7 @@ var Wallet = (function () {
 
 									if (_this.known_spent){
 										for (var k = 0; k < _this.known_spent.length; k++) {
-											if (_this.known_spent[k].txid === _this.known_unspent[j].txid){  
+											if (_this.known_unspent[j] && _this.known_spent[k].txid === _this.known_unspent[j].txid){  
 												matchObj = _this.known_unspent[j];
 												match = true;
 											}
@@ -629,7 +629,7 @@ var Wallet = (function () {
 
 		try {
 			$.post(florinsightBaseURL + '/api/tx/send', options, function (data) {
-				//console.log(data);
+				console.log(data);
 				if (!data.txid) {
 					Phoenix.wallet.known_unspent = [];
 					var event = new CustomEvent('wallet', {'detail': 'txpush-post'});
