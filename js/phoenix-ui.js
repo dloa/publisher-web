@@ -3281,7 +3281,19 @@ var PhoenixUI = (function(){
 				var value = artCSVRow[col];
 
 				try {
-					var tmpValue =  JSON.parse("["+value.replace(/^\n+|\n+$/g, "").replace(/\n+/g, ",").replace(/'\b/g, "\u2018").replace(/\b'/g, "\u2019").replace(/"\b/g, "\u201c").replace(/\b"/g, "\u201d").replace(/--/g,  "\u2014").replace(/\b\u2018\b/g,  "'")+"]")[0];
+					var tmpValue = value.replace(/\\n/g, "\\n")  
+								               .replace(/\\'/g, "\\'")
+								               .replace(/\\"/g, '\\"')
+								               .replace(/\\&/g, "\\&")
+								               .replace(/\\r/g, "\\r")
+								               .replace(/\\t/g, "\\t")
+								               .replace(/\\b/g, "\\b")
+								               .replace(/\\f/g, "\\f");
+					
+					// remove non-printable and other non-valid JSON chars
+					tmpValue = tmpValue.replace(/[\u0000-\u0019]+/g,""); 
+
+					var tmpValue =  JSON.parse("["+tmpValue+"]")[0];
 					console.log(tmpValue);
 					value = tmpValue;
 				} catch (e) { console.log(e); /* do nothing */ }
@@ -3337,9 +3349,23 @@ var PhoenixUI = (function(){
 
 			if (Array.isArray(fileColVal)){
 				for (var i in fileColVal){
+					// preserve newlines, etc - use valid JSON
+					fileColVal[i] = fileColVal[i].replace(/\\n/g, "\\n")  
+								               .replace(/\\'/g, "\\'")
+								               .replace(/\\"/g, '\\"')
+								               .replace(/\\&/g, "\\&")
+								               .replace(/\\r/g, "\\r")
+								               .replace(/\\t/g, "\\t")
+								               .replace(/\\b/g, "\\b")
+								               .replace(/\\f/g, "\\f");
+					
+					// remove non-printable and other non-valid JSON chars
+					fileColVal[i] = fileColVal[i].replace(/[\u0000-\u0019]+/g,""); 
 					try {
-						fileColVal[i] = JSON.parse("["+fileColVal[i].replace(/^\n+|\n+$/g, "").replace(/\n+/g, ",")+"]")[0];
-					} catch (e) { }
+						var tmpValue =  JSON.parse("["+fileColVal[i]+"]")[0];
+						console.log(tmpValue);
+						fileColVal[i] = tmpValue;
+					} catch (e) { console.log(e); /* do nothing */ }
 
 					if (typeof fileColVal[i] == "string"){
 						fileSearch.push(fileColVal[i]);
