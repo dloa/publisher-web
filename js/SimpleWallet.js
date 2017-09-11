@@ -232,6 +232,7 @@ var Wallet = (function () {
 						var unspentBal = 0;
 
 						if (_this.known_unspent){
+							_this.putSpent.bind(_this);
 							for (var j = 0; j < _this.known_unspent.length; j++) {
 								if (_this.known_unspent[j].address === addr_data['addrStr']){
 									var match = false;
@@ -239,6 +240,7 @@ var Wallet = (function () {
 									if (addr_data['transactions']){
 										for (var k = 0; k < addr_data['transactions'].length; k++) {
 											if (addr_data['transactions'][k] === _this.known_unspent[j].txid){
+												_this.putSpent(_this.known_unspent[j]);
 												matchObj = _this.known_unspent[j];
 												match = true;
 											}
@@ -563,6 +565,7 @@ var Wallet = (function () {
 
 						_this.putUnspent.bind(_this);
 						_this.putSpent.bind(_this);
+
 						for (var v in _this.tmpPutSpent)
 							_this.putSpent(_this.tmpPutSpent[v]);
 
@@ -633,8 +636,7 @@ var Wallet = (function () {
 					
 					window.dispatchEvent(event);
 					callback(data, undefined);
-				}
-				else {
+				} else {
 					callback(undefined, data);
 				}
 				_this.refreshBalances();
