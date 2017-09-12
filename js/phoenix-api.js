@@ -283,12 +283,12 @@ var Phoenix = (function() {
 	PhoenixAPI.logout = function(){
 		localStorage.identifier = '';
 		localStorage.loginWalletEnc = '';
-		window.location.href = 'login.html';
+		window.location.href = 'signin.html';
 	}
 
 	PhoenixAPI.clearAndLogout = function(){
 		localStorage.clear();
-		window.location.href = 'login.html';
+		window.location.href = 'signin.html';
 	}
 
 	PhoenixAPI.loadWIPArtifacts = function(callback){

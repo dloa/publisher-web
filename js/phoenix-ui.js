@@ -95,7 +95,7 @@ var hideAll = function(){
 PhoenixEvents.on("onError", function(msg){ console.log(msg.message) });
 PhoenixEvents.on("onLogin", function(msg){ console.log("Logging in"); })
 PhoenixEvents.on("onLoginFail", function(msg){ 
-	document.location.href = "login.html"
+	document.location.href = "signin.html"
 })
 PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success");PhoenixUI.updateBalanceDisplay();PhoenixUI.updatePubFee(); })
 PhoenixEvents.on("onPublishStart", function(msg){ 
