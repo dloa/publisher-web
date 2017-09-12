@@ -52,6 +52,13 @@ var Wallet = (function () {
 
 	Wallet.prototype.putUnspent = function (spent) {
 		this.known_unspent.push(spent);
+		// if it is in the spent, remove it from there.
+		// clean out known unspent
+		for (var v in this.known_spent) {
+			if (this.known_spent[v] && spent && spent.txid === this.known_spent[v].txid && this.known_spent[v].confirmations <= 0) {
+				delete this.known_spent[v];
+			}
+		}
 		this.storeSpent();
 	};
 
@@ -283,6 +290,7 @@ var Wallet = (function () {
 		this.totBal = 0;
 	};
 	Wallet.prototype.getUnspent = function (address, callback) {
+		var _this = this;
 		$.get(florinsightBaseURL + '/api/addr/' + address + '/utxo', function (data) {
 			// console.log(data);
 			// put into window var
@@ -290,11 +298,19 @@ var Wallet = (function () {
 			// blockr's API is inconsistent and returns a bare object
 			// if there's only one unspent. We fix that and return an array ALWAYS.
 			if (Array.isArray(data)) {
-				callback(data);
+				output = data;
 			}
 			else {
-				callback([data]);
+				output = [data];
 			}
+
+			for (var i = 0; i < output.length; i++) {
+				_this.putUnspent.bind(_this);
+
+				_this.putUnspent(output[i]);
+			}
+
+			callback(output);
 		}, "json");
 	};
 
