@@ -10,6 +10,7 @@
 		<!-- Application styles-->
 		<link rel="stylesheet" href="./css/bootstrap.min.css">
 		<link rel="stylesheet" href="./css/entypo.css">
+		<link rel="stylesheet" href="./css/font-awesome.css">
 		<!-- <link rel="stylesheet" href="css/bootstrap-dashboard.css"> -->
 
 		<link href="./css/bootstrap-tagsinput.css" rel="stylesheet">
@@ -851,18 +852,107 @@
 					<section id="WalletPage" class="container">
 						<div class="content-heading bg-white" style="padding-top: 30px">
 							<div class="row">
-								<div class="col-sm-8">
-									<h2 class="">Wallet</h2>
+								<div class="col-12">
+									<h2 class="text-center">Wallets</h2>
 								</div>
-								<div class="col-sm-4">
-									<!-- <button class="btn btn-info pull-right" style="float: right;" onclick="newAddress();">+ New Address</button> -->
+								<div class="col-12 col-sm-6 col-md-4">
+									<div class="card">
+										<div class="card-body text-center">
+											<h3 class="card-title"><img src="img/btcflat.svg" style="height: 50px" /> Bitcoin</h3>
+											<h6 class="card-subtitle mb-2 text-muted" style="margin-bottom:12px !important">23,014 bits (µBTC)</h6>
+											<h4 class="card-subtitle mb-2 text-muted"><span style="color: #28a745">$98.96</span></h4>
+											<div style="height:10px"></div>
+											<a href="#" class="btn btn-sm btn-outline-secondary" style="padding: 2px 5px;"><span class="icon icon-cog"></span> Manage</a>
+											<a href="#" class="btn btn-sm btn-outline-dark" style="padding: 2px 5px;"><span class="fa fa-qrcode"></span> Show QR</a>
+											<a href="#" class="btn btn-sm btn-outline-primary" style="padding: 2px 5px;"><span class="icon icon-wallet"></span> Send</a>
+											<a href="#" class="btn btn-sm btn-outline-success" style="padding: 2px 5px;"><span class="icon icon-credit"></span>Buy </a>
+										</div>
+										<div></div>
+									</div>
+								</div>
+								<div class="col-12 col-sm-6 col-md-4">
+									<div class="card">
+										<div class="card-body text-center">
+											<h3 class="card-title"><img src="img/FLOflat2.png" style="height: 50px" /> Florincoin</h3>
+											<h6 class="card-subtitle mb-2 text-muted" style="margin-bottom:12px !important">169.9157 FLO</h6>
+											<h4 class="card-subtitle mb-2 text-muted"><span style="color: #28a745">$16.09</span></h4>
+											<div style="height:10px"></div>
+											<a href="#" class="btn btn-sm btn-outline-secondary" style="padding: 2px 5px;"><span class="icon icon-cog"></span> Manage</a>
+											<a href="#" class="btn btn-sm btn-outline-dark" style="padding: 2px 5px;"><span class="fa fa-qrcode"></span> Show QR</a>
+											<a href="#" class="btn btn-sm btn-outline-primary" style="padding: 2px 5px;"><span class="icon icon-wallet"></span> Send</a>
+											<a href="#" class="btn btn-sm btn-outline-success" style="padding: 2px 5px;"><span class="icon icon-credit"></span>Buy </a>
+											<button class="btn btn-sm btn-outline-warning" style="margin-top:10px;"><span class="icon icon-upload-to-cloud"></span> Import</button>
+											<button class="btn btn-sm btn-outline-primary" style="margin-top:10px;"><span class="icon icon-download"></span> Backup</button>
+										</div>
+									</div>
+								</div>
+								<div class="col-12 col-sm-6 col-md-4">
+									<div class="card">
+										<div class="card-body text-center">
+											<h3 class="card-title"><img src="img/ltcflat.svg" style="height: 50px" /> Litecoin</h3>
+											<h6 class="card-subtitle mb-2 text-muted" style="margin-bottom:12px !important">1,291 µLTC</h6>
+											<h4 class="card-subtitle mb-2 text-muted"><span style="color: #28a745">$5.92</span></h4>
+											<div style="height:10px"></div>
+											<a href="#" class="btn btn-sm btn-outline-secondary" style="padding: 2px 5px;"><span class="icon icon-cog"></span> Manage</a>
+											<a href="#" class="btn btn-sm btn-outline-dark" style="padding: 2px 5px;"><span class="fa fa-qrcode"></span> Show QR</a>
+											<a href="#" class="btn btn-sm btn-outline-primary" style="padding: 2px 5px;"><span class="icon icon-wallet"></span> Send</a>
+											<a href="#" class="btn btn-sm btn-outline-success" style="padding: 2px 5px;"><span class="icon icon-credit"></span>Buy </a>
+										</div>
+									</div>
+								</div>
+								<div class="col-12" style="margin-top: 15px;">
+									<div class="card border border-success">
+										<div class="card-body text-center">
+											<h5 class="card-title"><span></span> Withdraw to Bank!</h5>
+											<h6 class="card-subtitle mb-2 text-muted"><span style="color: #28a745">up to $120.97</span></h6>
+											<a href="#" class="btn btn-sm btn-outline-success"><span class="icon icon-flash"></span> Instant Sell ($117.32)</a>
+											<a href="#" class="btn btn-sm btn-outline-secondary"><span class="icon icon-wallet"></span> Deposit to Bank ($120.97)</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-12">
+									<div style="margin: 40px auto;display: table;">
+										<button class="btn btn-outline-dark">Show Recent Transactions <span class="icon icon-chevron-down"></span></button>
+									</div>
+								</div>
+								<div class="col-12" style="margin-top: 50px;display:none">
+									<h4>Recent Transactions</h4>
+									<div class="table-responsive">
+										<table class="table table-bordered table-condensed" id="TXTable" style=" word-wrap: break-word; word-break: break-all; table-layout: fixed;">
+											<thead>
+												<tr>
+													<th>TXID</th>
+													<th style="width: 60%">Message</th>
+													<th>Tools</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td><code>d02aa650d71f9cb0...</code></td>
+													<td>oip-mp(2,2,FAFRmxDW9an5XLBMixU1ZCF9aB6LShZjyP,8b06659213,HzmxqBMTzD3jhWdYQGfb+d/3kD4S+bapo8G2Xeu07tuoXgNBfsWRCwGiCPjSuoiFZ2JbwHHtDVoMmKUX1Fk5bQs=,):zsLLREpk9sErAqRf7MGc5QB8"}]},"timestamp":1505055379,"publisher":"FAFRmxDW9an5XLBMixU1ZCF9aB6LShZjyP"},"signature":"IPwf997oKAJLPIHlihgdKq6QEoqEhLR0VHXGfw84urBLMsA1+2phnIWPhL6iyXzHjZm/tIBW5Fj1mwGo1Tz8qL8="}}</td>
+													<td><a href="" class="btn btn-outline-dark">View on Blockchain</a></td>
+												</tr>
+												<tr>
+													<td><code>7f34242885899199...</code></td>
+													<td>oip-mp(1,2,FAFRmxDW9an5XLBMixU1ZCF9aB6LShZjyP,8b06659213,ICxZyIQmR0VGxCtVGj5UmA3VlihxWPGWqK9JBpnth8d6XdOi3n4lqpVrfIEMHUij98PMQwyTsSwLCJdV3dfcvxs=,):.P.Lovecraft's short stories."},"storage":{"network":"IPFS","files":[{"fname":"Abdul_Alhazred.png","fsize":4114031,"type":"Image"},{"fname":"Abdul_Alhazred.jpg","fsize":292033,"type":"Image","subtype":"cover"}],"location":"QmUQY6YmNWnjwjKD2a8JBeXAhMcqLdm9k4VDHfm34fHhxo"},"payment":{"fiat":"USD","disPer":0.3,"sugTip":[],"addresses":[{"token":"BTC","address":"1Fv5b1hkQC</td>
+													<td><a href="" class="btn btn-outline-dark">View on Blockchain</a></td>
+												</tr>
+												<tr>
+													<td><code>8b06659213edc14d...</code></td>
+													<td>oip-mp(0,2,FAFRmxDW9an5XLBMixU1ZCF9aB6LShZjyP,,IJL97irZHAg8Eiw6Doc9B1A2u8KavjMPgMWY5B9Z3Ox1O93WXh94tx4CBJt272tLUavwhY2Wgi7QJjpfuqBjd4U=):{"oip-041":{"artifact":{"type":"Image-Basic","info":{"extraInfo":{"artist":"Katharsisdrill","genre":"The Arts","tags":["#drawing #lovecraft #krita #blackwhite #creativecommons"]},"title":"Abdul Alhazred","year":2017,"description":"Creative Commons -by - Depicting Abdul Alhazred, the author of the fictitious book The Necronomicon, and a character from the pulp-writer H</td>
+													<td><a href="" class="btn btn-outline-dark">View on Blockchain</a></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>
-						<div class="col-sm-12 bg-white" style="padding-top: 25px">
+								
+						<!--<div class="col-sm-12 bg-white" style="padding-top: 25px">
 							<h4 class="text-center">Identifier: <code id="identifier"></code></h4>
 							
-							<!--<div class="table-responsive">
+							<div class="table-responsive">
 								<table class="table table-bordered table-condensed" id="addressTable">
 									<thead>
 										<tr>
@@ -874,9 +964,9 @@
 										<tr></tr>
 									</tbody>
 								</table>
-							</div>-->
+							</div>
 							<div id="walletAccordian"></div>
-							<!-- <div class="card" id="walletAccordian" role="tablist" aria-multiselectable="true">
+							<div class="card" id="walletAccordian" role="tablist" aria-multiselectable="true">
 								<div class="card-block panel-default">
 									<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 										<div class="card-header" role="tab" id="headingOne">
@@ -968,7 +1058,7 @@
 										</div>
 									</div>
 								</div>
-							</div> -->
+							</div>
 							<h4 class="dev">Recent Transactions</h4>
 							<button class="dev btn btn-info pull-right" onclick="loadTransactions();">Load Transactions</button>
 							<div class="dev table-responsive">
@@ -986,7 +1076,7 @@
 									</tbody>
 								</table>
 							</div>
-						</div>
+						</div> -->
 					</section>
 
 					<section id="tools" class="container">
