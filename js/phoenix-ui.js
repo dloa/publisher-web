@@ -128,6 +128,10 @@ PhoenixEvents.on("onTusUploadError", function(msg){
 PhoenixEvents.on("onIPFSStart", function(msg){ 
 	PhoenixUI.drawArtifacts();
 })
+PhoenixEvents.on("onIPFSStatus", function(ipfsStatus){ 
+	//PhoenixUI.drawArtifacts();
+	console.log(ipfsStatus)
+})
 PhoenixEvents.on("onArtifactDeactivateSuccess", function(msg,txid){ 
 	console.log("Artifact Deactivation Success",msg); 
 	PhoenixUI.drawArtifacts();
@@ -3214,16 +3218,16 @@ var PhoenixUI = (function(){
 		Phoenix.uploadFileToTus(file, function(success){ 
 			var id = success;
 
-			var bulk = PhoenixUX.bulkFiles;
+			//var bulk = PhoenixUX.bulkFiles;
 
 			bulkProgressBarInfoElement.innerHTML = "Upload of \"" + file.name + "\" Complete";
 
-			for (var i = 0; i < bulk.length; i++) {
-				if (bulk[i] == file)
-					PhoenixUX.bulkFiles.splice(i, 1);
-			}
+			// for (var i = 0; i < bulk.length; i++) {
+			// 	if (bulk[i] == file)
+			// 		PhoenixUX.bulkFiles.splice(i, 1);
+			// }
 
-			PhoenixUX.bulkFilesComplete.push({file: file, id: id});
+			// PhoenixUX.bulkFilesComplete.push({file: file, id: id});
 
 			updateProg();
 		}, function(error){ console.log(error) }, function(percent){
@@ -3391,7 +3395,8 @@ var PhoenixUI = (function(){
 				for (var x in Phoenix.bulkTusFiles){
 					// console.log(PhoenixUX.bulkFilesComplete[x])
 					var tmpStr = Phoenix.bulkTusFiles[x].name;
-					if (fileSearch[i] === tmpStr.replace(idColVal + '.', '')){
+
+					if (fileSearch[i] === tmpStr){
 						tusFiles.push(Phoenix.bulkTusFiles[x]);
 					}
 				}
