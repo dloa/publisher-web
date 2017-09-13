@@ -130,7 +130,7 @@ PhoenixEvents.on("onIPFSStart", function(msg){
 })
 PhoenixEvents.on("onIPFSStatus", function(ipfsStatus){ 
 	//PhoenixUI.drawArtifacts();
-	console.log(ipfsStatus)
+	console.log(ipfsStatus.status + " " + ipfsStatus.id)
 })
 PhoenixEvents.on("onArtifactDeactivateSuccess", function(msg,txid){ 
 	console.log("Artifact Deactivation Success",msg); 

@@ -427,11 +427,9 @@ var Phoenix = (function() {
 				} else {
 					if (PhoenixAPI.pendingUploadQueue[i].ipfsStatus && PhoenixAPI.pendingUploadQueue[i].ipfsStatus.id){
 						PhoenixAPI.checkIPFSaddStatus(PhoenixAPI.pendingUploadQueue[i].ipfsStatus.id, function(data){
-							// PhoenixEvents.trigger("onIPFSStatus", data);
-							console.log(PhoenixAPI.pendingUploadQueue.length);
+							PhoenixEvents.trigger("onIPFSStatus", data);
 							for (var item = 0; item < PhoenixAPI.pendingUploadQueue.length; item++){
 								if (PhoenixAPI.pendingUploadQueue[item] && PhoenixAPI.pendingUploadQueue[item].ipfsStatus && PhoenixAPI.pendingUploadQueue[item].ipfsStatus.id && PhoenixAPI.pendingUploadQueue[item].ipfsStatus.id === data.id){
-									console.log(data)
 									Phoenix.pendingUploadQueue[item].ipfsStatus = data;
 
 									if (Phoenix.pendingUploadQueue[item].ipfsStatus.status === "ipfs_file_check_complete"){
