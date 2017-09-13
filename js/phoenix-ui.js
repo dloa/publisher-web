@@ -3525,6 +3525,50 @@ var PhoenixUI = (function(){
 	PhoenixUX.drawArtifacts = function(){
 		artifactsTBodyElement.innerHTML = "";
 
+		var current = Phoenix.currentArtifactPublish;
+		var waiting = Phoenix.publishQueue;
+
+		if (current && current.artifactJSON){
+			var progress = 0;
+
+			if (Phoenix.currentArtifactPublish.txs && Phoenix.currentArtifactPublish.txs.length && Phoenix.currentArtifactPublish.splitStrings && Phoenix.currentArtifactPublish.splitStrings.length)
+				progress = Phoenix.currentArtifactPublish.txs.length / Phoenix.currentArtifactPublish.splitStrings.length;
+
+			var title = "";
+			try { title = current.artifactJSON['oip-041'].artifact.info.title; } catch(e){}
+			artifactsTBodyElement.innerHTML += '<tr class="table-primary">\
+				<th scope="row"><span class="badge badge-primary">Publishing</span></th>\
+				<td><code>' + title + '</code></td>\
+				<td>\
+					<div class="progress">\
+						<div class="progress-bar progress-bar-animated progress-bar-striped bg-primary" role="progressbar" style="width: ' + (progress*100) + '%"></div>\
+					</div>\
+				</td>\
+				<td>\
+					<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'Sending your Artifact to the Florincoin blockchain network. <strong>This should take a few seconds</strong>\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
+				</td>\
+			</tr>';
+		}		
+
+		if (waiting.length > 0) {
+			for (var i = 0; i < waiting.length; i++) {
+				var title = "";
+				try { title = waiting[i].artifactJSON['oip-041'].artifact.info.title; } catch(e){}
+				artifactsTBodyElement.innerHTML += '<tr class="table-secondary">\
+					<th scope="row"><span class="badge badge-secondary">Waiting</span></th>\
+					<td><code>' + title + '</code></td>\
+					<td>\
+						<div class="progress">\
+							<div class="progress-bar" role="progressbar" style="width: 0%"></div>\
+						</div>\
+					</td>\
+					<td>\
+						<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'Waiting for the current publish to finish. This usually takes 10-15 seconds.\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
+					</td>\
+				</tr>';
+			}
+		}
+
 		for (var i = 0; i < Phoenix.pendingUploadQueue.length; i++){
 			var overallPer = 0;
 			var complete = 0;
@@ -3567,12 +3611,14 @@ var PhoenixUI = (function(){
 					</div>\
 				</td>\
 				<td>\
-					<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'' + (state === "uploading" ? "Currently Uploading files, please wait!" : "Adding files to our Peer to Peer network via IPFS. This can sometimes take a little while, please wait. ETA 1 minute") + '\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
+					<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'' + (state === "uploading" ? "Uploading your files to our server" : "Decentralizing your files into the IPFS peer-to-peer network. <strong>This should take a few minutes</strong>") + '\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
 				</td>\
 			</tr>';
 
 			artifactsTBodyElement.innerHTML += str;
 		}
+
+
 
 		PhoenixUX.successfulTXIDs = [];
 		PhoenixUX.processingArtifacts = [];
@@ -3621,55 +3667,11 @@ var PhoenixUI = (function(){
 					</div>\
 				</td>\
 				<td>\
-					<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'Waiting for your files & info to be picked up by the Open Index! This usually takes 20-40 seconds.\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
+					<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'Waiting for your Artifact to be confirmed and published into the Open Index. <strong>This should take less than a minute</strong>\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
 				</td>\
 			</tr>';
 
 			artifactsTBodyElement.innerHTML += markup;
-		}
-
-		var current = Phoenix.currentArtifactPublish;
-		var waiting = Phoenix.publishQueue;
-
-		if (current && current.artifactJSON){
-			var progress = 0;
-
-			if (Phoenix.currentArtifactPublish.txs && Phoenix.currentArtifactPublish.txs.length && Phoenix.currentArtifactPublish.splitStrings && Phoenix.currentArtifactPublish.splitStrings.length)
-				progress = Phoenix.currentArtifactPublish.txs.length / Phoenix.currentArtifactPublish.splitStrings.length;
-
-			var title = "";
-			try { title = current.artifactJSON['oip-041'].artifact.info.title; } catch(e){}
-			artifactsTBodyElement.innerHTML += '<tr class="table-primary">\
-				<th scope="row"><span class="badge badge-primary">Publishing</span></th>\
-				<td><code>' + title + '</code></td>\
-				<td>\
-					<div class="progress">\
-						<div class="progress-bar progress-bar-animated progress-bar-striped bg-primary" role="progressbar" style="width: ' + (progress*100) + '%"></div>\
-					</div>\
-				</td>\
-				<td>\
-					<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'We are currently publishing your artifact information permanantly into the Florincoin Blockchain! Please wait. ETA 5 seconds.\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
-				</td>\
-			</tr>';
-		}		
-
-		if (waiting.length > 0) {
-			for (var i = 0; i < waiting.length; i++) {
-				var title = "";
-				try { title = waiting[i].artifactJSON['oip-041'].artifact.info.title; } catch(e){}
-				artifactsTBodyElement.innerHTML += '<tr class="table-secondary">\
-					<th scope="row"><span class="badge badge-secondary">Waiting</span></th>\
-					<td><code>' + title + '</code></td>\
-					<td>\
-						<div class="progress">\
-							<div class="progress-bar" role="progressbar" style="width: 0%"></div>\
-						</div>\
-					</td>\
-					<td>\
-						<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'Waiting for the current publish to finish. This usually takes 10-15 seconds.\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
-					</td>\
-				</tr>';
-			}
 		}
 
 		for (var i = PhoenixUX.curArtifacts.length - 1; i >= 0; i--) {
