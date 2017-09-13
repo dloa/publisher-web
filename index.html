@@ -1222,7 +1222,7 @@
 			var env = "production";
 
 			// Attempt a new publish every 1 second
-			setInterval(Phoenix.processPublishQueue, 3 * 1000);
+			setInterval(Phoenix.processPublishQueue, 1 * 1000);
 			setInterval(Phoenix.checkUploadStatus, 3 * 1000);
 
 			// Attempt to refresh artifacts if there is a pending publish every 40 seconds.
