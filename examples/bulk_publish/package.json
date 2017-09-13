@@ -1,0 +1,14 @@
+{
+  "name": "dl-yt-playlist-n-csv-it",
+  "version": "1.0.0",
+  "description": "Download a Youtube Playlist and a CSV to import into Alexandria Bulk Publisher :)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Skylar Ostler",
+  "license": "MIT",
+  "dependencies": {
+    "youtube-dl": "^1.11.1"
+  }
+}
