@@ -688,7 +688,38 @@ var Wallet = (function () {
 	Wallet.prototype.getTotalBalance = function () {
 		var total = 0;
 		for (var v in this.balances) {
-			total += parseFloat(this.balances[v].toString());
+			var storedBalance = parseFloat(this.balances[v].toString());
+			var unspentBal = 0;
+
+			if (this.known_unspent){
+				for (var j = 0; j < this.known_unspent.length; j++) {
+					if (this.known_unspent[j].address === v){
+						var match = false;
+
+						if (this.known_spent){
+							for (var k = 0; k < this.known_spent.length; k++) {
+								if (this.known_unspent[j] && this.known_spent[k].txid === this.known_unspent[j].txid){  
+									match = true;
+								}
+							}
+						}
+
+						if (!match){
+							unspentBal += this.known_unspent[j].amount;
+						}
+					}
+				}
+			}
+			
+			var showBalance = 0;
+
+			if (unspentBal != 0){
+				showBalance = unspentBal;
+			} else {
+				showBalance = storedBalance;
+			}
+
+			total += showBalance;
 		}
 		return total;
 	};
