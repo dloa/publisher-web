@@ -9,6 +9,7 @@
   "author": "Skylar Ostler",
   "license": "MIT",
   "dependencies": {
+    "papaparse": "^4.3.6",
     "youtube-dl": "^1.11.1"
   }
 }

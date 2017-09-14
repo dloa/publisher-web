@@ -6,3 +6,4 @@ wallets.js
 .DS_Store
 
 lines.txt
+examples/bulk_publish/node_modules/*
