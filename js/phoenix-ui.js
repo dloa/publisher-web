@@ -97,7 +97,7 @@ PhoenixEvents.on("onLogin", function(msg){ console.log("Logging in"); })
 PhoenixEvents.on("onLoginFail", function(msg){ 
 	document.location.href = "signin.html"
 })
-PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success");PhoenixUI.updateBalanceDisplay();PhoenixUI.updatePubFee(); })
+PhoenixEvents.on("onLoginSuccess", function(msg){ console.log("Login Success");PhoenixUI.updateBalanceDisplay();PhoenixUI.updatePubFee();})
 PhoenixEvents.on("onPublishStart", function(msg){ 
 	PhoenixUI.drawArtifacts();
 	PhoenixUI.updateBalanceDisplay();
@@ -130,7 +130,8 @@ PhoenixEvents.on("onIPFSStart", function(msg){
 })
 PhoenixEvents.on("onIPFSStatus", function(ipfsStatus){ 
 	//PhoenixUI.drawArtifacts();
-	console.log(ipfsStatus.status + " " + ipfsStatus.id)
+	PhoenixUI.drawArtifacts();
+	// console.log(ipfsStatus.status + " " + ipfsStatus.id)
 })
 PhoenixEvents.on("onArtifactDeactivateSuccess", function(msg,txid){ 
 	console.log("Artifact Deactivation Success",msg); 
@@ -171,39 +172,15 @@ PhoenixEvents.on("onPublisherLoadSuccess", function(publishers){
 })
 PhoenixEvents.on("onPublisherLoadFailure", function(msg){ console.log(msg); })
 PhoenixEvents.on("onArtifactsLoad", function(msg){ 
-	console.log("Successfully loaded Artifacts for " + msg.address + ".", msg.results);
+	//console.log("Successfully loaded Artifacts for " + msg.address + ".", msg.results);
 
 	PhoenixUI.curArtifacts = msg.results;
 
 	// If we are on the currently selected one, then load in the artifacts to the Artifact page.
 	if (publisherSelectElement.value == msg.address){
-		// Wipe the artifact table clean
-		// $("#ArtifactsTable > tbody").empty();
 
 		if (!PhoenixUI.successfulTXIDs)
 			PhoenixUI.successfulTXIDs = [];
-
-		// Load in all the artifacts to the Table
-		// for (var i in msg.results){
-		// 	if (msg.results[i]['media-data']) {
-		// 		var markup = "<tr id='" + msg.results[i].txid + "'>\
-		// 						<th scope='row'>" + (1+parseInt(i)) + "</th>\
-		// 						<td><code>" + msg.results[i]['media-data']['alexandria-media'].info.title + "</code></td>\
-		// 						<td>TXID: <a href='https://florincoin.info/tx/" + msg.results[i].txid + "'><code>" + msg.results[i].txid.substring(0,10) + "...</code></a></td>\
-		// 						<td><button onClick='Phoenix.artifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='dev btn btn-outline-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-danger'>Deactivate</button></td>\
-		// 					</tr>";
-		// 		$("#ArtifactsTable > tbody").append(markup);
-		// 	} else if (msg.results[i]['oip-041']){
-		// 		PhoenixUI.successfulTXIDs.push(msg.results[i].txid);
-		// 		var markup = "<tr id='" + msg.results[i].txid + "'>\
-		// 						<th scope='row'>" + (1+parseInt(i)) + "</th>\
-		// 						<td><code>" + msg.results[i]['oip-041'].artifact.info.title + "</code></td>\
-		// 						<td>TXID: <a href='https://florincoin.info/tx/" + msg.results[i].txid + "'><code>" + msg.results[i].txid.substring(0,10) + "...</code></td>\
-		// 						<td><button onClick='ArtifactInfo(\"" + msg.results[i].txid + "\");' class='dev btn btn-info'>Info</button> <button onClick='PhoenixUI.EditArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-warning'>Edit</button> <button onClick='Phoenix.deactivateArtifact(\"" + msg.results[i].txid + "\");' class='btn btn-outline-danger'>Deactivate</button></td>\
-		// 					</tr>";
-		// 		$("#ArtifactsTable > tbody").append(markup);
-		// 	}
-		// }
 
 		if (!PhoenixUI.processingArtifacts)
 			PhoenixUI.processingArtifacts = [];
@@ -342,6 +319,8 @@ var PhoenixUI = (function(){
 	PhoenixUX.advancedPricing = {};
 	PhoenixUX.bulkFiles = [];
 	PhoenixUX.bulkFilesComplete = [];
+	PhoenixUX.artifactState = [];
+	PhoenixUX.curArtifacts = [];
 
 	// IMDB genres
 	PhoenixUX.movieGenres = {
@@ -3528,10 +3507,12 @@ var PhoenixUI = (function(){
 	}
 
 	PhoenixUX.drawArtifacts = function(){
-		artifactsTBodyElement.innerHTML = "";
+		//artifactsTBodyElement.innerHTML = "";
 
 		var current = Phoenix.currentArtifactPublish;
 		var waiting = Phoenix.publishQueue;
+
+		var newArtifactState = [];
 
 		if (current && current.artifactJSON){
 			var progress = 0;
@@ -3541,36 +3522,43 @@ var PhoenixUI = (function(){
 
 			var title = "";
 			try { title = current.artifactJSON['oip-041'].artifact.info.title; } catch(e){}
-			artifactsTBodyElement.innerHTML += '<tr class="table-primary">\
-				<th scope="row"><span class="badge badge-primary">Publishing</span></th>\
-				<td><code>' + title + '</code></td>\
-				<td>\
-					<div class="progress">\
-						<div class="progress-bar progress-bar-animated progress-bar-striped bg-primary" role="progressbar" style="width: ' + (progress*100) + '%"></div>\
-					</div>\
-				</td>\
-				<td>\
-					<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'Sending your Artifact to the Florincoin blockchain network. <strong>This should take a few seconds</strong>\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
-				</td>\
-			</tr>';
+
+			console.log(current);
+			newArtifactState.push({id: current.tmpID, state: "publishing", progress: (progress*100), title: title});
+
+			// artifactsTBodyElement.innerHTML += '<tr class="table-primary">\
+			// 	<th scope="row"><span class="badge badge-primary">Publishing</span></th>\
+			// 	<td><code>' + title + '</code></td>\
+			// 	<td>\
+			// 		<div class="progress">\
+			// 			<div class="progress-bar progress-bar-animated progress-bar-striped bg-primary" role="progressbar" style="width: ' + (progress*100) + '%"></div>\
+			// 		</div>\
+			// 	</td>\
+			// 	<td>\
+			// 		<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'Sending your Artifact to the Florincoin blockchain network. <strong>This should take a few seconds</strong>\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
+			// 	</td>\
+			// </tr>';
 		}		
 
 		if (waiting.length > 0) {
 			for (var i = 0; i < waiting.length; i++) {
 				var title = "";
 				try { title = waiting[i].artifactJSON['oip-041'].artifact.info.title; } catch(e){}
-				artifactsTBodyElement.innerHTML += '<tr class="table-secondary">\
-					<th scope="row"><span class="badge badge-secondary">Waiting</span></th>\
-					<td><code>' + title + '</code></td>\
-					<td>\
-						<div class="progress">\
-							<div class="progress-bar" role="progressbar" style="width: 0%"></div>\
-						</div>\
-					</td>\
-					<td>\
-						<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'Waiting for the current publish to finish. This usually takes 10-15 seconds.\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
-					</td>\
-				</tr>';
+
+				newArtifactState.push({id: waiting[i].tmpID, state: "waiting", progress: 0, title: title});
+
+				// artifactsTBodyElement.innerHTML += '<tr class="table-secondary">\
+				// 	<th scope="row"><span class="badge badge-secondary">Waiting</span></th>\
+				// 	<td><code>' + title + '</code></td>\
+				// 	<td>\
+				// 		<div class="progress">\
+				// 			<div class="progress-bar" role="progressbar" style="width: 0%"></div>\
+				// 		</div>\
+				// 	</td>\
+				// 	<td>\
+				// 		<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'Waiting for the current publish to finish. This usually takes 10-15 seconds.\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
+				// 	</td>\
+				// </tr>';
 			}
 		}
 
@@ -3580,9 +3568,14 @@ var PhoenixUI = (function(){
 			var incomplete = 0;
 			var total = 0;
 			var uploadComplete = true;
+			var firstTusId = "";
+
 			for (var j = 0; j < Phoenix.pendingUploadQueue[i].tusFiles.length; j++) {
 				if (!Phoenix.pendingUploadQueue[i].tusFiles[j])
 					continue;
+
+				if (firstTusId === "")
+					firstTusId = Phoenix.pendingUploadQueue[i].tusFiles[j].id;
 
 				total++;
 
@@ -3607,20 +3600,67 @@ var PhoenixUI = (function(){
 			var title = "";
 
 			try { title = Phoenix.pendingUploadQueue[i].artifactJSON.artifact.info.title; } catch(e){}
-			var str = '<tr class="table-' + (state === "uploading" ? "warning" : "info") + '">\
-				<th scope="row"><span class="badge badge-' + (state === "uploading" ? "warning" : "info") + '">' + (state === "uploading" ? "Uploading" : "Adding to IPFS") + '</span</th>\
-				<td><code>' + title + '</code></td>\
-				<td>\
-					<div class="progress">\
-						<div class="progress-bar progress-bar-animated progress-bar-striped bg-' + (state === "adding_to_ipfs" ? 'info' : 'warning') + '" role="progressbar" style="width: ' + overallPer + '%">' + (state === "adding_to_ipfs" ? 'Adding files to IPFS...' : 'Uploaded ' + complete + '/' + total + ' Files (' + parseFloat(overallPer).toFixed(0) + '%)') + '</div>\
-					</div>\
-				</td>\
-				<td>\
-					<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'' + (state === "uploading" ? "Uploading your files to our server" : "Decentralizing your files into the IPFS peer-to-peer network. <strong>This should take a few minutes</strong>") + '\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
-				</td>\
-			</tr>';
 
-			artifactsTBodyElement.innerHTML += str;
+			if (state === "adding_to_ipfs" && Phoenix.pendingUploadQueue[i] && Phoenix.pendingUploadQueue[i].ipfsStatus && Phoenix.pendingUploadQueue[i].ipfsStatus.status){
+				var status = Phoenix.pendingUploadQueue[i].ipfsStatus.status;
+
+				if (status === "not_started"){
+					status = "Getting Started..."
+				} else if (status === "ipfs_directory_create_fail"){
+					status = "Creating Directory..."
+				} else if (status === "ipfs_directory_create_start"){
+					status = "Creating Directory..."
+				} else if (status === "ipfs_directory_create_complete"){
+					status = "Create Directory Complete"
+				} else if (status === "ipfs_file_copy_start"){
+					status = "Start File Copy to IPFS"
+				} else if (status === "ipfs_file_copy_inprogress"){
+					status = "IPFS File Copy In Progress"
+				} else if (status === "ipfs_file_copy_queue"){
+					status = "Waiting in File Copy Queue"
+				} else if (status === "ipfs_file_copy_complete"){
+					status = "IPFS File Copy Complete"
+				} else if (status === "ipfs_file_add_retry"){
+					status = "IPFS File Add Retry"
+				} else if (status === "waiting_on_ipfs_add_queue"){
+					status = "Waiting in IPFS Add Queue"
+				} else if (status === "ipfs_file_add_start"){
+					status = "IPFS File Add Starting"
+				} else if (status === "ipfs_file_add_inprogress"){
+					status = "Adding files to IPFS..."
+				} else if (status === "ipfs_file_add_success"){
+					status = "Checking File Integrity"
+				} else if (status === "ipfs_file_add_error"){
+					status = "Error adding files to IPFS"
+				} else if (status === "ipfs_add_check_error"){
+					status = "IPFS Add Check Error"
+				} else if (status === "ipfs_file_copy_complete"){
+					status = "File Copy Complete"
+				} else if (status === "ipfs_file_check_complete"){
+					status = "Add to IPFS successful"
+				}
+
+				newArtifactState.push({id: Phoenix.pendingUploadQueue[i].tmpID, state: "adding_to_ipfs", status: status, progress: 100, title: title});
+			} else {
+				if (Phoenix.pendingUploadQueue[i].tmpID)
+					newArtifactState.push({id: Phoenix.pendingUploadQueue[i].tmpID, state: "uploading", progress: overallPer, title: title, status: 'Uploaded ' + complete + '/' + total + ' Files (' + parseFloat(overallPer).toFixed(0) + '%)'});
+			}
+			
+
+			// var str = '<tr class="table-' + (state === "uploading" ? "warning" : "info") + '">\
+			// 	<th scope="row"><span class="badge badge-' + (state === "uploading" ? "warning" : "info") + '">' + (state === "uploading" ? "Uploading" : "Adding to IPFS") + '</span</th>\
+			// 	<td><code>' + title + '</code></td>\
+			// 	<td>\
+			// 		<div class="progress">\
+			// 			<div class="progress-bar progress-bar-animated progress-bar-striped bg-' + (state === "adding_to_ipfs" ? 'info' : 'warning') + '" role="progressbar" style="width: ' + overallPer + '%">' + (state === "adding_to_ipfs" ? 'Adding files to IPFS...' : 'Uploaded ' + complete + '/' + total + ' Files (' + parseFloat(overallPer).toFixed(0) + '%)') + '</div>\
+			// 		</div>\
+			// 	</td>\
+			// 	<td>\
+			// 		<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'' + (state === "uploading" ? "Uploading your files to our server" : "Decentralizing your files into the IPFS peer-to-peer network. <strong>This should take a few minutes</strong>") + '\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
+			// 	</td>\
+			// </tr>';
+
+			//artifactsTBodyElement.innerHTML += str;
 		}
 
 
@@ -3663,20 +3703,25 @@ var PhoenixUI = (function(){
 		for (var i in PhoenixUX.processingArtifacts){
 			var title = "";
 			try { title = PhoenixUX.processingArtifacts[i].artifactJSON['oip-041'].artifact.info.title; } catch(e){}
-			var markup = '<tr class="table-secondary">\
-				<th scope="row"><span class="badge badge-secondary">Processing</span></th>\
-				<td><code>' + title + '</code></td>\
-				<td>\
-					<div class="progress">\
-						<div class="progress-bar progress-bar-animated progress-bar-striped bg-secondary" role="progressbar" style="width: 100%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">Waiting for Artifact to be picked up by Front End</div>\
-					</div>\
-				</td>\
-				<td>\
-					<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'Waiting for your Artifact to be confirmed and published into the Open Index. <strong>This should take less than a minute</strong>\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
-				</td>\
-			</tr>';
 
-			artifactsTBodyElement.innerHTML += markup;
+			// console.log(PhoenixUX.processingArtifacts[i]);
+
+			newArtifactState.push({id: PhoenixUX.processingArtifacts[i].tmpID, state: "processing", progress: 100, title: title});
+
+			// var markup = '<tr class="table-secondary">\
+			// 	<th scope="row"><span class="badge badge-secondary">Processing</span></th>\
+			// 	<td><code>' + title + '</code></td>\
+			// 	<td>\
+			// 		<div class="progress">\
+			// 			<div class="progress-bar progress-bar-animated progress-bar-striped bg-secondary" role="progressbar" style="width: 100%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">Waiting for Artifact to be picked up by Front End</div>\
+			// 		</div>\
+			// 	</td>\
+			// 	<td>\
+			// 		<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'Waiting for your Artifact to be confirmed and published into the Open Index. <strong>This should take less than a minute</strong>\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>\
+			// 	</td>\
+			// </tr>';
+
+			// artifactsTBodyElement.innerHTML += markup;
 		}
 
 		for (var i = PhoenixUX.curArtifacts.length - 1; i >= 0; i--) {
@@ -3696,16 +3741,169 @@ var PhoenixUI = (function(){
 				else 
 					continue;
 			} catch(e){}
+
+			// console.log(PhoenixUX.curArtifacts[i]);
+
+			newArtifactState.push({id: PhoenixUX.curArtifacts[i].txid, state: "active", title: title});
 			
-			artifactsTBodyElement.innerHTML += '<tr>\
-					<th scope="row"><span class="badge badge-success">Active</span></th>\
-					<td colspan="2" style="text-align: left;"><code>' + title + '</code></td>\
-					<td>\
-						<a class="btn btn-no-pad btn-outline-info" href="' + Phoenix.browserURL + PhoenixUX.curArtifacts[i].txid.substring(0, 6) + '">View</a>\
-						<button class="btn btn-no-pad btn-outline-danger" onClick="Phoenix.deactivateArtifact(\'' + PhoenixUX.curArtifacts[i].txid + '\');">Deactivate</button>\
-					</td>\
-				</tr>';
+			// artifactsTBodyElement.innerHTML += '<tr>\
+			// 		<th scope="row"><span class="badge badge-success">Active</span></th>\
+			// 		<td colspan="2" style="text-align: left;"><code>' + title + '</code></td>\
+			// 		<td>\
+			// 			<a class="btn btn-no-pad btn-outline-info" href="' + Phoenix.browserURL + PhoenixUX.curArtifacts[i].txid.substring(0, 6) + '">View</a>\
+			// 			<button class="btn btn-no-pad btn-outline-danger" onClick="Phoenix.deactivateArtifact(\'' + PhoenixUX.curArtifacts[i].txid + '\');">Deactivate</button>\
+			// 		</td>\
+			// 	</tr>';
 		}
+
+		if (!PhoenixUX.lastTableUpdateTime){
+			PhoenixUX.lastTableUpdateTime = 0;
+		}
+
+		// Check if it has been one second at least since the last update time
+		if (Date.now() - PhoenixUX.lastTableUpdateTime >= 200){
+			PhoenixUX.lastTableUpdateTime = Date.now();
+			// console.log("here!");
+
+			for (var i = newArtifactState.length - 1; i >= 0; i--) {
+				var progressBar = true;
+				var id = newArtifactState[i].id;
+				var title = newArtifactState[i].title ? newArtifactState[i].title : "";
+				var state = newArtifactState[i].state ? newArtifactState[i].state : "";
+				var status = newArtifactState[i].status ? newArtifactState[i].status : "";
+				var stateLabelText = "";
+				var moreInfoHTML = "";
+				var color = "secondary";
+				var progress = newArtifactState[i].progress ? newArtifactState[i].progress : 0;
+
+				if (state === "uploading"){
+					color = "warning";
+					stateLabelText = "Uploading"
+					moreInfoHTML = "Uploading your files to our Server";
+				} else if (state === "adding_to_ipfs"){
+					color = "info";
+					stateLabelText = "Adding to IPFS"
+					moreInfoHTML = "Decentralizing your files into the IPFS peer-to-peer network. <strong>This should take a few minutes</strong>";
+				} else if (state === "publishing"){
+					color = "primary";
+					stateLabelText = "Publishing"
+					moreInfoHTML = "Sending your Artifact to the Florincoin blockchain network. <strong>This should take a few seconds</strong>";
+				} else if (state === "waiting"){
+					color = "secondary";
+					stateLabelText = "Waiting to Publish"
+					moreInfoHTML = "Waiting for the current publish to finish. This usually takes 10-15 seconds.";
+				} else if (state === "processing"){
+					color = "secondary";
+					stateLabelText = "Processing"
+					moreInfoHTML = "Waiting for your Artifact to be confirmed and published into the Open Index. <strong>This should take less than a minute</strong>";
+				} else if (state === "active"){
+					color = "success"
+					progressBar = false;
+					stateLabelText = "Active"
+				}
+
+				if (document.getElementById(id)){
+					var parentElement = document.getElementById(id);
+					var badgeElement = parentElement.children[0];
+					var titleElement = parentElement.children[1];
+					var progressElement = parentElement.children[2];
+					var btnToolsElement = parentElement.children[3];
+
+					if (!badgeElement.children[0].classList.contains('badge-' + color)){
+						// console.log("Change Color!");
+						badgeElement.children[0].classList.remove('badge-warning');
+						badgeElement.children[0].classList.remove('badge-info');
+						badgeElement.children[0].classList.remove('badge-primary');
+						badgeElement.children[0].classList.remove('badge-secondary');
+						badgeElement.children[0].classList.remove('badge-success');
+
+						badgeElement.children[0].classList.add('badge-' + color);
+					}
+
+					if (badgeElement.children[0].innerHTML != stateLabelText){
+						badgeElement.children[0].innerHTML = stateLabelText;
+					}
+
+					if (progressElement.id === "btn-tools"){
+						if (!progressBar){
+							progressElement.innerHTML = '<a class="btn btn-no-pad btn-outline-info" href="' + Phoenix.browserURL + id.substring(0,6) + '">View</a>\
+							<button class="btn btn-no-pad btn-outline-danger" onClick="Phoenix.deactivateArtifact(\'' + id + '\');">Deactivate</button>'
+							//console.log("Need to add Prog Bar!");
+						}
+					} else {
+						var progBar = progressElement.children[0].children[0];
+
+						if (!progBar.classList.contains('bg-' + color)){
+							progBar.classList.remove('bg-warning');
+							progBar.classList.remove('bg-info');
+							progBar.classList.remove('bg-primary');
+							progBar.classList.remove('bg-secondary');
+							progBar.classList.remove('bg-success');
+
+							progBar.classList.add('bg-' + color);
+						}
+
+						if (progBar.style.width != progress + "%"){
+							progBar.style.width = progress + "%";
+						}
+
+						if (progBar.innerHTML != status){
+							progBar.innerHTML = status;
+						}
+					}
+
+					var builtInnerHTML = '<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'' + moreInfoHTML + '\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>';
+
+					if (btnToolsElement && btnToolsElement.id === "btn-tools" && btnToolsElement.innerHTML != builtInnerHTML){
+						btnToolsElement.innerHTML = builtInnerHTML;
+					}
+				} else {
+					if (stateLabelText != "Active")
+						console.log("adding thingy");
+
+					var builtInnerHTML = "";
+					if (moreInfoHTML != ""){
+						builtInnerHTML = '<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'' + moreInfoHTML + '\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>';
+					} else {
+						builtInnerHTML = '<a class="btn btn-no-pad btn-outline-info" href="' + Phoenix.browserURL + id.substring(0,6) + '">View</a>\
+							<button class="btn btn-no-pad btn-outline-danger" onClick="Phoenix.deactivateArtifact(\'' + id + '\');">Deactivate</button>';
+					}
+
+
+					//Add it to the table if it doesn't exist
+					artifactsTBodyElement.innerHTML = '<tr id="' + id + '">\
+						<th scope="row"><span class="badge badge-' + color + '">' + stateLabelText + '</span></th>\
+						<td ' + (progressBar ? '' : 'colspan="2"') + ' style="text-align: left;"><code>' + title + '</code></td>\
+						' + (progressBar ? '<td>\
+							<div class="progress">\
+								<div class="progress-bar progress-bar-animated progress-bar-striped bg-' + color + '" role="progressbar" style="width: ' + progress + '%">' + status + '</div>\
+							</div>\
+						</td>' : '') + '\
+						<td id="btn-tools">\
+							<a class="btn btn-no-pad btn-outline-info" href="' + Phoenix.browserURL + id.substring(0,6) + '">View</a>\
+							<button class="btn btn-no-pad btn-outline-danger" onClick="Phoenix.deactivateArtifact(\'' + id + '\');">Deactivate</button>\
+						</td>\
+					</tr>' + artifactsTBodyElement.innerHTML;
+				}
+			}
+
+			// console.log("Draw!");
+		}
+
+		artifactsTBodyElement = document.getElementById('artifactsTBody');
+		for (var child = 0; child < artifactsTBodyElement.children.length; child++){
+			var match = false;
+			for (var m in newArtifactState){
+				if (newArtifactState[m].id === artifactsTBodyElement.children[child].id){
+					match = true;
+				}
+			}
+			if (!match){
+				document.getElementById('artifactsTBody').removeChild(document.getElementById('artifactsTBody').children[child]);
+			}
+		}
+
+		console.log(newArtifactState);
 	}
 
 	PhoenixUX.updateBalanceDisplay = function(){

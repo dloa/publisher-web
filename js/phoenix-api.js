@@ -363,6 +363,10 @@ var Phoenix = (function() {
 		for (var i = 0; i < PhoenixAPI.pendingUploadQueue.length; i++) {
 			var wipArtifact = PhoenixAPI.pendingUploadQueue[i];
 
+			if (!PhoenixAPI.pendingUploadQueue[i].tmpID){
+				PhoenixAPI.pendingUploadQueue[i].tmpID = Math.random().toString(36).substring(7);
+			}
+
 			var publishObject = {
 				artifactJSON: wipArtifact.artifactJSON,
 				status: "Uploading"
@@ -409,7 +413,6 @@ var Phoenix = (function() {
 					}
 
 					PhoenixAPI.pendingUploadQueue[i].ipfsAddStart = true;
-					PhoenixAPI.pendingUploadQueue[i].tmpID = Math.random().toString(36).substring(7);
 
 					var startIPFSAdd = function(tmpID){
 						PhoenixAPI.addFilesToIPFS(idsToAdd, function(ipfsStatus){
@@ -442,7 +445,7 @@ var Phoenix = (function() {
 										wipArtifact.artifactJSON = LibraryDJS.signPublishArtifact(Phoenix.getWallet(), wipArtifact.artifactJSON.artifact.storage.location, Phoenix.currentPublisher.address, wipArtifact.artifactJSON);
 
 										//Publish the artifact JSON into the blockchain.
-										Phoenix.addToPublishQueue(wipArtifact.artifactJSON);
+										Phoenix.addWIPToPublishQueue(wipArtifact);
 									}
 								}
 							}
@@ -615,6 +618,17 @@ var Phoenix = (function() {
 			txPushComplete: false,
 			txs: [],
 			artifactJSON: artJSON
+		});
+	}
+
+	PhoenixAPI.addWIPToPublishQueue = function(wipJSON){
+		PhoenixAPI.publishQueue.push({
+			status: "",
+			txPushComplete: false,
+			txs: [],
+			artifactJSON: wipJSON.artifactJSON,
+			id: wipJSON.ipfsStatus.id,
+			tmpID: wipJSON.tmpID
 		});
 	}
 
