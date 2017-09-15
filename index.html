@@ -213,7 +213,7 @@
 				<h1 class="danger">Oops! Looks like there was an error loading the publisher, please try again later!</h1>
 			</div>
 			<div id="main" class="row" style="display: none;">
-				<nav class="col-sm-3 col-md-2 hidden-xs-down bg-light sidebar">
+				<nav class="col-sm-4 col-md-3 col-lg-2 hidden-xs-down bg-light sidebar">
 					<div class="text-center" style="margin-top: 30px">Welcome, <span id="pub-name"></span></div>
 					<div class="text-center" style="margin-bottom: 0px"> <strong>FLO</strong>: <code><span id="walletBalance"></span></code></strong></div>
 					<div class="text-center" style="margin-bottom: 10px"> <strong>USD</strong>: <code style="color: green"><span id="walletBalanceUSD"></span></code></strong></div>
@@ -224,9 +224,9 @@
 						<li class="nav-item"><a href="#" class="nav-link" id="toolsNav" style="color: black" onclick="showToolsPage()"><img style="width: 20px; height: auto; margin-left: 5px; margin-right: 10px;" src="./assets/svg/scissors.svg">Tools</a></li>
 					</ul>
 				</nav>
-				<main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3" style="overflow-y: auto;">
+				<main class="col-sm-8 offset-sm-4 col-md-9 col-lg-10 offset-md-3" style="overflow-y: auto;">
 					<section class="row text-center" id="wizard">
-						<nav class="navbar navbar-light" style="width: 100%; border-bottom: 1px solid #000; margin-top: -16.5px;">
+						<nav class="navbar navbar-light" style="width: 100%; border-bottom: 1px solid #000;">
 							<div class="col-3"><button class="btn btn-outline-info btn-background-white pull-left" onclick="showDraftsPage()"><span class="icon icon-chevron-left"></span> Back</button></div>
 							<div class="col-6">New Artifact: <span id="fillArtTitle"></span></div>
 							<div class="col-3"><button class="btn btn-outline-success btn-background-white pull-right" onclick="PhoenixUI.publish()">Publish <span class="icon icon-chevron-right"></span></button></div>
@@ -235,8 +235,8 @@
 							<div style="margin-top:60px;">
 								<div class="section publish col-lg-12">
 									<div class="publish-section artifact-type">
-										<h5>Select Artifact type</h5> 
-										<div class="row justify-content-center" style="margin-bottom: 20px;" id="typeCircles">
+										<h5 style="margin-bottom: 5px;">Select Artifact type</h5> 
+										<div class="row justify-content-center" style="margin-bottom: 10px;" id="typeCircles">
 											<!-- <div class="col-2"><div class="type-circle song-icon type-circle-active"></div>Audio</div>
 											<div class="col-2"><div class="type-circle video-icon"></div>Video</div>
 											<div class="col-2"><div class="type-circle image-icon"></div>Image</div>
@@ -245,7 +245,7 @@
 											<div class="col-2"><div class="type-circle web-icon"></div>Web</div> -->
 										</div>
 										<div style="display: inline-block; float: left; font-size: 16px; font-weight: 500;padding-right:10px;">Select Subtype: </div>
-										<ul class="nav nav-pills" role="tablist" id="subtypePills">
+										<ul class="nav nav-pills" role="tablist" id="subtypePills" style="margin-bottom:-5px;">
 											<!-- <li class="active" onclick="changeArtifactType('music')"><a href="#music" data-toggle="tab">Basic</a></li>
 											<li onclick="changeArtifactType('song')"><a href="#video" data-toggle="tab">Song</a></li>
 											<li onclick="changeArtifactType('album')"><a href="#video" data-toggle="tab">Album</a></li>
@@ -256,7 +256,7 @@
 											<li onclick="changeArtifactType('html')"><a href="#html" data-toggle="tab">HTML</a></li> -->
 										</ul>
 									</div>
-									<div class="publish-section">
+									<div class="publish-section" style="margin-top: -15px;">
 										<div class="publish-files audio-tracks">
 											<!-- Upload effect is on CSS :hover state, make it for drag & drop only -->
 											<div class="upload-area" id="mediaDrop" style="padding-bottom: 15px; height: 250px;display: flex; justify-content: center; align-items: center;">
