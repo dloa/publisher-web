@@ -27,7 +27,7 @@ var paymentAddressesElement = document.getElementById('paymentAddresses');
 var pricingElement = document.getElementById('pricing');
 var pricingTableBodyElement = document.getElementById('pricingTableBody');
 var subGenreSelectorElement = document.getElementById('subGenreSelector');
-var discountPercentageElement = document.getElementById('discountPercentage');
+var discountPercentageElement = document.getElementById('disPer');
 var colIdSelectorElement = document.getElementById('colIdSelector');
 var colFilesSelectorElement = document.getElementById('colFilesSelector');
 var bulkColDetailsElement = document.getElementById('bulkColDetails');
@@ -2165,6 +2165,13 @@ var PhoenixUI = (function(){
 						}
 					}
 				}
+			}
+		}
+
+		if (PhoenixUX.advancedPricing){
+			for (var item in PhoenixUX.advancedPricing){
+				if (item && item != "disPer" && PhoenixUX.advancedPricing[item])
+					artifactJSON.artifact.payment[item] = PhoenixUX.advancedPricing[item];
 			}
 		}
 			
