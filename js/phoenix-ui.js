@@ -3919,6 +3919,7 @@ var PhoenixUI = (function(){
 						builtInnerHTML = '<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'' + moreInfoHTML + '\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>';
 					} else {
 						builtInnerHTML = '<a class="btn btn-no-pad btn-outline-info" href="' + Phoenix.browserURL + id.substring(0,6) + '">View</a>\
+							<a class="btn btn-no-pad btn-outline-info" href="' + "https://florincoin.info/tx/" + id + '">Show TX</a>\
 							<button class="btn btn-no-pad btn-outline-danger" onClick="Phoenix.deactivateArtifact(\'' + id + '\');">Deactivate</button>';
 					}
 
@@ -3933,8 +3934,7 @@ var PhoenixUI = (function(){
 							</div>\
 						</td>' : '') + '\
 						<td id="btn-tools">\
-							<a class="btn btn-no-pad btn-outline-info" href="' + Phoenix.browserURL + id.substring(0,6) + '">View</a>\
-							<button class="btn btn-no-pad btn-outline-danger" onClick="Phoenix.deactivateArtifact(\'' + id + '\');">Deactivate</button>\
+							' + builtInnerHTML + '\
 						</td>\
 					</tr>' + artifactsTBodyElement.innerHTML;
 				}
