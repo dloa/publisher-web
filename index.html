@@ -206,7 +206,7 @@
 			<button class="btn btn-outline-light" style="right: 20px;" onclick="Phoenix.logout();">Sign Out</button>
 		</nav>
 
-		<div class="container-fluid" style="margin-top: 60px">
+		<div class="container-fluid" style="margin-top: 55px">
 			<div class="loader" id="loader" style=""></div>
 			<div class="errorScreen" id="errorScreen" style="display: none;text-align: center; padding-top: 300px;">
 				
@@ -227,6 +227,12 @@
 
 				<main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3" style="overflow-y: auto;">
 					<section class="row text-center" id="wizard">
+						<nav class="navbar navbar-light" style="width: 100%; border-bottom: 1px solid #000; margin-top: -16.5px;">
+							<div class="col-3"><button class="btn btn-outline-info btn-background-white pull-left" onclick="showDraftsPage()"><span class="icon icon-chevron-left"></span> Back</button></div>
+							<div class="col-6">New Artifact: <span id="fillArtTitle"></span></div>
+							<div class="col-3"><button class="btn btn-outline-success btn-background-white pull-right" onclick="PhoenixUI.publish()">Publish <span class="icon icon-chevron-right"></span></button></div>
+						</nav>
+						<hr />
 						<div class="col-sm-12" style="margin-top: 20px">
 							<h4 class="m0 text-thin">Welcome to Alexandria Publisher</h4><small>Please fill in the fields below</small>
 						</div>
