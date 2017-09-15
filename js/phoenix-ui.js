@@ -1492,7 +1492,7 @@ var PhoenixUI = (function(){
 
 		pricingElement.style.display = 'none';
 		mediaFilesTableElement.style.display = 'none';
-		mediaDrop.style.height="250px";
+		mediaDrop.style.height="150px";
 	}
 
 	PhoenixUX.loadIntoMeta = function(oip041){
@@ -1746,6 +1746,8 @@ var PhoenixUI = (function(){
 							} else {
 								value = oip041.artifact.info[location];
 							}
+
+							value = eval(value);
 
 							if (value) {
 								if (forms[k].id.includes('tags')){
@@ -2048,9 +2050,10 @@ var PhoenixUI = (function(){
 							} else {
 								var formValue = document.getElementById(location).value;
 							}
-							
 
 							if (formValue && formValue != ""){
+								formValue = PhoenixUX.makeJSONSafe(formValue);
+
 								if (location.includes('extraInfo.')){
 									var subLoc = location.replace('extraInfo.', '');
 									
@@ -2070,7 +2073,7 @@ var PhoenixUI = (function(){
 		}
 
 		if (artifactJSON.artifact.info.title && fillArtTitleElement){
-			fillArtTitleElement.innerHTML = artifactJSON.artifact.info.title;
+			fillArtTitleElement.innerHTML = eval(artifactJSON.artifact.info.title);
 		}
 
 		if (artifactJSON.artifact.info.year && typeof artifactJSON.artifact.info.year === "string"){
@@ -2367,9 +2370,9 @@ var PhoenixUI = (function(){
 			if (PhoenixUX.mediaFiles.length === 0){
 				pricingElement.style.display = 'none';
 				mediaFilesTableElement.style.display = 'none';
-				mediaDrop.style.height="250px";
+				mediaDrop.style.height="150px";
 			} else {
-				mediaDrop.style.height="100px";
+				mediaDrop.style.height="75px";
 			}
 		}
 
@@ -2585,6 +2588,32 @@ var PhoenixUI = (function(){
 	PhoenixUX.sanitizeID = function (name){
 		return name.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/\s]/gi, '');
 	}
+
+	PhoenixUX.makeJSONSafe = function quote(string) {
+		 var escapable = /[\\\"\x00-\x1f\x7f-\uffff]/g,
+        meta = {    // table of character substitutions
+            '\b': '\\b',
+            '\t': '\\t',
+            '\n': '\\n',
+            '\f': '\\f',
+            '\r': '\\r',
+            '"' : '\\"',
+            '\\': '\\\\'
+        };
+		// If the string contains no control characters, no quote characters, and no
+		// backslash characters, then we can safely slap some quotes around it.
+		// Otherwise we must also replace the offending characters with safe escape
+		// sequences.
+
+        escapable.lastIndex = 0;
+        return escapable.test(string) ?
+            '"' + string.replace(escapable, function (a) {
+                var c = meta[a];
+                return typeof c === 'string' ? c :
+                    '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+            }) + '"' :
+            '"' + string + '"';
+    }
 
 	PhoenixUX.checkboxToggle = function(elem){
 		//console.log(elem.id);
@@ -3913,6 +3942,18 @@ var PhoenixUI = (function(){
 		console.log(newArtifactState);
 	}
 
+	PhoenixUX.abbreviate_number = function(num, fixed) {
+		if (num === null) { return null; } // terminate early
+		if (num === 0) { return '0'; } // terminate early
+		fixed = (!fixed || fixed < 0) ? 0 : fixed; // number of decimal places to show
+		var b = (num).toPrecision(2).split("e"), // get power
+			k = b.length === 1 ? 0 : Math.floor(Math.min(b[1].slice(1), 14) / 3), // floor at decimals, ceiling at trillions
+			c = k < 1 ? num.toFixed(0 + fixed) : (num / Math.pow(10, k * 3) ).toFixed(1 + fixed), // divide by power
+			d = c < 0 ? c : Math.abs(c), // enforce -0 is 0
+			e = d + ['', 'K', 'M', 'B', 'T'][k]; // append power
+		return e;
+	}
+
 	PhoenixUX.updateBalanceDisplay = function(){
 		var wallet = Phoenix.getWallet();
 
@@ -3939,12 +3980,12 @@ var PhoenixUI = (function(){
 		try {
 			walletBalanceElement.value = totalBalance;
 			floWalletValueElement.value = totalBalance;
-			if (totalBalance < 10000) {
-				walletBalanceElement.innerHTML = totalBalance.toFixed(5);
-				floWalletValueElement.innerHTML = totalBalance.toFixed(5);
+			if (totalBalance > 10000) {
+				walletBalanceElement.innerHTML = totalBalance.toFixed(3) + " FLO";
+				floWalletValueElement.innerHTML = totalBalance.toFixed(3) + " FLO";
 			} else {
-				walletBalanceElement.innerHTML = totalBalance.toFixed(3);
-				floWalletValueElement.innerHTML = totalBalance.toFixed(3);
+				walletBalanceElement.innerHTML = totalBalance.toFixed(5) + " FLO";
+				floWalletValueElement.innerHTML = totalBalance.toFixed(5) + " FLO";
 			}
 		} catch (e) { 
 			// Oh well, give up setting balance.
