@@ -49,6 +49,8 @@ var proccessingArtifactsTitleElement = document.getElementById('proccessingArtif
 var artifactsTBodyElement = document.getElementById('artifactsTBody');
 var thumbTextElement = document.getElementById('thumbText');
 var fillArtTitleElement = document.getElementById('fillArtTitle');
+var floWalletValueElement = document.getElementById('floWalletValue');
+var floWalletUSDElement = document.getElementById('floWalletUSD');
 
 // Basic JSON to manage page
 var showWizardPage = function(){
@@ -3936,10 +3938,13 @@ var PhoenixUI = (function(){
 		
 		try {
 			walletBalanceElement.value = totalBalance;
+			floWalletValueElement.value = totalBalance;
 			if (totalBalance < 10000) {
 				walletBalanceElement.innerHTML = totalBalance.toFixed(5);
+				floWalletValueElement.innerHTML = totalBalance.toFixed(5);
 			} else {
 				walletBalanceElement.innerHTML = totalBalance.toFixed(3);
+				floWalletValueElement.innerHTML = totalBalance.toFixed(3);
 			}
 		} catch (e) { 
 			// Oh well, give up setting balance.
@@ -3953,6 +3958,7 @@ var PhoenixUI = (function(){
 
 			var totalWalletBalanceInUSD = (parseFloat(walletBalanceElement.value)*parseFloat(FLOUSD)).toFixed(2);
 			walletBalanceUSDElement.innerHTML = '$' + totalWalletBalanceInUSD;
+			floWalletUSDElement.innerHTML = '$' + totalWalletBalanceInUSD;
 		})
 	}
 
