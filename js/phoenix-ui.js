@@ -1747,12 +1747,19 @@ var PhoenixUI = (function(){
 								value = oip041.artifact.info[location];
 							}
 
-							value = eval(value);
+							if (value && value != "") {
+								console.log(value);
+								if (typeof value === "string" && value.substr(0,1) === '"' && value.substr(value.length-1,value.length) === '"')
+									value = eval(value);
 
-							if (value) {
+								console.log(value);
+
 								if (forms[k].id.includes('tags')){
 									// ToDo: Load tags
 									for (var z = 0; z < value.length; z++) {
+										if (typeof value[z] === "string" && value[z].substr(0,1) === '"' && value[z].substr(value[z].length-1,value[z].length) === '"')
+											value[z] = eval(value[z]);
+										
 										$("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput('add', value[z]);
 									}
 								} else if (forms[k].id.includes('genre')) {
@@ -2052,18 +2059,23 @@ var PhoenixUI = (function(){
 							}
 
 							if (formValue && formValue != ""){
-								formValue = PhoenixUX.makeJSONSafe(formValue);
+								var safeValue = PhoenixUX.makeJSONSafe(formValue);
+								console.log(formValue);
 
 								if (location.includes('extraInfo.')){
 									var subLoc = location.replace('extraInfo.', '');
 									
-									if (subLoc == 'tags'){
-										artifactJSON.artifact.info.extraInfo[subLoc] = formValue.split(',');
+									if (subLoc === 'tags'){
+										var tagsArr = formValue.split(',');
+										for (var i = 0; i < tagsArr.length; i++) {
+											tagsArr[i] = PhoenixUX.makeJSONSafe(tagsArr[i]);
+										}
+										artifactJSON.artifact.info.extraInfo[subLoc] = tagsArr;
 									} else {
-										artifactJSON.artifact.info.extraInfo[subLoc] = formValue;
+										artifactJSON.artifact.info.extraInfo[subLoc] = safeValue;
 									}
 								} else {
-									artifactJSON.artifact.info[location] = formValue;
+									artifactJSON.artifact.info[location] = safeValue;
 								}
 							}
 						}
@@ -2606,13 +2618,14 @@ var PhoenixUI = (function(){
 		// sequences.
 
         escapable.lastIndex = 0;
-        return escapable.test(string) ?
+        var newStr = escapable.test(string) ?
             '"' + string.replace(escapable, function (a) {
                 var c = meta[a];
                 return typeof c === 'string' ? c :
                     '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
             }) + '"' :
-            '"' + string + '"';
+            '' + string + '';
+        return newStr;
     }
 
 	PhoenixUX.checkboxToggle = function(elem){
