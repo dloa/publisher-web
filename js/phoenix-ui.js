@@ -1595,7 +1595,7 @@ var PhoenixUI = (function(){
 		}
 
 		for (var id in fillState){
-			console.log(id);
+			//console.log(id);
 			if (id != "extraInfo.genre"){
 				document.getElementById(id).value = fillState[id];
 			}
@@ -1658,7 +1658,7 @@ var PhoenixUI = (function(){
 		PhoenixUI.updateAllSubtypeSelects();
 
 		for (var id in fillState){
-			console.log(id);
+			//console.log(id);
 			if (id != "extraInfo.genre"){
 				document.getElementById(id).value = fillState[id];
 			}
@@ -1724,7 +1724,7 @@ var PhoenixUI = (function(){
 		}
 		
 
-		console.log(mainType,subType);
+		//console.log(mainType,subType);
 
 		PhoenixUX.changeType(mainType);
 		PhoenixUX.changeSubtype(mainType + ',' + subType);
@@ -1762,7 +1762,7 @@ var PhoenixUI = (function(){
 								} else if (forms[k].id.includes('genre')) {
 									var splitVal = value.split(',');
 									if (splitVal.length > 1){
-										console.log(splitVal[0]);
+										//console.log(splitVal[0]);
 										$('.genreOne option[value="' + splitVal[0] + '"]').attr('selected','selected');
 										$('.genreTwo option[value="' + splitVal[1] + '"]').attr('selected','selected');
 									} else {
@@ -1856,12 +1856,12 @@ var PhoenixUI = (function(){
 					PhoenixUX.addPaymentAddress();
 					arr.push({address: oip041.artifact.payment.tokens[z], currency: z})
 				}
-				console.log(paymentAddressesElement);
+				//console.log(paymentAddressesElement);
 
 				for (var j = 1; j < paymentAddressesElement.children.length - 1; j++) {
-					console.log(paymentAddressesElement.children[j]);
+					//console.log(paymentAddressesElement.children[j]);
 					paymentAddressesElement.children[j].children[0].children[1].value = arr[j].address;
-					console.log(paymentAddressesElement.children[j]);
+					//console.log(paymentAddressesElement.children[j]);
 					PhoenixUX.setPaymentAddressType(paymentAddressesElement.children[j], arr[j].currency);
 				}
 
@@ -2057,7 +2057,7 @@ var PhoenixUI = (function(){
 
 							if (formValue && formValue != ""){
 								var safeValue = PhoenixUX.makeJSONSafe(formValue);
-								console.log(formValue);
+								//console.log(formValue);
 
 								if (location.includes('extraInfo.')){
 									var subLoc = location.replace('extraInfo.', '');
@@ -3579,7 +3579,6 @@ var PhoenixUI = (function(){
 			var title = "";
 			try { title = current.artifactJSON['oip-041'].artifact.info.title; } catch(e){}
 
-			console.log(current);
 			newArtifactState.push({id: current.tmpID, state: "publishing", progress: (progress*100), title: title});
 
 			// artifactsTBodyElement.innerHTML += '<tr class="table-primary">\
@@ -3914,9 +3913,6 @@ var PhoenixUI = (function(){
 						btnToolsElement.innerHTML = builtInnerHTML;
 					}
 				} else {
-					if (stateLabelText != "Active")
-						console.log("adding thingy");
-
 					var builtInnerHTML = "";
 					if (moreInfoHTML != ""){
 						builtInnerHTML = '<button class="btn btn-no-pad btn-outline-info btn-background-white" onClick="document.getElementById(\'moreInfoText\').innerHTML = \'' + moreInfoHTML + '\'; $(\'#more-info-modal\').modal(\'show\')">More Info</button>';
@@ -3959,7 +3955,7 @@ var PhoenixUI = (function(){
 			}
 		}
 
-		console.log(newArtifactState);
+		//console.log(newArtifactState);
 	}
 
 	PhoenixUX.abbreviate_number = function(num, fixed) {
