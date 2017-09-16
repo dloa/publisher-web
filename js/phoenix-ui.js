@@ -2082,7 +2082,10 @@ var PhoenixUI = (function(){
 		}
 
 		if (artifactJSON.artifact.info.title && fillArtTitleElement){
-			fillArtTitleElement.innerHTML = eval(artifactJSON.artifact.info.title);
+			if (typeof value === "string" && value.substr(0,1) === '"' && value.substr(value.length-1,value.length) === '"')
+				fillArtTitleElement.innerHTML = eval(artifactJSON.artifact.info.title);
+			else
+				fillArtTitleElement.innerHTML = artifactJSON.artifact.info.title;
 		}
 
 		if (artifactJSON.artifact.info.year && typeof artifactJSON.artifact.info.year === "string"){
