@@ -1748,9 +1748,6 @@ var PhoenixUI = (function(){
 							}
 
 							if (value && value != "") {
-								if (typeof value === "string" && value.substr(0,1) === '"' && value.substr(value.length-1,value.length) === '"')
-									value = eval(value);
-
 								if (forms[k].id.includes('tags')){
 									// ToDo: Load tags
 									for (var z = 0; z < value.length; z++) {
@@ -1760,6 +1757,9 @@ var PhoenixUI = (function(){
 										$("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput('add', value[z]);
 									}
 								} else if (forms[k].id.includes('genre')) {
+									if (typeof value === "string" && value.substr(0,1) === '"' && value.substr(value.length-1,value.length) === '"')
+										value = eval(value);
+
 									var splitVal = value.split(',');
 									if (splitVal.length > 1){
 										//console.log(splitVal[0]);
@@ -1770,6 +1770,9 @@ var PhoenixUI = (function(){
 									}
 									
 								} else {
+									if (typeof value === "string" && value.substr(0,1) === '"' && value.substr(value.length-1,value.length) === '"')
+										value = eval(value);
+
 									document.getElementById(forms[k].id).value = value;
 								}
 							}
