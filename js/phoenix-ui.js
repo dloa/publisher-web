@@ -2064,8 +2064,8 @@ var PhoenixUI = (function(){
 									
 									if (subLoc === 'tags'){
 										var tagsArr = formValue.split(',');
-										for (var i = 0; i < tagsArr.length; i++) {
-											tagsArr[i] = PhoenixUX.makeJSONSafe(tagsArr[i]);
+										for (var q = 0; q < tagsArr.length; q++) {
+											tagsArr[q] = PhoenixUX.makeJSONSafe(tagsArr[q]);
 										}
 										artifactJSON.artifact.info.extraInfo[subLoc] = tagsArr;
 									} else {
