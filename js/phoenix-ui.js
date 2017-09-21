@@ -1466,7 +1466,11 @@ var PhoenixUI = (function(){
 	};
 
 	PhoenixUX.resetPublisher = function(){
+		PhoenixUX.paymentAddresses = {};
 		PhoenixUX.mediaFiles = [];
+		PhoenixUX.mediaPricing = {};
+		PhoenixUX.tips = {};
+		PhoenixUX.advancedPricing = {};
 
 		for (var i = 0; i < PhoenixUX.types.length; i++) {
 			if (PhoenixUX.types[i].type == PhoenixUX.type){
@@ -1486,6 +1490,8 @@ var PhoenixUI = (function(){
 		}
 
 		PhoenixUX.loadTypes();
+
+		PhoenixUX.resetPaymentAddresses();
 
 		mediaTableElement.innerHTML = "";
 		pricingTableBodyElement.innerHTML = "";
@@ -4020,6 +4026,56 @@ var PhoenixUI = (function(){
 			walletBalanceUSDElement.innerHTML = '$' + totalWalletBalanceInUSD;
 			floWalletUSDElement.innerHTML = '$' + totalWalletBalanceInUSD;
 		})
+	}
+
+	PhoenixUX.resetPaymentAddresses = function(){
+		var defaultStr = '<div class="row" id="0">\
+			<div class="input-group col-11" style="margin-bottom: 5px;" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="Why can\'t I change this?" data-content="This Payment Address is your Publisher Address that your account is linked to. By default, if you have no other payment methods your funds will be sent to this address.">\
+				<div class="input-group-btn has-danger">\
+					<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>\
+						<img style="height: 30px" src="./img/FLOflat2.png">\
+					</button>\
+					<div class="dropdown-menu">\
+						\
+					</div>\
+				</div>\
+				<input id="currentPublisherAddress" type="text" class="form-control" oninput="PhoenixUI.onPaymentAddressChange(this);" disabled value="">\
+				<span class="input-group-addon">\
+					<input type="radio" name="mainAddressRadio" checked>\
+				</span>\
+			</div>\
+			<div class="col-1">\
+				\
+			</div>\
+		</div>\
+		<div class="row" id="1">\
+			<div class="input-group col-10" style="margin-bottom: 5px;">\
+				<div class="input-group-btn">\
+					<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+						<img style="height: 30px" src="./img/Bitcoin.svg">\
+					</button>\
+					<div class="dropdown-menu">\
+						<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/Bitcoin.svg"> <span> Bitcoin</span></a>\
+						<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/FLOflat2.png"> <span> Florincoin</span></a>\
+						<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/Litecoin.svg"> <span> Litecoin</span></a>\
+						<a style="padding-left:-10px" class="dropdown-item" href="" onclick="PhoenixUI.changePaymentAddressType(this);return false;"><img style="height: 30px" src="./img/bch.png"> <span> Bitcoin Cash</span></a>\
+					</div>\
+				</div>\
+				<input type="text" class="form-control" oninput="PhoenixUI.onPaymentAddressChange(this);">\
+				<span class="input-group-addon">\
+					<input type="radio" name="mainAddressRadio">\
+				</span>\
+			</div>\
+			<div class="col-2">\
+				<div class="row justify-content-center align-items-center" style="margin-top: 7px; float: left;">\
+					<button class="btn btn-sm btn-outline-danger" onclick="PhoenixUI.removePaymentAddress(this);">-</button>\
+					<div style="width: 5px"> </div>\
+					<button class="btn btn-sm btn-outline-success" onclick="PhoenixUI.addPaymentAddress(this);">+</button>\
+				</div>\
+			</div>\
+		</div>';
+
+		paymentAddressesElement.innerHTML = defaultStr;
 	}
 
 	return PhoenixUX;
