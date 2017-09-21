@@ -2017,15 +2017,6 @@ var PhoenixUI = (function(){
 		var subtype = PhoenixUX.subtype;
 		var paid = $('[name="free"]')[1].checked;
 
-		var discountPercentage = discountPercentageElement.value;
-
-		if (discountPercentage === ""){
-			discountPercentage = 0.3; // Default of 30%
-		} else {
-			// parse to percent
-			discountPercentage = discountPercentageElement.value / 100;
-		}
-
 		var scale = 1000;
 
 		var artifactJSON = { 
@@ -2040,8 +2031,8 @@ var PhoenixUI = (function(){
 				},
 				"payment": {
 					"fiat": "USD",
-					//"scale": scale + ":1",
-					"disPer": discountPercentage,
+					"scale": scale + ":1",
+					"maxdisc": 0.3,
 					"promoter": 15,
 					"retailer": 15,
 					"sugTip": [],
@@ -2106,6 +2097,20 @@ var PhoenixUI = (function(){
 			artifactJSON.artifact.info.year = parseInt(artifactJSON.artifact.info.year);
 		}
 
+		if (PhoenixUX.advancedPricing){
+			for (var item in PhoenixUX.advancedPricing){
+				if (item && PhoenixUX.advancedPricing[item]){
+					if (item === "promoter" || item === "retailer"){
+						artifactJSON.artifact.payment[item] = parseInt(PhoenixUX.advancedPricing[item]);
+					} else if (item === "maxdisc"){
+						artifactJSON.artifact.payment[item] = parseInt(PhoenixUX.advancedPricing[item]) / 100;
+					} else {
+						artifactJSON.artifact.payment[item] = PhoenixUX.advancedPricing[item];
+					}
+				}
+			}
+		}
+
 		if (PhoenixUX.mediaFiles){
 			for (var i = 0; i < PhoenixUX.mediaFiles.length; i++) {
 				artifactJSON.artifact.storage.files[i] = {
@@ -2125,17 +2130,17 @@ var PhoenixUI = (function(){
 								if (!artifactJSON.artifact.payment)
 									artifactJSON.artifact.payment = {}
 
-								if (artifactJSON.artifact && artifactJSON.artifact.payment && !artifactJSON.artifact.payment.disPer)
-									artifactJSON.artifact.payment.disPer == 0.30;
+								if (artifactJSON.artifact && artifactJSON.artifact.payment && !artifactJSON.artifact.payment.maxdisc)
+									artifactJSON.artifact.payment.maxdisc = 0.30;
 
 								if (PhoenixUX.mediaPricing[pricing].sugBuy){
 									// disPer stands for discount percentage
-									artifactJSON.artifact.storage.files[i].minBuy = parseFloat(PhoenixUX.mediaPricing[pricing].sugBuy) * (1-artifactJSON.artifact.payment.disPer)
-									artifactJSON.artifact.storage.files[i].sugBuy = parseFloat(PhoenixUX.mediaPricing[pricing].sugBuy)
+									//artifactJSON.artifact.storage.files[i].minBuy = parseInt(parseFloat(parseFloat(PhoenixUX.mediaPricing[pricing].sugBuy) * (1-artifactJSON.artifact.payment.maxdisc)) * scale);
+									artifactJSON.artifact.storage.files[i].sugBuy = parseInt(parseFloat(PhoenixUX.mediaPricing[pricing].sugBuy) * scale)
 								}
 								if (PhoenixUX.mediaPricing[pricing].sugPlay){
-									artifactJSON.artifact.storage.files[i].minPlay = parseFloat(PhoenixUX.mediaPricing[pricing].sugPlay) * (1-artifactJSON.artifact.payment.disPer)
-									artifactJSON.artifact.storage.files[i].sugPlay = parseFloat(PhoenixUX.mediaPricing[pricing].sugPlay)
+									//artifactJSON.artifact.storage.files[i].minPlay = parseInt(parseFloat(parseFloat(PhoenixUX.mediaPricing[pricing].sugPlay) * (1-artifactJSON.artifact.payment.maxdisc)) * scale)
+									artifactJSON.artifact.storage.files[i].sugPlay = parseInt(parseFloat(PhoenixUX.mediaPricing[pricing].sugPlay) * scale)
 								}
 							}
 								
@@ -2182,17 +2187,6 @@ var PhoenixUI = (function(){
 						}
 					}
 				}
-			}
-		}
-
-		if (PhoenixUX.advancedPricing){
-			for (var item in PhoenixUX.advancedPricing){
-				if (item && item != "disPer" && PhoenixUX.advancedPricing[item])
-					if (item === "promoter" || item === "retailer"){
-						artifactJSON.artifact.payment[item] = parseInt(PhoenixUX.advancedPricing[item]);
-					} else {
-						artifactJSON.artifact.payment[item] = PhoenixUX.advancedPricing[item];
-					}
 			}
 		}
 			
