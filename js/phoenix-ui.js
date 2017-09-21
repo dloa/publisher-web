@@ -2039,6 +2039,8 @@ var PhoenixUI = (function(){
 					"fiat": "USD",
 					//"scale": scale + ":1",
 					"disPer": discountPercentage,
+					"promoter": 15,
+					"retailer": 15,
 					"sugTip": [],
 					"addresses": []
 				}
@@ -2183,7 +2185,11 @@ var PhoenixUI = (function(){
 		if (PhoenixUX.advancedPricing){
 			for (var item in PhoenixUX.advancedPricing){
 				if (item && item != "disPer" && PhoenixUX.advancedPricing[item])
-					artifactJSON.artifact.payment[item] = PhoenixUX.advancedPricing[item];
+					if (item === "promoter" || item === "retailer"){
+						artifactJSON.artifact.payment[item] = parseInt(PhoenixUX.advancedPricing[item]);
+					} else {
+						artifactJSON.artifact.payment[item] = PhoenixUX.advancedPricing[item];
+					}
 			}
 		}
 			
