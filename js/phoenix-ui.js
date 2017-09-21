@@ -1374,11 +1374,13 @@ var PhoenixUI = (function(){
 		],
 		'Text': [
 			'Plaintext',
+			'Markdown',
 			'PDF',
 			'RTF',
 			'Document',
 			'Book',
-			'File'
+			'File',
+			'Other'
 		],
 		'Software': [
 			'Source Code',
@@ -1440,6 +1442,7 @@ var PhoenixUI = (function(){
 			"bmp"
 		],
 		'Text': [
+			'md',
 			'txt',
 			'rtf',
 			'pdf'
