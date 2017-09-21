@@ -1063,6 +1063,46 @@ var PhoenixUI = (function(){
 				"id": "thumbnail",
 				"class": "thumbnail"
 			}
+		},{
+			"subtype": "Gallery",
+			"forms": [{
+					"id": "title",
+					"width": 12,
+					"placeholder": "Title*"
+				},
+				{
+					"id": "extraInfo.artist",
+					"width": 12,
+					"placeholder": "Creator"
+				},
+				{
+					"id": "extraInfo.genre",
+					"width": 6,
+					"placeholder": "Genre",
+					"genres": PhoenixUX.imageGenres
+				},
+				{
+					"id": "year",
+					"width": 6,
+					"placeholder": "Year"
+				},
+				{
+					"id": "extraInfo.tags",
+					"width": 12,
+					"placeholder": "Tags"
+				},
+				{
+					"id": "description",
+					"width": 12,
+					"placeholder": "Description",
+					"type": "textarea",
+					"row": 3
+				}
+			],
+			"coverArt": {
+				"id": "thumbnail",
+				"class": "thumbnail"
+			}
 		}]
 	},{
 		"type": "Text",
