@@ -27,7 +27,6 @@ var paymentAddressesElement = document.getElementById('paymentAddresses');
 var pricingElement = document.getElementById('pricing');
 var pricingTableBodyElement = document.getElementById('pricingTableBody');
 var subGenreSelectorElement = document.getElementById('subGenreSelector');
-var discountPercentageElement = document.getElementById('disPer');
 var colIdSelectorElement = document.getElementById('colIdSelector');
 var colFilesSelectorElement = document.getElementById('colFilesSelector');
 var bulkColDetailsElement = document.getElementById('bulkColDetails');
@@ -2072,7 +2071,7 @@ var PhoenixUI = (function(){
 				"payment": {
 					"fiat": "USD",
 					"scale": scale + ":1",
-					"maxdisc": 0.3,
+					"maxdisc": 30,
 					"promoter": 15,
 					"retailer": 15,
 					"sugTip": [],
@@ -2140,10 +2139,8 @@ var PhoenixUI = (function(){
 		if (PhoenixUX.advancedPricing){
 			for (var item in PhoenixUX.advancedPricing){
 				if (item && PhoenixUX.advancedPricing[item]){
-					if (item === "promoter" || item === "retailer"){
+					if (item === "promoter" || item === "retailer" || item === "maxdisc"){
 						artifactJSON.artifact.payment[item] = parseInt(PhoenixUX.advancedPricing[item]);
-					} else if (item === "maxdisc"){
-						artifactJSON.artifact.payment[item] = parseInt(PhoenixUX.advancedPricing[item]) / 100;
 					} else {
 						artifactJSON.artifact.payment[item] = PhoenixUX.advancedPricing[item];
 					}
@@ -2171,7 +2168,7 @@ var PhoenixUI = (function(){
 									artifactJSON.artifact.payment = {}
 
 								if (artifactJSON.artifact && artifactJSON.artifact.payment && !artifactJSON.artifact.payment.maxdisc)
-									artifactJSON.artifact.payment.maxdisc = 0.30;
+									artifactJSON.artifact.payment.maxdisc = 30;
 
 								if (PhoenixUX.mediaPricing[pricing].sugBuy){
 									// disPer stands for discount percentage
