@@ -7,3 +7,4 @@ wallets.js
 
 lines.txt
 examples/bulk_publish/node_modules/*
+*.codekit3

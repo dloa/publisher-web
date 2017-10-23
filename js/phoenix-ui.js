@@ -2194,6 +2194,10 @@ var PhoenixUI = (function(){
 							if (PhoenixUX.mediaPricing[pricing].subtype){
 								artifactJSON.artifact.storage.files[i].subtype = PhoenixUX.mediaPricing[pricing].subtype;
 							}
+
+							if (PhoenixUX.mediaPricing[pricing].duration){
+								artifactJSON.artifact.storage.files[i].duration = parseInt(PhoenixUX.mediaPricing[pricing].duration);
+							}
 						}
 					}
 				}
@@ -2296,7 +2300,8 @@ var PhoenixUI = (function(){
 
 				PhoenixUX.changeMediaSelect(files[i].id, type, subtypefor);
 
-				PhoenixUX.trySetTitleAndType(file.name, type);
+				PhoenixUX.trySetTitleAndType(files[i].name, type);
+				PhoenixUX.trySetLength(files[i], type);
 
 				if (subtypefor != "cover")
 					PhoenixUX.appendFileToPricingTable(files[i]);
@@ -2353,7 +2358,8 @@ var PhoenixUI = (function(){
 			PhoenixUX.appendFileToMediaTable(file, iconURL, coverArt);
 			PhoenixUX.changeMediaSelect(file.id, type, subtypefor);
 
-			PhoenixUX.trySetTitleAndType(file.name, type)
+			PhoenixUX.trySetTitleAndType(file.name, type);
+			PhoenixUX.trySetLength(file, type);
 
 			if (subtypefor != "cover")
 				PhoenixUX.appendFileToPricingTable(file);
@@ -2368,6 +2374,26 @@ var PhoenixUI = (function(){
 				PhoenixUX.setProgress(percent, file.id)
 				PhoenixUX.updateProgress(file.id)
 			});
+		}
+	}
+
+	PhoenixUX.trySetLength = function(file, type){
+		if (type === "Audio"){
+			var audio = document.createElement('audio');
+			var fileURL = URL.createObjectURL(file);
+			audio.src = fileURL;
+			// wait for duration to change from NaN to the actual duration
+			audio.ondurationchange = function() {
+				PhoenixUX.mediaPricing[PhoenixUX.sanitizeID(file.name) + "price"].duration = this.duration;
+			};
+		} else if (type === "Video"){
+			var vid = document.createElement('video');
+			var fileURL = URL.createObjectURL(file);
+			vid.src = fileURL;
+			// wait for duration to change from NaN to the actual duration
+			vid.ondurationchange = function() {
+				PhoenixUX.mediaPricing[PhoenixUX.sanitizeID(file.name) + "price"].duration = this.duration;
+			};
 		}
 	}
 
