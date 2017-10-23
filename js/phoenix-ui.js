@@ -2488,18 +2488,21 @@ var PhoenixUI = (function(){
 
 	PhoenixUX.trySetTitleAndType = function(title, type){
 		if (PhoenixUX.mediaFiles.length === 0){
-			PhoenixUX.changeType(type);
+			if (PhoenixUX.type !== type && PhoenixUX.subtype === "Basic"){
+				PhoenixUX.changeType(type);
+			}
 		}
 
 		try {
-			var parts = title.split(".");
+			if (document.getElementById('title').value === ""){
+				var parts = title.split(".");
 
-			if (parts.length > 1){
-				title = title.replace("." + parts[parts.length -1], '');
-			} 
+				if (parts.length > 1){
+					title = title.replace("." + parts[parts.length -1], '');
+				} 
 
-			if (document.getElementById('title').value === "")
 				document.getElementById('title').value = title;
+			}
 		} catch (e){}
 	}
 
