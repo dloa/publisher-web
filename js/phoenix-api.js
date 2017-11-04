@@ -67,7 +67,7 @@ var Phoenix = (function() {
 			url: librarianHost +'/alexandria/v2/search',
 			data: queryString.toString(),
 			success: function (e) {
-				mediaData = $.parseJSON(e).response;
+				mediaData = e.response;
 			},
 			async:   false
 		});
