@@ -763,21 +763,37 @@ var Phoenix = (function() {
 				if (artJSON.artifact && artJSON.artifact.storage && artJSON.artifact.storage.files){
 					var files = artJSON.artifact.storage.files;
 
+					if (!artJSON.artifact.payment){
+						artJSON.artifact.payment = {
+							maxdisc: 30
+						}
+					}
+
+					var scale = artJSON.artifact.payment.scale;
+
+					if (typeof scale === "string" && scale.split(":").length === 2){
+						scale = parseInt(scale.split(":")[0]);
+					} else {
+						scale = 1;
+					}
+
+					if (artJSON.artifact && artJSON.artifact.payment){
+						if (!artJSON.artifact.payment.maxdisc){
+							artJSON.artifact.payment.maxdisc == 30;
+						} else if (typeof artJSON.artifact.payment.maxdisc === "string"){
+							artJSON.artifact.payment.maxdisc = parseFloat(artJSON.artifact.payment.maxdisc);
+						}
+					}
+
 					for (var i = 0; i < files.length; i++) {
-						if (!artJSON.artifact.payment)
-							artJSON.artifact.payment = {}
-
-						if (artJSON.artifact && artJSON.artifact.payment && !artJSON.artifact.payment.disPer)
-							artJSON.artifact.payment.disPer == 0.30;
-
 						if (files[i].sugBuy){
-							// disPer stands for discount percentage
-							minBuyArray.push(parseFloat(files[i].sugBuy) * (1-artJSON.artifact.payment.disPer))
-							sugBuyArray.push(parseFloat(files[i].sugBuy))
+							// maxdisc stands for discount percentage
+							minBuyArray.push((files[i].sugBuy * (1 - (artJSON.artifact.payment.maxdisc / 100))) / scale)
+							sugBuyArray.push(files[i].sugBuy / scale)
 						}
 						if (files[i].sugPlay){
-							minPlayArray.push(parseFloat(files[i].sugPlay) * (1-artJSON.artifact.payment.disPer))
-							sugPlayArray.push(parseFloat(files[i].sugPlay))
+							minPlayArray.push((files[i].sugPlay * (1 - (artJSON.artifact.payment.maxdisc / 100))) / scale);
+							sugPlayArray.push(files[i].sugPlay / scale)
 						}
 					}
 				}		
