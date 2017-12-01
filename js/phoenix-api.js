@@ -818,7 +818,9 @@ var Phoenix = (function() {
 					totSugBuy += sugBuyArray[i];
 				}
 
-				var artCost = (totMinPlay + totSugPlay + totMinBuy + totSugBuy) / 4; // divide by 4 because there are four inputs
+				var artCost = (totMinPlay + totSugPlay + totMinBuy + totSugBuy) / 2; 
+				// divide by 2 because 
+				// devon (3:54 PM): doing it that way applies both of those impacts, which are good, and also solves the previous issue we were discussing
 
 				var avgArtCost = libraryDData.avgArtCost;
 
