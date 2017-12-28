@@ -76,101 +76,35 @@ var Phoenix = (function() {
 	}
 
 	PhoenixAPI.register = function(username, password, email){
-		var data = {};
+		OIPJS.User.Register(email, password, function(wallet){
+			var floAddress = OIPJS.Wallet.getMainAddress('florincoin');
 
-		if (email)
-			data = {email: email};
-
-		$.post(PhoenixAPI.flovaultBaseURL + "/wallet/create", data, function (response) {
-			if (response.error) {
-				//swal("Error", "Registration failed, please try again!", "error");
-				console.error(response.error);
-				PhoenixEvents.trigger("onWalletCreateFail", response);
-				return;
-			}
-			//identifierInput.val(response.identifier);
-			PhoenixAPI.wallet = new Wallet(response.identifier, password);
-			PhoenixAPI.wallet.setSharedKey(response.shared_key);
-			//PhoenixAPI.wallet.store();
-
-			// Create one address by default.
-			PhoenixAPI.wallet.generateAddress();
-
-			// Store wallet.
-			PhoenixAPI.wallet.store();
-
-			// Request 1 FLO from tradebot
-			var address = "";
-			for (var addr in PhoenixAPI.wallet.addresses) {
-				address = PhoenixAPI.wallet.addresses[addr].addr;
-			}
-
-			if (address === ""){
-				PhoenixEvents.trigger("onWalletCreateFail", {error: {type: "ADD_ADDRESS_ERR", message: "No address found, aborting..."}});
+			if (floAddress === ""){
+				PhoenixEvents.trigger("onWalletCreateFail", error);
 				return;
 			}
 
-			var faucetData = {
-				flo_address: address,
-				recaptcha: grecaptcha.getResponse()
-			}
-
-			$.post(PhoenixAPI.tradebotURL + "/faucet", faucetData, function(response){
-				if (response.includes("reCAPTCHAv2 error!")){
-					PhoenixEvents.trigger("reCAPTCHAFail", response);
-					return;
-				}
-
-				var res = JSON.parse(response);
-
-				if (res.success){
-					var txid = res.txid;
-					var inf = res['tx-info'].replace(/u'/g, "'").replace(/'/g, '"').replace(/Decimal\(\"/g, '').replace(/\"\)/g, '');
-					var txinfo = JSON.parse(inf);
-					var tmpVout = 1;
-					for (var i = 0; i < txinfo.vout.length; i++){
-						if (txinfo.vout[i].value == 1)
-							tmpVout = txinfo.vout[i].n;
-					}
-					PhoenixAPI.wallet.known_unspent.push({ address: address, amount: 1, confirmations: -1, txid: res.txid, vout: tmpVout});
-
-					LibraryDJS.announcePublisher(PhoenixAPI.wallet, username, address, "", email, function(err, data){
-						if (err){
-							PhoenixEvents.trigger("onPublisherAnnounceFail", err);
-							console.error(err);
-							return;
-						} 
-
-						PhoenixAPI.sentPubUsers.push({
-							username: username,
-							address: address,
-							email: email
-						});
-
-						localStorage.sentPubUsers = JSON.stringify(PhoenixAPI.sentPubUsers);
-
-						localStorage.setItem("identifier", PhoenixAPI.wallet.identifier);
-						localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt(password, PhoenixAPI.wallet.identifier));
-						localStorage.setItem("remember-me", "true");
+			OIPJS.Wallet.tryOneTimeFaucet(floAddress, grecaptcha.getResponse(), function(res, txinfo){
+				OIPJS.Publisher.Register(username, floAddress, email, function(pub){
+					localStorage.setItem("identifier", wallet.identifier);
+					localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt(password, wallet.identifier));
+					localStorage.setItem("remember-me", "true");
 
 
-						PhoenixEvents.trigger("onPublisherAnnounceSuccess", {
-							identifier: PhoenixAPI.wallet.identifier,
-							username: username,
-							address: address,
-							email: email
-						});
-
-						// Redirect to main dashboard page.
-						//window.location.href = 'index.html';
+					PhoenixEvents.trigger("onPublisherAnnounceSuccess", {
+						identifier: wallet.identifier,
+						username: username,
+						address: address,
+						email: email
 					});
-				} else {
-					console.error(res);
-					PhoenixEvents.trigger("onFaucetFail", res);
-				}
-				
-			});
-			//$(".sweet-alert .lead").html("Register was successful, here is your identifier, please keep this safe or you may lose access to your coins and Publisher ID: <br><code>" + response.identifier + "</code><br>Your initial Florincoin address is: <br><code>" + address + "</code>");
+				}, function(error){
+					PhoenixEvents.trigger("onPublisherAnnounceFail", error);
+				})
+			}, function(error){
+				PhoenixEvents.trigger("onFaucetFail", error);
+			})
+		}, function(error){
+			PhoenixEvents.trigger("onWalletCreateFail", error);
 		});
 	}
 
@@ -209,41 +143,28 @@ var Phoenix = (function() {
 
 					password = CryptoJS.AES.decrypt(localStorage.loginWalletEnc, identifier).toString(CryptoJS.enc.Utf8);
 
-					$.get(flovaultBaseURL + "/wallet/checkload/" + identifier, function (response) {
-						console.log(response);
-						// if (response.gauth_enabled) {
-						// 	// ToDo: add 2FA support, needs further research
-						// 	PhoenixEvents.trigger("onLoginFail", { 
-						// 		title: "Error!", 
-						// 		type: "error", 
-						// 		message: "Two Factor Authentication is not currently supported, please disable it or create a new wallet." 
-						// 	});
-						// }
-						PhoenixAPI.wallet = new Wallet(response.identifier, password);
-						PhoenixAPI.wallet.load(function () {
-							if (localStorage["remember-me"] == "false"){
-								localStorage.identifier = '';
-								localStorage.loginWalletEnc = '';
-							}
+					OIPJS.User.Login(identifier, password, function(publisher) {
+						if (localStorage["remember-me"] == "false"){
+							localStorage.identifier = '';
+							localStorage.loginWalletEnc = '';
+						}
 
-							PhoenixEvents.trigger("onLoginSuccess", {});
-							PhoenixEvents.trigger("onWalletLoad", PhoenixAPI.wallet);
+						PhoenixEvents.trigger("onLoginSuccess", {});
+						PhoenixEvents.trigger("onWalletLoad", {});
+						PhoenixEvents.trigger("onPublisherLoadSuccess", [publisher]);
 
-							PhoenixAPI.publishState = "Ready";
+						PhoenixAPI.publishState = "Ready";
 
-							PhoenixAPI.getPublishersFromLibraryD();
-						});
+						PhoenixAPI.loadArtifactsForPub(publisher.address);
+					}, function(error) {
+						// On Error
+						PhoenixEvents.trigger("onLoginFail", error)
 					});
 				} else {
 					PhoenixEvents.trigger("onLoginFail", "Missing identifier or password and none found in localStorage!")
-					// if (window.location.pathname.includes('index.html')){
-					// 	window.location.href = 'login.html';
-					// 	return;
-					// }
 				}
 			} else {
 				PhoenixEvents.trigger("onLoginFail", "Missing identifier or password and HTML5 LocalStorage is not supported.")
-			    // console.log('No Support for storing locally.')
 			}
 		}
 	}
@@ -283,6 +204,9 @@ var Phoenix = (function() {
 	PhoenixAPI.logout = function(){
 		localStorage.identifier = '';
 		localStorage.loginWalletEnc = '';
+
+		//OIPJS.User.Logout();
+
 		window.location.href = 'signin.html';
 	}
 
@@ -442,7 +366,7 @@ var Phoenix = (function() {
 
 										PhoenixAPI.pendingUploadQueue.splice(item, 1);
 
-										wipArtifact.artifactJSON = LibraryDJS.signPublishArtifact(Phoenix.getWallet(), wipArtifact.artifactJSON.artifact.storage.location, Phoenix.currentPublisher.address, wipArtifact.artifactJSON);
+										//wipArtifact.artifactJSON = LibraryDJS.signPublishArtifact(Phoenix.getWallet(), wipArtifact.artifactJSON.artifact.storage.location, Phoenix.currentPublisher.address, wipArtifact.artifactJSON);
 
 										//Publish the artifact JSON into the blockchain.
 										Phoenix.addWIPToPublishQueue(wipArtifact);
@@ -593,21 +517,17 @@ var Phoenix = (function() {
 
 		PhoenixAPI.calculatePublishFee(artifactJSON, function(usd, pubFee){
 			PhoenixEvents.trigger("onPublishStart", "Starting publish attempt");
-			LibraryDJS.publishArtifact(PhoenixAPI.wallet, artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, artifactJSON, pubFee, function(err, data){
-				if (err){
-					console.log("Error: " + data);
-					return;
-				}
-				callback(data);
+			OIPJS.OIPd.publishArtifact(artifactJSON, function(txids){
+				callback(txids);
 
-				PhoenixEvents.trigger("onPublishEnd", data);		
+				PhoenixEvents.trigger("onPublishEnd", txids);		
 			});
 		})
 			
 	}
 
 	PhoenixAPI.addBulkToPublishQueue = function(artifactJSON){
-		artifactJSON = LibraryDJS.signPublishArtifact(PhoenixAPI.wallet, artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, artifactJSON);
+		//artifactJSON = LibraryDJS.signPublishArtifact(PhoenixAPI.wallet, artifactJSON.artifact.storage.location, PhoenixAPI.currentPublisher.address, artifactJSON);
 
 		PhoenixAPI.addToPublishQueue(artifactJSON);
 	}
@@ -642,32 +562,32 @@ var Phoenix = (function() {
 			// Get the first element and remove it from the array
 			var pubObj = PhoenixAPI.publishQueue.shift();
 			PhoenixAPI.currentArtifactPublish = pubObj;
-
-			PhoenixAPI.currentArtifactPublish.splitStrings = LibraryDJS.createMultipartStrings(JSON.stringify(pubObj.artifactJSON));
-
-			PhoenixAPI.calculatePublishFee(pubObj.artifactJSON, function(usd, pubFee){
-				if (isNaN(pubFee)){
-					pubFee = 0.002;
-				}
-				PhoenixAPI.currentArtifactPublish.pubFee = pubFee;
-				PhoenixEvents.trigger("onPublishStart", "Starting publish attempt");
-			})
-
-			// PhoenixAPI.publishArtifact(pubObj.artifactJSON, function(data){
-			// 	PhoenixAPI.publishState = "Ready";
-			// 	PhoenixAPI.currentArtifactPublish = undefined;
-			// })
+			
+			PhoenixEvents.trigger("onPublishStart", "Starting publish attempt");
 		}
 
 		if (PhoenixAPI.publishState === "Publishing"){
-			try {
-				LibraryDJS.processTXPublishObj(PhoenixAPI.currentArtifactPublish, {
-					wallet: PhoenixAPI.wallet,
-					address: PhoenixAPI.currentPublisher.address
-				}, PhoenixAPI.publishQueueOnTXSuccess, PhoenixAPI.publishQueueOnTXError);
-			} catch (e) {
-				LibraryDJS.walletStatus = "Idle";
-			}
+			PhoenixAPI.publishState = "Busy";
+
+			OIPJS.OIPd.publishArtifact(PhoenixAPI.currentArtifactPublish.artifactJSON, function(txids){
+				PhoenixAPI.publishState = "Ready";
+
+				PhoenixAPI.currentArtifactPublish.txs = txids;
+				PhoenixAPI.currentArtifactPublish.publisher = PhoenixAPI.currentPublisher.address;
+
+				PhoenixAPI.publishedArtifacts.push(PhoenixAPI.currentArtifactPublish);
+				localStorage.publishedArtifacts = JSON.stringify(PhoenixAPI.publishedArtifacts);
+
+				console.log("Publish Success!", PhoenixAPI.currentArtifactPublish.artifactJSON, txids);
+
+				PhoenixAPI.currentArtifactPublish = undefined;
+
+				PhoenixEvents.trigger("onPublishTXSuccess", txids);
+				PhoenixEvents.trigger("onPublishEnd", txids);
+			}, function(error){
+				PhoenixAPI.publishState = "Ready";
+				console.log("Publish Error!", PhoenixAPI.currentArtifactPublish.artifactJSON, error);
+			})
 		}
 
 		localStorage.currentArtifactPublish = JSON.stringify(PhoenixAPI.currentArtifactPublish);
@@ -713,31 +633,13 @@ var Phoenix = (function() {
 				confirmButtonText: "Yes, deactivate it!",   
 				closeOnConfirm: false 
 			}, function(){   
-				var results = PhoenixAPI.searchAPI('media', 'txid', artifactTxid);
-
-				if (!results){
-					console.error("ERR: No results from API when trying to Deactivate TXID: " + artifactTxid);
-					PhoenixEvents.trigger('onArtifactDeactivateFail', "ERR: No results from API when trying to Deactivate TXID: " + artifactTxid);
-					return;
-				}
-
-				var artPublisher;
-				if (results[0]["media-data"]){
-					artPublisher = results[0]["media-data"]["alexandria-media"].publisher;
-				} else if (results[0]["oip-041"]){
-					artPublisher = results[0].publisher;
-				}
-
-				LibraryDJS.sendDeactivationMessage(PhoenixAPI.wallet, artPublisher, artifactTxid, function(error, response){
-					if (error) {
-						PhoenixEvents.trigger('onArtifactDeactivateFail', error);
-						return;
-					}
-
+				OIPJS.OIPd.deactivateArtifact(artifactTxid, function(success){
 					PhoenixAPI.disabledArtifactTXIDs.push(artifactTxid);
 					localStorage.disabledArtifactTXIDs = JSON.stringify(PhoenixAPI.disabledArtifactTXIDs);
 
-					PhoenixEvents.trigger('onArtifactDeactivateSuccess', response, artifactTxid);
+					PhoenixEvents.trigger('onArtifactDeactivateSuccess', success, artifactTxid);
+				}, function(error){
+					PhoenixEvents.trigger('onArtifactDeactivateFail', error);
 				});
 			});
 		} catch (e) {

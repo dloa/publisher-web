@@ -194,120 +194,7 @@ PhoenixEvents.on("onArtifactsLoad", function(msg){
 
 	doneLoading();
 })
-PhoenixEvents.on("onWalletLoad", function(wallet){ 
-	PhoenixUI.updateBalanceDisplay();
 
-	//walletIdentifierElement.innerHTML = wallet.identifier;
-
-	Phoenix.getMarketData(function(data){ 
-		marketData = data; 
-		perBTC = marketData.USD/marketData.weighted;
-		var FLOUSD = marketData.USD;
-	
-		// Wipe the div
-		//$('#walletAccordian').html("");
-
-		var i = 0;
-		for (var addr in Phoenix.wallet.addresses) {
-			i = i + 1;
-			var address = wallet.addresses[addr].addr;
-			var priv = wallet.addresses[addr].priv;
-			var balance = wallet.balances[addr];
-
-			// Add the florincoin addresses and balance to the table.
-			// $('#walletAccordian').append('<div class="card">\
-			// 					<a role="button" data-toggle="collapse" data-parent="#walletAccordian" href="#collapse' + i + '" aria-expanded="true" aria-controls="collapse' + i + '">\
-			// 						<div class="card-header" role="tab" id="heading' + i + '">\
-			// 							<h4 class="card-title">\
-			// 								<div style="padding: 0px 30px; color: #000">\
-			// 									<span>' + address + '</span><span style="float: right"><span style="color: green">$' + (parseFloat(balance)*parseFloat(FLOUSD)).toFixed(2) + '</span> - ' + balance + ' FLO</span>\
-			// 								</div>\
-			// 							</h4>\
-			// 						</div>\
-			// 					</a>\
-			// 					<div id="collapse' + i + '" class="collapse" role="tabpanel" aria-labelledby="heading' + i + '">\
-			// 						<div class="card-body">\
-			// 							<!-- Some HTML design code comes from https://github.com/OutCast3k/coinbin/, you can view the license for this code here: https://github.com/OutCast3k/coinbin/blob/master/LICENSE -->\
-			// 							<div class="col-md-12" align="center" style="margin-top: 30px;">\
-			// 								<div id="walletQrCode' + i + '" title="florincoin:' + address + '"></div> <br>\
-			// 								<div>\
-			// 									<span class="walletAddress">' + address + '</span>\
-			// 								</div>\
-			// 								<br>\
-			// 								<div class="container" style="text-align:center; width: 450px;">\
-			// 									<ul class="nav nav-pills align-center" role="tablist">\
-			// 										<li role="presentation" class="active"><a href="javascript:;" id="walletBalance' + i + '" rel="' + balance + '" style="display: block;">' + balance + ' FLO</a></li>\
-			// 										<li role="presentation"><a href="#walletSpend' + i + '" id="walletShowSpend' + i + '"  aria-controls="walletSpend' + i + '" role="pill" data-toggle="pill">Spend</a></li>\
-			// 										<li role="presentation"><a id="walletHistory" href="http://florincoin.info/address/' + address + '" target="_blank" data-ytta-id="-">History</a></li>\
-			// 										<li role="presentation"><a href="#tradebot" target="" >Buy</a></li>\
-			// 										<li role="presentation"><a href="#walletKeys' + i + '" id="walletShowKeys' + i + '"  aria-controls="walletKeys' + i + '" role="pill" data-toggle="pill">Keys</a></li>\
-			// 									</ul>\
-			// 									<br>\
-			// 									<div class="tab-content" style="margin-top: -40px;">\
-			// 										<div role="tabpanel" id="walletKeys' + i + '" class="tab-pane">\
-			// 											<label>Public Key</label>\
-			// 											<input class="form-control pubkey" type="text" readonly="" data-original-title="" title="" value="' + address + '">\
-			// 											<label>Private key</label>\
-			// 											<div class="input-group">\
-			// 												<input id="priv' + i + '" class="form-control privkey" type="password" readonly="" data-original-title="" title="" value="' + priv + '">\
-			// 												<span class="input-group-btn">\
-			// 													<button class="showKey btn btn-default" onclick="$(\'#priv' + i + '\').clone().attr(\'type\',\'text\').insertAfter(\'#priv' + i + '\').prev().remove();" type="button">Show</button>\
-			// 												</span>\
-			// 											</div>\
-			// 										</div>\
-			// 										<div id="walletSpend' + i + '" class="tab-pane active">\
-			// 											<div class="row">\
-			// 												<div class="form-inline output col-12">\
-			// 													<div class="col-8">\
-			// 														<label>Address</label>\
-			// 													</div>\
-			// 													<div class="col-3">\
-			// 														<label>Amount</label>\
-			// 													</div>\
-			// 												</div>\
-			// 											</div>\
-			// 											<div class="row" id="walletSpendTo">\
-			// 												<div class="form-horizontal output col-12">\
-			// 													<div class="row">\
-			// 														<div class="col-8">\
-			// 															<input type="text" class="form-control addressTo" data-original-title="" title="">\
-			// 														</div>\
-			// 														<div class="col-3">\
-			// 															<input type="text" class="form-control amount" data-original-title="" title="" placeholder="0.00">\
-			// 														</div>\
-			// 														<a href="javascript:;" class="addressAdd" data-ytta-id="-"><span class="glyphicon glyphicon-plus"></span></a>\
-			// 														<br><br>\
-			// 													</div>\
-			// 												</div>\
-			// 											</div>\
-			// 											<div class="row">\
-			// 												<!--<div class="col-6">\
-			// 													<label><abbr title="" data-original-title="the amount to pay in network miner fees - 0.0004 or more recommended for a faster processing time">Transaction Fee</abbr>&nbsp;&nbsp;<a href="https://bitcoinfees.21.co/" target="_blank" data-ytta-id="-"><span class="glyphicon glyphicon-question-sign"></span></a></label>\
-			// 													<input type="text" class="form-control txFee" value="0.0004" id="txFee" data-original-title="" title="">\
-			// 												</div>-->\
-			// 												<!--<div class="col-5">\
-			// 													<label><abbr title="" data-original-title="the amount to donate to coinb.in">Donation</abbr></label>\
-			// 													<input type="text" class="form-control" value="0.003" id="developerDonation" data-original-title="" title="">\
-			// 												</div>-->\
-			// 											</div>\
-			// 											<br>\
-			// 											<div id="walletSendStatus" class="alert alert-danger hidden"></div>\
-			// 											<button class="btn btn-primary" type="button" id="walletSendBtn" onclick="sendFromInterface(\'collapse' + i + '\')">Send</button>\
-			// 											<button class="btn btn-default" type="button">Reset</button>\
-			// 										</div>\
-			// 									</div>\
-			// 								</div>\
-			// 							</div>\
-			// 						</div>\
-			// 					</div>\
-			// 				</div>');
-
-			// var walQR = new QRCode("walletQrCode" + i + "");
-			// var qrStr = 'florincoin:' + address;
-			// walQR.makeCode(qrStr);
-		}
-	});
-})
 PhoenixEvents.on("onWalletUpdate", function(wallet){ console.log("Wallet Updated" + wallet); })
 
 var PhoenixUI = (function(){
@@ -3651,11 +3538,11 @@ var PhoenixUI = (function(){
 		if (current && current.artifactJSON){
 			var progress = 0;
 
-			if (Phoenix.currentArtifactPublish.txs && Phoenix.currentArtifactPublish.txs.length && Phoenix.currentArtifactPublish.splitStrings && Phoenix.currentArtifactPublish.splitStrings.length)
-				progress = Phoenix.currentArtifactPublish.txs.length / Phoenix.currentArtifactPublish.splitStrings.length;
+			if (current.txs && current.length)
+				progress = 1;
 
 			var title = "";
-			try { title = current.artifactJSON['oip-041'].artifact.info.title; } catch(e){}
+			try { title = current.artifactJSON.artifact.info.title; } catch(e){}
 
 			newArtifactState.push({id: current.tmpID, state: "publishing", progress: (progress*100), title: title});
 
@@ -3676,7 +3563,7 @@ var PhoenixUI = (function(){
 		if (waiting.length > 0) {
 			for (var i = 0; i < waiting.length; i++) {
 				var title = "";
-				try { title = waiting[i].artifactJSON['oip-041'].artifact.info.title; } catch(e){}
+				try { title = waiting[i].artifactJSON.artifact.info.title; } catch(e){}
 
 				newArtifactState.push({id: waiting[i].tmpID, state: "waiting", progress: 0, title: title});
 
@@ -3815,7 +3702,7 @@ var PhoenixUI = (function(){
 			var match = false;
 			for (var j in Phoenix.publishedArtifacts[i].txs){
 				for (var k in PhoenixUX.successfulTXIDs){
-					if (Phoenix.publishedArtifacts[i].txs[j].txid === PhoenixUX.successfulTXIDs[k]){
+					if (Phoenix.publishedArtifacts[i].txs[j].substring(0,10) === PhoenixUX.successfulTXIDs[k]){
 						match = true;
 					}
 				}
@@ -3835,7 +3722,7 @@ var PhoenixUI = (function(){
 
 		for (var i in PhoenixUX.processingArtifacts){
 			var title = "";
-			try { title = PhoenixUX.processingArtifacts[i].artifactJSON['oip-041'].artifact.info.title; } catch(e){}
+			try { title = PhoenixUX.processingArtifacts[i].artifactJSON.artifact.info.title; } catch(e){}
 
 			// console.log(PhoenixUX.processingArtifacts[i]);
 
@@ -4048,29 +3935,13 @@ var PhoenixUI = (function(){
 		return e;
 	}
 
-	PhoenixUX.updateBalanceDisplay = function(){
-		var wallet = Phoenix.getWallet();
-
-		var totalBalance = wallet.getTotalBalance() || 0;
-
-		var knownBal = 0;
-
-		for (var i in wallet.known_unspent){
-			var spent = false;
-			for (var j in wallet.known_spent){
-				if (wallet.known_unspent[i].txid === wallet.known_spent[j].txid){
-					spent = true;
-				}
-			}
-			if (!spent){
-				knownBal += parseFloat(wallet.known_unspent[i].amount);
-			}
+	PhoenixUX.updateBalanceDisplay = function(state){
+		if (!state || !OIPJS){
+			return
 		}
 
-		if (knownBal > 0){
-			totalBalance = knownBal;
-		}
-		
+		var totalBalance = state.florincoin.balance;
+
 		try {
 			walletBalanceElement.value = totalBalance;
 			floWalletValueElement.value = totalBalance;
@@ -4085,15 +3956,17 @@ var PhoenixUI = (function(){
 			// Oh well, give up setting balance.
 		}
 
-		Phoenix.getMarketData(function(data){ 
-			marketData = data; 
-			perBTC = marketData.USD/marketData.weighted;
-			var FLOUSD = marketData.USD;
+		OIPJS.Data.getExchangeRate("florincoin", "usd", function(USDperFLO){
+			var totalWalletBalanceInUSD = totalBalance * USDperFLO;
 
+			totalWalletBalanceInUSD = totalWalletBalanceInUSD.toFixed(2);
 
-			var totalWalletBalanceInUSD = (parseFloat(walletBalanceElement.value)*parseFloat(FLOUSD)).toFixed(2);
-			walletBalanceUSDElement.innerHTML = '$' + totalWalletBalanceInUSD;
-			floWalletUSDElement.innerHTML = '$' + totalWalletBalanceInUSD;
+			try {
+				walletBalanceUSDElement.innerHTML = '$' + totalWalletBalanceInUSD;
+				floWalletUSDElement.innerHTML = '$' + totalWalletBalanceInUSD;
+			} catch (e) {}
+		}, function(error){
+
 		})
 	}
 
@@ -4149,6 +4022,8 @@ var PhoenixUI = (function(){
 
 	return PhoenixUX;
 })();
+
+OIPJS.Wallet.on("bal-update", PhoenixUI.updateBalanceDisplay);
 
 function csv2JSON(csv){
 	var data = Papa.parse(csv);
