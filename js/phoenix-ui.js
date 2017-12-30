@@ -50,6 +50,10 @@ var thumbTextElement = document.getElementById('thumbText');
 var fillArtTitleElement = document.getElementById('fillArtTitle');
 var floWalletValueElement = document.getElementById('floWalletValue');
 var floWalletUSDElement = document.getElementById('floWalletUSD');
+var ltcWalletValueElement = document.getElementById('ltcWalletValue');
+var ltcWalletUSDElement = document.getElementById('ltcWalletUSD');
+var btcWalletValueElement = document.getElementById('btcWalletValue');
+var btcWalletUSDElement = document.getElementById('btcWalletUSD');
 
 // Basic JSON to manage page
 var showWizardPage = function(){
@@ -3940,30 +3944,61 @@ var PhoenixUI = (function(){
 			return
 		}
 
-		var totalBalance = state.florincoin.balance;
+		var floBalance = state.florincoin.balance;
+		var ltcBalance = state.litecoin.balance;
+		var btcBalance = state.bitcoin.balance;
 
 		try {
-			walletBalanceElement.value = totalBalance;
-			floWalletValueElement.value = totalBalance;
-			if (totalBalance > 10000) {
-				walletBalanceElement.innerHTML = totalBalance.toFixed(3) + " FLO";
-				floWalletValueElement.innerHTML = totalBalance.toFixed(3) + " FLO";
+			walletBalanceElement.value = floBalance;
+			floWalletValueElement.value = floBalance;
+			ltcWalletValueElement.value = ltcBalance;
+			btcWalletValueElement.value = btcBalance;
+			if (floBalance > 10000) {
+				walletBalanceElement.innerHTML = floBalance.toFixed(3) + " FLO";
+				floWalletValueElement.innerHTML = floBalance.toFixed(3) + " FLO";
 			} else {
-				walletBalanceElement.innerHTML = totalBalance.toFixed(5) + " FLO";
-				floWalletValueElement.innerHTML = totalBalance.toFixed(5) + " FLO";
+				walletBalanceElement.innerHTML = floBalance.toFixed(5) + " FLO";
+				floWalletValueElement.innerHTML = floBalance.toFixed(5) + " FLO";
 			}
+
+			ltcWalletValueElement.innerHTML = ltcBalance.toFixed(5) + " LTC";
+			btcWalletValueElement.innerHTML = btcBalance.toFixed(5) + " BTC";
 		} catch (e) { 
 			// Oh well, give up setting balance.
 		}
 
 		OIPJS.Data.getExchangeRate("florincoin", "usd", function(USDperFLO){
-			var totalWalletBalanceInUSD = totalBalance * USDperFLO;
+			var floWalletBalanceInUSD = floBalance * USDperFLO;
 
-			totalWalletBalanceInUSD = totalWalletBalanceInUSD.toFixed(2);
+			floWalletBalanceInUSD = floWalletBalanceInUSD.toFixed(2);
 
 			try {
-				walletBalanceUSDElement.innerHTML = '$' + totalWalletBalanceInUSD;
-				floWalletUSDElement.innerHTML = '$' + totalWalletBalanceInUSD;
+				walletBalanceUSDElement.innerHTML = '$' + floWalletBalanceInUSD;
+				floWalletUSDElement.innerHTML = '$' + floWalletBalanceInUSD;
+			} catch (e) {}
+		}, function(error){
+
+		})
+
+		OIPJS.Data.getExchangeRate("litecoin", "usd", function(USDperLTC){
+			var ltcWalletBalanceInUSD = ltcBalance * USDperLTC;
+
+			ltcWalletBalanceInUSD = ltcWalletBalanceInUSD.toFixed(2);
+
+			try {
+				ltcWalletUSDElement.innerHTML = '$' + ltcWalletBalanceInUSD;
+			} catch (e) {}
+		}, function(error){
+
+		})
+
+		OIPJS.Data.getExchangeRate("bitcoin", "usd", function(USDperBTC){
+			var btcWalletBalanceInUSD = btcBalance * USDperBTC;
+
+			btcWalletBalanceInUSD = btcWalletBalanceInUSD.toFixed(2);
+
+			try {
+				btcWalletUSDElement.innerHTML = '$' + btcWalletBalanceInUSD;
 			} catch (e) {}
 		}, function(error){
 
