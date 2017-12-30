@@ -3706,6 +3706,12 @@ var PhoenixUI = (function(){
 			var match = false;
 			for (var j in Phoenix.publishedArtifacts[i].txs){
 				for (var k in PhoenixUX.successfulTXIDs){
+					var testtxid;
+					if (Phoenix.publishedArtifacts[i].txs[j].txid)
+						testtxid = Phoenix.publishedArtifacts[i].txs[j].txid
+					else
+						testtxid = Phoenix.publishedArtifacts[i].txs[j]
+					
 					if (Phoenix.publishedArtifacts[i].txs[j].substring(0,10) === PhoenixUX.successfulTXIDs[k]){
 						match = true;
 					}
