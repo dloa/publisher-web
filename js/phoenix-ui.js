@@ -3708,11 +3708,11 @@ var PhoenixUI = (function(){
 				for (var k in PhoenixUX.successfulTXIDs){
 					var testtxid;
 					if (Phoenix.publishedArtifacts[i].txs[j].txid)
-						testtxid = Phoenix.publishedArtifacts[i].txs[j].txid
+						testtxid = Phoenix.publishedArtifacts[i].txs[j].txid.substring(0,10)
 					else
-						testtxid = Phoenix.publishedArtifacts[i].txs[j]
-					
-					if (Phoenix.publishedArtifacts[i].txs[j].substring(0,10) === PhoenixUX.successfulTXIDs[k]){
+						testtxid = Phoenix.publishedArtifacts[i].txs[j].substring(0,10)
+
+					if (testtxid === PhoenixUX.successfulTXIDs[k]){
 						match = true;
 					}
 				}
