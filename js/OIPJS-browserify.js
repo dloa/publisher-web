@@ -132265,7 +132265,7 @@ var WalletFunction = function WalletFunction() {
 			email: email,
 			password: password
 		}).then(function (wallet) {
-			Wallet.Login(email, password, onSuccess, onError);
+			Wallet.Login(wallet.identifier, password, onSuccess, onError);
 		}).catch(onError);
 	};
 
@@ -132325,30 +132325,6 @@ var WalletFunction = function WalletFunction() {
 				onSuccess();
 			});
 		}, onError);
-	};
-
-	Wallet.tryAddUnconfirmed = function (flo_address, txinfo, onSuccess, onError) {
-		for (var key in Wallet.wallet.keys) {
-			if (Wallet.wallet.keys[key].coins.florincoin) {
-				for (var i in txinfo.vout) {
-					for (var j in txinfo.vout[i].scriptPubKey.addresses) {
-						if (txinfo.vout[i].scriptPubKey.addresses[j] === Wallet.wallet.keys[key].coins.florincoin.address) {
-							var txid = txinfo.txid;
-							var vout = txinfo.vout[i].n;
-							var amount = txinfo.vout[i].value;
-							var satoshi = amount * Wallet.wallet.keys[key].coins.florincoin.coinInfo.satPerCoin;
-							var inputs = [];
-
-							Wallet.wallet.keys[key].coins.florincoin.addUnconfirmed(txid, vout, amount, satoshi, inputs);
-							Wallet.wallet.store();
-							Wallet.refresh();
-
-							onSuccess(txinfo);
-						}
-					}
-				}
-			}
-		}
 	};
 
 	Wallet.createAndEmitState = function (onSuccess, onError) {
@@ -132441,7 +132417,9 @@ var WalletFunction = function WalletFunction() {
 	};
 
 	Wallet.createState = function () {
-		var state = {};
+		var state = {
+			identifier: Wallet.wallet.identifier
+		};
 
 		var supportedCoins = _oipmw2.default.Networks.listSupportedCoins();
 

@@ -76,7 +76,7 @@ var Phoenix = (function() {
 	}
 
 	PhoenixAPI.register = function(username, password, email){
-		OIPJS.User.Register(email, password, function(wallet){
+		OIPJS.User.Register(email, password, function(state){
 			var floAddress = OIPJS.Wallet.getMainAddress('florincoin');
 
 			if (floAddress === ""){
@@ -86,15 +86,14 @@ var Phoenix = (function() {
 
 			OIPJS.Wallet.tryOneTimeFaucet(floAddress, grecaptcha.getResponse(), function(res, txinfo){
 				OIPJS.Publisher.Register(username, floAddress, email, function(pub){
-					localStorage.setItem("identifier", wallet.identifier);
-					localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt(password, wallet.identifier));
+					localStorage.setItem("identifier", state.identifier);
+					localStorage.setItem("loginWalletEnc", CryptoJS.AES.encrypt(password, state.identifier));
 					localStorage.setItem("remember-me", "true");
 
 
 					PhoenixEvents.trigger("onPublisherAnnounceSuccess", {
-						identifier: wallet.identifier,
+						identifier: state.identifier,
 						username: username,
-						address: address,
 						email: email
 					});
 				}, function(error){
