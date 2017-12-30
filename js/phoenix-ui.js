@@ -3954,15 +3954,15 @@ var PhoenixUI = (function(){
 			ltcWalletValueElement.value = ltcBalance;
 			btcWalletValueElement.value = btcBalance;
 			if (floBalance > 10000) {
-				walletBalanceElement.innerHTML = floBalance.toFixed(3) + " FLO";
-				floWalletValueElement.innerHTML = floBalance.toFixed(3) + " FLO";
+				walletBalanceElement.innerHTML = parseFloat(floBalance.toFixed(3)) + " FLO";
+				floWalletValueElement.innerHTML = parseFloat(floBalance.toFixed(3)) + " FLO";
 			} else {
-				walletBalanceElement.innerHTML = floBalance.toFixed(5) + " FLO";
-				floWalletValueElement.innerHTML = floBalance.toFixed(5) + " FLO";
+				walletBalanceElement.innerHTML = parseFloat(floBalance.toFixed(5)) + " FLO";
+				floWalletValueElement.innerHTML = parseFloat(floBalance.toFixed(5)) + " FLO";
 			}
 
-			ltcWalletValueElement.innerHTML = ltcBalance.toFixed(5) + " LTC";
-			btcWalletValueElement.innerHTML = btcBalance.toFixed(5) + " BTC";
+			ltcWalletValueElement.innerHTML = parseFloat(ltcBalance.toFixed(5)) + " LTC";
+			btcWalletValueElement.innerHTML = parseFloat(btcBalance.toFixed(5)) + " BTC";
 		} catch (e) { 
 			// Oh well, give up setting balance.
 		}
