@@ -3712,7 +3712,7 @@ var PhoenixUI = (function(){
 					else
 						testtxid = Phoenix.publishedArtifacts[i].txs[j].substring(0,10)
 
-					if (testtxid === PhoenixUX.successfulTXIDs[k]){
+					if (testtxid === PhoenixUX.successfulTXIDs[k].substring(0,10)){
 						match = true;
 					}
 				}
@@ -3757,7 +3757,7 @@ var PhoenixUI = (function(){
 		for (var i = PhoenixUX.curArtifacts.length - 1; i >= 0; i--) {
 			var skip = false;
 			for (var j in Phoenix.disabledArtifactTXIDs){
-				if (PhoenixUX.curArtifacts[i].txid === Phoenix.disabledArtifactTXIDs[j])
+				if (PhoenixUX.curArtifacts[i].txid.substring(0,10) === Phoenix.disabledArtifactTXIDs[j].substring(0,10))
 					skip = true;
 			}
 
